@@ -1,0 +1,172 @@
+
+Create appropriate indices for that
+27. Okt.
+·
+mehdinavidi/NVD
+·
+master
+·
++128
+-0
+
+Archivieren
+
+Weitergeben
+
+PR erstellen
+
+
+mach passende index dafur
+Kopieren
+Summary
+
+Added a styled index.html landing page that introduces the validation protocol collection and links to the existing v0.2.7 report.
+
+Testing
+
+⚠️ Tests not run (HTML-only change)
+
+
+Datei (1)
+
+index.html
+Neu
+
+
+
+Diffs
+Protokolle
+
+index.html
+Neu
++128
+-0
+
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Validierungsprotokolle Übersicht</title>
+    <style>
+      :root {
+        --primary: #8b1538;
+        --bg: #f8f9fb;
+        --card: #ffffff;
+        --text: #1e2434;
+        --muted: #e9edf3;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      .container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 24px 16px 48px;
+      }
+      header {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 24px;
+      }
+      h1 {
+        font-size: 28px;
+        margin: 0;
+        color: var(--primary);
+      }
+      p {
+        margin: 0;
+        line-height: 1.5;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+      }
+      .card {
+        background: var(--card);
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .card h2 {
+        margin: 0;
+        font-size: 20px;
+      }
+      .meta {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 14px;
+        color: #53607a;
+      }
+      .btn {
+        align-self: flex-start;
+        appearance: none;
+        border: none;
+        border-radius: 999px;
+        background: var(--primary);
+        color: #fff;
+        padding: 10px 18px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 12px 24px rgba(139, 21, 56, 0.2);
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 26px rgba(139, 21, 56, 0.24);
+      }
+      footer {
+        margin-top: 32px;
+        font-size: 13px;
+        color: #7b869b;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Validierungsprotokolle</h1>
+        <p>
+          Willkommen im Überblick der CL Validierungsprotokolle. Wähle unten das passende Protokoll aus, um direkt in die detaillierte
+          Dokumentation zu springen.
+        </p>
+      </header>
+      <section class="cards">
+        <article class="card">
+          <h2>Web App Validierungsprotokoll</h2>
+          <div class="meta">
+            <span>Version: <strong>v0.2.7 (ES5)</strong></span>
+            <span>Letzte Aktualisierung: Mai 2024</span>
+          </div>
+          <p>
+            Enthält die vollständige Übersicht der Validierungsergebnisse der CL Web App mit Status, Testergebnissen und Anmerkungen.
+          </p>
+          <a class="btn" href="validierungsprotokoll_app_v_0_2_7.html">Protokoll öffnen</a>
+        </article>
+      </section>
+      <footer>
+        &copy; <span id="year"></span> CL Validation Suite
+      </footer>
+    </div>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
