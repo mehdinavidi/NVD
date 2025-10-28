@@ -1,172 +1,261 @@
-
-Create appropriate indices for that
-27. Okt.
-·
-mehdinavidi/NVD
-·
-master
-·
-+128
--0
-
-Archivieren
-
-Weitergeben
-
-PR erstellen
-
-
-mach passende index dafur
-Kopieren
-Summary
-
-Added a styled index.html landing page that introduces the validation protocol collection and links to the existing v0.2.7 report.
-
-Testing
-
-⚠️ Tests not run (HTML-only change)
-
-
-Datei (1)
-
-index.html
-Neu
-
-
-
-Diffs
-Protokolle
-
-index.html
-Neu
-+128
--0
-
 <!DOCTYPE html>
-<html lang="de">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Validierungsprotokolle Übersicht</title>
-    <style>
-      :root {
-        --primary: #8b1538;
-        --bg: #f8f9fb;
-        --card: #ffffff;
-        --text: #1e2434;
-        --muted: #e9edf3;
-      }
-      * {
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        height: 100%;
-      }
-      body {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-        background: var(--bg);
-        color: var(--text);
-      }
-      .container {
-        max-width: 960px;
-        margin: 0 auto;
-        padding: 24px 16px 48px;
-      }
-      header {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        margin-bottom: 24px;
-      }
-      h1 {
-        font-size: 28px;
-        margin: 0;
-        color: var(--primary);
-      }
-      p {
-        margin: 0;
-        line-height: 1.5;
-      }
-      .cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 16px;
-      }
-      .card {
-        background: var(--card);
-        border-radius: 16px;
-        padding: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .card h2 {
-        margin: 0;
-        font-size: 20px;
-      }
-      .meta {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        font-size: 14px;
-        color: #53607a;
-      }
-      .btn {
-        align-self: flex-start;
-        appearance: none;
-        border: none;
-        border-radius: 999px;
-        background: var(--primary);
-        color: #fff;
-        padding: 10px 18px;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        box-shadow: 0 12px 24px rgba(139, 21, 56, 0.2);
-      }
-      .btn:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 16px 26px rgba(139, 21, 56, 0.24);
-      }
-      footer {
-        margin-top: 32px;
-        font-size: 13px;
-        color: #7b869b;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1>Validierungsprotokolle</h1>
-        <p>
-          Willkommen im Überblick der CL Validierungsprotokolle. Wähle unten das passende Protokoll aus, um direkt in die detaillierte
-          Dokumentation zu springen.
-        </p>
-      </header>
-      <section class="cards">
-        <article class="card">
-          <h2>Web App Validierungsprotokoll</h2>
-          <div class="meta">
-            <span>Version: <strong>v0.2.7 (ES5)</strong></span>
-            <span>Letzte Aktualisierung: Mai 2024</span>
-          </div>
-          <p>
-            Enthält die vollständige Übersicht der Validierungsergebnisse der CL Web App mit Status, Testergebnissen und Anmerkungen.
-          </p>
-          <a class="btn" href="validierungsprotokoll_app_v_0_2_7.html">Protokoll öffnen</a>
-        </article>
-      </section>
-      <footer>
-        &copy; <span id="year"></span> CL Validation Suite
-      </footer>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<title>Apps Hub – Version 25.0.3</title>
+
+<!-- App-Logo / Favicons -->
+<link rel="icon" type="image/png" sizes="32x32"  href="photos/logo/app-icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="photos/logo/app-icon-192.png">
+<link rel="apple-touch-icon" sizes="192x192" href="photos/logo/app-icon-192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="photos/logo/app-icon-512.png">
+<meta name="theme-color" content="#8B1538" />
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="manifest.webmanifest">
+
+<style>
+:root{
+  --brand:#8B1538; --bg:#0b0f1a; --surface:#111826; --text:#e9edf3; --muted:#6e7a94;
+  --border:rgba(255,255,255,.12); --glassA:rgba(12,16,27,.65); --glassB:rgba(12,16,27,.35);
+  --radius:22px; --gap:18px; --card-w:260px; --card-h:180px; --scale-hover:1.06; --scale-focus:1.10;
+}
+html[data-theme="light"]{
+  --bg:#f4f6fb; --surface:#ffffff; --text:#0f172a; --muted:#4b556b; --border:rgba(15,23,42,.12);
+  --glassA:rgba(255,255,255,.75); --glassB:rgba(255,255,255,.55);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; color:var(--text);
+  background:
+    radial-gradient(1200px 800px at 70% -10%, color-mix(in srgb, var(--brand), transparent 85%) 15%, transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg), #000 8%) 100%);
+  overflow-x:hidden;
+}
+.backdrop{position:fixed; inset:0; z-index:-1; pointer-events:none; background:center/cover no-repeat;
+  filter:blur(40px) saturate(120%) brightness(75%); opacity:.35; transition:background-image .35s ease, opacity .35s ease, filter .35s ease;}
+
+header{position:sticky; top:0; z-index:10; backdrop-filter:blur(12px) saturate(160%);
+  background:linear-gradient(180deg, color-mix(in srgb, var(--bg), #000 20%) 85%, transparent); border-bottom:1px solid var(--border);}
+.topbar{max-width:1400px;margin:0 auto;padding:14px 18px;display:flex;align-items:center;gap:10px}
+.logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--brand),#e43e6a);display:grid;place-items:center;overflow:hidden}
+.logo img{width:100%;height:100%;object-fit:cover;display:none}
+.brand{font-weight:700}
+.page{max-width:1400px;margin:24px auto 90px;padding:0 30px}
+
+/* Hero */
+.hero{margin:10px 0 6px;border-radius:var(--radius);overflow:hidden;background:color-mix(in srgb,var(--bg),#000 20%);
+  display:grid;grid-template-columns:minmax(280px,1fr) minmax(380px,1fr);box-shadow:0 20px 60px rgba(0,0,0,.35);position:relative;}
+html[data-theme="light"] .hero{ box-shadow:0 12px 36px rgba(0,0,0,.10); }
+.hero .art{min-height:300px;background:center/cover no-repeat;transform:scale(1.02);transition:transform .6s ease;}
+.hero:hover .art{transform:scale(1.06)}
+.hero .info{padding:28px 26px;display:flex;flex-direction:column;justify-content:center;gap:14px;
+  background:linear-gradient(180deg, color-mix(in srgb, var(--bg), #000 10%) 0%, color-mix(in srgb, var(--bg), #000 15%) 100%);}
+.badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--text);opacity:.85}
+.badge .dot{width:8px;height:8px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 4px color-mix(in srgb,var(--brand),transparent 75%)}
+.hero h1{margin:0;font-size:28px}
+.hero p{margin:0;color:var(--muted)}
+.actions{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
+.btn{border:none;padding:12px 18px;border-radius:12px;font-weight:700;cursor:pointer;box-shadow:0 10px 24px color-mix(in srgb,var(--brand),transparent 50%)}
+.btn.primary{background:var(--brand);color:#fff}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--border);box-shadow:none}
+
+/* Strip */
+.row{margin-top:24px}
+.row h2{font-size:18px;margin:0 0 10px 6px;opacity:.9}
+.strip{display:flex;gap:var(--gap);justify-content:center;flex-wrap:wrap;padding:16px 60px 32px;
+  align-items:center;position:relative;transition:transform .35s ease,filter .35s ease;}
+.strip:hover{transform:translateY(-18px) scale(1.03); filter:brightness(1.05)}
+
+/* Card */
+.card{position:relative;width:var(--card-w);height:var(--card-h);border-radius:18px;background:var(--surface);overflow:hidden;cursor:pointer;flex-shrink:0;
+  box-shadow:0 10px 24px rgba(0,0,0,.35);transform-origin:center;transition:transform .18s ease,box-shadow .2s ease,filter .2s ease;}
+html[data-theme="light"] .card{ box-shadow:0 12px 30px rgba(0,0,0,.10); }
+.card:hover{transform:scale(var(--scale-hover))}
+.card:focus-visible,.card.is-focus{transform:scale(var(--scale-focus));
+  box-shadow:0 20px 50px rgba(0,0,0,.6),0 0 0 3px rgba(255,255,255,.3),0 0 0 8px color-mix(in srgb,var(--brand),transparent 70%);z-index:5;}
+.thumb{position:absolute;inset:0;background:center/cover no-repeat;transition:transform .3s ease;pointer-events:none}
+.card:hover .thumb,.card.is-focus .thumb{transform:scale(1.06)}
+.label{position:absolute;left:10px;right:10px;bottom:10px;padding:8px 10px;border-radius:10px;
+  background:linear-gradient(180deg,var(--glassA),var(--glassB));color:var(--text);display:flex;align-items:center;gap:8px;font-size:14px;border:1px solid var(--border);backdrop-filter:blur(8px)}
+.label .ico{width:16px;height:16px;border-radius:6px;background:linear-gradient(135deg,var(--brand),#f05880)}
+.card.no-thumb .thumb{background:#0f1524}
+.card.no-thumb .thumb::after{content:"Kein Bild";position:absolute;top:8px;right:10px;font-size:12px;background:rgba(255,255,255,.12);padding:4px 8px;border-radius:999px}
+
+/* Modal */
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:50}
+.modal.is-open{display:flex}
+.modal .sheet{width:min(860px,92vw);max-height:84vh;overflow:auto;background:var(--surface);color:var(--text);border:1px solid var(--border);
+  border-radius:16px;padding:0 0 18px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.sheet .head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--border);
+  background:linear-gradient(135deg, color-mix(in srgb, var(--brand), transparent 75%), transparent 60%);}
+.head .title{display:flex;flex-direction:column;gap:4px}
+.head .title strong{font-size:16px;letter-spacing:.3px}
+.head .subtitle{color:var(--muted);font-size:13px}
+.head .badge{background:var(--brand);color:#fff;padding:6px 10px;border-radius:999px;font-weight:700;font-size:12px;box-shadow:0 8px 22px color-mix(in srgb,var(--brand),transparent 60%)}
+.modal .close{border:none;background:transparent;color:var(--text);font-size:20px;cursor:pointer;padding:6px 10px;border-radius:10px}
+.modal .close:hover{background:rgba(255,255,255,.08)}
+.section{padding:14px 18px 0}
+.section h4{margin:0 0 6px;font-size:15px}
+.section p{margin:4px 0;color:var(--muted)}
+.section ul{margin:6px 0 0 18px}
+.pre{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;background:color-mix(in srgb,var(--bg),#000 10%);
+  border:1px solid var(--border);border-radius:10px;padding:10px;overflow:auto;font-size:13px;line-height:1.45;margin:6px 0 12px}
+
+/* Footer */
+footer{text-align:center;color:var(--muted);margin:40px 0 30px;font-size:13px}
+</style>
+</head>
+<body>
+<div class="backdrop" id="backdrop"></div>
+
+<header>
+  <div class="topbar">
+    <div class="logo" title="Apps Hub">
+      <img id="brandLogo" src="photos/logo/app-icon-192.png" alt="Logo">
     </div>
-    <script>
-      document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
-  </body>
+    <div class="brand">Apps&nbsp;Hub</div>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero">
+    <div class="art" id="heroArt"></div>
+    <div class="info">
+      <div class="badge"><span class="dot"></span> Neu & empfohlen</div>
+      <h1>Dein zentraler Startpunkt</h1>
+      <p>Schneller Zugriff auf deine Web-Apps mit dynamischem Hintergrund und kompakten Kacheln.</p>
+      <div class="actions">
+        <button class="btn primary" id="btnInfo">Info</button>
+        <button class="btn ghost" id="btnTheme">Modus: Hell</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="apps" class="row">
+    <h2>Apps</h2>
+    <div class="strip">
+      <article class="card" data-link="Tätigkeitsbericht.html" data-img="photos/Tätigkeitsbericht.jpg" data-bg="photos/Tätigkeitsbericht.jpg" aria-label="Tätigkeitsbericht">
+        <div class="thumb"></div><div class="label"><span class="ico"></span>Tätigkeitsbericht</div>
+      </article>
+      <article class="card" data-link="Reisekosten.html" data-img="photos/Reisekosten.jpg" data-bg="photos/Reisekosten.jpg" aria-label="Reisekosten">
+        <div class="thumb"></div><div class="label"><span class="ico"></span>Reisekosten</div>
+      </article>
+      <article class="card" data-link="EuroSDS.html" data-img="photos/EuroSDS.jpg" data-bg="photos/EuroSDS.jpg" aria-label="EuroSDS">
+        <div class="thumb"></div><div class="label"><span class="ico"></span>EuroSDS</div>
+      </article>
+      <article class="card" data-link="Validierung.html" data-img="photos/Validierung.jpg" data-bg="photos/Validierung.jpg" aria-label="Validierung">
+        <div class="thumb"></div><div class="label"><span class="ico"></span>Validierung</div>
+      </article>
+      <article class="card" data-link="Wissen.html" data-img="photos/Wissen.jpg" data-bg="photos/Wissen.jpg" aria-label="Wissen">
+        <div class="thumb"></div><div class="label"><span class="ico"></span>Entwicklung</div>
+      </article>
+    </div>
+  </section>
+
+  <footer>Apps Hub – Version 25.0.3 • Entwickelt und programmiert von Nexus IPS (MENA)</footer>
+</main>
+
+<div class="modal" id="infoModal">
+  <div class="sheet">
+    <div class="head">
+      <div class="title">
+        <strong>Nexus IPS – Apps Hub</strong>
+        <div class="subtitle">Entwickelt und programmiert von <b>Nexus IPS (MENA)</b></div>
+      </div>
+      <span class="badge">Version&nbsp;25.0.3</span>
+      <button class="close" title="Schließen" aria-label="Schließen">&times;</button>
+    </div>
+
+    <div class="section">
+      <h4>Architektur & Technik</h4>
+      <ul>
+        <li>Vanilla HTML, CSS, JS – keine externen Bibliotheken</li>
+        <li>Flexbox/Grid für Layout, CSS-Variablen für Themes</li>
+        <li>Dark/Light-Modus mit LocalStorage-Speicherung</li>
+        <li>Dynamischer Backdrop pro Kachel</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h4>Projektstruktur</h4>
+      <div class="pre" id="projStruct"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const heroArt=document.getElementById('heroArt');
+  const backdrop=document.getElementById('backdrop');
+  heroArt.style.backgroundImage="url('photos/Hero.jpg')";
+  const brandImg=document.getElementById('brandLogo');
+  brandImg.addEventListener('load',()=>brandImg.style.display='block');
+  brandImg.addEventListener('error',()=>brandImg.style.display='none');
+
+  function setBackdrop(card){
+    const url=card?.dataset?.bg||card?.dataset?.img||"";
+    if(url) backdrop.style.backgroundImage=`url('${url}')`;
+  }
+  document.querySelectorAll('.card').forEach(c=>{
+    const t=c.querySelector('.thumb'); const img=c.dataset.img;
+    if(img) t.style.backgroundImage=`url('${img}')`; else c.classList.add('no-thumb');
+  });
+  const first=document.querySelector('.card'); if(first) setBackdrop(first);
+  document.addEventListener('mouseenter',e=>{
+    const c=e.target.closest?.('.card'); if(c) setBackdrop(c);
+  },true);
+  document.addEventListener('click',e=>{
+    const c=e.target.closest?.('.card'); if(c){const href=c.dataset.link;if(href) location.href=href;}
+  });
+
+  const modal=document.getElementById('infoModal');
+  const btn=document.getElementById('btnInfo');
+  const close=modal.querySelector('.close');
+  const proj=document.getElementById('projStruct');
+
+  function detectDrive(){
+    const href=decodeURIComponent(window.location.href);
+    let m=href.match(/file:\/\/\/([A-Za-z]):\//);if(m)return m[1].toUpperCase();
+    m=window.location.pathname.match(/^\/([A-Za-z]):\//);if(m)return m[1].toUpperCase();
+    return '<Laufwerk>';
+  }
+  function showProject(){
+    const d=detectDrive();
+    proj.textContent=`${d}:/Nexus-ips/
+├─ photos/
+│   ├─ Hero.jpg
+│   ├─ Tätigkeitsbericht.jpg
+│   ├─ Reisekosten.jpg
+│   ├─ EuroSDS.jpg
+│   ├─ Validierung.jpg
+│   ├─ Wissen.jpg
+│   └─ logo/
+│        ├─ app-icon-32.png
+│        ├─ app-icon-192.png
+│        └─ app-icon-512.png
+│
+├─ Tätigkeitsbericht.html
+├─ Reisekosten.html
+├─ EuroSDS.html
+├─ Validierung.html
+├─ Wissen.html
+├─ manifest.webmanifest
+└─ apps-hub-25.0.3.html`;
+  }
+  showProject();
+
+  btn.onclick=()=>{modal.classList.add('is-open');showProject();}
+  close.onclick=()=>modal.classList.remove('is-open');
+
+  const themeBtn=document.getElementById('btnTheme');
+  function apply(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('theme',t);
+    themeBtn.textContent=t==='light'?'Modus: Dunkel':'Modus: Hell';}
+  apply(localStorage.getItem('theme')||'dark');
+  themeBtn.onclick=()=>apply(document.documentElement.getAttribute('data-theme')==='light'?'dark':'light');
+})();
+</script>
+</body>
 </html>
