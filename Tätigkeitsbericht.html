@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <!-- Optimierter Viewport für iOS (verhindert Auto-Zoom/Umbruch) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Tätigkeitsbericht-V25.10.23</title>
+
+  <style>
+	/* ====== Basis (UI unverändert) ====== */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow-x:hidden}
+html{-webkit-text-size-adjust:100%} /* iOS: verhindert Auto-Zoom */
+body{
+  font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+  background:#8B1538;
+  padding:10px;
+  transition:background 0.3s;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact; /* Farbtreue bei Print */
+}
+.container{
+  max-width:1000px;
+  margin:0 auto;
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  transition:all 0.3s;
+}
+h1{
+  font-size:20px;color:#2C3E50;margin-bottom:15px;font-weight:700;
+  text-align:center;border-bottom:3px solid #8B1538;padding-bottom:10px
+}
+.label{font-weight:600;color:#555;font-size:13px;margin-bottom:5px;display:block}
+input,select,textarea{width:100%;padding:12px;border:2px solid #ddd;border-radius:6px;font-size:14px;margin-bottom:10px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#8B1538}
+textarea{min-height:80px;resize:vertical;font-family:inherit}
+.section{margin-bottom:20px;padding-bottom:20px;border-bottom:2px solid #eee}
+
+/* Kopfbereich */
+.section:first-of-type{
+  display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:15px;padding:0;border:none
+}
+.section:first-of-type>div{display:flex;flex-direction:column}
+.section:first-of-type .label{
+  background:#8B1538;color:#fff;padding:10px;margin:0;border-radius:6px 6px 0 0;font-size:13px;text-align:center
+}
+.section:first-of-type input{
+  margin:0;border-radius:0 0 6px 6px;border-top:none;border-color:#8B1538;font-size:14px;padding:12px;height:44px;line-height:20px;text-align:center
+}
+
+/* Tabelle */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:15px 0}
+table{width:100%;border-collapse:collapse;min-width:600px}
+th{background:#8B1538;color:#fff;padding:10px 5px;font-size:12px;text-align:center;border:1px solid #7A1230}
+td{border:1px solid #ddd;padding:8px 5px;text-align:center;font-size:13px;vertical-align:middle}
+td input,td select{margin:0;padding:6px;font-size:13px}
+.hours{font-weight:700}
+.overnight-note{font-size:11px;color:#FF9800;margin-top:2px}
+
+/* Buttons */
+.btn{display:block;width:100%;padding:15px;margin:10px 0;border:none;border-radius:8px;font-size:16px;font-weight:600;color:#fff;cursor:pointer;text-align:center}
+.btn-save{background:#2C3E50}
+.btn-pdf{background:#8B1538}
+.btn-print{background:#27AE60}
+.btn-add{background:#27AE60;margin:15px 0}
+.btn-sig{background:#8B1538}
+.btn-json{background:#34495E}
+.btn-import{background:#7F8C8D}
+
+/* Kleinere Inline-Buttons – ans Theme angepasst */
+.btn-row{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 12px;margin:2px;border-radius:9999px;
+  font-size:12px;font-weight:600;cursor:pointer;
+  background:#fff;border:1px solid #8B1538;color:#8B1538;
+  transition:background .15s, color .15s, transform .05s;
+  user-select:none;
+}
+.btn-row:hover{background:#8B1538;color:#fff}
+.btn-row:active{transform:translateY(1px)}
+.btn-row.danger{border-color:#E74C3C;color:#E74C3C}
+.btn-row.danger:hover{background:#E74C3C;color:#fff}
+
+/* Unterschrift (Vorschau in der UI) */
+.sig-preview{border:2px dashed #ddd;padding:15px;min-height:100px;display:flex;align-items:center;justify-content:center;background:#fafafa;border-radius:6px;margin-top:10px}
+.sig-preview img{max-width:100%;max-height:80px;border:1px solid #ddd;background:#fff;padding:8px;border-radius:4px}
+.placeholder{color:#999;font-style:italic}
+
+/* Modal Signatur */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9999}
+.modal-content{background:#fff;margin:5% auto;padding:20px;width:95%;max-width:800px;border-radius:10px;max-height:85vh;overflow-y:auto}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:15px}
+.close{float:right;font-size:28px;font-weight:700;cursor:pointer;color:#999}
+.canvas-box{border:3px solid #8B1538;background:#fff;width:100%;height:300px;border-radius:8px;margin:15px 0;position:relative;touch-action:none}
+#sigCanvas{width:100%;height:100%;touch-action:none;cursor:crosshair}
+.canvas-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#ccc;font-size:16px;pointer-events:none}
+.canvas-hint.hide{display:none}
+.modal-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:15px}
+.modal-btn{padding:12px;border:none;border-radius:6px;font-size:14px;font-weight:600;color:#fff;cursor:pointer}
+.btn-clear{background:#FF9800}
+.btn-cancel{background:#E74C3C}
+.btn-ok{background:#27AE60}
+
+/* Statistik */
+.stats{background:#8B1538;color:#fff;padding:15px;border-radius:8px;margin:15px 0;display:none}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:10px}
+.stat-item{background:rgba(255,255,255,0.2);padding:10px;border-radius:6px;text-align:center}
+.stat-label{font-size:11px;opacity:0.9}
+.stat-value{font-size:18px;font-weight:700;margin-top:5px}
+
+/* Gespeicherte Berichte */
+.reports{margin-top:30px;padding-top:20px;border-top:3px solid #8B1538}
+.reports h2{font-size:18px;margin-bottom:15px;color:#2C3E50}
+.report-item{background:#f5f5f5;padding:15px;margin-bottom:15px;border-left:5px solid #8B1538;border-radius:6px}
+.report-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.report-btn{padding:10px;border:none;border-radius:6px;font-size:13px;font-weight:600;color:#fff;cursor:pointer}
+.report-load{background:#2C3E50}
+.report-delete{background:#E74C3C}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;right:20px;left:20px;background:#333;color:#fff;padding:15px;border-radius:8px;z-index:10000;display:none;animation:slideIn 0.3s}
+@keyframes slideIn{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}
+.toast.success{background:#27AE60}
+.toast.error{background:#E74C3C}
+.toast.info{background:#2196F3}
+
+/* Logo-Vorschau: saubere, helle Box */
+.logo-preview{
+  height:100px;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px;
+  overflow:hidden;
+}
+
+/* Logo-Bild */
+.logo-preview img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  display:block;
+  background:transparent;
+  border:0;
+  padding:0;
+  border-radius:0;
+}
+
+
+/* ===== Info Modal ===== */
+.info-modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9999;overflow-y:auto;padding:20px}
+.info-modal[hidden]{display:none!important}
+.info-modal-content{
+  background:#fff;margin:20px auto;padding:30px;max-width:800px;border-radius:10px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);position:relative;
+}
+.info-modal-content h2{font-size:24px;color:#2C3E50;margin-bottom:20px;padding-bottom:10px;border-bottom:3px solid #8B1538}
+.info-modal-content h3{font-size:18px;color:#8B1538;margin-top:20px;margin-bottom:10px}
+.info-modal-content ul{margin-left:20px;line-height:1.8}
+.info-modal-content li{margin-bottom:8px}
+.info-modal-content code{background:#f5f5f5;padding:2px 6px;border-radius:3px;font-family:monospace;font-size:13px;color:#e74c3c}
+.info-modal-content .tech-section{margin-bottom:25px}
+.info-modal-content .features{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:15px}
+.info-modal-content .feature-item{background:#f8f9fa;padding:15px;border-radius:6px;border-left:4px solid #8B1538}
+.info-close{position:absolute;top:10px;right:10px;width:40px;height:40px;background:#8B1538;color:#fff;border:none;border-radius:50%;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.info-close:hover{background:#6d0f2a}
+@media(max-width:768px){
+  .info-modal{padding:10px}
+  .info-modal-content{padding:20px;margin:10px auto}
+  .info-modal-content h2{font-size:20px}
+  .info-modal-content h3{font-size:16px}
+  .info-modal-content .features{grid-template-columns:1fr}
+}
+
+/* Mobile */
+@media(max-width:768px){
+  body{padding:5px}
+  .container{padding:15px}
+  .section:first-of-type{grid-template-columns:1fr}
+  table{font-size:11px;min-width:550px}
+  th,td{padding:6px 3px}
+  td input,td select{padding:5px;font-size:12px}
+  .canvas-box{height:250px}
+  .modal-content{width:98%;padding:15px;margin:3% auto}
+  .modal-btns{grid-template-columns:1fr;gap:8px}
+}
+
+/* === Mobile-Overrides (ANS ENDE DER CSS) === */
+@media (max-width:768px){
+  /* Kopfbereich wieder zweispaltig */
+  .section:first-of-type{ 
+    display:grid;
+    grid-template-columns:1fr 1fr; 
+  }
+
+  /* Modal: drei Buttons nebeneinander */
+  .modal-btns{ 
+    display:grid; 
+    grid-template-columns:1fr 1fr 1fr; 
+    gap:10px; 
+  }
+
+  /* Signatur-Canvas wieder größer */
+  .canvas-box{ 
+    height:300px; 
+  }
+
+  /* Tabelle lesbarer */
+  table{ 
+    font-size:13px; 
+    min-width:600px; 
+  }
+  th,td{ 
+    padding:8px 5px; 
+  }
+}
+
+
+/* ================== PRINT / PDF ================== */
+.print-only{display:none}
+
+@media print{
+  @page{margin:18mm 15mm;size:A4 portrait}
+	
+	#logoSection{display:none!important}
+	.print-logo{
+  max-height: 20px;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+	
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-sizing:border-box}
+  html,body{height:auto!important;width:100%!important;background:#fff!important;color:#000!important}
+  body{padding:0!important;margin:0!important}
+  .container{box-shadow:none!important;padding:12px!important;max-width:100%!important;margin:0!important;border-radius:0!important;background:#fff!important}
+
+  .stats,.reports,.modal,.toast,.btn,.btn-row,.btn-add,.btn-sig,.btn-json,.btn-import,
+  .theme-toggle,.info-toggle,.info-modal{display:none!important;visibility:hidden!important}
+
+  #headerSection{display:none!important}
+
+  #notes,
+  label[for="notes"],
+  .label:has(+ #notes),
+  .section textarea#notes{display:none!important;visibility:hidden!important;height:0!important;margin:0!important;padding:0!important;border:none!important}
+
+  label[for="sigName"],
+  #sigName,
+  .btn-sig,
+  #sigPrev,
+  .sig-preview,
+  .section:has(#sigName){display:none!important;visibility:hidden!important;height:0!important;margin:0!important;padding:0!important;border:none!important}
+
+  input,select,textarea{
+    background:#fff!important;color:#2C3E50!important;border:1px solid #8B1538!important;box-shadow:none!important
+  }
+
+  input::placeholder,textarea::placeholder{color:#999!important;opacity:1!important}
+
+  h1{
+    font-size:18px!important;margin-bottom:15px!important;text-align:center!important;
+    color:#2C3E50!important;font-weight:700!important;border-bottom:3px solid #8B1538!important;padding-bottom:10px!important
+  }
+
+  .table-wrap{display:none!important}
+  .print-only{display:block}
+
+  .print-table{page-break-after:always;margin-top:8px}
+  .print-table:last-of-type{page-break-after:auto}
+
+  .print-header{margin-bottom:6px;font-size:12px;color:#2C3E50!important}
+  .print-header .grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .print-header strong{color:#2C3E50!important}
+
+  .print-table table{width:100%;border-collapse:collapse}
+  .print-table th,.print-table td{border:1px solid #ccc;padding:6px;font-size:12px}
+  .print-table th{background:#8B1538!important;color:#fff!important;border-color:#7A1230!important}
+  .print-table td{color:#000!important}
+
+  .print-foot{font-weight:700;background:#f8f9fa;color:#2C3E50!important}
+
+  .print-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 15px;
+  padding: 10px 0;
+  border: 1px solid #8B1538;
+  border-radius: 8px;
+  background: #fff;
+  page-break-inside: avoid;
+  color:#2C3E50 !important;
+  font-weight: 600 !important;
+  width: 100%;
+}
+
+.print-footer strong {
+  display: block;
+  color:#2C3E50 !important;
+  font-size: 13px;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.print-footer img {
+  max-height: 38px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  margin-top: 4px;
+}
+
+@media print {
+  .print-footer {
+    position: relative;
+    bottom: 0;
+    page-break-inside: avoid;
+  }
+}
+}
+
+/* Jede Druckseite als Flex-Column auf volle Seitenhöhe */
+  .print-table{
+    display:flex;
+    flex-direction:column;
+    /* A4-Höhe (297mm) minus @page-Top/Bottom-Margins (hier 18mm) */
+    min-height: calc(277mm - 2 * 18mm);
+    page-break-after: always;
+    margin-top: 8px;
+  }
+  .print-table:last-of-type{ page-break-after: auto; }
+
+  /* Fußzeile nach unten drücken */
+  .print-footer{
+    margin-top: auto;     /* <-- schiebt sie an das Seitenende */
+    page-break-inside: avoid;
+  }
+}
+
+/* Standard: in der App unsichtbar */
+.print-notes{ display:none; }
+
+/* Im Druck sichtbar + hübsch */
+@media print{
+  .print-notes{
+    display:block;
+    margin-top:10px;
+    border:1px solid #8B1538;
+    border-radius:6px;
+    padding:8px;
+    page-break-inside:avoid;
+    background:#fff;
+  }
+  .print-notes__title{
+    font-weight:700;
+    background:#8B1538;
+    color:#fff;
+    padding:6px 8px;
+    margin:-8px -8px 8px;
+    font-size:12px;
+  }
+  .print-notes__body{
+    font-size:12px;
+    color:#000;
+    white-space:pre-wrap;
+  }
+}
+
+
+/* ===== Dark-Mode & Info (nur UI) ===== */
+.theme-toggle,.info-toggle{
+  position:fixed;top:20px;right:20px;width:45px;height:45px;border-radius:50%;
+  border:none;background:#8B1538;color:#fff;font-size:20px;cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.2);z-index:1000
+}
+.info-toggle{right:75px}
+.theme-toggle:hover,.info-toggle:hover{transform:scale(1.05)}
+body.dark-theme{background:#1a1a1a}
+body.dark-theme .container{background:#2d2d2d;color:#e0e0e0}
+body.dark-theme h1{color:#fff;border-bottom-color:#8B1538}
+body.dark-theme input,body.dark-theme select,body.dark-theme textarea{background:#3d3d3d;color:#fff;border-color:#555}
+
+
+/* ===== iOS Print Lock (nur iPhone/iPad) – ganz am Ende lassen ===== */
+@media print {
+  html.ios body{
+    -webkit-text-size-adjust:100%!important;
+    print-color-adjust:exact!important;
+    -webkit-print-color-adjust:exact!important;
+  }
+  html.ios @page{
+    size:210mm 297mm!important;
+    margin:18mm 15mm!important;
+  }
+  html.ios .container{
+    width:100%!important;max-width:100%!important;margin:0!important;padding:12px!important;background:#fff!important;
+  }
+  html.ios .print-table{
+    height:calc(297mm - (2 * 18mm))!important;
+    min-height:unset!important;
+    display:flex!important;flex-direction:column!important;
+    page-break-after:always!important;
+  }
+  html.ios .print-table:last-of-type{page-break-after:auto!important;}
+  html.ios .print-table table{table-layout:fixed!important;width:100%!important}
+  html.ios .print-table th{
+    background:#8B1538!important;color:#fff!important;border-color:#7A1230!important;
+  }
+  html.ios h1,
+  html.ios .print-table th,
+  html.ios .print-table td,
+  html.ios .print-notes__title,
+  html.ios .print-notes__body{
+    -webkit-text-size-adjust:100%!important;
+  }
+  html.ios .print-footer{
+    margin-top:auto!important;page-break-inside:avoid!important;
+  }
+  html.ios .print-logo,
+  html.ios .print-footer img{
+    max-height:38px!important;height:auto!important;image-rendering:-webkit-optimize-contrast;
+  }
+}
+	</style>
+
+</head>
+<body>
+
+  <!-- Neue UI Buttons -->
+  <button class="theme-toggle" id="themeBtn" title="Hell/Dunkel">🌓</button>
+  <button class="info-toggle" id="infoBtn" title="App Info">ℹ️</button>
+
+  <!-- Info Modal -->
+  <div id="infoModal" class="info-modal" role="dialog" aria-modal="true" aria-labelledby="infoTitle" hidden>
+    <div class="info-modal-content">
+      <button class="info-close" id="infoCloseBtn" aria-label="Schließen">✕</button>
+      
+      <h2 id="infoTitle">🛠️ Technologie-Informationen</h2>
+      
+      <p style="margin-bottom:20px;color:#666">Diese App wurde mit <strong>reinen Web-Technologien</strong> entwickelt – keine Frameworks, keine externen Abhängigkeiten!</p>
+
+      <div class="tech-section">
+        <h3>1. HTML5</h3>
+        <ul>
+          <li>Struktur der Webseite</li>
+          <li>Semantische Elemente (<code>&lt;input type="date"&gt;</code>, <code>&lt;canvas&gt;</code>, <code>&lt;textarea&gt;</code>)</li>
+          <li>Meta-Tags für Mobile-Optimierung</li>
+        </ul>
+      </div>
+
+      <div class="tech-section">
+        <h3>2. CSS3</h3>
+        <ul>
+          <li>Komplettes Styling (kein CSS-Framework verwendet!)</li>
+          <li>Grid Layout für responsive Layouts</li>
+          <li>Flexbox für Ausrichtung</li>
+          <li>Media Queries für Mobile/Desktop/Print</li>
+          <li>CSS Transitions für Animationen</li>
+          <li>Dark Mode mit CSS-Variablen</li>
+        </ul>
+      </div>
+
+      <div class="tech-section">
+        <h3>3. Vanilla JavaScript (ES6+)</h3>
+        <ul>
+          <li>Keine Frameworks wie React, Vue oder Angular</li>
+          <li>Moderne JavaScript-Features:
+            <ul style="margin-top:8px">
+              <li>Arrow Functions (<code>=&gt;</code>)</li>
+              <li>Template Literals (<code>``</code>)</li>
+              <li>Async/Await</li>
+              <li>Array-Methoden (<code>.map()</code>, <code>.filter()</code>, <code>.forEach()</code>)</li>
+              <li>Destructuring</li>
+            </ul>
+          </li>
+          <li>Canvas API für die Unterschrift</li>
+          <li>LocalStorage API für Datenspeicherung</li>
+          <li>File API für JSON Import</li>
+        </ul>
+      </div>
+
+      <div class="tech-section">
+        <h3>4. Browser APIs</h3>
+        <ul>
+          <li><strong>Canvas API</strong> – Unterschriften zeichnen</li>
+          <li><strong>LocalStorage</strong> – Daten speichern</li>
+          <li><strong>File API</strong> – Dateien importieren</li>
+          <li><strong>Blob API</strong> – JSON exportieren</li>
+          <li><strong>Print API</strong> – PDF erstellen (<code>window.print()</code>)</li>
+        </ul>
+      </div>
+
+      <div class="tech-section">
+        <h3>📦 Besonderheiten</h3>
+        <div class="features">
+          <div class="feature-item">
+            ✅ <strong>Keine externen Abhängigkeiten</strong><br>
+            <small>Kein npm, keine Bibliotheken</small>
+          </div>
+          <div class="feature-item">
+            ✅ <strong>Keine Build-Tools</strong><br>
+            <small>Kein Webpack, Vite oder Bundler nötig</small>
+          </div>
+          <div class="feature-item">
+            ✅ <strong>Single File Application</strong><br>
+            <small>Alles in einer HTML-Datei</small>
+          </div>
+          <div class="feature-item">
+            ✅ <strong>Offline-fähig</strong><br>
+            <small>Funktioniert ohne Internet</small>
+          </div>
+          <div class="feature-item">
+            ✅ <strong>Keine Installation</strong><br>
+            <small>Einfach im Browser öffnen</small>
+          </div>
+          <div class="feature-item">
+            ✅ <strong>Datenschutz</strong><br>
+            <small>Alle Daten bleiben lokal</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="tech-section">
+        <h3>💡 Vorteile dieser Herangehensweise</h3>
+        <ul>
+          <li><strong>Einfache Wartung</strong> – Nur eine Datei</li>
+          <li><strong>Schnell</strong> – Keine großen Frameworks laden</li>
+          <li><strong>Portabel</strong> – Überall verwendbar (USB-Stick, E-Mail, etc.)</li>
+          <li><strong>Kompatibel</strong> – Läuft in jedem modernen Browser</li>
+          <li><strong>Privat</strong> – Alle Daten bleiben lokal im Browser</li>
+        </ul>
+      </div>
+
+      <p style="margin-top:25px;padding-top:20px;border-top:2px solid #eee;color:#666;text-align:center">
+        <strong>Tätigkeitsbericht-V25.10.23</strong> | Entwickelt mit ❤️ und purem Code
+      </p>
+    </div>
+  </div>
+
+
+  <div class="container">
+    <h1>📝 Tätigkeitsbericht</h1>
+	
+	<!-- Firmenlogo (Nexus ips) – optional -->
+<div class="section" id="logoSection">
+  
+
+  <!-- Upload-Button (verschwindet nach Upload) -->
+  <label class="btn btn-import" id="logoUploadBtn">
+    📤 Logo auswählen
+    <input type="file" id="logoFile"
+           accept="image/png,image/jpeg,image/svg+xml"
+           style="display:none"
+           onchange="importLogoFile(this.files[0])">
+  </label>
+
+  <!-- Vorschau -->
+  <div id="logoPrev" class="logo-preview" style="margin-top:4px;"></div>
+
+  <!-- Nach Upload sichtbar -->
+  <div id="logoActions" style="display:none;margin-top:1px;">
+  <button type="button" class="btn btn-import" onclick="changeLogo()">✨ Logo ändern</button>
+  <button type="button" class="btn btn-import" style="background:#E74C3C;" onclick="clearLogo()">🗑️ Logo entfernen</button>
+</div>
+
+</div>
+
+    <!-- Kopfbereich -->
+    <div class="section" id="headerSection">
+      <div>
+        <label class="label">Kunde:</label>
+        <input type="text" id="kunde" placeholder="Kundenname">
+      </div>
+      <div>
+        <label class="label">Projekt / Tätigkeit:</label>
+        <input type="text" id="projekt" placeholder="Projektnummer">
+      </div>
+      <div>
+        <label class="label">Datum:</label>
+        <input type="date" id="datum">
+      </div>
+      <div>
+        <label class="label">Mitarbeiter:</label>
+        <input type="text" id="mitarbeiter" placeholder="Ihr Name">
+      </div>
+    </div>
+
+    <!-- Statistik -->
+    <div id="stats" class="stats">
+      <div style="font-weight:600;margin-bottom:5px">📊 Statistik</div>
+      <div id="statsGrid" class="stats-grid"></div>
+    </div>
+
+    <!-- Tabelle (Bearbeitung) -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:30px">#</th>
+            <th style="width:90px">Datum</th>
+            <th style="width:120px">Aufgabe</th>
+            <th style="width:130px">Von - Bis</th>
+            <th style="width:70px">Std</th>
+            <th style="width:100px">Aktion</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <tr>
+            <td>1</td>
+            <td><input type="date" class="date-in"></td>
+            <td>
+              <select class="task-sel">
+                <option value="">-</option>
+                <option>Anfahrt</option>
+                <option>Installation</option>
+                <option>Schulung</option>
+                <option>Inbetriebnahme</option>
+                <option>Fehlerbehebung</option>
+                <option>Support</option>
+                <option>Test</option>
+                <option>Wartung</option>
+                <option>Dokumentation</option>
+              </select>
+            </td>
+            <td>
+              <input type="time" class="time-start" style="width:45%;display:inline-block"> -
+              <input type="time" class="time-end" style="width:45%;display:inline-block">
+            </td>
+            <td class="hours">00:00</td>
+            <td>
+              <button class="btn-row" onclick="dupRow(this)">📋</button>
+              <button class="btn-row danger" onclick="delRow(this)">🗑️</button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="4" style="text-align:right;font-weight:700">Summe:</td>
+            <td id="total" >00:00</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- Print-only Seiten -->
+    <div id="printPages" class="print-only"></div>
+
+    <button class="btn btn-add" onclick="addRow()">➕ Zeile hinzufügen</button>
+
+    <!-- Bemerkungen -->
+    <div class="section">
+      <label class="label">📌 Bemerkungen:</label>
+      <textarea id="notes" placeholder="Beschreibung der Tätigkeiten..."></textarea>
+    </div>
+
+    <!-- Signatur / Name -->
+    <div class="section">
+      <label class="label">👤 Name (Unterzeichnung):</label>
+      <label for="sigName"></label><input type="text" id="sigName" placeholder="Vollständiger Name">
+
+      <label class="label">✍️ Unterschrift:</label>
+      <button class="btn btn-sig" onclick="openSig()">Jetzt unterschreiben</button>
+		
+		<label class="label">📷 Unterschrift als Bild hochladen (PNG/JPG):</label>
+			<label class="btn btn-import">📤 Datei auswählen
+			<input type="file" id="sigFile" accept="image/png,image/jpeg" style="display:none" onchange="importSigFile(this.files[0])">
+		</label>
+		
+		<small style="color:#666;display:block;margin:6px 0 0 2px">Tipp: Helle, gut lesbare Signatur verwenden.</small>
+
+      <div id="sigPrev" class="sig-preview">
+        <span class="placeholder">Noch keine Unterschrift</span>
+      </div>
+    </div>
+
+    <!-- Aktionen -->
+    <button class="btn btn-save" onclick="saveReport()">💾 Speichern</button>
+    <button class="btn btn-pdf" onclick="exportPDF()">📄 PDF Export</button>
+    <button class="btn btn-print" onclick="window.print()">🖨️ Drucken</button>
+    <button class="btn btn-json" onclick="exportJSON()">🗄️ JSON Export</button>
+    <label class="btn btn-import" style="display:block;cursor:pointer">
+      📥 JSON Import
+      <input id="jsonFile" type="file" accept="application/json" style="display:none" onchange="importJSON(this.files[0])">
+    </label>
+
+    <!-- Gespeicherte Berichte -->
+    <div id="reports" class="reports">
+      <h2>💼 Gespeicherte Berichte</h2>
+      <div id="reportsList"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Signatur -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <span class="close" onclick="closeSig()">&times;</span>
+      <div class="modal-title">✍️ Unterschrift erstellen</div>
+      <p style="color:#666;font-size:14px;margin-bottom:10px">Zeichnen Sie Ihre Unterschrift:</p>
+      <div class="canvas-box">
+        <div id="hint" class="canvas-hint">Hier unterschreiben...</div>
+        <canvas id="sigCanvas"></canvas>
+      </div>
+      <div class="modal-btns">
+        <button class="modal-btn btn-clear" onclick="clearSig()">🗑️ Löschen</button>
+        <button class="modal-btn btn-cancel" onclick="closeSig()">❌ Abbrechen</button>
+        <button class="modal-btn btn-ok" onclick="saveSig()">✅ OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <script>
+    let rowNum=1, reports=[], sigData=null, logoData=null, canvas, ctx, drawing=false, hasUnsavedChanges=false, canvasInitialized=false;
+
+    // Helpers
+    document.getElementById('datum').valueAsDate=new Date();
+    function toMin(t){if(!t)return 0;const[h,m]=t.split(':').map(Number);return(h||0)*60+(m||0)}
+    function toHM(m){const h=Math.floor(m/60);const mn=Math.abs(m%60);return String(h).padStart(2,'0')+':'+String(mn).padStart(2,'0')}
+    function markUnsaved(){hasUnsavedChanges=true}
+    function markSaved(){hasUnsavedChanges=false}
+    function toast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type;t.style.display='block';setTimeout(()=>t.style.display='none',3000)}
+
+    // Zeitberechnung + Nachtschicht (dataset.minutes)
+    function calcRow(row){
+      const s=row.querySelector('.time-start').value;
+      const e=row.querySelector('.time-end').value;
+      const cell=row.querySelector('.hours');
+      if(!s||!e){cell.textContent='00:00';cell.style.color='';cell.dataset.minutes='0';return}
+      const sm=toMin(s),em=toMin(e);
+      let diff=em-sm;
+
+      if(diff<0){
+        diff=1440+diff;
+        cell.textContent=toHM(diff);
+        cell.dataset.minutes=String(diff);
+        cell.style.color='#FF9800';
+        let note=row.querySelector('.overnight-note');
+        if(!note){
+          note=document.createElement('div');
+          note.className='overnight-note';
+          note.textContent='(über Mitternacht)';
+          cell.appendChild(note);
+        }
+      }else if(diff===0){
+        cell.textContent='⚠️';cell.style.color='#E74C3C';cell.dataset.minutes='0';
+      }else{
+        cell.style.color='';cell.textContent=toHM(diff);
+        cell.dataset.minutes=String(diff);
+        const note=row.querySelector('.overnight-note'); if(note)note.remove();
+      }
+      calcTotal();
+      markUnsaved();
+    }
+
+    function calcTotal(){
+      let tot=0;
+      document.querySelectorAll('#tbody .hours').forEach(c=>{
+        const m = Number(c.dataset.minutes || 0);
+        if(!isNaN(m) && c.textContent !== '⚠️') tot += m;
+      });
+      document.getElementById('total').textContent=toHM(tot);
+      updateStats();
+    }
+
+    function updateStats(){
+      const stats={};let hasData=false;
+      document.querySelectorAll('#tbody tr').forEach(row=>{
+        const task=row.querySelector('.task-sel')?.value;
+        const m=Number(row.querySelector('.hours')?.dataset.minutes||0);
+        const warn=(row.querySelector('.hours')?.textContent==='⚠️');
+        if(task && !isNaN(m) && !warn){hasData=true;stats[task]=(stats[task]||0)+m;}
+      });
+      const sec=document.getElementById('stats');
+      const grid=document.getElementById('statsGrid');
+      if(!sec||!grid){return}
+      if(!hasData){sec.style.display='none';return}
+      sec.style.display='block';
+      grid.innerHTML=Object.entries(stats).sort((a,b)=>b[1]-a[1]).map(([t,m])=>`
+        <div class="stat-item"><div class="stat-label">${t}</div><div class="stat-value">${toHM(m)}</div></div>
+      `).join('');
+    }
+
+    function attachRow(row){
+      row.querySelector('.time-start').addEventListener('change',()=>calcRow(row));
+      row.querySelector('.time-end').addEventListener('change',()=>calcRow(row));
+      row.querySelector('.task-sel').addEventListener('change',()=>{updateStats();markUnsaved()});
+      row.querySelector('.date-in').addEventListener('change',markUnsaved);
+    }
+
+    function addRow(){
+      const last=document.querySelector('#tbody tr:last-child');
+      const lastDate=last?last.querySelector('.date-in').value:'';
+      rowNum++;
+      const tr=document.createElement('tr');
+      tr.innerHTML=`
+        <td>${rowNum}</td>
+        <td><input type="date" class="date-in" value="${lastDate}"></td>
+        <td>
+          <select class="task-sel">
+            <option value="">-</option>
+            <option>Anfahrt</option>
+            <option>Installation</option>
+            <option>Schulung</option>
+            <option>Inbetriebnahme</option>
+            <option>Fehlerbehebung</option>
+            <option>Support</option>
+            <option>Test</option>
+            <option>Wartung</option>
+            <option>Dokumentation</option>
+          </select>
+        </td>
+        <td>
+          <input type="time" class="time-start" style="width:45%;display:inline-block"> -
+          <input type="time" class="time-end" style="width:45%;display:inline-block">
+        </td>
+        <td class="hours"  data-minutes="0">00:00</td>
+        <td><button class="btn-row" onclick="dupRow(this)">📋</button> <button class="btn-row danger" onclick="delRow(this)">🗑️</button></td>
+      `;
+      document.getElementById('tbody').appendChild(tr);
+      attachRow(tr);
+      markUnsaved();
+      toast('Zeile hinzugefügt','success');
+    }
+
+    function dupRow(btn){
+      const row=btn.closest('tr');
+      rowNum++;
+      const tr=document.createElement('tr');
+      tr.innerHTML=`
+        <td>${rowNum}</td>
+        <td><input type="date" class="date-in" value="${row.querySelector('.date-in').value}"></td>
+        <td>
+          <select class="task-sel">
+            <option value="">-</option>
+            <option>Anfahrt</option>
+            <option>Installation</option>
+            <option>Schulung</option>
+            <option>Inbetriebnahme</option>
+            <option>Fehlerbehebung</option>
+            <option>Support</option>
+            <option>Test</option>
+            <option>Wartung</option>
+            <option>Dokumentation</option>
+          </select>
+        </td>
+        <td>
+          <input type="time" class="time-start" style="width:45%;display:inline-block" value="${row.querySelector('.time-start').value}">
+           -
+          <input type="time" class="time-end" style="width:45%;display:inline-block" value="${row.querySelector('.time-end').value}">
+        </td>
+        <td class="hours"  data-minutes="0">00:00</td>
+        <td><button class="btn-row" onclick="dupRow(this)">📋</button> <button class="btn-row danger" onclick="delRow(this)">🗑️</button></td>
+      `;
+      row.parentNode.insertBefore(tr,row.nextSibling);
+      tr.querySelector('.task-sel').value=row.querySelector('.task-sel').value;
+      tr.querySelectorAll('.overnight-note').forEach(n=>n.remove());
+      attachRow(tr);
+      calcRow(tr);
+      renumber();
+      markUnsaved();
+      toast('Zeile dupliziert','success');
+    }
+
+    function delRow(btn){
+      if(document.querySelectorAll('#tbody tr').length===1){
+        toast('Mindestens eine Zeile erforderlich!','error');return;
+      }
+      btn.closest('tr').remove();
+      renumber();
+      calcTotal();
+      markUnsaved();
+      toast('Zeile gelöscht','info');
+    }
+
+    function renumber(){
+      const rows=document.querySelectorAll('#tbody tr');
+      rowNum=0;
+      rows.forEach(r=>{
+        rowNum++;
+        r.querySelector('td:first-child').textContent=rowNum;
+      });
+    }
+
+    // Signature Modal
+    function openSig(){
+      document.getElementById('modal').style.display='block';
+      document.body.style.overflow='hidden';
+      if(!canvasInitialized){
+        setTimeout(initCanvas,100);
+        canvasInitialized=true;
+      }
+    }
+    function closeSig(){
+      document.getElementById('modal').style.display='none';
+      document.body.style.overflow='auto';
+    }
+    function initCanvas(){
+      canvas=document.getElementById('sigCanvas');
+      ctx=canvas.getContext('2d');
+      const rect=canvas.getBoundingClientRect();
+      const dpr=window.devicePixelRatio||1;
+      canvas.width=rect.width*dpr; canvas.height=rect.height*dpr;
+      ctx.scale(dpr,dpr);
+      ctx.strokeStyle='#000'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.lineJoin='round';
+
+      function getPos(e){const r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
+      function getTouchPos(t){const r=canvas.getBoundingClientRect();return{x:t.clientX-r.left,y:t.clientY-r.top};}
+      function startDraw(x,y){document.getElementById('hint').classList.add('hide');ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y);ctx.stroke();drawing=true;}
+      function draw(x,y){ctx.lineTo(x,y);ctx.stroke();ctx.beginPath();ctx.moveTo(x,y);}
+
+      canvas.addEventListener('mousedown',e=>{e.preventDefault();const{ x,y }=getPos(e);startDraw(x,y);});
+      canvas.addEventListener('mousemove',e=>{e.preventDefault();if(!drawing)return;const{ x,y }=getPos(e);draw(x,y);});
+      canvas.addEventListener('mouseup',()=>{if(drawing){drawing=false;ctx.beginPath()}});
+      canvas.addEventListener('mouseleave',()=>{if(drawing){drawing=false;ctx.beginPath()}});
+      canvas.addEventListener('touchstart',e=>{e.preventDefault();const t=e.touches[0];const{ x,y }=getTouchPos(t);startDraw(x,y)},{passive:false});
+      canvas.addEventListener('touchmove',e=>{e.preventDefault();if(!drawing)return;const t=e.touches[0];const{ x,y }=getTouchPos(t);draw(x,y)},{passive:false});
+      canvas.addEventListener('touchend',e=>{e.preventDefault();if(drawing){drawing=false;ctx.beginPath()}},{passive:false});
+    }
+    function clearSig(){
+      if(!ctx||!canvas)return;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      document.getElementById('hint').classList.remove('hide');
+      toast('Unterschrift gelöscht','info');
+    }
+    function isCanvasBlank(cnv){
+      const blank=document.createElement('canvas');
+      blank.width=cnv.width; blank.height=cnv.height;
+      return cnv.toDataURL()===blank.toDataURL();
+    }
+    function trimSignature(cnv){
+      const w=cnv.width,h=cnv.height, c=cnv.getContext('2d');
+      const img=c.getImageData(0,0,w,h).data;
+      let minX=w,minY=h,maxX=0,maxY=0,found=false;
+      for(let y=0;y<h;y++){
+        for(let x=0;x<w;x++){
+          const idx=(y*w+x)*4;
+          const a=img[idx+3];
+          if(a>0){found=true; if(x<minX)minX=x; if(y<minY)minY=y; if(x>maxX)maxX=x; if(y>maxY)maxY=y;}
+        }
+      }
+      if(!found)return null;
+      const tw=maxX-minX+1,th=maxY-minY+1;
+      const out=document.createElement('canvas');
+      out.width=tw; out.height=th;
+      out.getContext('2d').drawImage(cnv,minX,minY,tw,th,0,0,tw,th);
+      return out;
+    }
+    function saveSig(){
+      if(!canvas||isCanvasBlank(canvas)){toast('Bitte unterschreiben Sie zuerst!','error');return;}
+      const trimmed=trimSignature(canvas);
+      if(!trimmed){toast('Unterschrift leer. Bitte erneut zeichnen.','error');return;}
+      sigData=trimmed.toDataURL('image/png');
+      document.getElementById('sigPrev').innerHTML=`<img src="${sigData}" alt="Unterschrift">`;
+      closeSig();
+      markUnsaved();
+      toast('Unterschrift gespeichert','success');
+    }
+
+	// Bild-Datei als Unterschrift importieren
+function importSigFile(file){
+  if(!file){ return; }
+  if(!/^image\/(png|jpeg)$/i.test(file.type)){
+    toast('Nur PNG oder JPG erlaubt.','error'); return;
+  }
+  const maxBytes = 2 * 1024 * 1024; // 2 MB
+  if(file.size > maxBytes){
+    toast('Bild ist zu groß (max. 2 MB).','error'); return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => {
+    sigData = e.target.result; // DataURL
+    document.getElementById('sigPrev').innerHTML = `<img src="${sigData}" alt="Unterschrift">`;
+    markUnsaved();
+    toast('Unterschrift-Bild übernommen','success');
+  };
+  reader.readAsDataURL(file);
+}
+
+// Firmenlogo importieren (Nexus ips)
+function importLogoFile(file){
+  if(!file){return;}
+  if(!/^image\//i.test(file.type)){
+    toast('Bitte ein Bild (PNG/JPG/SVG) wählen.','error'); return;
+  }
+  const maxBytes = 2 * 1024 * 1024;
+  if(file.size > maxBytes){
+    toast('Logo ist zu groß (max. 2 MB).','error'); return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => {
+    logoData = e.target.result; // DataURL
+    document.getElementById('logoPrev').innerHTML = `<img src="${logoData}" alt="Logo">`;
+
+    // Upload-Button ausblenden, Aktionen einblenden
+    const up  = document.getElementById('logoUploadBtn');
+    const act = document.getElementById('logoActions');
+    if(up)  up.style.display  = 'none';
+    if(act) act.style.display = 'block';
+
+    markUnsaved();
+    toast('Logo übernommen','success');
+  };
+  reader.readAsDataURL(file);
+}
+function changeLogo(){
+  document.getElementById('logoFile')?.click();
+}
+
+function clearLogo(){
+  logoData = null;
+
+  const prev = document.getElementById('logoPrev');
+  if (prev) prev.innerHTML = '<span class="placeholder">Noch kein Logo ausgewählt</span>';
+
+  // Upload-Button und Aktionen korrekt umschalten
+  const up  = document.getElementById('logoUploadBtn');
+  const act = document.getElementById('logoActions');
+  if (up)  up.style.display  = '';
+  if (act) act.style.display = 'none';
+
+  const input = document.getElementById('logoFile');
+  if (input) input.value = '';
+
+  markUnsaved();
+  toast('Logo entfernt', 'info');
+}
+
+
+    // Speichern/Reports
+    function saveReport(){
+      const kunde=document.getElementById('kunde').value.trim();
+      const projekt=document.getElementById('projekt').value.trim();
+      const datum=document.getElementById('datum').value;
+      const ma=document.getElementById('mitarbeiter').value.trim();
+      const notes=document.getElementById('notes').value.trim();
+      const sigName=document.getElementById('sigName').value.trim();
+      if(!kunde){toast('Bitte Kunde eingeben!','error');return}
+      if(!sigName){toast('Bitte Namen eingeben!','error');return}
+      if(!sigData){toast('Bitte unterschreiben!','error');return}
+		
+      const entries=[]; let hasErr=false;
+      document.querySelectorAll('#tbody tr').forEach((row,i)=>{
+        const d=row.querySelector('.date-in').value;
+        const task=row.querySelector('.task-sel').value;
+        const s=row.querySelector('.time-start').value;
+        const e=row.querySelector('.time-end').value;
+        let h=row.querySelector('.hours').textContent||'00:00';
+        h=h.replace('(über Mitternacht)','').trim();
+        if(h.includes('⚠️'))hasErr=true;
+        if(task||s||e||d)entries.push({nr:i+1,datum:d,aufgabe:task,start:s,end:e,stunden:h});
+      });
+      if(hasErr){toast('Bitte Zeitfehler korrigieren!','error');return}
+      if(!entries.length){toast('Bitte mindestens einen Eintrag!','error');return}
+
+      const report={
+        id:Date.now(),
+        kunde,projekt,datum,mitarbeiter:ma,
+        bemerkungen:notes,sigName,sigData,
+        logoData,
+        entries,
+        summe:document.getElementById('total').textContent,
+        erstellt:new Date().toLocaleString('de-DE')
+      };
+
+      try{
+        reports.push(report);
+        localStorage.setItem('reports',JSON.stringify(reports));
+        markSaved();
+        toast('✅ Bericht gespeichert!','success');
+        displayReports();
+      }catch(e){
+        if(e && e.name==='QuotaExceededError'){
+          toast('❌ Speicher voll! Bitte alte Berichte löschen.','error');
+        }else{
+          toast('❌ Fehler beim Speichern!','error'); console.error(e);
+        }
+      }
+    }
+
+    function esc(s){return String(s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
+    function displayReports(){
+      const list=document.getElementById('reportsList');
+      if(!reports.length){
+        list.innerHTML='<p style="color:#999;padding:15px;text-align:center">Keine Berichte gespeichert</p>';
+        return;
+      }
+      const sorted=[...reports].sort((a,b)=>b.id-a.id);
+      list.innerHTML=sorted.map(r=>`
+        <div class="report-item">
+          <strong style="font-size:15px;color:#2C3E50">📋 ${esc(r.kunde)}</strong>${r.projekt?' – '+esc(r.projekt):''}<br>
+          <small style="color:#666">Erstellt: ${esc(r.erstellt)} | ${r.entries.length} Einträge | ${esc(r.summe)}</small>
+          ${r.sigData?'<br><img alt="Unterschrift" src="'+esc(r.sigData)+'" style="max-width:200px;max-height:60px;margin-top:8px;border:0;padding:0;background:#fff">':''}
+          <div class="report-actions">
+            <button class="report-btn report-load" onclick="loadReport(${r.id})">📂 Laden</button>
+            <button class="report-btn report-delete" onclick="deleteReport(${r.id})">🗑️ Löschen</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function loadReport(id){
+      const r=reports.find(x=>x.id===id);
+      if(!r)return;
+      if(hasUnsavedChanges&&!confirm('Nicht gespeicherte Änderungen gehen verloren. Fortfahren?'))return;
+
+      document.getElementById('kunde').value=r.kunde||'';
+      document.getElementById('projekt').value=r.projekt||'';
+      document.getElementById('datum').value=r.datum||'';
+      document.getElementById('mitarbeiter').value=r.mitarbeiter||'';
+      document.getElementById('notes').value=r.bemerkungen||'';
+      document.getElementById('sigName').value=r.sigName||'';
+
+      sigData=r.sigData||null;
+      document.getElementById('sigPrev').innerHTML=sigData?`<img src="${sigData}" alt="Unterschrift">`:'<span class="placeholder">Noch keine Unterschrift</span>';
+
+      // Logo wiederherstellen + UI-Zustand
+      logoData = r.logoData || null;
+      const logoPrev = document.getElementById('logoPrev');
+      logoPrev.innerHTML = logoData
+        ? `<img src="${esc(logoData)}" alt="Logo">`
+        : '<span class="placeholder">Noch kein Logo ausgewählt</span>';
+      document.getElementById('logoUploadBtn').style.display = logoData ? 'none'  : '';
+      document.getElementById('logoActions').style.display   = logoData ? 'block' : 'none';
+
+      document.getElementById('tbody').innerHTML='';
+      rowNum=0;
+
+      if(r.entries&&r.entries.length){
+        r.entries.forEach(e=>{
+          addRow();
+          const row=document.querySelector('#tbody tr:last-child');
+          row.querySelector('.date-in').value=e.datum||'';
+          row.querySelector('.task-sel').value=e.aufgabe||'';
+          row.querySelector('.time-start').value=e.start||'';
+          row.querySelector('.time-end').value=e.end||'';
+          calcRow(row);
+        });
+      }else{ addRow() }
+
+      markSaved();
+      window.scrollTo({top:0,behavior:'smooth'});
+      toast('Bericht geladen','success');
+    }
+
+    function deleteReport(id){
+      if(!confirm('Bericht wirklich löschen?'))return;
+      reports=reports.filter(r=>r.id!==id);
+      try{
+        localStorage.setItem('reports',JSON.stringify(reports));
+        displayReports();
+        toast('Bericht gelöscht','info');
+      }catch(e){
+        toast('Fehler beim Löschen!','error'); console.error(e);
+      }
+    }
+
+    function exportPDF(){
+      toast('PDF wird vorbereitet...','info');
+      setTimeout(()=>window.print(),200);
+    }
+
+    function exportJSON(){
+      const allData=captureCurrentAsObject();
+      const blob=new Blob([JSON.stringify(allData,null,2)],{type:'application/json'});
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob);
+      const safeName=(document.getElementById('kunde').value||'Unbekannt').replace(/[^\w\-]+/g,'_');
+      a.download=`Taetigkeitsbericht_${safeName}_${new Date().toISOString().slice(0,10)}.json`;
+      document.body.appendChild(a);a.click();a.remove();
+      toast('JSON exportiert','success');
+    }
+
+    // >>>>>>> JSON IMPORT <<<<<<<<<
+    function importJSON(file){
+      if(!file){ return; }
+      if(file.type && file.type !== 'application/json' && !file.name.toLowerCase().endsWith('.json')){
+        toast('Bitte eine JSON-Datei wählen.','error'); return;
+      }
+      const maxBytes = 2 * 1024 * 1024; // 2 MB
+      if(file.size > maxBytes){
+        toast('Datei ist zu groß (max. 2 MB).','error'); return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        try{
+          const data = JSON.parse(e.target.result || '{}');
+          const r = data.report ? data.report : data;
+
+          document.getElementById('kunde').value = r.kunde || '';
+          document.getElementById('projekt').value = r.projekt || '';
+          document.getElementById('datum').value = r.datum || '';
+          document.getElementById('mitarbeiter').value = r.mitarbeiter || '';
+          document.getElementById('notes').value = r.bemerkungen || r.notes || '';
+          document.getElementById('sigName').value = r.sigName || '';
+          sigData = r.sigData || null;
+          logoData = r.logoData || null;
+
+          // Signatur-Vorschau
+          document.getElementById('sigPrev').innerHTML = sigData
+            ? `<img src="${sigData}" alt="Unterschrift">`
+            : '<span class="placeholder">Noch keine Unterschrift</span>';
+
+          // Logo-Vorschau + UI-Zustand
+          const logoPrev = document.getElementById('logoPrev');
+          logoPrev.innerHTML = logoData
+            ? `<img src="${esc(logoData)}" alt="Logo">`
+            : '<span class="placeholder">Noch kein Logo ausgewählt</span>';
+          document.getElementById('logoUploadBtn').style.display = logoData ? 'none'  : '';
+          document.getElementById('logoActions').style.display   = logoData ? 'block' : 'none';
+
+          // Tabelle befüllen
+          document.getElementById('tbody').innerHTML = '';
+          rowNum = 0;
+          const entries = Array.isArray(r.entries) ? r.entries : [];
+          if(entries.length){
+            entries.forEach(eRow=>{
+              addRow();
+              const row=document.querySelector('#tbody tr:last-child');
+              row.querySelector('.date-in').value = eRow.datum || '';
+              row.querySelector('.task-sel').value = eRow.aufgabe || '';
+              row.querySelector('.time-start').value = eRow.start || '';
+              row.querySelector('.time-end').value = eRow.end || '';
+              calcRow(row);
+            });
+          }else{
+            addRow();
+          }
+
+          if(r.summe){ document.getElementById('total').textContent = r.summe; }
+          calcTotal();
+          updateStats();
+
+          const fileInput = document.getElementById('jsonFile');
+          if(fileInput) fileInput.value = '';
+          markSaved();
+          window.scrollTo({top:0,behavior:'smooth'});
+          toast('JSON importiert','success');
+
+        }catch(err){
+          console.error(err);
+          toast('JSON konnte nicht gelesen werden. Prüfen Sie das Format.','error');
+        }
+      };
+      reader.readAsText(file, 'utf-8');
+    }
+    // <<<<<<<<< ENDE JSON IMPORT <<<<<<<<<
+
+    function captureCurrentAsObject(){
+      const entries=[];
+      document.querySelectorAll('#tbody tr').forEach((row,i)=>{
+        let h=row.querySelector('.hours').textContent||'00:00';
+        h=h.replace('(über Mitternacht)','').trim();
+        entries.push({
+          nr:i+1,
+          datum:row.querySelector('.date-in').value||'',
+          aufgabe:row.querySelector('.task-sel').value||'',
+          start:row.querySelector('.time-start').value||'',
+          end:row.querySelector('.time-end').value||'',
+          stunden:h
+        });
+      });
+      return {
+        meta:{version:'Tätigkeitsbericht-V25.10.23',exported:new Date().toISOString()},
+        kunde:document.getElementById('kunde').value.trim(),
+        projekt:document.getElementById('projekt').value.trim(),
+        datum:document.getElementById('datum').value,
+        mitarbeiter:document.getElementById('mitarbeiter').value.trim(),
+        bemerkungen:document.getElementById('notes').value.trim(),
+        sigName:document.getElementById('sigName').value.trim(),
+        sigData:sigData||null,
+        logoData:logoData||null,
+        entries,
+        summe:document.getElementById('total').textContent||'00:00'
+      };
+    }
+
+    // Warnung bei ungespeicherten Änderungen
+    window.addEventListener('beforeunload',e=>{
+      if(hasUnsavedChanges){e.preventDefault();e.returnValue='';}
+    });
+
+	
+
+    // Initialisierung
+    document.querySelectorAll('#tbody tr').forEach(attachRow);
+    const saved=localStorage.getItem('reports');
+    if(saved){try{reports=JSON.parse(saved)||[]}catch{reports=[]}}
+    displayReports();
+
+    // ====== DRUCK: 20 Zeilen + Kopf & Fuß pro Seite ======
+    function buildPrintTables(){
+      const wrap = document.getElementById('printPages');
+      if(!wrap) return;
+      wrap.innerHTML = '';
+
+      const rows = Array.from(document.querySelectorAll('#tbody tr'));
+      if(rows.length === 0) return;
+
+      const chunkSize = 18;
+	
+	  const notesVal = document.getElementById('notes')?.value.trim() || '';
+
+      const kundeVal = document.getElementById('kunde')?.value || '';
+      const projektVal = document.getElementById('projekt')?.value || '';
+      const datumVal = document.getElementById('datum')?.value || '';
+      const mitarbeiterVal = document.getElementById('mitarbeiter')?.value || '';
+      const sigNameVal = document.getElementById('sigName')?.value || '';
+      const totalAll = document.getElementById('total')?.textContent || '00:00';
+      const sig = sigData || '';
+
+      const esc = (s)=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+
+      function makeHeader(){
+  const h = document.createElement('div');
+  h.className = 'print-header';
+
+  const esc = (s)=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+
+  const card = (title, value) => `
+    <div style="border:1px solid #8B1538;border-radius:6px;overflow:hidden;">
+      <div style="background:#8B1538;color:#fff;padding:6px 0;font-size:11px;font-weight:700;text-align:center;border-bottom:1px solid #8B1538;">${title}</div>
+      <div style="padding:8px 10px;text-align:center;font-size:12px;background:#fff;color:#2C3E50;">${value ? esc(value) : '&nbsp;'}</div>
+    </div>
+  `;
+
+  const topBar = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <div style="font-size:12px;color:#2C3E50;font-weight:600">Tätigkeitsbericht</div>
+      <div>${logoData ? `<img class="print-logo" src="${esc(logoData)}" alt="Nexus ips Logo">` : ''}</div>
+    </div>
+  `;
+
+  const kundeVal = document.getElementById('kunde')?.value || '';
+  const projektVal = document.getElementById('projekt')?.value || '';
+  const datumVal = document.getElementById('datum')?.value || '';
+  const mitarbeiterVal = document.getElementById('mitarbeiter')?.value || '';
+
+  h.innerHTML = `
+    ${topBar}
+    <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:10px;margin-bottom:10px;page-break-inside:avoid;">
+      ${card('Kunde:', kundeVal)}
+      ${card('Projekt / Tätigkeit:', projektVal)}
+      ${card('Datum:', datumVal)}
+      ${card('Mitarbeiter:', mitarbeiterVal)}
+    </div>
+  `;
+  return h;
+}
+
+
+
+      function makeFooter(){
+  const f = document.createElement('div');
+  f.className = 'print-footer';
+  f.innerHTML = `
+    <strong>Name:</strong>
+    ${esc(sigNameVal)}
+    ${sig ? `<img src="${esc(sig)}" alt="Unterschrift">` : ''}
+  `;
+  return f;
+}
+
+
+      for(let i=0;i<rows.length;i+=chunkSize){
+        const page = document.createElement('div');
+        page.className = 'print-table';
+
+        page.appendChild(makeHeader());
+
+        const tbl = document.createElement('table');
+        const thead = document.createElement('thead');
+        thead.innerHTML = '<tr>'+
+          '<th style="width:30px">#</th>'+
+          '<th style="width:90px">Datum</th>'+
+          '<th style="width:120px">Aufgabe</th>'+
+          '<th style="width:130px">Von - Bis</th>'+
+          '<th style="width:70px">Std</th>'+
+        '</tr>';
+        tbl.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+        const slice = rows.slice(i, i+chunkSize);
+        slice.forEach((tr, idx)=>{
+          const dateVal = tr.querySelector('.date-in')?.value || '';
+          const taskVal = tr.querySelector('.task-sel')?.value || '';
+          const s = tr.querySelector('.time-start')?.value || '';
+          const e = tr.querySelector('.time-end')?.value || '';
+          const h = tr.querySelector('.hours')?.textContent || '00:00';
+
+          const trOut = document.createElement('tr');
+          trOut.innerHTML = '<td>'+((i+idx)+1)+'</td>'+
+            '<td>'+esc(dateVal)+'</td>'+
+            '<td>'+esc(taskVal || '-')+'</td>'+
+            '<td>'+esc(s)+' - '+esc(e)+'</td>'+
+            '<td>'+esc(h)+'</td>';
+          tbody.appendChild(trOut);
+        });
+        tbl.appendChild(tbody);
+
+        if(i+chunkSize >= rows.length){
+          const tfoot = document.createElement('tfoot');
+          const trf = document.createElement('tr');
+          trf.className = 'print-foot';
+          trf.innerHTML = '<td colspan="4" style="text-align:right">Summe:</td><td>'+esc(totalAll)+'</td>';
+          tfoot.appendChild(trf);
+          tbl.appendChild(tfoot);
+        }
+
+        page.appendChild(tbl);
+
+        // >>> Bemerkungen auf der letzten Seite, wenn Text vorhanden
+        if (i + chunkSize >= rows.length && notesVal) {
+          const notesBox = document.createElement('div');
+          notesBox.className = 'print-notes';
+          notesBox.innerHTML = `
+            <div class="print-notes__title">Bemerkungen</div>
+            <div class="print-notes__body">${esc(notesVal)}</div>
+          `;
+          page.appendChild(notesBox);
+        }
+
+        page.appendChild(makeFooter());
+        wrap.appendChild(page);
+      }
+    }
+
+    if(window.matchMedia){
+      window.addEventListener('beforeprint', buildPrintTables);
+      window.addEventListener('afterprint', function(){
+        const p=document.getElementById('printPages'); if(p) p.innerHTML='';
+      });
+    } else {
+      window.onbeforeprint = buildPrintTables;
+      window.onafterprint = function(){ const p=document.getElementById('printPages'); if(p) p.innerHTML=''; };
+    }
+
+    /* ===== Dark-Mode (UI only) ===== */
+    (function(){
+      const btn=document.getElementById('themeBtn');
+      const saved=localStorage.getItem('uiTheme');
+      if(saved==='dark')document.body.classList.add('dark-theme');
+      btn.addEventListener('click',()=>{
+        document.body.classList.toggle('dark-theme');
+        localStorage.setItem('uiTheme',document.body.classList.contains('dark-theme')?'dark':'light');
+      });
+    })();
+
+    
+/* ===== Info-Modal ohne aria-hidden-Warnung ===== */
+    (function(){
+      const infoBtn=document.getElementById('infoBtn');
+      const modal=document.getElementById('infoModal');
+      const closeBtn=document.getElementById('infoCloseBtn');
+      let lastFocus=null;
+
+      function openInfo(){
+        lastFocus=document.activeElement;
+        modal.hidden=false;
+        document.body.style.overflow='hidden';
+        closeBtn && closeBtn.focus();
+      }
+      function closeInfo(){
+        modal.hidden=true;
+        document.body.style.overflow='auto';
+        if(lastFocus && typeof lastFocus.focus==='function') lastFocus.focus();
+      }
+      infoBtn && infoBtn.addEventListener('click',openInfo);
+      closeBtn && closeBtn.addEventListener('click',closeInfo);
+      modal && modal.addEventListener('click',e=>{if(e.target===modal)closeInfo();});
+      document.addEventListener('keydown',e=>{if(e.key==='Escape' && !modal.hidden) closeInfo();});
+    })();
+
+    // ===== iOS erkennen und Klasse setzen (für Print-Lock) =====
+    (function(){
+      var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      if(iOS) document.documentElement.classList.add('ios');
+    })();
+
+    // NEU: Standard-Logo initial setzen (mit deinem Bild-Link)
+	function initDefaultLogo(){
+		const DEFAULT_LOGO = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1shSo_HkAXx3y8zO86_q1fLiAZsrAm7DcVw&s';
+		if(!logoData){
+		logoData = DEFAULT_LOGO;
+
+      // Vorschau
+		const prev = document.getElementById('logoPrev');
+		if (prev) prev.innerHTML = `<img src="${logoData}" alt="Standardlogo">`;
+
+      // UI umschalten
+		const up  = document.getElementById('logoUploadBtn');
+		const act = document.getElementById('logoActions');
+		if (up)  up.style.display  = 'none';
+		if (act) act.style.display = 'block';
+    }
+  }
+
+  // Aufruf direkt nach deiner Initialisierung (z. B. nach displayReports();)
+  initDefaultLogo();
+
+
+
+  </script>
+</body>
+</html>
