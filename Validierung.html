@@ -3,11 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – v3.3 Fixed</title>
+  <title>CL Validierungsprotokoll – v3.3 Fixed + ProPrint</title>
   <style>
     :root{
       --primary:#8B1538; --bg:#F8F9FB; --text:#1E2434; --card:#ffffff; --muted:#e9edf3;
       --ok:#11a36a; --warn:#d97706; --err:#c81e1e; --guide:#94a3b8;
+      /* ProPrint Theme */
+      --print-margin: 15mm;
+      --print-fg: #111827;
+      --print-muted: #4b5563;
+      --print-border: #d1d5db;
+      --print-accent: #8B1538;
+      --print-bg: #ffffff;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -16,11 +23,11 @@
     .container{max-width:1100px;margin:0 auto;padding:16px;padding-top:80px;position:relative}
     .sheet{background:var(--card);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.08);overflow:visible;position:relative}
     
-    /* Seitenumbruch-Markierungen */
+    /* Seitenumbruch-Markierungen (Overlay wird per JS top-positioniert) */
     #pageBreakMarkers{
       position:absolute;
       left:0;
-      top:80px;
+      /* top wird dynamisch gesetzt */
       width:100%;
       pointer-events:none;
       z-index:100;
@@ -60,7 +67,7 @@
     .hamburger-btn.active span:nth-child(1){transform:rotate(45deg) translate(5px, 5px)}
     .hamburger-btn.active span:nth-child(2){opacity:0}
     .hamburger-btn.active span:nth-child(3){transform:rotate(-45deg) translate(7px, -7px)}
-    .hamburger-menu{position:fixed;top:80px;right:16px;background:#fff;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.2);padding:12px;display:none;flex-direction:column;gap:8px;min-width:250px;z-index:4999}
+    .hamburger-menu{position:fixed;top:80px;right:16px;background:#fff;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.2);padding:12px;display:none;flex-direction:column;gap:8px;min-width:280px;z-index:4999}
     .hamburger-menu.active{display:flex}
     .hamburger-menu .btn{width:100%;text-align:left;justify-content:flex-start}
 
@@ -163,185 +170,58 @@
       transition:all 0.3s;
       position:relative;
     }
-    .group.disabled{
-      opacity:0.5;
-      background:#f9fafb;
-    }
-    .group.collapsed .group-content{
-      display:none;
-    }
-    .group.dragging{
-      opacity:0.5;
-      transform:scale(0.98);
-    }
-    .group.drag-over{
-      border-color:var(--primary);
-      border-style:dashed;
-    }
+    .group.disabled{opacity:0.5;background:#f9fafb}
+    .group.collapsed .group-content{display:none}
+    .group.dragging{opacity:0.5;transform:scale(0.98)}
+    .group.drag-over{border-color:var(--primary);border-style:dashed}
     
     .group-header{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      justify-content:space-between;
-      background:linear-gradient(135deg, #8B1538 0%, #a91d47 100%);
-      color:#fff;
-      border-radius:10px 10px 0 0;
-      padding:14px 16px;
-      user-select:none;
+      display:flex;align-items:center;gap:10px;justify-content:space-between;
+      background:linear-gradient(135deg, #8B1538 0%, #a91d47 100%);color:#fff;
+      border-radius:10px 10px 0 0;padding:14px 16px;user-select:none;
     }
-    .group-header:hover{
-      background:linear-gradient(135deg, #9a1740 0%, #ba2250 100%);
-    }
-    
-    .group-title-section{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      flex:1;
-    }
-    
+    .group-header:hover{background:linear-gradient(135deg, #9a1740 0%, #ba2250 100%)}
+    .group-title-section{display:flex;align-items:center;gap:12px;flex:1}
     .group-move-handle{
-      background:rgba(255,255,255,0.2);
-      border:1px solid rgba(255,255,255,0.3);
-      border-radius:6px;
-      width:36px;
-      height:36px;
-      cursor:grab;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:3px;
-      transition:all 0.2s;
+      background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:6px;
+      width:36px;height:36px;cursor:grab;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:all 0.2s;
     }
-    .group-move-handle:hover{
-      background:rgba(255,255,255,0.3);
-    }
-    .group-move-handle:active{
-      cursor:grabbing;
-    }
-    .group-move-handle::before,
-    .group-move-handle::after{
-      content:'';
-      width:20px;
-      height:2px;
-      background:#fff;
-      border-radius:1px;
-    }
-    .group-move-handle span{
-      width:20px;
-      height:2px;
-      background:#fff;
-      border-radius:1px;
-      display:block;
-    }
+    .group-move-handle:hover{background:rgba(255,255,255,0.3)}
+    .group-move-handle:active{cursor:grabbing}
+    .group-move-handle::before,.group-move-handle::after{content:'';width:20px;height:2px;background:#fff;border-radius:1px}
+    .group-move-handle span{width:20px;height:2px;background:#fff;border-radius:1px;display:block}
     
     .group-collapse-btn{
-      background:rgba(255,255,255,0.2);
-      border:1px solid rgba(255,255,255,0.3);
-      border-radius:6px;
-      width:32px;
-      height:32px;
-      display:grid;
-      place-items:center;
-      cursor:pointer;
-      color:#fff;
-      font-size:18px;
-      font-weight:bold;
-      transition:all 0.2s;
+      background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:6px;
+      width:32px;height:32px;display:grid;place-items:center;cursor:pointer;color:#fff;font-size:18px;font-weight:bold;transition:all 0.2s;
     }
-    .group-collapse-btn:hover{
-      background:rgba(255,255,255,0.3);
-      transform:scale(1.05);
-    }
-    .group.collapsed .group-collapse-btn::before{
-      content:'▼';
-    }
-    .group:not(.collapsed) .group-collapse-btn::before{
-      content:'▲';
-    }
+    .group-collapse-btn:hover{background:rgba(255,255,255,0.3);transform:scale(1.05)}
+    .group.collapsed .group-collapse-btn::before{content:'▼'}
+    .group:not(.collapsed) .group-collapse-btn::before{content:'▲'}
     
     .group-title-input{
-      border:none;
-      background:rgba(255,255,255,0.15);
-      color:#fff;
-      font-weight:700;
-      font-size:17px;
-      padding:8px 12px;
-      border-radius:8px;
-      min-width:200px;
-      flex:1;
-      outline:none;
+      border:none;background:rgba(255,255,255,0.15);color:#fff;font-weight:700;font-size:17px;
+      padding:8px 12px;border-radius:8px;min-width:200px;flex:1;outline:none;
     }
-    .group-title-input::placeholder{
-      color:rgba(255,255,255,0.7);
-    }
-    .group-title-input:focus{
-      background:rgba(255,255,255,0.25);
-      box-shadow:0 0 0 3px rgba(255,255,255,0.2);
-    }
-    
-    .group-actions{
-      display:flex;
-      gap:6px;
-      align-items:center;
-    }
-    
+    .group-title-input::placeholder{color:rgba(255,255,255,0.7)}
+    .group-title-input:focus{background:rgba(255,255,255,0.25);box-shadow:0 0 0 3px rgba(255,255,255,0.2)}
+    .group-actions{display:flex;gap:6px;align-items:center}
     .group-toggle{
-      background:rgba(255,255,255,0.2);
-      border:1px solid rgba(255,255,255,0.3);
-      border-radius:6px;
-      padding:6px 12px;
-      color:#fff;
-      font-size:12px;
-      font-weight:700;
-      cursor:pointer;
-      transition:all 0.2s;
-      white-space:nowrap;
+      background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:6px;
+      padding:6px 12px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;white-space:nowrap;
     }
-    .group-toggle:hover{
-      background:rgba(255,255,255,0.3);
-    }
-    .group-toggle.active{
-      background:#11a36a;
-      border-color:#11a36a;
-    }
-    
+    .group-toggle:hover{background:rgba(255,255,255,0.3)}
+    .group-toggle.active{background:#11a36a;border-color:#11a36a}
     .group-btn{
-      background:rgba(255,255,255,0.2);
-      border:1px solid rgba(255,255,255,0.3);
-      border-radius:6px;
-      width:32px;
-      height:32px;
-      display:grid;
-      place-items:center;
-      cursor:pointer;
-      color:#fff;
-      font-size:16px;
-      transition:all 0.2s;
+      background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:6px;
+      width:32px;height:32px;display:grid;place-items:center;cursor:pointer;color:#fff;font-size:16px;transition:all 0.2s;
     }
-    .group-btn:hover{
-      background:rgba(255,255,255,0.3);
-      transform:scale(1.05);
-    }
+    .group-btn:hover{background:rgba(255,255,255,0.3);transform:scale(1.05)}
     .group-btn.duplicate::before{content:'⧉'}
     .group-btn.delete::before{content:'✕'}
-    .group-btn.delete:hover{
-      background:#ef4444;
-      border-color:#ef4444;
-    }
-    
-    .group-content{
-      padding:0;
-    }
-    
-    .group-add-section{
-      padding:16px;
-      text-align:center;
-      border-top:2px dashed #e5e7eb;
-      background:#f9fafb;
-    }
+    .group-btn.delete:hover{background:#ef4444;border-color:#ef4444}
+    .group-content{padding:0}
+    .group-add-section{padding:16px;text-align:center;border-top:2px dashed #e5e7eb;background:#f9fafb}
 
     /* Modal */
     .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center}
@@ -357,197 +237,115 @@
     .section-type-card .icon{font-size:32px;margin-bottom:8px}
     .section-type-card .name{font-weight:700;color:var(--text)}
 
-    /* PRINT STYLES - EXAKT 1:1 WIE UI */
+    /* ========= ProPrint: nur im Druck sichtbar ========= */
+    .only-print{display:none}
+
+    /* PRINT: UI 1:1 (dein bisheriger Modus) bleibt funktionsfähig;
+       ProPrint-Theme wird via Body-Klasse getriggert, siehe JS. */
     @media print {
-      @page {
-        size: A4;
-        margin: 12mm;
+      @page { size: A4; margin: 12mm; }
+      body { background:#F8F9FB !important; padding:0; margin:0; }
+      .container { max-width:100%; padding:0; padding-top:0; }
+      .sheet { box-shadow:0 10px 30px rgba(0,0,0,.08); border-radius:16px; background:#ffffff; }
+      /* Steuerelemente ausblenden */
+      .hamburger-container,.hamburger-menu,#pageBreakMarkers,.group-btn,.group-toggle,.group-collapse-btn,.group-move-handle,.move-handle,.move-btns,.group-add-section,.check .manage,.check .del,.section-header .btn.icon,.sig-controls button,.collapse-btn,.image-preview-item .delete-btn,.text-editor-toolbar button { display:none !important; }
+      /* Deaktivierte Gruppen weglassen */
+      .group.disabled { display:none !important }
+      /* Immer ausgeklappt drucken */
+      .group.collapsed .group-content,.section.collapsed .section-body { display:block !important }
+      /* UI-Stile 1:1 */
+      header { background:#8B1538; color:#fff; padding:16px 20px }
+      .group-header { background:linear-gradient(135deg,#8B1538 0%,#a91d47 100%); color:#fff; padding:14px 16px; border-radius:10px 10px 0 0 }
+      .group { border:2px solid #e5e7eb; border-radius:12px; margin:20px 0; background:#ffffff; page-break-inside:avoid }
+      .section { padding:18px 20px; border-top:1px solid #e9edf3; page-break-inside:avoid }
+      .section-header { background:#f8f9fb; padding:12px 16px; margin:-18px -20px 16px -20px; border-bottom:2px solid #8B1538 }
+      .check { border:1px solid #e5e7eb; border-radius:10px; padding:8px 10px; display:flex; gap:10px; align-items:center }
+      .spacing-section { background:#f8f9fb; border:2px dashed #cbd5e1; border-radius:8px; padding:12px }
+      .text-section { background:#fff; border:1px solid #e5e7eb; border-radius:8px; padding:12px }
+      .text-editor-toolbar { background:#f8f9fb; border:1px solid #e5e7eb; padding:8px; border-radius:6px 6px 0 0 }
+      .text-editor-content { padding:12px; border:1px solid #e5e7eb; border-top:none; border-radius:0 0 6px 6px; background:#fff }
+      .image-section { background:#fff; border:1px solid #e5e7eb; border-radius:8px; padding:12px }
+      .image-upload-zone { border:2px dashed #cbd5e1; border-radius:8px; padding:20px; text-align:center; background:#f8f9fb }
+      .sig-area { border:2px dashed #cbd5e1; border-radius:8px; padding:12px; background:#f8f9fb }
+      input[type="text"],input[type="date"],input[type="number"],textarea,select { border:1px solid #d1d5db !important; background:#fff !important; color:#111 !important }
+      .group-title-input { background:rgba(255,255,255,0.15); color:#fff; border:none; padding:8px 12px; border-radius:8px }
+      .check .tiny { width:60px; border:1px solid #d1d5db; border-radius:8px; padding:4px 6px; text-align:center }
+      .check .label-input { border:1px solid #d1d5db; border-radius:8px; padding:6px 8px }
+      .check .note { border:1px solid #d1d5db; border-radius:8px; padding:6px 8px }
+    }
+
+    /* ===== ProPrint: Professionelles Druck-Theme (aktiviert via body.preview-print-pro) ===== */
+    @media print {
+      body.preview-print-pro {
+        /* Pro-Theme Ränder und Farben */
       }
-      
-      body {
-        background: #F8F9FB !important;
-        padding: 0;
-        margin: 0;
+      body.preview-print-pro .sheet{ box-shadow:none !important; border-radius:0 !important; background:#fff !important }
+      body.preview-print-pro header{ background:#fff !important; color:#000 !important; border-bottom:2px solid var(--print-border) !important }
+      body.preview-print-pro .group-header{ background:#f5f6f8 !important; color:#111 !important }
+      /* Header/Footer anzeigen */
+      body.preview-print-pro .only-print{ display:block !important }
+      body.preview-print-pro #printHeader.print-pro,
+      body.preview-print-pro #printFooter.print-pro{
+        position: fixed; left:0; right:0; color:var(--print-fg); font-size:11px;
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
       }
-      
-      .container {
-        max-width: 100%;
-        padding: 0;
-        padding-top: 0;
+      body.preview-print-pro #printHeader.print-pro{
+        top:0; height:28mm; padding:6mm 0; border-bottom:1px solid var(--print-border);
+        display:flex; align-items:flex-end; justify-content:space-between; background:#fff;
       }
-      
-      .sheet {
-        box-shadow: 0 10px 30px rgba(0,0,0,.08);
-        border-radius: 16px;
-        background: #ffffff;
+      body.preview-print-pro #printHeader .ph-left{ margin-left: calc(var(--print-margin)) }
+      body.preview-print-pro #printHeader .ph-right{ margin-right: calc(var(--print-margin)); text-align:right }
+      body.preview-print-pro #printHeader .ph-title{ font-weight:800; font-size:15px }
+      body.preview-print-pro #printHeader .ph-sub{ color:var(--print-muted); margin-top:4px }
+      body.preview-print-pro #printFooter.print-pro{
+        bottom:0; height:12mm; padding:0; border-top:1px solid var(--print-border);
+        display:flex; align-items:center; justify-content:space-between; background:#fff;
       }
-      
-      /* Verstecke NUR Steuerelemente */
-      .hamburger-container,
-      .hamburger-menu,
-      #pageBreakMarkers,
-      .group-btn,
-      .group-toggle,
-      .group-collapse-btn,
-      .group-move-handle,
-      .move-handle,
-      .move-btns,
-      .group-add-section,
-      .check .manage,
-      .check .del,
-      .section-header .btn.icon,
-      .sig-controls button,
-      .collapse-btn,
-      .image-preview-item .delete-btn,
-      .text-editor-toolbar button {
-        display: none !important;
+      body.preview-print-pro #printFooter .pf-left{ margin-left: calc(var(--print-margin)); color:var(--print-muted) }
+      body.preview-print-pro #printFooter .pf-right{ margin-right: calc(var(--print-margin)) }
+      body.preview-print-pro .pageNumber:after{ content: counter(page) }
+      body.preview-print-pro .totalPages:after{ content: counter(pages) }
+      @supports not (content: counter(pages)) {
+        body.preview-print-pro #printFooter .pageSep,
+        body.preview-print-pro #printFooter .totalPages{ display:none }
       }
-      
-      /* Deaktivierte Gruppen ausblenden */
-      .group.disabled {
-        display: none !important;
+      /* Inhalt zwischen Header/Footer einrücken */
+      body.preview-print-pro { margin-top: 30mm; margin-bottom: 16mm }
+      /* Deckblatt */
+      body.preview-print-pro #printCover.print-pro{
+        break-after: page;
+        border:2px solid var(--print-border); border-radius:8px;
+        padding:16mm 14mm; background:#fff; display:block !important;
       }
-      
-      /* Immer ausgeklappt im Druck */
-      .group.collapsed .group-content,
-      .section.collapsed .section-body {
-        display: block !important;
-      }
-      
-      /* EXAKTE KOPIE DER UI-STYLES */
-      header {
-        background: #8B1538;
-        color: #fff;
-        padding: 16px 20px;
-      }
-      
-      .group-header {
-        background: linear-gradient(135deg, #8B1538 0%, #a91d47 100%);
-        color: #fff;
-        padding: 14px 16px;
-        border-radius: 10px 10px 0 0;
-      }
-      
-      .group {
-        border: 2px solid #e5e7eb;
-        border-radius: 12px;
-        margin: 20px 0;
-        background: #ffffff;
-        page-break-inside: avoid;
-      }
-      
-      .section {
-        padding: 18px 20px;
-        border-top: 1px solid #e9edf3;
-        page-break-inside: avoid;
-      }
-      
-      .section-header {
-        background: #f8f9fb;
-        padding: 12px 16px;
-        margin: -18px -20px 16px -20px;
-        border-bottom: 2px solid #8B1538;
-      }
-      
-      .check {
-        border: 1px solid #e5e7eb;
-        border-radius: 10px;
-        padding: 8px 10px;
-        display: flex;
-        gap: 10px;
-        align-items: center;
-      }
-      
-      .spacing-section {
-        background: #f8f9fb;
-        border: 2px dashed #cbd5e1;
-        border-radius: 8px;
-        padding: 12px;
-      }
-      
-      .text-section {
-        background: #fff;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 12px;
-      }
-      
-      .text-editor-toolbar {
-        background: #f8f9fb;
-        border: 1px solid #e5e7eb;
-        padding: 8px;
-        border-radius: 6px 6px 0 0;
-      }
-      
-      .text-editor-content {
-        padding: 12px;
-        border: 1px solid #e5e7eb;
-        border-top: none;
-        border-radius: 0 0 6px 6px;
-        background: #fff;
-      }
-      
-      .image-section {
-        background: #fff;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 12px;
-      }
-      
-      .image-upload-zone {
-        border: 2px dashed #cbd5e1;
-        border-radius: 8px;
-        padding: 20px;
-        text-align: center;
-        background: #f8f9fb;
-      }
-      
-      .sig-area {
-        border: 2px dashed #cbd5e1;
-        border-radius: 8px;
-        padding: 12px;
-        background: #f8f9fb;
-      }
-      
-      /* Behalte alle Input-Styles */
-      input[type="text"],
-      input[type="date"],
-      input[type="number"],
-      textarea,
-      select {
-        border: 1px solid #d1d5db;
-        border-radius: 10px;
-        background: #fff;
-        padding: 10px;
-      }
-      
-      .group-title-input {
-        background: rgba(255,255,255,0.15);
-        color: #fff;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 8px;
-      }
-      
-      .check .tiny {
-        width: 60px;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        padding: 4px 6px;
-        text-align: center;
-      }
-      
-      .check .label-input {
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        padding: 6px 8px;
-      }
-      
-      .check .note {
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        padding: 6px 8px;
-      }
+      body.preview-print-pro #printCover h1{ margin:0 0 12mm 0; font-size:28px; color:var(--print-accent) }
+      body.preview-print-pro #printCover ul{ list-style:none; padding:0; margin:0 }
+      body.preview-print-pro #printCover li{ margin:6px 0; font-size:14px }
+      /* Abschnitt-Zusammenhalt */
+      body.preview-print-pro .group, 
+      body.preview-print-pro .section,
+      body.preview-print-pro .image-section,
+      body.preview-print-pro .text-section,
+      body.preview-print-pro .spacing-section{ break-inside:avoid; page-break-inside:avoid }
+      /* UI-Controls in ProPrint ebenso weg */
+      body.preview-print-pro .hamburger-container,
+      body.preview-print-pro .hamburger-menu,
+      body.preview-print-pro #pageBreakMarkers,
+      body.preview-print-pro .group-btn,
+      body.preview-print-pro .group-toggle,
+      body.preview-print-pro .group-collapse-btn,
+      body.preview-print-pro .group-move-handle,
+      body.preview-print-pro .move-handle,
+      body.preview-print-pro .move-btns,
+      body.preview-print-pro .group-add-section,
+      body.preview-print-pro .check .manage,
+      body.preview-print-pro .check .del,
+      body.preview-print-pro .section-header .btn.icon,
+      body.preview-print-pro .sig-controls button,
+      body.preview-print-pro .collapse-btn,
+      body.preview-print-pro .image-preview-item .delete-btn,
+      body.preview-print-pro .text-editor-toolbar button{ display:none !important }
+      /* Deaktivierte Gruppen im Pro-Print nicht drucken */
+      body.preview-print-pro .group.disabled{ display:none !important }
     }
 
     @media (max-width: 768px) {
@@ -556,6 +354,12 @@
       .check .note { min-width: 100%; max-width: 100%; }
       .group-actions { flex-wrap: wrap; }
     }
+
+    /* Optional: ProPrint im Screen „previewen“ */
+    body.preview-print-pro #printHeader.print-pro,
+    body.preview-print-pro #printFooter.print-pro,
+    body.preview-print-pro #printCover.print-pro{ display:block; position:sticky }
+    body.preview-print-pro{ background:#fff }
   </style>
 </head>
 <body>
@@ -571,6 +375,7 @@
         <span>Seitenumbrüche</span>
         <span id="pageBreakState">Aus</span>
       </button>
+      <!-- ProPrint Toggle wird per JS ergänzt -->
       <button class="btn" id="btnPDF">🖨️ PDF drucken</button>
       <button class="btn secondary" id="btnSave">💾 Speichern</button>
       <button class="btn secondary" id="btnLoad">📂 Laden</button>
@@ -587,7 +392,7 @@
       <header>
         <div>
           <div class="title">CL Validierungsprotokoll</div>
-          <div class="version">Version 3.3 – Fixed</div>
+          <div class="version">Version 3.3 – Fixed + ProPrint</div>
         </div>
         <div style="text-align:right;font-size:12px">
           <div>Erstellt: <span id="stamp"></span></div>
@@ -773,7 +578,7 @@
         </div>
       </div>
 
-      <!-- Dynamische Gruppen (Verschiebbar) -->
+      <!-- Dynamische Gruppen -->
       <div id="groupsContainer"></div>
     </div>
   </div>
@@ -804,6 +609,35 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- ==== ProPrint: fixer Header/Footer + optionales Deckblatt ==== -->
+  <div id="printHeader" class="print-pro only-print">
+    <div class="ph-left">
+      <!-- Optional: <img src="data:image/png;base64,..." alt="Logo" style="height:14mm;margin-bottom:4mm"> -->
+      <div class="ph-title">CL Validierungsprotokoll</div>
+      <div class="ph-sub">Standort: <span id="phOrt"></span> • Produkt: <span id="phProdukt"></span></div>
+    </div>
+    <div class="ph-right">
+      <div class="ph-meta">Erstellt: <span id="phDate"></span></div>
+      <div class="ph-meta">Version: 3.3</div>
+    </div>
+  </div>
+
+  <div id="printFooter" class="print-pro only-print">
+    <div class="pf-left">NEXUS / IPS – Validierung</div>
+    <div class="pf-right">Seite <span class="pageNumber"></span><span class="pageSep"> / </span><span class="totalPages"></span></div>
+  </div>
+
+  <div id="printCover" class="print-pro only-print" hidden>
+    <h1>Validierungsprotokoll</h1>
+    <ul>
+      <li><strong>Einrichtung:</strong> <span id="pcEinrichtung"></span></li>
+      <li><strong>Standort:</strong> <span id="pcOrt"></span></li>
+      <li><strong>Produkt:</strong> <span id="pcProdukt"></span></li>
+      <li><strong>Version:</strong> <span id="pcVersion"></span></li>
+      <li><strong>Datum:</strong> <span id="pcDate"></span></li>
+    </ul>
   </div>
 
   <script>
@@ -916,7 +750,7 @@
       location.reload();
     }
 
-    /* Listen (KV/IQ/OQ) mit Code + Move Handle + funktionierendem Delete */
+    /* Listen (KV/IQ/OQ) */
     function renderList(selector, items, onUpdate){
       var container = document.querySelector(selector);
       if(!container) return;
@@ -950,26 +784,14 @@
         labelInput.oninput = function(){ item.text = labelInput.value; onUpdate(); };
         noteInput.oninput = function(){ item.note = noteInput.value; onUpdate(); };
         checkbox.onchange = function(){ item.ok = checkbox.checked; onUpdate(); };
-        
-        // FIXED: Delete Button
         delBtn.onclick = function(e){
-          e.preventDefault();
-          e.stopPropagation();
-          items.splice(i, 1);
-          renderList(selector, items, onUpdate);
-          onUpdate();
+          e.preventDefault(); e.stopPropagation();
+          items.splice(i, 1); renderList(selector, items, onUpdate); onUpdate();
         };
 
-        // Drag & Drop
         var handle = row.querySelector('.move-handle');
-        handle.ondragstart = function(e){ 
-          e.dataTransfer.effectAllowed='move'; 
-          e.dataTransfer.setData('text/plain', i); 
-        };
-        row.ondragover = function(e){ 
-          e.preventDefault(); 
-          e.dataTransfer.dropEffect='move'; 
-        };
+        handle.ondragstart = function(e){ e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain', i); };
+        row.ondragover = function(e){ e.preventDefault(); e.dataTransfer.dropEffect='move'; };
         row.ondrop = function(e){
           e.preventDefault();
           var from = parseInt(e.dataTransfer.getData('text/plain'));
@@ -986,7 +808,7 @@
       });
     }
 
-    /* Collapse */
+    /* Collapse (für statische Sections) */
     function initCollapsibles(){
       $$('.section.collapsible').forEach(function(section){
         var btn = section.querySelector('.collapse-btn');
@@ -998,7 +820,7 @@
       });
     }
 
-    /* Gruppen rendern mit Drag & Drop */
+    /* Gruppen rendern mit Drag & Drop (Drag nur über Handle) */
     function drawGroups(){
       var host = document.getElementById('groupsContainer');
       if(!host) return;
@@ -1011,55 +833,9 @@
       appState.groups.forEach(function(g, gIdx){
         var group = document.createElement('div');
         group.className = 'group';
-        group.setAttribute('draggable', 'true');
         group.setAttribute('data-group-index', gIdx);
         if(!g.enabled) group.classList.add('disabled');
         if(g.collapsed) group.classList.add('collapsed');
-
-        // Drag & Drop für Gruppen
-        group.ondragstart = function(e){
-          e.stopPropagation();
-          group.classList.add('dragging');
-          e.dataTransfer.effectAllowed = 'move';
-          e.dataTransfer.setData('text/plain', gIdx);
-        };
-        
-        group.ondragend = function(e){
-          group.classList.remove('dragging');
-          $$('.group').forEach(function(g){ g.classList.remove('drag-over'); });
-        };
-        
-        group.ondragover = function(e){
-          e.preventDefault();
-          e.stopPropagation();
-          var dragging = $('.group.dragging');
-          if(dragging && dragging !== group){
-            e.dataTransfer.dropEffect = 'move';
-            group.classList.add('drag-over');
-          }
-        };
-        
-        group.ondragleave = function(e){
-          if(!group.contains(e.relatedTarget)){
-            group.classList.remove('drag-over');
-          }
-        };
-        
-        group.ondrop = function(e){
-          e.preventDefault();
-          e.stopPropagation();
-          group.classList.remove('drag-over');
-          
-          var fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
-          var toIndex = gIdx;
-          
-          if(fromIndex !== toIndex){
-            var movedGroup = appState.groups.splice(fromIndex, 1)[0];
-            appState.groups.splice(toIndex, 0, movedGroup);
-            drawGroups();
-            sync();
-          }
-        };
 
         var header = document.createElement('div');
         header.className = 'group-header';
@@ -1067,19 +843,53 @@
         var titleSection = document.createElement('div');
         titleSection.className = 'group-title-section';
         
-        // Move Handle
+        // Move Handle (draggable nur hier)
         var moveHandle = document.createElement('div');
         moveHandle.className = 'group-move-handle';
         moveHandle.innerHTML = '<span></span>';
         moveHandle.title = 'Gruppe verschieben';
-        
+        moveHandle.setAttribute('draggable','true');
+
+        moveHandle.ondragstart = function(e){
+          e.stopPropagation();
+          group.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', gIdx);
+        };
+        moveHandle.ondragend = function(){
+          group.classList.remove('dragging');
+          $$('.group').forEach(function(g){ g.classList.remove('drag-over'); });
+        };
+
+        group.ondragover = function(e){
+          e.preventDefault();
+          if ($('.group.dragging') && !group.classList.contains('dragging')) {
+            group.classList.add('drag-over');
+          }
+        };
+        group.ondragleave = function(e){
+          if(!group.contains(e.relatedTarget)){
+            group.classList.remove('drag-over');
+          }
+        };
+        group.ondrop = function(e){
+          e.preventDefault();
+          group.classList.remove('drag-over');
+          var fromIndex = parseInt(e.dataTransfer.getData('text/plain'),10);
+          var toIndex = gIdx;
+          if(fromIndex !== toIndex){
+            var movedGroup = appState.groups.splice(fromIndex, 1)[0];
+            appState.groups.splice(toIndex, 0, movedGroup);
+            drawGroups(); sync();
+          }
+        };
+
         var collapseBtn = document.createElement('div');
         collapseBtn.className = 'group-collapse-btn';
         collapseBtn.onclick = function(e){
           e.stopPropagation();
           g.collapsed = !g.collapsed;
-          drawGroups();
-          sync();
+          drawGroups(); sync();
         };
         
         var titleInput = document.createElement('input');
@@ -1087,11 +897,7 @@
         titleInput.className = 'group-title-input';
         titleInput.value = g.title || 'Gruppe ' + (gIdx + 1);
         titleInput.placeholder = 'Gruppenname...';
-        titleInput.oninput = function(e){
-          e.stopPropagation();
-          g.title = titleInput.value;
-          sync();
-        };
+        titleInput.oninput = function(e){ e.stopPropagation(); g.title = titleInput.value; sync(); };
         titleInput.onclick = function(e){ e.stopPropagation(); };
         titleInput.ondragstart = function(e){ e.preventDefault(); };
         
@@ -1108,8 +914,7 @@
         toggleBtn.onclick = function(e){
           e.stopPropagation();
           g.enabled = !g.enabled;
-          drawGroups();
-          sync();
+          drawGroups(); sync();
         };
         
         var duplicateBtn = document.createElement('div');
@@ -1121,21 +926,17 @@
           newGroup.id = Date.now() + Math.random();
           newGroup.title = g.title + ' (Kopie)';
           appState.groups.splice(gIdx + 1, 0, newGroup);
-          drawGroups();
-          sync();
+          drawGroups(); sync();
         };
         
-        // FIXED: Delete Button
         var deleteBtn = document.createElement('div');
         deleteBtn.className = 'group-btn delete';
         deleteBtn.title = 'Gruppe löschen';
         deleteBtn.onclick = function(e){
-          e.preventDefault();
-          e.stopPropagation();
+          e.preventDefault(); e.stopPropagation();
           if(confirm('Gruppe "' + g.title + '" wirklich löschen?')){
             appState.groups.splice(gIdx, 1);
-            drawGroups();
-            sync();
+            drawGroups(); sync();
           }
         };
         
@@ -1184,7 +985,7 @@
       initCollapsibles();
     }
 
-    /* Checklisten-Abschnitt mit Code + Move Handle + funktionierendem Delete */
+    /* Checklisten-Abschnitt */
     function renderChecklistSection(host, section, sections, sIdx){
       var header = document.createElement('div');
       header.className = 'section-header';
@@ -1207,23 +1008,19 @@
       
       var addBtn = header.querySelector('.add-row-btn');
       addBtn.onclick = function(e){
-        e.preventDefault();
-        e.stopPropagation();
+        e.preventDefault(); e.stopPropagation();
         if(!section.rows) section.rows = [];
         section.rows.push({text:'Neuer Punkt', ok:false, note:'', code:''});
         renderChecklistSection(host, section, sections, sIdx);
         sync();
       };
       
-      // FIXED: Delete Button
       var delBtn = header.querySelector('.del-section-btn');
       delBtn.onclick = function(e){
-        e.preventDefault();
-        e.stopPropagation();
+        e.preventDefault(); e.stopPropagation();
         if(confirm('Abschnitt löschen?')){
           sections.splice(sIdx, 1);
-          drawGroups();
-          sync();
+          drawGroups(); sync();
         }
       };
       
@@ -1238,9 +1035,7 @@
         rowDiv.className = 'check';
         rowDiv.innerHTML = `
           <div class="move-btns">
-            <div class="move-handle" draggable="true">
-              <span></span>
-            </div>
+            <div class="move-handle" draggable="true"><span></span></div>
           </div>
           <input type="text" class="tiny" value="${row.code||''}" placeholder="Code" />
           <input type="text" class="label-input" value="${row.text}" placeholder="Punkt..." />
@@ -1260,25 +1055,16 @@
         noteInput.oninput = function(){ row.note = noteInput.value; sync(); };
         checkbox.onchange = function(){ row.ok = checkbox.checked; sync(); };
         
-        // FIXED: Delete Button
         delRowBtn.onclick = function(e){
-          e.preventDefault();
-          e.stopPropagation();
+          e.preventDefault(); e.stopPropagation();
           section.rows.splice(rIdx, 1);
           renderChecklistSection(host, section, sections, sIdx);
           sync();
         };
         
-        // Drag & Drop
         var handle = rowDiv.querySelector('.move-handle');
-        handle.ondragstart = function(e){ 
-          e.dataTransfer.effectAllowed='move'; 
-          e.dataTransfer.setData('text/plain', rIdx); 
-        };
-        rowDiv.ondragover = function(e){ 
-          e.preventDefault(); 
-          e.dataTransfer.dropEffect='move'; 
-        };
+        handle.ondragstart = function(e){ e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain', rIdx); };
+        rowDiv.ondragover = function(e){ e.preventDefault(); e.dataTransfer.dropEffect='move'; };
         rowDiv.ondrop = function(e){
           e.preventDefault();
           var from = parseInt(e.dataTransfer.getData('text/plain'));
@@ -1318,16 +1104,11 @@
           <button class="btn icon del">✕</button>
         </div>
       `;
-      
-      // FIXED: Delete Button
       var delBtn = header.querySelector('.del');
       delBtn.onclick = function(e){
-        e.preventDefault();
-        e.stopPropagation();
+        e.preventDefault(); e.stopPropagation();
         if(confirm('Abschnitt löschen?')){
-          sections.splice(sIdx, 1);
-          drawGroups();
-          sync();
+          sections.splice(sIdx, 1); drawGroups(); sync();
         }
       };
       
@@ -1374,15 +1155,11 @@
       var titleInput = header.querySelector('input');
       titleInput.oninput = function(){ section.title = titleInput.value; sync(); };
       
-      // FIXED: Delete Button
       var delBtn = header.querySelector('.del');
       delBtn.onclick = function(e){
-        e.preventDefault();
-        e.stopPropagation();
+        e.preventDefault(); e.stopPropagation();
         if(confirm('Abschnitt löschen?')){
-          sections.splice(sIdx, 1);
-          drawGroups();
-          sync();
+          sections.splice(sIdx, 1); drawGroups(); sync();
         }
       };
       
@@ -1402,16 +1179,9 @@
       var editor = body.querySelector('.text-editor-content');
       var toolbar = body.querySelector('.text-editor-toolbar');
       
-      editor.oninput = function(){
-        section.content = editor.innerHTML;
-        sync();
-      };
-      
+      editor.oninput = function(){ section.content = editor.innerHTML; sync(); };
       toolbar.querySelectorAll('button').forEach(function(btn){
-        btn.onclick = function(){
-          document.execCommand(btn.getAttribute('data-cmd'), false, null);
-          editor.focus();
-        };
+        btn.onclick = function(){ document.execCommand(btn.getAttribute('data-cmd'), false, null); editor.focus(); };
       });
       
       host.innerHTML = '';
@@ -1436,15 +1206,11 @@
       var titleInput = header.querySelector('input');
       titleInput.oninput = function(){ section.title = titleInput.value; sync(); };
       
-      // FIXED: Delete Button
       var delBtn = header.querySelector('.del');
       delBtn.onclick = function(e){
-        e.preventDefault();
-        e.stopPropagation();
+        e.preventDefault(); e.stopPropagation();
         if(confirm('Abschnitt löschen?')){
-          sections.splice(sIdx, 1);
-          drawGroups();
-          sync();
+          sections.splice(sIdx, 1); drawGroups(); sync();
         }
       };
       
@@ -1465,18 +1231,9 @@
       var preview = body.querySelector('.image-preview');
       
       zone.onclick = function(){ fileInput.click(); };
-      
-      zone.ondragover = function(e){
-        e.preventDefault();
-        zone.classList.add('dragover');
-      };
+      zone.ondragover = function(e){ e.preventDefault(); zone.classList.add('dragover'); };
       zone.ondragleave = function(){ zone.classList.remove('dragover'); };
-      zone.ondrop = function(e){
-        e.preventDefault();
-        zone.classList.remove('dragover');
-        handleFiles(e.dataTransfer.files);
-      };
-      
+      zone.ondrop = function(e){ e.preventDefault(); zone.classList.remove('dragover'); handleFiles(e.dataTransfer.files); };
       fileInput.onchange = function(){ handleFiles(fileInput.files); };
       
       function handleFiles(files){
@@ -1495,14 +1252,10 @@
       section.images.forEach(function(src, imgIdx){
         var item = document.createElement('div');
         item.className = 'image-preview-item';
-        item.innerHTML = `
-          <img src="${src}" />
-          <button class="delete-btn">✕</button>
-        `;
+        item.innerHTML = `<img src="${src}" /><button class="delete-btn">✕</button>`;
         var delImgBtn = item.querySelector('.delete-btn');
         delImgBtn.onclick = function(e){
-          e.preventDefault();
-          e.stopPropagation();
+          e.preventDefault(); e.stopPropagation();
           section.images.splice(imgIdx, 1);
           renderImageSection(host, section, sections, sIdx);
           sync();
@@ -1525,12 +1278,8 @@
       $('#sectionTypeModal').classList.remove('active');
       pendingSectionCallback = null;
     }
-    
     $('#sectionTypeClose').onclick = closeSectionTypeModal;
-    $('#sectionTypeModal').onclick = function(e){
-      if(e.target === this) closeSectionTypeModal();
-    };
-    
+    $('#sectionTypeModal').onclick = function(e){ if(e.target === this) closeSectionTypeModal(); };
     $$('.section-type-card').forEach(function(card){
       card.onclick = function(){
         var type = card.getAttribute('data-type');
@@ -1550,27 +1299,18 @@
           g = appState.groups[0];
           currentGroupIndex = 0;
         }
-        
-        var section = {
-          type: type || 'checklist',
-          title: 'Neuer Abschnitt',
-          id: Date.now()
-        };
-        
+        var section = { type: type || 'checklist', title: 'Neuer Abschnitt', id: Date.now() };
         if(section.type === 'checklist') section.rows = [];
         if(section.type === 'spacing') section.heightCm = 5;
         if(section.type === 'text') section.content = '';
         if(section.type === 'image') section.images = [];
-        
         if(!g.sections) g.sections = [];
         g.sections.push(section);
-        
-        drawGroups();
-        sync();
+        drawGroups(); sync();
       });
     }
 
-    /* Seitenumbruch-Markierungen */
+    /* Seitenumbruch-Markierungen – dynamisch relativ zur Headerhöhe */
     var pageBreaksOn = false;
     function updatePageBreaks(){
       var container = document.getElementById('pageBreakMarkers');
@@ -1578,28 +1318,76 @@
       container.innerHTML = '';
       if(!pageBreaksOn) return;
 
-      var contentEl = document.getElementById('app');
-      var totalH = Math.max(contentEl.scrollHeight, contentEl.offsetHeight);
-      
-      var pageHeightPx = 1032;
+      var sheet = document.getElementById('app');
+      var header = sheet.querySelector('header');
+      var headerH = header ? header.getBoundingClientRect().height : 0;
+      container.style.top = headerH + 'px';
+
+      var totalH = Math.max(sheet.scrollHeight, sheet.offsetHeight) - headerH;
+      var pageHeightPx = 1032; // A4 Nutzfläche bei @page margin: 12mm
       var count = Math.floor(totalH / pageHeightPx);
-      
       for(var i = 1; i <= count; i++){
         var y = i * pageHeightPx;
-        
         var line = document.createElement('div');
         line.className = 'page-break-line';
         line.style.top = y + 'px';
-        
         var label = document.createElement('div');
         label.className = 'page-break-label';
         label.style.top = y + 'px';
         label.textContent = 'Seite ' + (i + 1);
-        
         container.appendChild(line);
         container.appendChild(label);
       }
     }
+
+    /* ProPrint: Daten füllen + Toggle + Print-Override */
+    function fillPrintMeta(){
+      var ort = document.getElementById('standortInstallation')?.value || '';
+      var produkt = document.getElementById('produkt')?.value || '';
+      var einrichtung = document.getElementById('nameEinrichtung')?.value || '';
+      var version = document.getElementById('version')?.value || '';
+      var now = new Date().toLocaleDateString('de-DE');
+
+      document.getElementById('phOrt').textContent = ort;
+      document.getElementById('phProdukt').textContent = produkt;
+      document.getElementById('phDate').textContent = now;
+
+      document.getElementById('pcEinrichtung').textContent = einrichtung;
+      document.getElementById('pcOrt').textContent = ort;
+      document.getElementById('pcProdukt').textContent = produkt;
+      document.getElementById('pcVersion').textContent = version;
+      document.getElementById('pcDate').textContent = now;
+    }
+
+    (function addPrintProToggle(){
+      var menu = document.getElementById('hamburgerMenu');
+      if(!menu || document.getElementById('btnPrintTheme')) return;
+
+      var btn = document.createElement('button');
+      btn.className = 'btn';
+      btn.id = 'btnPrintTheme';
+      btn.innerHTML = '🖨️ Druckvorlage (Pro) – <span id="printThemeState">Aus</span>';
+      btn.onclick = function(){
+        var on = document.body.classList.toggle('preview-print-pro');
+        document.getElementById('printThemeState').textContent = on ? 'An' : 'Aus';
+        document.getElementById('printCover').hidden = true; // Deckblatt standardmäßig aus
+        fillPrintMeta();
+      };
+      var pdfBtn = document.getElementById('btnPDF');
+      menu.insertBefore(btn, pdfBtn);
+    })();
+
+    (function overridePrintButton(){
+      var pdfBtn = document.getElementById('btnPDF');
+      if(!pdfBtn) return;
+      var original = pdfBtn.onclick;
+      pdfBtn.onclick = function(){
+        if(document.body.classList.contains('preview-print-pro')){
+          fillPrintMeta();
+        }
+        window.print();
+      };
+    })();
 
     /* Init */
     function addKV(){ appState.kv.push({text:'Neue KV-Anforderung', ok:false, note:'', code:'', info:''}); renderAll(); sync(); }
@@ -1644,29 +1432,23 @@
       $('#btnPDF').onclick = function(){
         btn.classList.remove('active');
         menu.classList.remove('active');
-        window.print();
+        // ProPrint-Handling ist bereits in overridePrintButton gesetzt
+        if(!document.body.classList.contains('preview-print-pro')){
+          window.print();
+        }else{
+          // nichts – override erledigt den Druck
+        }
       };
       $('#btnReset').onclick = resetAll;
       $('#btnNewSectionMenu').onclick = function(e){
-        e.preventDefault();
-        e.stopPropagation();
+        e.preventDefault(); e.stopPropagation();
         addDynamicSection();
-        setTimeout(function(){
-          btn.classList.remove('active');
-          menu.classList.remove('active');
-        }, 100);
+        setTimeout(function(){ btn.classList.remove('active'); menu.classList.remove('active'); }, 100);
       };
       $('#btnNewGroup').onclick = function(){
-        appState.groups.push({
-          id: Date.now() + Math.random(),
-          title: 'Neue Gruppe',
-          enabled: true,
-          collapsed: false,
-          sections: []
-        });
+        appState.groups.push({ id: Date.now() + Math.random(), title: 'Neue Gruppe', enabled: true, collapsed: false, sections: [] });
         currentGroupIndex = appState.groups.length - 1;
-        drawGroups();
-        sync();
+        drawGroups(); sync();
       };
       
       $('#btnPageBreaks').onclick = function(){
@@ -1701,9 +1483,8 @@
         new ResizeObserver(updatePageBreaks).observe($('#app'));
       }
       window.addEventListener('resize', updatePageBreaks);
-      new MutationObserver(function(){
-        if(pageBreaksOn) updatePageBreaks();
-      }).observe($('#app'), {childList:true, subtree:true});
+      new MutationObserver(function(){ if(pageBreaksOn) updatePageBreaks(); })
+        .observe($('#app'), {childList:true, subtree:true});
     }
 
     if(document.readyState === 'loading'){
