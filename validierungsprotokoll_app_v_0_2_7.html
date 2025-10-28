@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – v0.5.0 (Gruppen & Seiten-Guides)</title>
+  <title>CL Validierungsprotokoll – v0.5.1 (Gruppen, Guides, Collapsible)</title>
   <style>
     :root{
       --primary:#8B1538; --bg:#F8F9FB; --text:#1E2434; --card:#ffffff; --muted:#e9edf3;
-      --ok:#11a36a; --warn:#d97706; --err:#c81e1e;
-      --guide:#94a3b8;
+      --ok:#11a36a; --warn:#d97706; --err:#c81e1e; --guide:#94a3b8;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -39,10 +38,19 @@
     .btn.icon{padding:6px 8px;border-radius:8px}
     .btn.switch{justify-content:space-between}
 
+    /* Sections */
     .section{padding:18px 20px;border-top:1px solid var(--muted)}
-    .section h2{margin:0 0 12px 0;font-size:18px;color:var(--primary)}
+    .section.collapsible .section-body{transition:max-height .25s ease}
+    .section.collapsed .section-body{display:none}
+    .section .collapse-btn{
+      background:#fff;border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;font-size:14px;
+      width:30px;height:30px;display:grid;place-items:center;margin-right:8px;color:#1f2937
+    }
+    .section .collapse-btn:hover{background:#f1f5f9}
+    .section h2{margin:0;font-size:18px;color:var(--primary)}
     .section-header{background:#f8f9fb;padding:12px 16px;margin:-18px -20px 16px -20px;border-bottom:2px solid var(--primary)}
-    .section-header h2{margin:0;font-size:20px}
+    .section-header .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .section-header .title-wrap{display:flex;align-items:center;gap:8px}
 
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
     .col-3{grid-column:span 3} .col-4{grid-column:span 4} .col-6{grid-column:span 6} .col-8{grid-column:span 8} .col-12{grid-column:span 12}
@@ -121,7 +129,7 @@
     @media print{ .group.disabled { display:none!important } }
 
     /* Seiten-Guides (A4) */
-    .page-guides{position:absolute;inset:0;pointer-events:none}
+    .page-guides{position:absolute;inset:0;pointer-events:none;z-index:3000}
     .page-guides .line{position:absolute;left:0;right:0;border-top:1px dashed var(--guide);opacity:.8}
     .page-guides .tag{position:absolute;right:8px;transform:translateY(-50%);font-size:11px;color:#64748b;background:#ffffffaa;padding:2px 6px;border-radius:6px;border:1px solid #cbd5e1}
     .page-guides.hidden{display:none}
@@ -139,6 +147,8 @@
       .image-section{ border:1px solid #000 }
       .image-preview-item{ border:1px solid #000 }
       .section{ break-inside:avoid; page-break-inside:avoid }
+      /* Collapsed-UI druckt trotzdem Inhalt */
+      .section.collapsed .section-body{ display:block !important }
     }
 
     .footer{display:flex;justify-content:space-between;gap:12px}
@@ -147,6 +157,23 @@
       .hamburger-container{top:12px;right:12px}
       .hamburger-menu{right:12px;top:70px}
     }
+
+    /* ========= Modal (Fix für Popup) ========= */
+    .modal-backdrop{
+      position:fixed;inset:0;background:rgba(0,0,0,.35);
+      display:none;align-items:center;justify-content:center;z-index:6000
+    }
+    .modal{
+      background:#fff;border-radius:12px;max-width:520px;width:92%;
+      box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden;border:1px solid #e5e7eb
+    }
+    .modal header{background:#f8fafc;color:#111827;border-bottom:1px solid #e5e7eb;padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
+    .modal .content{padding:12px 14px}
+    .section-type-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:12px}
+    .section-type-card{padding:16px;border:2px solid #e5e7eb;border-radius:8px;cursor:pointer;text-align:center;transition:all .2s;background:#fff}
+    .section-type-card:hover{border-color:#8B1538;background:#fef2f2;transform:translateY(-1px);box-shadow:0 6px 16px rgba(139,21,56,.15)}
+    .section-type-card .icon{font-size:36px;margin-bottom:6px}
+    .section-type-card .name{font-weight:700;color:#1e293b;font-size:13px}
   </style>
 </head>
 <body>
@@ -172,58 +199,76 @@
       <header>
         <div>
           <div class="title">CL Validierungsprotokoll</div>
-          <div class="version">Version 0.5.0 • Gruppen & Seiten-Guides</div>
+          <div class="version">Version 0.5.1 • Gruppen, Guides, Collapsible</div>
         </div>
       </header>
 
       <!-- KOPFDATEN -->
-      <div class="section">
-        <div class="section-header"><h2>Deckblatt & Kopfdaten</h2></div>
-        <div class="grid">
-          <div class="col-6"><label>Name der Einrichtung</label><input type="text" id="instName" placeholder="z.B. Klinikum Musterstadt"/></div>
-          <div class="col-6"><label>Standort der Installation</label><input type="text" id="instOrt" placeholder="Ort / Abteilung"/></div>
-          <div class="col-6"><label>Verantwortliche Person (Betreiber)</label><input type="text" id="betreiber" placeholder="Name"/></div>
-          <div class="col-6"><label>Produkt</label><input type="text" id="produkt" placeholder="z.B. EuroSDS"/></div>
-          <div class="col-4"><label>Programm-Paket</label><input type="text" id="programmpaket" placeholder="z.B. Komplettpaket"/></div>
-          <div class="col-4"><label>Version</label><input type="text" id="version" placeholder="z.B. 6.4.x"/></div>
-          <div class="col-4">
-            <label>Softwarepflege (EVB IT-Pflege S)</label>
-            <select id="evbPflege">
-              <option value="">Bitte wählen...</option><option>EVB IT-Pflege 1</option><option>EVB IT-Pflege 2</option><option>EVB IT-Pflege 3</option><option>EVB IT-Pflege 4</option><option>EVB IT-Pflege 5</option>
-            </select>
+      <div class="section collapsible" id="sec-kopf">
+        <div class="section-header">
+          <div class="row">
+            <div class="title-wrap">
+              <button class="collapse-btn" data-toggle="#sec-kopf">▾</button>
+              <h2>Deckblatt & Kopfdaten</h2>
+            </div>
           </div>
-          <div class="col-6"><label>Art/Anzahl der Arbeitsplätze</label><input type="text" id="arbeitsplaetze" placeholder="z.B. 8 Clients + 1 Notfallbackplatz"/></div>
-          <div class="col-6"><label>Angebundene Geräte</label><input type="text" id="geraete" placeholder="z.B. RDG, Steri, Foliengerät..."/></div>
-          <div class="col-12"><label>Bemerkung zur Installation</label><textarea id="bemerkung" rows="3"></textarea></div>
-          <div class="col-4"><label>Validierung durchgeführt am</label><input type="text" id="valAm" class="date-input" placeholder="TT.mm.jjjj"/></div>
-          <div class="col-4"><label>Letzte Validierung</label><input type="text" id="valLast" class="date-input" placeholder="TT.mm.jjjj"/></div>
-          <div class="col-4"><label>Nächste Validierung</label><input type="text" id="valNext" class="date-input" placeholder="TT.mm.jjjj"/></div>
-          <div class="col-6"><div class="checkbox-inline"><input type="checkbox" id="chkVal"/><label for="chkVal">Validierung</label></div></div>
-          <div class="col-6"><div class="checkbox-inline"><input type="checkbox" id="chkReval"/><label for="chkReval">Revalidierung</label></div></div>
+        </div>
+        <div class="section-body">
+          <div class="grid">
+            <div class="col-6"><label>Name der Einrichtung</label><input type="text" id="instName" placeholder="z.B. Klinikum Musterstadt"/></div>
+            <div class="col-6"><label>Standort der Installation</label><input type="text" id="instOrt" placeholder="Ort / Abteilung"/></div>
+            <div class="col-6"><label>Verantwortliche Person (Betreiber)</label><input type="text" id="betreiber" placeholder="Name"/></div>
+            <div class="col-6"><label>Produkt</label><input type="text" id="produkt" placeholder="z.B. EuroSDS"/></div>
+            <div class="col-4"><label>Programm-Paket</label><input type="text" id="programmpaket" placeholder="z.B. Komplettpaket"/></div>
+            <div class="col-4"><label>Version</label><input type="text" id="version" placeholder="z.B. 6.4.x"/></div>
+            <div class="col-4">
+              <label>Softwarepflege (EVB IT-Pflege S)</label>
+              <select id="evbPflege">
+                <option value="">Bitte wählen...</option><option>EVB IT-Pflege 1</option><option>EVB IT-Pflege 2</option><option>EVB IT-Pflege 3</option><option>EVB IT-Pflege 4</option><option>EVB IT-Pflege 5</option>
+              </select>
+            </div>
+            <div class="col-6"><label>Art/Anzahl der Arbeitsplätze</label><input type="text" id="arbeitsplaetze" placeholder="z.B. 8 Clients + 1 Notfallbackplatz"/></div>
+            <div class="col-6"><label>Angebundene Geräte</label><input type="text" id="geraete" placeholder="z.B. RDG, Steri, Foliengerät..."/></div>
+            <div class="col-12"><label>Bemerkung zur Installation</label><textarea id="bemerkung" rows="3"></textarea></div>
+            <div class="col-4"><label>Validierung durchgeführt am</label><input type="text" id="valAm" class="date-input" placeholder="TT.mm.jjjj"/></div>
+            <div class="col-4"><label>Letzte Validierung</label><input type="text" id="valLast" class="date-input" placeholder="TT.mm.jjjj"/></div>
+            <div class="col-4"><label>Nächste Validierung</label><input type="text" id="valNext" class="date-input" placeholder="TT.mm.jjjj"/></div>
+            <div class="col-6"><div class="checkbox-inline"><input type="checkbox" id="chkVal"/><label for="chkVal">Validierung</label></div></div>
+            <div class="col-6"><div class="checkbox-inline"><input type="checkbox" id="chkReval"/><label for="chkReval">Revalidierung</label></div></div>
+          </div>
         </div>
       </div>
 
       <!-- VALIDIERER & FREIGABE -->
-      <div class="section">
-        <div class="section-header"><h2>Validierer & Freigabe</h2></div>
-        <div class="grid">
-          <div class="col-4"><label>Validierer (NEXUS / IPS)</label><input type="text" id="validiererName" placeholder="Name"/></div>
-          <div class="col-4"><label>Fachliche Qualifikation</label><input type="text" id="fachlicheQualifikation"/></div>
-          <div class="col-4"><label>Produktschulung (Programmpaket)</label><input type="text" id="produktschulung"/></div>
-          <div class="col-6">
-            <label>Datum / Unterschrift Validierer</label>
-            <div class="sig-wrap"><canvas id="sigValidierer" class="signature"></canvas></div>
-            <div class="sig-controls"><button class="btn" data-clear="sigValidierer">Löschen</button><input type="text" id="sigDate1" class="date-input" placeholder="TT.mm.jjjj"/></div>
+      <div class="section collapsible" id="sec-val">
+        <div class="section-header">
+          <div class="row">
+            <div class="title-wrap">
+              <button class="collapse-btn" data-toggle="#sec-val">▾</button>
+              <h2>Validierer & Freigabe</h2>
+            </div>
           </div>
-          <div class="col-6">
-            <label>Freigabe durch Betreiber – Datum / Unterschrift</label>
-            <div class="sig-wrap"><canvas id="sigBetreiber" class="signature"></canvas></div>
-            <div class="sig-controls"><button class="btn" data-clear="sigBetreiber">Löschen</button><input type="text" id="sigDate2" class="date-input" placeholder="TT.mm.jjjj"/></div>
+        </div>
+        <div class="section-body">
+          <div class="grid">
+            <div class="col-4"><label>Validierer (NEXUS / IPS)</label><input type="text" id="validiererName" placeholder="Name"/></div>
+            <div class="col-4"><label>Fachliche Qualifikation</label><input type="text" id="fachlicheQualifikation"/></div>
+            <div class="col-4"><label>Produktschulung (Programmpaket)</label><input type="text" id="produktschulung"/></div>
+            <div class="col-6">
+              <label>Datum / Unterschrift Validierer</label>
+              <div class="sig-wrap"><canvas id="sigValidierer" class="signature"></canvas></div>
+              <div class="sig-controls"><button class="btn" data-clear="sigValidierer">Löschen</button><input type="text" id="sigDate1" class="date-input" placeholder="TT.mm.jjjj"/></div>
+            </div>
+            <div class="col-6">
+              <label>Freigabe durch Betreiber – Datum / Unterschrift</label>
+              <div class="sig-wrap"><canvas id="sigBetreiber" class="signature"></canvas></div>
+              <div class="sig-controls"><button class="btn" data-clear="sigBetreiber">Löschen</button><input type="text" id="sigDate2" class="date-input" placeholder="TT.mm.jjjj"/></div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Standard-Listen (KV/IQ/OQ) als eigene Gruppe 0 -->
+      <!-- Standard-Listen (KV/IQ/OQ) als fixe Gruppe -->
       <div class="group" id="group-fixed">
         <div class="group-header">
           <div class="group-title">
@@ -237,30 +282,39 @@
           </div>
         </div>
 
-        <div class="section">
-          <div class="section-header"><h2>KV – Konstruktionsvalidierung</h2></div>
-          <div class="list" id="kvList"></div>
-          <div style="margin-top:12px;display:flex;gap:8px">
-            <button class="btn" id="kvAddBtn">+ Zeile hinzufügen</button>
-            <button class="btn danger" id="kvRemoveBtn">− Letzte entfernen</button>
+        <div class="section collapsible" id="sec-kv">
+          <div class="section-header"><div class="row"><div class="title-wrap">
+            <button class="collapse-btn" data-toggle="#sec-kv">▾</button><h2>KV – Konstruktionsvalidierung</h2></div></div></div>
+          <div class="section-body">
+            <div class="list" id="kvList"></div>
+            <div style="margin-top:12px;display:flex;gap:8px">
+              <button class="btn" id="kvAddBtn">+ Zeile hinzufügen</button>
+              <button class="btn danger" id="kvRemoveBtn">− Letzte entfernen</button>
+            </div>
           </div>
         </div>
 
-        <div class="section">
-          <div class="section-header"><h2>IQ – Installationsqualifikation</h2></div>
-          <div class="list" id="iqList"></div>
-          <div style="margin-top:12px;display:flex;gap:8px">
-            <button class="btn" id="iqAddBtn">+ Zeile hinzufügen</button>
-            <button class="btn danger" id="iqRemoveBtn">− Letzte entfernen</button>
+        <div class="section collapsible" id="sec-iq">
+          <div class="section-header"><div class="row"><div class="title-wrap">
+            <button class="collapse-btn" data-toggle="#sec-iq">▾</button><h2>IQ – Installationsqualifikation</h2></div></div></div>
+          <div class="section-body">
+            <div class="list" id="iqList"></div>
+            <div style="margin-top:12px;display:flex;gap:8px">
+              <button class="btn" id="iqAddBtn">+ Zeile hinzufügen</button>
+              <button class="btn danger" id="iqRemoveBtn">− Letzte entfernen</button>
+            </div>
           </div>
         </div>
 
-        <div class="section">
-          <div class="section-header"><h2>OQ – Funktionsqualifikation</h2></div>
-          <div class="list" id="oqList"></div>
-          <div style="margin-top:12px;display:flex;gap:8px">
-            <button class="btn" id="oqAddBtn">+ Zeile hinzufügen</button>
-            <button class="btn danger" id="oqRemoveBtn">− Letzte entfernen</button>
+        <div class="section collapsible" id="sec-oq">
+          <div class="section-header"><div class="row"><div class="title-wrap">
+            <button class="collapse-btn" data-toggle="#sec-oq">▾</button><h2>OQ – Funktionsqualifikation</h2></div></div></div>
+          <div class="section-body">
+            <div class="list" id="oqList"></div>
+            <div style="margin-top:12px;display:flex;gap:8px">
+              <button class="btn" id="oqAddBtn">+ Zeile hinzufügen</button>
+              <button class="btn danger" id="oqRemoveBtn">− Letzte entfernen</button>
+            </div>
           </div>
         </div>
       </div>
@@ -278,7 +332,7 @@
       <div class="section">
         <div class="footer">
           <div style="font-size:12px;color:#64748b">Erstellt am: <span id="stamp"></span></div>
-          <div style="font-size:12px;color:#64748b">CL Validierungsprotokoll v0.5.0</div>
+          <div style="font-size:12px;color:#64748b">CL Validierungsprotokoll v0.5.1</div>
         </div>
       </div>
 
@@ -295,10 +349,10 @@
         <button class="btn icon" id="infoClose">✕</button>
       </header>
       <div class="content">
-        <textarea id="infoTextarea" placeholder="Zusätzliche Informationen zu diesem Punkt..."></textarea>
-        <div style="margin-top:12px;display:flex;gap:8px">
-          <button class="btn" id="infoSave">Speichern</button>
+        <textarea id="infoTextarea" placeholder="Zusätzliche Informationen zu diesem Punkt..." style="width:100%;min-height:140px;border:1px solid #e5e7eb;border-radius:8px;padding:10px"></textarea>
+        <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
           <button class="btn" id="infoCancel">Abbrechen</button>
+          <button class="btn secondary" id="infoSave">Speichern</button>
         </div>
       </div>
     </div>
@@ -327,16 +381,13 @@
     function clone(o){ return JSON.parse(JSON.stringify(o)); }
 
     /* ===== State ===== */
-    var stateKey = 'clValidationAppState_v0_5_0';
+    var stateKey = 'clValidationAppState_v0_5_1';
     var modalCtx = null;
     var currentGroupIndex = 0; // aktive Gruppe fürs "Abschnitt hinzufügen"
 
     var NOTE_SUGGESTIONS = ['N/A', 'OK', 'Nicht anwendbar', 'Siehe Anhang', 'Manuell geprüft'];
 
-    var appState = {
-      kv: [], iq: [], oq: [],
-      groups: [] // [{id,title,enabled:true,sections:[{type,...}]}]
-    };
+    var appState = { kv: [], iq: [], oq: [], groups: [] };
 
     var defaultKV = [
       {text:'Anforderungen definiert', ok:false, note:'', code:'KV-01', info:''},
@@ -390,7 +441,7 @@
 
     function collectAll(){
       return {
-        meta:{ ts:(new Date()).toISOString(), version:'0.5.0' },
+        meta:{ ts:(new Date()).toISOString(), version:'0.5.1' },
         kopf:{
           instName: $('#instName').value, instOrt: $('#instOrt').value, betreiber: $('#betreiber').value,
           produkt: $('#produkt').value, programmpaket: $('#programmpaket').value, version: $('#version').value,
@@ -430,11 +481,10 @@
       appState.iq = data.iq && data.iq.length ? data.iq : clone(iqItems);
       appState.oq = data.oq && data.oq.length ? data.oq : clone(oqItems);
 
-      // Gruppen migrieren / übernehmen
+      // Gruppen
       if(Array.isArray(data.groups) && data.groups.length){
         appState.groups = data.groups;
       }else{
-        // initial: eine leere Gruppe
         appState.groups = [{ id: Date.now(), title:'Gruppe 1', enabled:true, sections:[] }];
       }
       currentGroupIndex = Math.min(currentGroupIndex, appState.groups.length-1);
@@ -460,7 +510,7 @@
     function mkCheckRow(item, syncFn, delFn, items){
       var row=document.createElement('div'); row.className='check';
       var draggedIndex=-1; row.draggable=true;
-      // Handle (optisch)
+
       var moveDiv=document.createElement('div'); moveDiv.className='move-btns';
       var handle=document.createElement('div'); handle.className='move-handle'; handle.title='Zeile ziehen zum Verschieben'; handle.appendChild(document.createElement('span')); moveDiv.appendChild(handle);
 
@@ -497,70 +547,138 @@
       });
     }
 
+    /* Collapsible helpers */
+    function wireCollapseButton(btn){
+      var sel = btn.getAttribute('data-toggle');
+      if(!sel) return;
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        var sec = document.querySelector(sel);
+        if(!sec) return;
+        var collapsed = sec.classList.toggle('collapsed');
+        btn.textContent = collapsed ? '▸' : '▾';
+      });
+    }
+    function initCollapsibles(){
+      $$('.collapse-btn').forEach(wireCollapseButton);
+    }
+
     // Abschnitte (für Gruppen)
     function renderChecklistSection(container, section, sectionsArray, idx){
-      var header=document.createElement('div'); header.className='section-header';
-      var row=document.createElement('div'); row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.gap='8px';
+      container.classList.add('collapsible');
+      if(section._collapsed) container.classList.add('collapsed');
 
-      var title=document.createElement('input'); title.type='text'; title.value=section.title||'Checkliste'; Object.assign(title.style,{fontSize:'20px',fontWeight:'700',color:'var(--primary)',border:'1px solid transparent',background:'transparent',padding:'4px 8px'});
+      var header=document.createElement('div');
+      header.className='section-header';
+      header.innerHTML = '<div class="row"><div class="title-wrap"></div></div>';
+      var titleWrap = header.querySelector('.title-wrap');
+
+      var toggle=document.createElement('button'); toggle.className='collapse-btn'; toggle.textContent=section._collapsed?'▸':'▾';
+      toggle.addEventListener('click', function(){ section._collapsed=!section._collapsed; container.classList.toggle('collapsed', !!section._collapsed); toggle.textContent = section._collapsed?'▸':'▾'; sync(); });
+      titleWrap.appendChild(toggle);
+
+      var title=document.createElement('input');
+      title.type='text'; title.value=section.title||'Checkliste';
+      Object.assign(title.style,{fontSize:'20px',fontWeight:'700',color:'var(--primary)',border:'1px solid transparent',background:'transparent',padding:'4px 8px'});
       title.onchange=function(){ section.title=title.value; sync(); };
+      titleWrap.appendChild(title);
 
-      var tools=document.createElement('div'); tools.style.display='flex'; tools.style.gap='8px';
-      var addBtn=document.createElement('button'); addBtn.className='btn'; addBtn.textContent='➕ Zeile'; addBtn.onclick=function(e){ e.preventDefault(); (section.rows||(section.rows=[])).push({text:'Neue Anforderung', ok:false, note:'', code:'', info:''}); drawGroups(); sync(); };
-      var delBtn=document.createElement('button'); delBtn.className='btn danger'; delBtn.textContent='🗑️ Löschen'; delBtn.onclick=function(e){ e.preventDefault(); if(confirm('Abschnitt löschen?')){ sectionsArray.splice(idx,1); drawGroups(); sync(); } };
+      var tools=document.createElement('div'); tools.style.display='flex'; tools.style.gap='8px'; tools.style.marginLeft='auto';
+      var addBtn=document.createElement('button'); addBtn.className='btn'; addBtn.textContent='➕ Zeile';
+      addBtn.onclick=function(e){ e.preventDefault(); (section.rows||(section.rows=[])).push({text:'Neue Anforderung', ok:false, note:'', code:'', info:''}); drawGroups(); sync(); };
+      var delBtn=document.createElement('button'); delBtn.className='btn danger'; delBtn.textContent='🗑️ Löschen';
+      delBtn.onclick=function(e){ e.preventDefault(); if(confirm('Abschnitt löschen?')){ sectionsArray.splice(idx,1); drawGroups(); sync(); } };
       tools.appendChild(addBtn); tools.appendChild(delBtn);
+      header.querySelector('.row').appendChild(tools);
+      container.appendChild(header);
 
-      row.appendChild(title); row.appendChild(tools); header.appendChild(row); container.appendChild(header);
-
+      var body=document.createElement('div'); body.className='section-body';
       var list=document.createElement('div'); list.className='list';
       (section.rows||[]).forEach(function(r, i){
         var rowEl = mkCheckRow(r, function(){ sync(); drawGroups(); }, function(){ section.rows.splice(i,1); sync(); drawGroups(); }, section.rows);
         list.appendChild(rowEl);
       });
-      container.appendChild(list);
+      body.appendChild(list);
+      container.appendChild(body);
     }
-    function renderSpacingSection(container, section, sectionsArray, idx){
-      var header=document.createElement('div'); header.className='section-header';
-      var row=document.createElement('div'); row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.gap='8px';
-      var title=document.createElement('h2'); title.textContent=section.title||'Abstand-Abschnitt'; title.contentEditable='true'; title.onblur=function(){ section.title=title.textContent; sync(); };
-      var delBtn=document.createElement('button'); delBtn.className='btn danger'; delBtn.textContent='🗑️ Löschen'; delBtn.onclick=function(){ if(confirm('Abschnitt löschen?')){ sectionsArray.splice(idx,1); drawGroups(); sync(); } };
-      row.appendChild(title); row.appendChild(delBtn); header.appendChild(row); container.appendChild(header);
 
+    function renderSpacingSection(container, section, sectionsArray, idx){
+      container.classList.add('collapsible');
+      if(section._collapsed) container.classList.add('collapsed');
+
+      var header=document.createElement('div'); header.className='section-header';
+      var row=document.createElement('div'); row.className='row';
+      var titleWrap=document.createElement('div'); titleWrap.className='title-wrap';
+      var toggle=document.createElement('button'); toggle.className='collapse-btn'; toggle.textContent=section._collapsed?'▸':'▾';
+      toggle.onclick=function(){ section._collapsed=!section._collapsed; container.classList.toggle('collapsed', !!section._collapsed); toggle.textContent=section._collapsed?'▸':'▾'; sync(); };
+      var title=document.createElement('h2'); title.textContent=section.title||'Abstand-Abschnitt'; title.contentEditable='true'; title.onblur=function(){ section.title=title.textContent; sync(); };
+      titleWrap.appendChild(toggle); titleWrap.appendChild(title);
+
+      var delBtn=document.createElement('button'); delBtn.className='btn danger'; delBtn.textContent='🗑️ Löschen';
+      delBtn.onclick=function(e){ e.preventDefault(); if(confirm('Abschnitt löschen?')){ sectionsArray.splice(idx,1); drawGroups(); sync(); } };
+
+      row.appendChild(titleWrap); row.appendChild(delBtn); header.appendChild(row); container.appendChild(header);
+
+      var body=document.createElement('div'); body.className='section-body';
       var wrap=document.createElement('div'); wrap.className='spacing-section';
       var controls=document.createElement('div'); controls.className='controls';
       var lab=document.createElement('label'); lab.textContent='Höhe (cm): '; lab.style.marginRight='8px';
       var inp=document.createElement('input'); Object.assign(inp,{type:'number',min:'0.5',max:'29',step:'0.5'}); inp.value=section.heightCm||5; inp.style.width='80px';
       var info=document.createElement('span'); info.textContent=' (Max: 29 cm A4)'; info.style.fontSize='12px'; info.style.color='#64748b';
       controls.appendChild(lab); controls.appendChild(inp); controls.appendChild(info);
-
       var prev=document.createElement('div'); prev.className='preview'; prev.textContent='Abstand: '+(section.heightCm||5)+' cm';
-      prev.style.height=((section.heightCm||5)*3.7795275591*10)+'px'; // cm -> px (96dpi)
+      prev.style.height=((section.heightCm||5) * 37.795275591)+'px';
       inp.onchange=function(){ var v=parseFloat(inp.value)||5; if(v>29) v=29; if(v<0.5) v=0.5; section.heightCm=v; prev.textContent='Abstand: '+v+' cm'; prev.style.height=(v*37.795275591)+'px'; sync(); };
 
-      wrap.appendChild(controls); wrap.appendChild(prev); container.appendChild(wrap);
+      wrap.appendChild(controls); wrap.appendChild(prev); body.appendChild(wrap); container.appendChild(body);
     }
-    function renderTextSection(container, section, sectionsArray, idx){
-      var header=document.createElement('div'); header.className='section-header';
-      var row=document.createElement('div'); row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.gap='8px';
-      var title=document.createElement('h2'); title.textContent=section.title||'Text-Abschnitt'; title.contentEditable='true'; title.onblur=function(){ section.title=title.textContent; sync(); };
-      var delBtn=document.createElement('button'); delBtn.className='btn danger'; delBtn.textContent='🗑️ Löschen'; delBtn.onclick=function(){ if(confirm('Abschnitt löschen?')){ sectionsArray.splice(idx,1); drawGroups(); sync(); } };
-      row.appendChild(title); row.appendChild(delBtn); header.appendChild(row); container.appendChild(header);
 
+    function renderTextSection(container, section, sectionsArray, idx){
+      container.classList.add('collapsible');
+      if(section._collapsed) container.classList.add('collapsed');
+
+      var header=document.createElement('div'); header.className='section-header';
+      var row=document.createElement('div'); row.className='row';
+      var titleWrap=document.createElement('div'); titleWrap.className='title-wrap';
+      var toggle=document.createElement('button'); toggle.className='collapse-btn'; toggle.textContent=section._collapsed?'▸':'▾';
+      toggle.onclick=function(){ section._collapsed=!section._collapsed; container.classList.toggle('collapsed', !!section._collapsed); toggle.textContent=section._collapsed?'▸':'▾'; sync(); };
+      var title=document.createElement('h2'); title.textContent=section.title||'Text-Abschnitt'; title.contentEditable='true'; title.onblur=function(){ section.title=title.textContent; sync(); };
+      titleWrap.appendChild(toggle); titleWrap.appendChild(title);
+
+      var delBtn=document.createElement('button'); delBtn.className='btn danger'; delBtn.textContent='🗑️ Löschen';
+      delBtn.onclick=function(){ if(confirm('Abschnitt löschen?')){ sectionsArray.splice(idx,1); drawGroups(); sync(); } };
+
+      row.appendChild(titleWrap); row.appendChild(delBtn); header.appendChild(row); container.appendChild(header);
+
+      var body=document.createElement('div'); body.className='section-body';
       var textDiv=document.createElement('div'); textDiv.className='text-section';
       var toolbar=document.createElement('div'); toolbar.className='text-editor-toolbar';
       [['B','bold'],['I','italic'],['U','underline'],['•','insertUnorderedList'],['1.','insertOrderedList'],['←','justifyLeft'],['↔','justifyCenter'],['→','justifyRight']]
         .forEach(function([icon,cmd]){ var b=document.createElement('button'); b.textContent=icon; b.onclick=function(e){e.preventDefault();document.execCommand(cmd,false,null); editor.focus();}; toolbar.appendChild(b); });
       var editor=document.createElement('div'); editor.className='text-editor-content'; editor.contentEditable='true'; editor.innerHTML=section.content||'';
       editor.oninput=function(){ section.content=editor.innerHTML; sync(); };
-      textDiv.appendChild(toolbar); textDiv.appendChild(editor); container.appendChild(textDiv);
+      textDiv.appendChild(toolbar); textDiv.appendChild(editor);
+      body.appendChild(textDiv); container.appendChild(body);
     }
-    function renderImageSection(container, section, sectionsArray, idx){
-      var header=document.createElement('div'); header.className='section-header';
-      var row=document.createElement('div'); row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.gap='8px';
-      var title=document.createElement('h2'); title.textContent=section.title||'Bild-Abschnitt'; title.contentEditable='true'; title.onblur=function(){ section.title=title.textContent; sync(); };
-      var delBtn=document.createElement('button'); delBtn.className='btn danger'; delBtn.textContent='🗑️ Löschen'; delBtn.onclick=function(){ if(confirm('Abschnitt löschen?')){ sectionsArray.splice(idx,1); drawGroups(); sync(); } };
-      row.appendChild(title); row.appendChild(delBtn); header.appendChild(row); container.appendChild(header);
 
+    function renderImageSection(container, section, sectionsArray, idx){
+      container.classList.add('collapsible');
+      if(section._collapsed) container.classList.add('collapsed');
+
+      var header=document.createElement('div'); header.className='section-header';
+      var row=document.createElement('div'); row.className='row';
+      var titleWrap=document.createElement('div'); titleWrap.className='title-wrap';
+      var toggle=document.createElement('button'); toggle.className='collapse-btn'; toggle.textContent=section._collapsed?'▸':'▾';
+      toggle.onclick=function(){ section._collapsed=!section._collapsed; container.classList.toggle('collapsed', !!section._collapsed); toggle.textContent=section._collapsed?'▸':'▾'; sync(); };
+      var title=document.createElement('h2'); title.textContent=section.title||'Bild-Abschnitt'; title.contentEditable='true'; title.onblur=function(){ section.title=title.textContent; sync(); };
+      titleWrap.appendChild(toggle); titleWrap.appendChild(title);
+
+      var delBtn=document.createElement('button'); delBtn.className='btn danger'; delBtn.textContent='🗑️ Löschen';
+      delBtn.onclick=function(){ if(confirm('Abschnitt löschen?')){ sectionsArray.splice(idx,1); drawGroups(); sync(); } };
+
+      row.appendChild(titleWrap); row.appendChild(delBtn); header.appendChild(row); container.appendChild(header);
+
+      var body=document.createElement('div'); body.className='section-body';
       var imageDiv=document.createElement('div'); imageDiv.className='image-section';
       var uploadZone=document.createElement('div'); uploadZone.className='image-upload-zone';
       var txt=document.createElement('div'); txt.innerHTML='<div style="font-size:48px;margin-bottom:8px">📷</div><div><strong>Bilder hinzufügen</strong></div><div style="font-size:13px;color:#64748b;margin-top:4px">Klicken oder Dateien hierher ziehen • Kamera auf Mobilgeräten</div>';
@@ -584,7 +702,7 @@
         });
         imageDiv.appendChild(preview);
       }
-      container.appendChild(imageDiv);
+      body.appendChild(imageDiv); container.appendChild(body);
     }
 
     function handleFiles(files, section){
@@ -611,10 +729,7 @@
         var tools=document.createElement('div'); tools.className='group-tools';
         var btnSel=document.createElement('button'); btnSel.className='btn'; btnSel.textContent='Auswählen'; btnSel.onclick=function(){ currentGroupIndex=gIdx; alert('Aktive Gruppe: '+(g.title||('Gruppe '+(gIdx+1)))); };
         var btnDup=document.createElement('button'); btnDup.className='btn'; btnDup.textContent='Duplizieren';
-        btnDup.onclick=function(){
-          var copy=clone(g); copy.id=Date.now()+Math.random(); copy.title=(g.title||('Gruppe '+(gIdx+1)))+' (Kopie)';
-          appState.groups.splice(gIdx+1,0,copy); currentGroupIndex=gIdx+1; drawGroups(); sync();
-        };
+        btnDup.onclick=function(){ var copy=clone(g); copy.id=Date.now()+Math.random(); copy.title=(g.title||('Gruppe '+(gIdx+1)))+' (Kopie)'; appState.groups.splice(gIdx+1,0,copy); currentGroupIndex=gIdx+1; drawGroups(); sync(); };
         var btnDel=document.createElement('button'); btnDel.className='btn danger'; btnDel.textContent='Löschen';
         btnDel.onclick=function(){ if(confirm('Gruppe löschen?')){ appState.groups.splice(gIdx,1); currentGroupIndex=0; drawGroups(); sync(); } };
         var btnToggle=document.createElement('button'); btnToggle.className='btn'; btnToggle.textContent=(g.enabled===false?'Aktivieren':'Deaktivieren');
@@ -638,6 +753,7 @@
       });
 
       updatePageGuides(); // Guides nach jedem Render neu berechnen
+      initCollapsibles(); // Buttons in neu gerenderten Abschnitten verdrahten
     }
 
     /* ===== Abschnitte hinzufügen ===== */
@@ -646,19 +762,22 @@
     function closeSectionTypeModal(){ $('#sectionTypeModal').style.display='none'; pendingSectionCallback=null; }
     $('#sectionTypeClose').onclick = closeSectionTypeModal;
     $('#sectionTypeModal').addEventListener('click', function(e){ if(e.target===this) closeSectionTypeModal(); });
-    $$('.section-type-card').forEach(function(card){
-      card.onclick=function(e){
-        e.preventDefault(); e.stopPropagation();
-        var type=card.getAttribute('data-type');
-        if(pendingSectionCallback){ var cb=pendingSectionCallback; closeSectionTypeModal(); cb(type); } else { closeSectionTypeModal(); }
-      };
+    // Modal-Karten
+    document.addEventListener('DOMContentLoaded', function(){
+      $$('.section-type-card').forEach(function(card){
+        card.onclick=function(e){
+          e.preventDefault(); e.stopPropagation();
+          var type=card.getAttribute('data-type');
+          if(pendingSectionCallback){ var cb=pendingSectionCallback; closeSectionTypeModal(); cb(type); } else { closeSectionTypeModal(); }
+        };
+      });
     });
 
     function addDynamicSection(){
       showSectionTypeModal(function(type){
         var g = appState.groups[currentGroupIndex] || (appState.groups[0]);
         if(!g) { appState.groups=[{id:Date.now(), title:'Gruppe 1', enabled:true, sections:[]}]; g=appState.groups[0]; }
-        var section={ type:type||'checklist', title:'Neuer Abschnitt', id:Date.now() };
+        var section={ type:type||'checklist', title:'Neuer Abschnitt', id:Date.now(), _collapsed:false };
         if(section.type==='checklist') section.rows=[];
         if(section.type==='spacing') section.heightCm=5;
         if(section.type==='text') section.content='';
@@ -668,18 +787,14 @@
       });
     }
 
-    /* ===== Seiten-Guides (A4) =====
-       Anzeigen, wo beim Druck (A4 Hochformat, Margin 12mm) ungefähr umgebrochen wird.
-       A4 Höhe: 297mm -> ~1122px @96dpi; Nutzfläche (ohne 12mm Top/Bottom): ~1032px.
-    */
+    /* ===== Seiten-Guides (A4) ===== */
     var guidesOn=false;
     function updatePageGuides(){
       var host=document.getElementById('pageGuides'); if(!host) return;
       host.innerHTML='';
       if(!guidesOn) return;
       var contentEl=document.getElementById('app');
-      var rect=contentEl.getBoundingClientRect();
-      var pageHeightPx = 1032; // grobe Nutzfläche je Seite bei Margin 12mm
+      var pageHeightPx = 1032; // grobe Nutzfläche bei 12mm Rändern
       var totalH = contentEl.scrollHeight;
       var count = Math.floor(totalH / pageHeightPx);
       for(var i=1;i<=count;i++){
@@ -723,25 +838,17 @@
       $('#btnPDF').onclick=function(){ btn.classList.remove('active'); menu.classList.remove('active'); window.print(); };
       $('#btnReset').onclick=resetAll;
       $('#btnNewSectionMenu').onclick=function(e){ e.preventDefault(); e.stopPropagation(); addDynamicSection(); setTimeout(function(){ btn.classList.remove('active'); menu.classList.remove('active'); }, 100); };
-      $('#btnNewGroup').onclick=function(){
-        appState.groups.push({ id: Date.now()+Math.random(), title:'Neue Gruppe', enabled:true, sections:[] });
-        currentGroupIndex = appState.groups.length-1; drawGroups(); sync();
-      };
-      $('#btnGuides').onclick=function(){
-        guidesOn=!guidesOn;
-        var overlay=$('#pageGuides'); overlay.classList.toggle('hidden', !guidesOn);
-        $('#guideState').textContent = guidesOn ? 'An' : 'Aus';
-        updatePageGuides();
-      };
+      $('#btnNewGroup').onclick=function(){ appState.groups.push({ id: Date.now()+Math.random(), title:'Neue Gruppe', enabled:true, sections:[] }); currentGroupIndex = appState.groups.length-1; drawGroups(); sync(); };
+      $('#btnGuides').onclick=function(){ guidesOn=!guidesOn; var overlay=$('#pageGuides'); overlay.classList.toggle('hidden', !guidesOn); $('#guideState').textContent = guidesOn ? 'An' : 'Aus'; updatePageGuides(); };
 
       // Signaturen
       initSignature('sigValidierer'); initSignature('sigBetreiber');
 
       // Clear-Buttons Signatur
-      $$('[data-clear]').forEach(function(b){ b.addEventListener('click', function(){ clearSignature(b.getAttribute('data-clear')); }); });
+      $$('.sig-controls [data-clear]').forEach(function(b){ b.addEventListener('click', function(){ clearSignature(b.getAttribute('data-clear')); }); });
 
-      // Recompute guides on resize/content changes
-      var ro; if(window.ResizeObserver){ ro=new ResizeObserver(updatePageGuides); ro.observe(document.getElementById('app')); }
+      // Guides neu berechnen bei Resize/Mutationen
+      if(window.ResizeObserver){ new ResizeObserver(updatePageGuides).observe(document.getElementById('app')); }
       window.addEventListener('resize', updatePageGuides);
       new MutationObserver(function(){ if(guidesOn) updatePageGuides(); }).observe(document.getElementById('app'), {childList:true,subtree:true});
     }
