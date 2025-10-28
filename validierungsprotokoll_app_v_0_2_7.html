@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – Web App (v0.2.7 – ES5)</title>
+  <title>CL Validierungsprotokoll – Erweitert (v0.3.0 – ES5)</title>
   <style>
     :root{
       --primary:#8B1538; --bg:#F8F9FB; --text:#1E2434; --card:#ffffff; --muted:#e9edf3; --ok:#11a36a; --warn:#d97706; --err:#c81e1e;
@@ -45,6 +45,31 @@
     .check .del{margin-left:4px}
     .check input[type="checkbox"]{width:18px;height:18px;margin-left:auto}
 
+    /* NEU: Abstand-Abschnitt */
+    .spacing-section{background:#f8f9fb;border:2px dashed #cbd5e1;border-radius:8px;padding:12px;margin:8px 0}
+    .spacing-section .controls{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+    .spacing-section .preview{background:#fff;border:1px solid #e5e7eb;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:13px}
+
+    /* NEU: Text-Abschnitt mit Editor */
+    .text-section{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:12px;margin:8px 0}
+    .text-editor-toolbar{display:flex;gap:4px;padding:8px;background:#f8f9fb;border:1px solid #e5e7eb;border-radius:6px 6px 0 0;flex-wrap:wrap}
+    .text-editor-toolbar button{padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;background:#fff;cursor:pointer;font-size:13px}
+    .text-editor-toolbar button:hover{background:#f1f5f9}
+    .text-editor-toolbar button.active{background:#dbeafe;border-color:#3b82f6}
+    .text-editor-content{min-height:120px;padding:12px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 6px 6px;background:#fff;outline:none}
+    .text-editor-content:focus{border-color:#3b82f6}
+
+    /* NEU: Bild-Abschnitt */
+    .image-section{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:12px;margin:8px 0}
+    .image-upload-zone{border:2px dashed #cbd5e1;border-radius:8px;padding:20px;text-align:center;background:#f8f9fb;cursor:pointer;transition:all 0.2s}
+    .image-upload-zone:hover{border-color:#8B1538;background:#fef2f2}
+    .image-upload-zone.dragover{border-color:#8B1538;background:#fee2e2}
+    .image-preview{display:grid;grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));gap:10px;margin-top:12px}
+    .image-preview-item{position:relative;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;aspect-ratio:4/3}
+    .image-preview-item img{width:100%;height:100%;object-fit:cover}
+    .image-preview-item .delete-btn{position:absolute;top:4px;right:4px;background:#ef4444;color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;line-height:1}
+    .image-preview-item .delete-btn:hover{background:#dc2626}
+
     /* Modal */
     .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;z-index:4000}
     .modal{background:#fff;border-radius:12px;max-width:560px;width:92%;box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden}
@@ -52,12 +77,18 @@
     .modal .content{padding:12px}
     .modal textarea{min-height:140px}
 
+    /* Section Type Modal */
+    .section-type-grid{display:grid;grid-template-columns:repeat(2, 1fr);gap:12px;padding:12px}
+    .section-type-card{padding:16px;border:2px solid #e5e7eb;border-radius:10px;cursor:pointer;text-align:center;transition:all 0.2s}
+    .section-type-card:hover{border-color:#8B1538;background:#fef2f2}
+    .section-type-card .icon{font-size:32px;margin-bottom:8px}
+    .section-type-card .name{font-weight:700;color:#1e293b}
+
     /* ——— Print / PDF: A4 sheet hardening ——— */
     @page{ size:A4; margin:12mm; }
     @media print{
       html, body{ height:auto !important; }
       body{ background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; color:#000; }
-      /* Single A4 sheet width with inner padding for stable layout on iOS */
       .container{ max-width:none; padding:0; }
       .sheet{ width:210mm; min-height:297mm; margin:0 auto; border-radius:0; box-shadow:none; }
       header{ position:static !important; box-shadow:none !important; }
@@ -65,13 +96,28 @@
       .section{ break-inside: avoid; page-break-inside: avoid; padding:10mm 10mm 8mm; border-top:1px solid #000; }
       .section:first-of-type{ border-top:0; padding-top:10mm; }
 
+      /* Hide controls in print */
+      .btn, button, .controls, .delete-btn, .image-upload-zone{ display:none !important; }
+      
+      /* Spacing section */
+      .spacing-section{ border:none; background:transparent; padding:0; }
+      .spacing-section .preview{ border:none; }
+
+      /* Text editor */
+      .text-editor-toolbar{ display:none !important; }
+      .text-editor-content{ border:1px solid #000 !important; padding:8px; }
+
+      /* Images */
+      .image-section{ border:1px solid #000; }
+      .image-preview{ gap:5mm; }
+      .image-preview-item{ border:1px solid #000; }
+
       /* Table-like rendering for lists */
       .list{ display:table; width:100%; border-collapse:collapse; gap:0 !important; }
       .check{ display:table-row; border:none; border-radius:0; padding:0; }
       .check > *{ display:table-cell; border:1px solid #000; padding:2.5mm 2mm; vertical-align:middle; }
       .check > *:not(:first-child){ border-left:1px solid #000; }
 
-      /* Column widths: code | label | note | checkbox */
       .check .tiny{ width:14mm !important; height:auto !important; text-align:center; border:none !important; background:#fff !important; }
       .check .info-btn{ display:none !important; }
       .check .label{ width:auto; }
@@ -79,14 +125,10 @@
       .check .note{ width:100% !important; height:auto !important; border:none !important; background:#fff !important; color:#000 !important; }
       .check .main{ width:8mm !important; text-align:center; display:block; margin:auto; }
 
-      /* Inputs normalization */
       input, select, textarea{ border:none !important; background:#fff !important; color:#000 !important; box-shadow:none !important; }
       [contenteditable="true"]{ outline:none !important; }
 
-      /* Prevent WebKit shrink-to-fit surprises */
       .sheet{ -webkit-transform: scale(1); transform: scale(1); -webkit-transform-origin: top left; transform-origin: top left; }
-
-      /* Utility */
       .page-break{ page-break-before:always; break-before:page; }
     }
 
@@ -103,281 +145,739 @@
     <div class="sheet" id="app">
       <header>
         <div>
-          <div class="title">CL Validierungsprotokoll – Web App</div>
-          <div class="version">Edition: v0.2.7 (ES5) • Layout A4 (druckbar)</div>
+          <div class="title">CL Validierungsprotokoll – Erweitert</div>
+          <div class="version">Edition: v0.3.0 (ES5) • Mit Abstand-, Text- und Bild-Abschnitten</div>
         </div>
         <div class="toolbar">
           <button class="btn" id="btnSave">Speichern (JSON)</button>
           <button class="btn" id="btnLoad">Laden (JSON)</button>
           <button class="btn secondary" id="btnNewSection">+ Abschnitt</button>
-          <button class="btn outline" id="btnPDF">PDF / Drucken</button>
-          <button class="btn danger" id="btnReset">Daten zurücksetzen</button>
+          <button class="btn" id="btnPDF">Drucken / PDF</button>
+          <button class="btn danger" id="btnReset">Zurücksetzen</button>
         </div>
       </header>
 
-      <section class="section">
-        <h2>Deckblatt & Kopfdaten</h2>
+      <div class="section">
+        <h2>Kopfdaten</h2>
         <div class="grid">
-          <div class="col-6"><label>Name der Einrichtung</label><input id="instName" type="text" placeholder="z.B. Klinikum Musterstadt" /></div>
-          <div class="col-6"><label>Standort der Installation</label><input id="instOrt" type="text" placeholder="Ort / Abteilung" /></div>
-          <div class="col-6"><label>Verantwortliche Person (Betreiber)</label><input id="betreiber" type="text" placeholder="Name" /></div>
-          <div class="col-6"><label>Produkt</label><input id="produkt" type="text" value="EuroSDS" /></div>
-          <div class="col-4"><label>Programm-Paket</label><input id="programmpaket" type="text" placeholder="z.B. Komplettpaket" /></div>
-          <div class="col-4"><label>Version</label><input id="version" type="text" placeholder="z.B. 6.4.x" /></div>
-          <div class="col-4"><label>Softwarepflege (EVB IT-Pflege S)</label>
-            <select id="evbPflege"><option value="">Bitte wählen…</option><option>ja</option><option>nein</option></select>
-          </div>
-          <div class="col-6"><label>Art/Anzahl der Arbeitsplätze</label><input id="arbeitsplaetze" type="text" placeholder="z.B. 6 Clients + 1 Notfallpackplatz" /></div>
-          <div class="col-6"><label>Angebundene Geräte</label><input id="geraete" type="text" placeholder="RDG, Steri, Foliengerät …" /></div>
-          <div class="col-12"><label>Bemerkung zur Installation</label><textarea id="bemerkung"></textarea></div>
+          <div class="col-6"><label>Institution</label><input type="text" id="instName"/></div>
+          <div class="col-6"><label>Ort</label><input type="text" id="instOrt"/></div>
+          <div class="col-6"><label>Betreiber</label><input type="text" id="betreiber"/></div>
+          <div class="col-6"><label>Produkt</label><input type="text" id="produkt"/></div>
+          <div class="col-6"><label>Programmpaket</label><input type="text" id="programmpaket"/></div>
+          <div class="col-6"><label>Version</label><input type="text" id="version"/></div>
+          <div class="col-6"><label>EVB Pflege</label><input type="text" id="evbPflege"/></div>
+          <div class="col-6"><label>Arbeitsplätze</label><input type="number" id="arbeitsplaetze"/></div>
+          <div class="col-12"><label>Geräte</label><textarea id="geraete"></textarea></div>
+          <div class="col-12"><label>Bemerkungen</label><textarea id="bemerkung"></textarea></div>
         </div>
-        <div class="grid" style="margin-top:10px">
-          <div class="col-4"><label>Validierung durchgeführt am</label><input id="valAm" type="date" /></div>
-          <div class="col-4"><label>Letzte Validierung</label><input id="valLast" type="date" /></div>
-          <div class="col-4"><label>Nächste Validierung</label><input id="valNext" type="date" /></div>
-        </div>
-        <div class="row" style="margin-top:12px">
-          <span class="chip"><input type="checkbox" id="chkVal" /> Validierung</span>
-          <span class="chip"><input type="checkbox" id="chkReval" /> Revalidierung</span>
-        </div>
-      </section>
+      </div>
 
-      <section class="section">
-        <h2>Validierer & Freigabe</h2>
+      <div class="section">
+        <h2>Validierungsdaten</h2>
         <div class="grid">
-          <div class="col-4"><label>Validierer (NEXUS / IPS)</label><input id="validierer" type="text" placeholder="Name" /></div>
-          <div class="col-4"><label>Fachliche Qualifikation</label><input id="qualifikation" type="text" /></div>
-          <div class="col-4"><label>Produktschulung (Programmpaket)</label><input id="schulung" type="text" /></div>
-          <div class="col-6"><label>Datum / Unterschrift Validierer</label>
-            <div class="sig-wrap"><canvas class="signature" id="sigValidierer"></canvas>
-              <div class="row" style="justify-content:space-between;margin-top:6px"><button class="btn" data-clear="sigValidierer">Löschen</button><input id="sigDate1" type="date" /></div>
-            </div>
-          </div>
-          <div class="col-6"><label>Freigabe durch Betreiber – Datum / Unterschrift</label>
-            <div class="sig-wrap"><canvas class="signature" id="sigBetreiber"></canvas>
-              <div class="row" style="justify-content:space-between;margin-top:6px"><button class="btn" data-clear="sigBetreiber">Löschen</button><input id="sigDate2" type="date" /></div>
-            </div>
-          </div>
+          <div class="col-4"><label>Validierung am</label><input type="date" id="valAm"/></div>
+          <div class="col-4"><label>Letzte Validierung</label><input type="date" id="valLast"/></div>
+          <div class="col-4"><label>Nächste Validierung</label><input type="date" id="valNext"/></div>
+          <div class="col-6"><label><input type="checkbox" id="chkVal"/> Validierung durchgeführt</label></div>
+          <div class="col-6"><label><input type="checkbox" id="chkReval"/> Revalidierung erforderlich</label></div>
         </div>
-      </section>
+      </div>
 
-      <section class="section">
-        <h2>Kundenvorgespräch (Kurzfassung)
-          <button class="btn icon" id="kvAddBtn" title="Punkt hinzufügen">＋</button>
-          <button class="btn icon" id="kvRemoveBtn" title="Letzten Punkt entfernen">－</button>
-        </h2>
-        <div class="list" id="kvChecks"></div>
-      </section>
+      <div class="section">
+        <h2>KV – Konstruktionsvalidierung</h2>
+        <div class="list" id="kvList"></div>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn" id="kvAddBtn">+ Zeile</button>
+          <button class="btn danger" id="kvRemoveBtn">− Letzte</button>
+        </div>
+      </div>
 
-      <section class="section">
-        <h2>Installationsqualifizierung (IQ)
-          <button class="btn icon" id="iqAddBtn" title="Punkt hinzufügen">＋</button>
-          <button class="btn icon" id="iqRemoveBtn" title="Letzten Punkt entfernen">－</button>
-        </h2>
+      <div class="section">
+        <h2>IQ – Installationsqualifikation</h2>
         <div class="list" id="iqList"></div>
-      </section>
-
-      <section class="section">
-        <h2>Funktionsqualifizierung (OQ)
-          <button class="btn icon" id="oqAddBtn" title="Punkt hinzufügen">＋</button>
-          <button class="btn icon" id="oqRemoveBtn" title="Letzten Punkt entfernen">－</button>
-        </h2>
-        <div class="list" id="oqList"></div>
-      </section>
-
-      <section class="section">
-        <h2>Weitere Abschnitte</h2>
-        <div class="row" style="margin-bottom:8px">
-          <button class="btn secondary" id="btnNewSection2">＋ Abschnitt</button>
-          <button class="btn danger" id="btnRemoveSection">－ Abschnitt</button>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn" id="iqAddBtn">+ Zeile</button>
+          <button class="btn danger" id="iqRemoveBtn">− Letzte</button>
         </div>
-        <div id="dynamicSections" class="list"></div>
-      </section>
+      </div>
 
-      <div class="section page-break">
+      <div class="section">
+        <h2>OQ – Funktionsqualifikation</h2>
+        <div class="list" id="oqList"></div>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn" id="oqAddBtn">+ Zeile</button>
+          <button class="btn danger" id="oqRemoveBtn">− Letzte</button>
+        </div>
+      </div>
+
+      <div id="dynamicSections"></div>
+
+      <div class="section">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <button class="btn secondary" id="btnNewSection2">+ Abschnitt hinzufügen</button>
+          <button class="btn danger" id="btnRemoveSection">− Letzten Abschnitt</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Unterschriften</h2>
+        <div class="grid">
+          <div class="col-6">
+            <label>Validierer</label>
+            <div class="sig-wrap">
+              <canvas id="sigValidierer" class="signature"></canvas>
+            </div>
+            <button class="btn" data-clear="sigValidierer" style="margin-top:8px">Löschen</button>
+            <input type="date" id="sigDate1" style="margin-top:8px" placeholder="Datum"/>
+          </div>
+          <div class="col-6">
+            <label>Betreiber</label>
+            <div class="sig-wrap">
+              <canvas id="sigBetreiber" class="signature"></canvas>
+            </div>
+            <button class="btn" data-clear="sigBetreiber" style="margin-top:8px">Löschen</button>
+            <input type="date" id="sigDate2" style="margin-top:8px" placeholder="Datum"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
         <div class="footer">
-          <div>© NEXUS / IPS – Validierungsprotokoll • Web-App v0.2.7 (ES5)</div>
-          <div>Erstellt am <span id="stamp"></span></div>
+          <div style="font-size:12px;color:#64748b">Erstellt am: <span id="stamp"></span></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Info Modal -->
   <div class="modal-backdrop" id="infoModal">
     <div class="modal">
       <header>
-        <div><strong>Zusätzliche Informationen</strong></div>
-        <button class="btn icon" id="infoClose">×</button>
+        <span>Info</span>
+        <button class="btn icon" id="infoClose">✕</button>
       </header>
       <div class="content">
-        <label for="infoTextarea">Diese Informationen erscheinen <strong>nicht</strong> im PDF.</label>
-        <textarea id="infoTextarea" placeholder="Freitext…"></textarea>
-        <div class="row" style="justify-content:flex-end;margin-top:10px">
+        <textarea id="infoTextarea" placeholder="Zusätzliche Informationen..."></textarea>
+        <div style="margin-top:12px;display:flex;gap:8px">
           <button class="btn" id="infoSave">Speichern</button>
+          <button class="btn" id="infoCancel">Abbrechen</button>
         </div>
       </div>
     </div>
   </div>
 
-  <datalist id="noteOptions"></datalist>
+  <div class="modal-backdrop" id="sectionTypeModal">
+    <div class="modal">
+      <header>
+        <span>Abschnittstyp wählen</span>
+        <button class="btn icon" id="sectionTypeClose">✕</button>
+      </header>
+      <div class="section-type-grid">
+        <div class="section-type-card" data-type="checklist">
+          <div class="icon">✓</div>
+          <div class="name">Checkliste</div>
+        </div>
+        <div class="section-type-card" data-type="spacing">
+          <div class="icon">↕</div>
+          <div class="name">Abstand</div>
+        </div>
+        <div class="section-type-card" data-type="text">
+          <div class="icon">📝</div>
+          <div class="name">Text</div>
+        </div>
+        <div class="section-type-card" data-type="image">
+          <div class="icon">🖼</div>
+          <div class="name">Bilder</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="testBanner"></div>
 
   <script>
-    function $(sel, root){ if(!root) root=document; return root.querySelector(sel); }
-    function $$(sel, root){ if(!root) root=document; return Array.prototype.slice.call(root.querySelectorAll(sel)); }
-
-    var stateKey = 'valprotokoll.v027.es5';
+    function $(sel){ return document.querySelector(sel); }
+    function $$(sel){ return document.querySelectorAll(sel); }
+    function escapeHtml(text){ var div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
     function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
 
-    var NOTE_SUGGESTIONS = ['N/A','OK','Offen','Erledigt'];
+    var stateKey = 'clValidationAppState_v0_3_0';
+    var modalCtx = null;
+
+    var NOTE_SUGGESTIONS = ['N/A', 'OK', 'Nicht anwendbar', 'Siehe Anhang', 'Manuell geprüft'];
+    function ensureNoteOptions(){ if(NOTE_SUGGESTIONS.indexOf('N/A')===-1) NOTE_SUGGESTIONS.unshift('N/A'); }
+    function addSuggestion(text){ if(NOTE_SUGGESTIONS.indexOf(text)===-1) NOTE_SUGGESTIONS.push(text); }
+    function removeSuggestion(text){ var idx = NOTE_SUGGESTIONS.indexOf(text); if(idx>-1) NOTE_SUGGESTIONS.splice(idx,1); }
+
+    var appState = {
+      kv: [],
+      iq: [],
+      oq: [],
+      dynamic: []
+    };
 
     var defaultKV = [
-      {text:'Offene Arbeitsaufträge', ok:false, note:'', code:'', info:''},
-      {text:'Programmstörungen gemeldet', ok:false, note:'', code:'', info:''},
-      {text:'Programmstörungen noch nicht gemeldet', ok:false, note:'', code:'', info:''},
-      {text:'Probleme mit der Datenübertragung', ok:false, note:'', code:'', info:''},
-      {text:'Probleme mit Protokollen (Anzeige/Druck)', ok:false, note:'', code:'', info:''}
+      {text:'Anforderungen definiert', ok:false, note:'', code:'KV-01', info:''},
+      {text:'Spezifikationen erstellt', ok:false, note:'', code:'KV-02', info:''}
     ];
+
     var iqItems = [
-      {text:'Funktion des Netzwerks geprüft (Messprotokolle vorhanden)', note:'', code:'', info:''},
-      {text:'Funktion Drucker gegeben', note:'', code:'', info:''},
-      {text:'Funktion Arbeitsplätze (PC) gegeben', note:'', code:'', info:''},
-      {text:'Funktion Server gegeben', note:'', code:'', info:''}
+      {text:'Hardware installiert', ok:false, note:'', code:'IQ-01', info:''},
+      {text:'Software installiert', ok:false, note:'', code:'IQ-02', info:''}
     ];
+
     var oqItems = [
-      {text:'RDG Beladung – Vor/Nachbeladung definiert', note:'', code:'', info:''},
-      {text:'Packplatz / Desinfektionspackplatz vorhanden', note:'', code:'', info:''},
-      {text:'Chargenvorbereitung konfiguriert', note:'', code:'', info:''},
-      {text:'Sterilisator Beladung – Geräte-/Nachbeladung', note:'', code:'', info:''},
-      {text:'Freigabe Sterilisation / Desinfektion', note:'', code:'', info:''},
-      {text:'Ausgabe / Rücknahme / Rückverfolgung definiert', note:'', code:'', info:''}
+      {text:'Grundfunktionen getestet', ok:false, note:'', code:'OQ-01', info:''},
+      {text:'Schnittstellen geprüft', ok:false, note:'', code:'OQ-02', info:''}
     ];
 
-    var appState = { kv: clone(defaultKV), iq: clone(iqItems), oq: clone(oqItems), dynamic: [] };
+    function loadState(){
+      try{
+        var saved = localStorage.getItem(stateKey);
+        if(saved){
+          var data = JSON.parse(saved);
+          applyAll(data);
+          return true;
+        }
+      }catch(e){ if(window.console && console.error) console.error('Load error', e); }
+      return false;
+    }
 
-    function ensureNoteOptions(){
-      var host = $('#noteOptions'); host.innerHTML='';
-      for(var i=0;i<NOTE_SUGGESTIONS.length;i++){
-        var opt = document.createElement('option'); opt.value = NOTE_SUGGESTIONS[i]; host.appendChild(opt);
+    function mkCheckRow(item, syncFn, delFn){
+      var row = document.createElement('div'); row.className='check';
+      
+      var code = document.createElement('input'); code.className='tiny'; code.type='text'; code.value=item.code||'';
+      code.onchange = function(){ item.code = code.value; syncFn(); };
+      
+      var infoBtn = document.createElement('div'); infoBtn.className='info-btn';
+      infoBtn.onclick = function(){ openInfo(item, syncFn); };
+      if(item.info){ infoBtn.style.background='#dbeafe'; infoBtn.style.borderColor='#3b82f6'; }
+      
+      var label = document.createElement('div'); label.className='label'; label.textContent = item.text;
+      
+      var manage = document.createElement('div'); manage.className='manage';
+      var note = document.createElement('input'); note.className='note'; note.type='text'; note.value=item.note||'';
+      note.setAttribute('list', 'noteOptions'); note.onchange = function(){ item.note = note.value; if(note.value && NOTE_SUGGESTIONS.indexOf(note.value)===-1) addSuggestion(note.value); syncFn(); };
+      manage.appendChild(note);
+      
+      var delBtn = document.createElement('button'); delBtn.className='btn danger del'; delBtn.textContent='×';
+      delBtn.onclick = function(){ if(confirm('Zeile löschen?')) delFn(); };
+      
+      var checkbox = document.createElement('input'); checkbox.className='main'; checkbox.type='checkbox'; checkbox.checked=!!item.ok;
+      checkbox.onchange = function(){ item.ok = checkbox.checked; syncFn(); };
+      
+      row.appendChild(code); row.appendChild(infoBtn); row.appendChild(label); row.appendChild(manage); row.appendChild(delBtn); row.appendChild(checkbox);
+      return row;
+    }
+
+    function openInfo(item, saveFn){
+      modalCtx = {item:item, saveFn:saveFn};
+      $('#infoTextarea').value = item.info || '';
+      $('#infoModal').style.display='flex';
+    }
+    function closeInfo(){ $('#infoModal').style.display='none'; modalCtx=null; }
+
+    function renderList(containerSel, items, syncFn){
+      var container = $(containerSel); container.innerHTML='';
+      for(var i=0;i<items.length;i++){
+        (function(idx){
+          var row = mkCheckRow(items[idx], syncFn, function(){ items.splice(idx,1); renderList(containerSel, items, syncFn); syncFn(); });
+          container.appendChild(row);
+        })(i);
       }
     }
-    function addSuggestion(val){ val = (val||'').trim(); if(!val) return; if(NOTE_SUGGESTIONS.indexOf(val)===-1){ NOTE_SUGGESTIONS.push(val); ensureNoteOptions(); }}
-    function removeSuggestion(val){ val=(val||'').trim(); var idx=NOTE_SUGGESTIONS.indexOf(val); if(idx> -1){ NOTE_SUGGESTIONS.splice(idx,1); ensureNoteOptions(); }}
+
+    function renderAll(){
+      renderList('#kvList', appState.kv, sync);
+      renderList('#iqList', appState.iq, sync);
+      renderList('#oqList', appState.oq, sync);
+      drawDynamic();
+    }
+
+    function addKV(){ appState.kv.push({text:'Neue KV-Anforderung', ok:false, note:'', code:'', info:''}); renderAll(); sync(); }
+    function addIQ(){ appState.iq.push({text:'Neue IQ-Prüfung', ok:false, note:'', code:'', info:''}); renderAll(); sync(); }
+    function addOQ(){ appState.oq.push({text:'Neue OQ-Prüfung', ok:false, note:'', code:'', info:''}); renderAll(); sync(); }
 
     function exportJSON(){
       var data = collectAll();
-      data.__note_suggestions = NOTE_SUGGESTIONS.slice(0);
-      var blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+      var blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
       var url = URL.createObjectURL(blob);
-      var a = document.createElement('a'); a.href = url; a.download = 'Validierungsprotokoll.json'; a.click(); URL.revokeObjectURL(url);
+      var a = document.createElement('a'); a.href=url; a.download='validierung_'+Date.now()+'.json'; a.click();
+      URL.revokeObjectURL(url);
     }
+
     function importJSON(){
-      var inp = document.createElement('input'); inp.type='file'; inp.accept='.json,application/json';
-      inp.onchange = function(){ var f = inp.files[0]; if(!f) return; var reader = new FileReader(); reader.onload = function(){
-        try{ var data = JSON.parse(reader.result); applyAll(data); alert('JSON geladen.'); } catch(e){ alert('Ungültige JSON-Datei.'); }
-      }; reader.readAsText(f); }; inp.click();
-    }
-    function resetAll(){ if(!confirm('Alle Eingaben wirklich löschen?')) return; localStorage.removeItem(stateKey); location.reload(); }
-
-    function escapeHtml(s){ s = (s==null?'':String(s)); return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;'); }
-
-    var modalCtx = { item:null, saveFn:null };
-    function openInfo(item, onSave){ modalCtx.item=item; modalCtx.saveFn=onSave; $('#infoTextarea').value=item.info||''; $('#infoModal').style.display='flex'; }
-    function closeInfo(){ $('#infoModal').style.display='none'; modalCtx.item=null; modalCtx.saveFn=null; }
-
-    function mkCheckRow(item, onChange, onDelete){
-      var wrap = document.createElement('div'); wrap.className = 'check';
-      var html = ''+
-        '<input class="tiny" type="text" maxlength="2" placeholder="" value="' + escapeHtml(item.code||'') + '" aria-label="Kürzel">'+
-        '<button type="button" class="info-btn" title="Zusatzinfo" aria-label="Zusatzinfo"></button>'+
-        '<div class="label" contenteditable="true" spellcheck="false">' + escapeHtml(item.text) + '</div>'+
-        '<div class="manage">'+
-          '<input class="note" list="noteOptions" type="text" aria-label="Bemerkung" placeholder="" value="' + escapeHtml(item.note||'') + '">'+
-          '<button class="btn icon addSug" title="Diese Bemerkung zur Auswahl hinzufügen">＋</button>'+
-          '<button class="btn icon delSug" title="Diese Bemerkungs-Option entfernen">−</button>'+
-        '</div>'+
-        '<input class="main" type="checkbox" ' + (item.ok?'checked':'') + ' aria-label="Erledigt">'+
-        '<button class="btn icon del" title="Zeile löschen">🗑</button>';
-      wrap.innerHTML = html;
-
-      var code = wrap.querySelector('input.tiny');
-      var note = wrap.querySelector('input.note');
-      var cb = wrap.querySelector('input.main');
-      var infoBtn = wrap.querySelector('.info-btn');
-      var addS = wrap.querySelector('.addSug');
-      var delS = wrap.querySelector('.delSug');
-      var delBtn = wrap.querySelector('.del');
-
-      if(code){ code.oninput = function(){ item.code = code.value; if(onChange) onChange(); }; }
-      if(note){ note.oninput = function(){ item.note = note.value; if(onChange) onChange(); }; }
-      if(cb){ cb.onchange = function(){ item.ok = cb.checked; if(onChange) onChange(); }; }
-      if(infoBtn){ infoBtn.onclick = function(){ openInfo(item, function(v){ item.info=v; if(onChange) onChange(); }); }; }
-      if(addS){ addS.onclick = function(){ addSuggestion(note.value); }; }
-      if(delS){ delS.onclick = function(){ removeSuggestion(note.value); }; }
-      if(delBtn){ delBtn.onclick = function(){ if(onDelete) onDelete(); }; }
-
-      var label = wrap.querySelector('.label');
-      if(label){ label.oninput=function(){ item.text = label.textContent.replace(/^\s+|\s+$/g,''); if(onChange) onChange(); }; }
-
-      return wrap;
+      var input = document.createElement('input'); input.type='file'; input.accept='.json';
+      input.onchange = function(){
+        var file = input.files[0]; if(!file) return;
+        var reader = new FileReader();
+        reader.onload = function(e){
+          try{
+            var data = JSON.parse(e.target.result);
+            applyAll(data);
+            alert('Daten erfolgreich geladen!');
+          }catch(err){ alert('Fehler beim Laden: '+err.message); }
+        };
+        reader.readAsText(file);
+      };
+      input.click();
     }
 
-    function renderSection(hostSel, arr){
-      var host = $(hostSel); host.innerHTML='';
-      for(var i=0;i<arr.length;i++){
+    function resetAll(){
+      if(!confirm('Alle Daten zurücksetzen?')) return;
+      localStorage.removeItem(stateKey);
+      location.reload();
+    }
+
+    // NEU: Section Type Selection
+    var pendingSectionCallback = null;
+    function showSectionTypeModal(callback){
+      pendingSectionCallback = callback;
+      $('#sectionTypeModal').style.display = 'flex';
+    }
+    function closeSectionTypeModal(){
+      $('#sectionTypeModal').style.display = 'none';
+      pendingSectionCallback = null;
+    }
+
+    function addDynamicSection(){
+      showSectionTypeModal(function(type){
+        var section = {type: type || 'checklist', title: 'Neuer Abschnitt', id: Date.now()};
+        
+        if(type === 'checklist'){
+          section.rows = [];
+        } else if(type === 'spacing'){
+          section.heightCm = 5;
+        } else if(type === 'text'){
+          section.content = '';
+        } else if(type === 'image'){
+          section.images = [];
+        }
+        
+        appState.dynamic.push(section);
+        drawDynamic();
+        sync();
+      });
+    }
+
+    // NEU: Render Dynamic Sections with new types
+    function drawDynamic(){
+      var host = $('#dynamicSections');
+      host.innerHTML='';
+      
+      for(var i=0;i<appState.dynamic.length;i++){
         (function(idx){
-          host.appendChild(mkCheckRow(arr[idx], sync, function(){ arr.splice(idx,1); renderSection(hostSel, arr); sync(); }));
+          var s = appState.dynamic[idx];
+          var sectionDiv = document.createElement('div');
+          sectionDiv.className = 'section';
+          
+          if(s.type === 'checklist'){
+            renderChecklistSection(sectionDiv, s, idx);
+          } else if(s.type === 'spacing'){
+            renderSpacingSection(sectionDiv, s, idx);
+          } else if(s.type === 'text'){
+            renderTextSection(sectionDiv, s, idx);
+          } else if(s.type === 'image'){
+            renderImageSection(sectionDiv, s, idx);
+          }
+          
+          host.appendChild(sectionDiv);
         })(i);
       }
     }
 
-    function renderAll(){ ensureNoteOptions(); renderSection('#kvChecks', appState.kv); renderSection('#iqList', appState.iq); renderSection('#oqList', appState.oq); drawDynamic(); }
+    function renderChecklistSection(container, section, idx){
+      var header = document.createElement('div');
+      header.className = 'row';
+      header.style.justifyContent = 'space-between';
+      header.style.marginBottom = '12px';
+      
+      var titleInput = document.createElement('input');
+      titleInput.type = 'text';
+      titleInput.value = section.title;
+      titleInput.style.fontSize = '18px';
+      titleInput.style.fontWeight = '700';
+      titleInput.style.color = 'var(--primary)';
+      titleInput.style.border = '1px solid transparent';
+      titleInput.style.padding = '4px 8px';
+      titleInput.onchange = function(){ section.title = titleInput.value; sync(); };
+      
+      var tools = document.createElement('div');
+      tools.style.display = 'flex';
+      tools.style.gap = '8px';
+      
+      var addBtn = document.createElement('button');
+      addBtn.className = 'btn';
+      addBtn.textContent = '+ Zeile';
+      addBtn.onclick = function(){
+        if(!section.rows) section.rows = [];
+        section.rows.push({text:'', ok:false, note:'', code:'', info:''});
+        drawDynamic();
+        sync();
+      };
+      
+      var delBtn = document.createElement('button');
+      delBtn.className = 'btn danger';
+      delBtn.textContent = 'Abschnitt löschen';
+      delBtn.onclick = function(){
+        if(confirm('Abschnitt löschen?')){
+          appState.dynamic.splice(idx,1);
+          drawDynamic();
+          sync();
+        }
+      };
+      
+      tools.appendChild(addBtn);
+      tools.appendChild(delBtn);
+      header.appendChild(titleInput);
+      header.appendChild(tools);
+      container.appendChild(header);
+      
+      var list = document.createElement('div');
+      list.className = 'list';
+      
+      if(section.rows){
+        for(var r=0;r<section.rows.length;r++){
+          (function(rowIdx){
+            var row = mkCheckRow(section.rows[rowIdx], sync, function(){
+              section.rows.splice(rowIdx,1);
+              drawDynamic();
+              sync();
+            });
+            list.appendChild(row);
+          })(r);
+        }
+      }
+      
+      container.appendChild(list);
+    }
 
-    function addKV(){ var t = window.prompt('Neuen Punkt (KV) eingeben:'); if(!t) return; appState.kv.push({text:t, ok:false, note:'', code:'', info:''}); renderAll(); sync(); }
-    function addIQ(){ var t = window.prompt('Neuen Punkt (IQ) eingeben:'); if(!t) return; appState.iq.push({text:t, ok:false, note:'', code:'', info:''}); renderAll(); sync(); }
-    function addOQ(){ var t = window.prompt('Neuen Punkt (OQ) eingeben:'); if(!t) return; appState.oq.push({text:t, ok:false, note:'', code:'', info:''}); renderAll(); sync(); }
+    // NEU: Spacing Section
+    function renderSpacingSection(container, section, idx){
+      var header = document.createElement('div');
+      header.className = 'row';
+      header.style.justifyContent = 'space-between';
+      header.style.marginBottom = '12px';
+      
+      var title = document.createElement('h2');
+      title.textContent = section.title || 'Abstand-Abschnitt';
+      title.contentEditable = 'true';
+      title.style.margin = '0';
+      title.onblur = function(){ section.title = title.textContent; sync(); };
+      
+      var delBtn = document.createElement('button');
+      delBtn.className = 'btn danger';
+      delBtn.textContent = 'Löschen';
+      delBtn.onclick = function(){
+        if(confirm('Abschnitt löschen?')){
+          appState.dynamic.splice(idx,1);
+          drawDynamic();
+          sync();
+        }
+      };
+      
+      header.appendChild(title);
+      header.appendChild(delBtn);
+      container.appendChild(header);
+      
+      var spacingDiv = document.createElement('div');
+      spacingDiv.className = 'spacing-section';
+      
+      var controls = document.createElement('div');
+      controls.className = 'controls';
+      
+      var label = document.createElement('label');
+      label.textContent = 'Höhe (cm): ';
+      label.style.marginRight = '8px';
+      
+      var heightInput = document.createElement('input');
+      heightInput.type = 'number';
+      heightInput.min = '0.5';
+      heightInput.max = '29';
+      heightInput.step = '0.5';
+      heightInput.value = section.heightCm || 5;
+      heightInput.style.width = '80px';
+      heightInput.onchange = function(){
+        var val = parseFloat(heightInput.value);
+        if(val > 29) val = 29;
+        if(val < 0.5) val = 0.5;
+        section.heightCm = val;
+        preview.style.height = (val * 37.795275591) + 'px'; // cm to px conversion
+        sync();
+      };
+      
+      var info = document.createElement('span');
+      info.textContent = ' (Max: 29 cm für A4)';
+      info.style.fontSize = '12px';
+      info.style.color = '#64748b';
+      
+      controls.appendChild(label);
+      controls.appendChild(heightInput);
+      controls.appendChild(info);
+      
+      var preview = document.createElement('div');
+      preview.className = 'preview';
+      preview.textContent = 'Abstand: ' + (section.heightCm || 5) + ' cm';
+      preview.style.height = ((section.heightCm || 5) * 37.795275591) + 'px';
+      
+      spacingDiv.appendChild(controls);
+      spacingDiv.appendChild(preview);
+      container.appendChild(spacingDiv);
+    }
 
-    function addDynamicSection(){ var name = window.prompt('Titel des Abschnitts?'); if(!name) return; var sec = {title:name, rows:[]}; appState.dynamic.push(sec); drawDynamic(); sync(); }
+    // NEU: Text Section with Rich Editor
+    function renderTextSection(container, section, idx){
+      var header = document.createElement('div');
+      header.className = 'row';
+      header.style.justifyContent = 'space-between';
+      header.style.marginBottom = '12px';
+      
+      var title = document.createElement('h2');
+      title.textContent = section.title || 'Text-Abschnitt';
+      title.contentEditable = 'true';
+      title.style.margin = '0';
+      title.onblur = function(){ section.title = title.textContent; sync(); };
+      
+      var delBtn = document.createElement('button');
+      delBtn.className = 'btn danger';
+      delBtn.textContent = 'Löschen';
+      delBtn.onclick = function(){
+        if(confirm('Abschnitt löschen?')){
+          appState.dynamic.splice(idx,1);
+          drawDynamic();
+          sync();
+        }
+      };
+      
+      header.appendChild(title);
+      header.appendChild(delBtn);
+      container.appendChild(header);
+      
+      var textDiv = document.createElement('div');
+      textDiv.className = 'text-section';
+      
+      // Toolbar
+      var toolbar = document.createElement('div');
+      toolbar.className = 'text-editor-toolbar';
+      
+      var commands = [
+        {icon: 'B', cmd: 'bold', title: 'Fett'},
+        {icon: 'I', cmd: 'italic', title: 'Kursiv'},
+        {icon: 'U', cmd: 'underline', title: 'Unterstrichen'},
+        {icon: '•', cmd: 'insertUnorderedList', title: 'Liste'},
+        {icon: '1.', cmd: 'insertOrderedList', title: 'Nummerierte Liste'},
+        {icon: '←', cmd: 'justifyLeft', title: 'Links'},
+        {icon: '→', cmd: 'justifyCenter', title: 'Zentriert'},
+        {icon: '→→', cmd: 'justifyRight', title: 'Rechts'}
+      ];
+      
+      for(var c=0; c<commands.length; c++){
+        (function(command){
+          var btn = document.createElement('button');
+          btn.textContent = command.icon;
+          btn.title = command.title;
+          btn.onclick = function(e){
+            e.preventDefault();
+            document.execCommand(command.cmd, false, null);
+            editor.focus();
+          };
+          toolbar.appendChild(btn);
+        })(commands[c]);
+      }
+      
+      // Editor content
+      var editor = document.createElement('div');
+      editor.className = 'text-editor-content';
+      editor.contentEditable = 'true';
+      editor.innerHTML = section.content || '';
+      editor.oninput = function(){
+        section.content = editor.innerHTML;
+        sync();
+      };
+      
+      textDiv.appendChild(toolbar);
+      textDiv.appendChild(editor);
+      container.appendChild(textDiv);
+    }
 
-    function drawDynamic(){
-      var host = $('#dynamicSections'); host.innerHTML='';
-      for(var i=0;i<appState.dynamic.length;i++){
-        (function(idx){
-          var s = appState.dynamic[idx];
-          var card = document.createElement('div'); card.className='card';
-          var head = document.createElement('div'); head.className='row'; head.style.justifyContent='space-between';
-          head.innerHTML = '<strong>'+escapeHtml(s.title)+'</strong>';
-          var tools = document.createElement('div');
-          var addBtn = document.createElement('button'); addBtn.className='btn'; addBtn.textContent='+ Zeile';
-          addBtn.onclick = function(){ s.rows.push({text:'', ok:false, note:'', code:'', info:''}); drawDynamic(); sync(); };
-          var delBtn = document.createElement('button'); delBtn.className='btn danger'; delBtn.textContent='Abschnitt löschen';
-          delBtn.onclick = function(){ if(confirm('Abschnitt löschen?')){ appState.dynamic.splice(idx,1); drawDynamic(); sync(); } };
-          tools.appendChild(addBtn); tools.appendChild(delBtn); head.appendChild(tools); card.appendChild(head);
-          for(var r=0;r<s.rows.length;r++){
-            (function(rowIdx){
-              var row = mkCheckRow(s.rows[rowIdx], sync, function(){ s.rows.splice(rowIdx,1); drawDynamic(); sync(); });
-              card.appendChild(row);
-            })(r);
-          }
-          host.appendChild(card);
-        })(i);
+    // NEU: Image Section
+    function renderImageSection(container, section, idx){
+      var header = document.createElement('div');
+      header.className = 'row';
+      header.style.justifyContent = 'space-between';
+      header.style.marginBottom = '12px';
+      
+      var title = document.createElement('h2');
+      title.textContent = section.title || 'Bild-Abschnitt';
+      title.contentEditable = 'true';
+      title.style.margin = '0';
+      title.onblur = function(){ section.title = title.textContent; sync(); };
+      
+      var delBtn = document.createElement('button');
+      delBtn.className = 'btn danger';
+      delBtn.textContent = 'Löschen';
+      delBtn.onclick = function(){
+        if(confirm('Abschnitt löschen?')){
+          appState.dynamic.splice(idx,1);
+          drawDynamic();
+          sync();
+        }
+      };
+      
+      header.appendChild(title);
+      header.appendChild(delBtn);
+      container.appendChild(header);
+      
+      var imageDiv = document.createElement('div');
+      imageDiv.className = 'image-section';
+      
+      // Upload zone
+      var uploadZone = document.createElement('div');
+      uploadZone.className = 'image-upload-zone';
+      
+      var uploadText = document.createElement('div');
+      uploadText.innerHTML = '<div style="font-size:48px;margin-bottom:8px">📷</div><div><strong>Bilder hinzufügen</strong></div><div style="font-size:13px;color:#64748b;margin-top:4px">Klicken oder Dateien hierher ziehen</div>';
+      uploadZone.appendChild(uploadText);
+      
+      var fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.multiple = true;
+      fileInput.capture = 'environment'; // Mobile camera
+      fileInput.style.display = 'none';
+      
+      fileInput.onchange = function(){
+        handleFiles(fileInput.files, section);
+      };
+      
+      uploadZone.onclick = function(){
+        fileInput.click();
+      };
+      
+      // Drag and drop
+      uploadZone.ondragover = function(e){
+        e.preventDefault();
+        uploadZone.classList.add('dragover');
+      };
+      
+      uploadZone.ondragleave = function(){
+        uploadZone.classList.remove('dragover');
+      };
+      
+      uploadZone.ondrop = function(e){
+        e.preventDefault();
+        uploadZone.classList.remove('dragover');
+        handleFiles(e.dataTransfer.files, section);
+      };
+      
+      imageDiv.appendChild(uploadZone);
+      
+      // Preview area
+      if(section.images && section.images.length > 0){
+        var preview = document.createElement('div');
+        preview.className = 'image-preview';
+        
+        for(var i=0; i<section.images.length; i++){
+          (function(imgIdx){
+            var item = document.createElement('div');
+            item.className = 'image-preview-item';
+            
+            var img = document.createElement('img');
+            img.src = section.images[imgIdx];
+            
+            var delBtn = document.createElement('button');
+            delBtn.className = 'delete-btn';
+            delBtn.textContent = '×';
+            delBtn.onclick = function(){
+              section.images.splice(imgIdx, 1);
+              drawDynamic();
+              sync();
+            };
+            
+            item.appendChild(img);
+            item.appendChild(delBtn);
+            preview.appendChild(item);
+          })(i);
+        }
+        
+        imageDiv.appendChild(preview);
+      }
+      
+      container.appendChild(imageDiv);
+    }
+
+    function handleFiles(files, section){
+      if(!section.images) section.images = [];
+      
+      for(var i=0; i<files.length; i++){
+        (function(file){
+          if(!file.type.match('image.*')) return;
+          
+          var reader = new FileReader();
+          reader.onload = function(e){
+            section.images.push(e.target.result);
+            drawDynamic();
+            sync();
+          };
+          reader.readAsDataURL(file);
+        })(files[i]);
       }
     }
 
     function collectAll(){
-      var data = { meta:{ ts:(new Date()).toISOString() }, kopf:{
-        instName: $('#instName').value, instOrt: $('#instOrt').value, betreiber: $('#betreiber').value, produkt: $('#produkt').value, programmpaket: $('#programmpaket').value, version: $('#version').value, evbPflege: $('#evbPflege').value, arbeitsplaetze: $('#arbeitsplaetze').value, geraete: $('#geraete').value, bemerkung: $('#bemerkung').value, valAm: $('#valAm').value, valLast: $('#valLast').value, valNext: $('#valNext').value, chkVal: $('#chkVal').checked, chkReval: $('#chkReval').checked },
-        sign:{ validiererDate: $('#sigDate1').value, betreiberDate: $('#sigDate2').value, sigValidierer: document.getElementById('sigValidierer').toDataURL('image/png'), sigBetreiber: document.getElementById('sigBetreiber').toDataURL('image/png') },
-        kv: appState.kv, iq: appState.iq, oq: appState.oq, dynamic: appState.dynamic };
+      var data = {
+        meta:{ ts:(new Date()).toISOString() },
+        kopf:{
+          instName: $('#instName').value,
+          instOrt: $('#instOrt').value,
+          betreiber: $('#betreiber').value,
+          produkt: $('#produkt').value,
+          programmpaket: $('#programmpaket').value,
+          version: $('#version').value,
+          evbPflege: $('#evbPflege').value,
+          arbeitsplaetze: $('#arbeitsplaetze').value,
+          geraete: $('#geraete').value,
+          bemerkung: $('#bemerkung').value,
+          valAm: $('#valAm').value,
+          valLast: $('#valLast').value,
+          valNext: $('#valNext').value,
+          chkVal: $('#chkVal').checked,
+          chkReval: $('#chkReval').checked
+        },
+        sign:{
+          validiererDate: $('#sigDate1').value,
+          betreiberDate: $('#sigDate2').value,
+          sigValidierer: document.getElementById('sigValidierer').toDataURL('image/png'),
+          sigBetreiber: document.getElementById('sigBetreiber').toDataURL('image/png')
+        },
+        kv: appState.kv,
+        iq: appState.iq,
+        oq: appState.oq,
+        dynamic: appState.dynamic
+      };
       return data;
     }
 
     function applyAll(data){
-      if(data.__note_suggestions && data.__note_suggestions.length){ NOTE_SUGGESTIONS = data.__note_suggestions; }
+      if(data.__note_suggestions && data.__note_suggestions.length){
+        NOTE_SUGGESTIONS = data.__note_suggestions;
+      }
       ensureNoteOptions();
-      if(data.kopf){ for(var k in data.kopf){ var el = document.getElementById(k); if(!el) continue; if(el.type==='checkbox') el.checked=!!data.kopf[k]; else el.value = data.kopf[k] || ''; } }
-      if(data.sign){ if(data.sign.validiererDate) $('#sigDate1').value=data.sign.validiererDate; if(data.sign.betreiberDate) $('#sigDate2').value=data.sign.betreiberDate; }
+      
+      if(data.kopf){
+        for(var k in data.kopf){
+          var el = document.getElementById(k);
+          if(!el) continue;
+          if(el.type==='checkbox') el.checked=!!data.kopf[k];
+          else el.value = data.kopf[k] || '';
+        }
+      }
+      
+      if(data.sign){
+        if(data.sign.validiererDate) $('#sigDate1').value=data.sign.validiererDate;
+        if(data.sign.betreiberDate) $('#sigDate2').value=data.sign.betreiberDate;
+      }
+      
       appState.kv = data.kv || clone(defaultKV);
       appState.iq = data.iq || clone(iqItems);
       appState.oq = data.oq || clone(oqItems);
@@ -385,68 +885,183 @@
       renderAll();
     }
 
-    function sync(){ localStorage.setItem(stateKey, JSON.stringify(collectAll())); }
+    function sync(){
+      localStorage.setItem(stateKey, JSON.stringify(collectAll()));
+    }
 
     function initSignature(id){
-      var canvas = document.getElementById(id); var ctx = canvas.getContext('2d'); var drawing=false, last=null;
-      function pos(e){ var r = canvas.getBoundingClientRect(); var cx = (e.touches?e.touches[0].clientX:e.clientX)-r.left; var cy = (e.touches?e.touches[0].clientY:e.clientY)-r.top; return {x:cx*(canvas.width/r.width), y:cy*(canvas.height/r.height)}; }
-      function start(e){ drawing=true; last=pos(e); if(e && !e.touches && e.preventDefault) e.preventDefault(); }
-      function move(e){ if(!drawing) return; var p=pos(e); ctx.lineCap='round'; ctx.lineJoin='round'; ctx.lineWidth=2; ctx.strokeStyle='#111827'; ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; if(e && !e.touches && e.preventDefault) e.preventDefault(); }
+      var canvas = document.getElementById(id);
+      var ctx = canvas.getContext('2d');
+      var drawing=false, last=null;
+      
+      function pos(e){
+        var r = canvas.getBoundingClientRect();
+        var cx = (e.touches?e.touches[0].clientX:e.clientX)-r.left;
+        var cy = (e.touches?e.touches[0].clientY:e.clientY)-r.top;
+        return {x:cx*(canvas.width/r.width), y:cy*(canvas.height/r.height)};
+      }
+      
+      function start(e){
+        drawing=true;
+        last=pos(e);
+        if(e && !e.touches && e.preventDefault) e.preventDefault();
+      }
+      
+      function move(e){
+        if(!drawing) return;
+        var p=pos(e);
+        ctx.lineCap='round';
+        ctx.lineJoin='round';
+        ctx.lineWidth=2;
+        ctx.strokeStyle='#111827';
+        ctx.beginPath();
+        ctx.moveTo(last.x,last.y);
+        ctx.lineTo(p.x,p.y);
+        ctx.stroke();
+        last=p;
+        if(e && !e.touches && e.preventDefault) e.preventDefault();
+      }
+      
       function end(){ drawing=false; }
-      canvas.addEventListener('mousedown',start); canvas.addEventListener('mousemove',move); window.addEventListener('mouseup',end);
-      canvas.addEventListener('touchstart', start, {passive:true}); canvas.addEventListener('touchmove', move, {passive:true}); window.addEventListener('touchend',end);
-      function resize(){ var r = canvas.getBoundingClientRect(); var ratio = window.devicePixelRatio||1; canvas.width = Math.floor(r.width*ratio); canvas.height = Math.floor(r.height*ratio); }
-      resize(); if(window.ResizeObserver){ new ResizeObserver(resize).observe(canvas); } else { window.addEventListener('resize', resize); }
+      
+      canvas.addEventListener('mousedown',start);
+      canvas.addEventListener('mousemove',move);
+      window.addEventListener('mouseup',end);
+      canvas.addEventListener('touchstart', start, {passive:true});
+      canvas.addEventListener('touchmove', move, {passive:true});
+      window.addEventListener('touchend',end);
+      
+      function resize(){
+        var r = canvas.getBoundingClientRect();
+        var ratio = window.devicePixelRatio||1;
+        canvas.width = Math.floor(r.width*ratio);
+        canvas.height = Math.floor(r.height*ratio);
+      }
+      
+      resize();
+      if(window.ResizeObserver){
+        new ResizeObserver(resize).observe(canvas);
+      } else {
+        window.addEventListener('resize', resize);
+      }
     }
-    function clearSignature(id){ var c = document.getElementById(id); var ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); }
+
+    function clearSignature(id){
+      var c = document.getElementById(id);
+      var ctx = c.getContext('2d');
+      ctx.clearRect(0,0,c.width,c.height);
+    }
 
     function initAll(){
-      renderAll(); $('#stamp').textContent = (new Date()).toLocaleString(); ensureNoteOptions();
+      if(!loadState()){
+        appState.kv = clone(defaultKV);
+        appState.iq = clone(iqItems);
+        appState.oq = clone(oqItems);
+      }
+      
+      renderAll();
+      $('#stamp').textContent = (new Date()).toLocaleString();
+      ensureNoteOptions();
+      
       document.getElementById('btnSave').onclick = exportJSON;
       document.getElementById('btnLoad').onclick = importJSON;
       document.getElementById('btnPDF').onclick = function(){ window.print(); };
       document.getElementById('btnReset').onclick = resetAll;
       document.getElementById('btnNewSection').onclick = addDynamicSection;
-      var btn2 = document.getElementById('btnNewSection2'); if(btn2){ btn2.onclick = addDynamicSection; }
+      
+      var btn2 = document.getElementById('btnNewSection2');
+      if(btn2){ btn2.onclick = addDynamicSection; }
+      
       document.getElementById('kvAddBtn').onclick = addKV;
       document.getElementById('iqAddBtn').onclick = addIQ;
       document.getElementById('oqAddBtn').onclick = addOQ;
-
+      
       var clears = $$('[data-clear]');
-      for(var i=0;i<clears.length;i++){ (function(btn){ btn.addEventListener('click', function(){ clearSignature(btn.getAttribute('data-clear')); }); })(clears[i]); }
-      initSignature('sigValidierer'); initSignature('sigBetreiber');
+      for(var i=0;i<clears.length;i++){
+        (function(btn){
+          btn.addEventListener('click', function(){
+            clearSignature(btn.getAttribute('data-clear'));
+          });
+        })(clears[i]);
+      }
+      
+      initSignature('sigValidierer');
+      initSignature('sigBetreiber');
+      
+      // Section type modal
+      document.getElementById('sectionTypeClose').onclick = closeSectionTypeModal;
+      var typeCards = $$('.section-type-card');
+      for(var i=0; i<typeCards.length; i++){
+        (function(card){
+          card.onclick = function(){
+            var type = card.getAttribute('data-type');
+            closeSectionTypeModal();
+            if(pendingSectionCallback){
+              pendingSectionCallback(type);
+            }
+          };
+        })(typeCards[i]);
+      }
     }
-    if(document.readyState === 'loading'){ window.addEventListener('DOMContentLoaded', initAll); } else { initAll(); }
+
+    if(document.readyState === 'loading'){
+      window.addEventListener('DOMContentLoaded', initAll);
+    } else {
+      initAll();
+    }
 
     document.getElementById('infoClose').onclick = closeInfo;
-    document.getElementById('infoSave').onclick = function(){ if(modalCtx && modalCtx.item){ modalCtx.item.info = $('#infoTextarea').value; if(modalCtx.saveFn) modalCtx.saveFn($('#infoTextarea').value); } closeInfo(); };
+    document.getElementById('infoCancel').onclick = closeInfo;
+    document.getElementById('infoSave').onclick = function(){
+      if(modalCtx && modalCtx.item){
+        modalCtx.item.info = $('#infoTextarea').value;
+        if(modalCtx.saveFn) modalCtx.saveFn($('#infoTextarea').value);
+      }
+      closeInfo();
+    };
 
-    (function runSelfTests(){
-      var results = []; function ok(name, cond){ results.push({name:name, pass: !!cond}); }
-      try {
-        var probe = mkCheckRow({text:'Test', ok:false, note:'', code:'', info:''}, function(){}, function(){});
-        ok('tiny code field exists', !!probe.querySelector('input.tiny'));
-        ok('info button exists', !!probe.querySelector('.info-btn'));
-        ok('note input exists', !!probe.querySelector('input.note'));
-        ok('main checkbox exists', !!probe.querySelector('input.main'));
-        ok('delete button exists', !!probe.querySelector('button.del'));
-        ensureNoteOptions(); var hasNA = NOTE_SUGGESTIONS.indexOf('N/A')>-1; ok('N/A present in suggestions', hasNA);
-        ok('note default not N/A', probe.querySelector('input.note').value === '');
-        addSuggestion('TestOpt'); ok('suggestion added', NOTE_SUGGESTIONS.indexOf('TestOpt')>-1);
-        removeSuggestion('TestOpt'); ok('suggestion removed', NOTE_SUGGESTIONS.indexOf('TestOpt')===-1);
-        var deleted=false; var pr = mkCheckRow({text:'X', ok:false, note:'', code:'', info:''}, function(){}, function(){deleted=true;}); pr.querySelector('button.del').click(); ok('delete callback executed', deleted===true);
-      } catch(e){ ok('Tests threw no fatal error', false); if(window.console && console.error) console.error('SelfTests error', e); }
-      var failed = []; for(var i=0;i<results.length;i++){ if(!results[i].pass) failed.push(results[i]); }
-      var banner = document.getElementById('testBanner'); if(banner){ banner.style.display='block'; if(failed.length>0) banner.classList.add('fail'); banner.textContent = failed.length===0 ? ('Self-Tests: '+results.length+' ✓ alle bestanden') : ('Self-Tests: '+failed.length+' Fehler – Details in Konsole'); }
-      if(window.console && console.table) console.table(results);
-    })();
-
+    // Additional buttons
     (function wireNewButtons(){
       var e;
-      e=document.getElementById('kvRemoveBtn'); if(e) e.onclick=function(){ if(appState.kv.length && confirm('Letzten KV-Punkt entfernen?')){ appState.kv.pop(); renderAll(); sync(); } };
-      e=document.getElementById('iqRemoveBtn'); if(e) e.onclick=function(){ if(appState.iq.length && confirm('Letzten IQ-Punkt entfernen?')){ appState.iq.pop(); renderAll(); sync(); } };
-      e=document.getElementById('oqRemoveBtn'); if(e) e.onclick=function(){ if(appState.oq.length && confirm('Letzten OQ-Punkt entfernen?')){ appState.oq.pop(); renderAll(); sync(); } };
-      e=document.getElementById('btnRemoveSection'); if(e) e.onclick=function(){ if(appState.dynamic.length===0){ alert('Keine Abschnitte vorhanden.'); return;} if(confirm('Letzten Abschnitt entfernen?')){ appState.dynamic.pop(); drawDynamic(); sync(); } };
+      e=document.getElementById('kvRemoveBtn');
+      if(e) e.onclick=function(){
+        if(appState.kv.length && confirm('Letzten KV-Punkt entfernen?')){
+          appState.kv.pop();
+          renderAll();
+          sync();
+        }
+      };
+      
+      e=document.getElementById('iqRemoveBtn');
+      if(e) e.onclick=function(){
+        if(appState.iq.length && confirm('Letzten IQ-Punkt entfernen?')){
+          appState.iq.pop();
+          renderAll();
+          sync();
+        }
+      };
+      
+      e=document.getElementById('oqRemoveBtn');
+      if(e) e.onclick=function(){
+        if(appState.oq.length && confirm('Letzten OQ-Punkt entfernen?')){
+          appState.oq.pop();
+          renderAll();
+          sync();
+        }
+      };
+      
+      e=document.getElementById('btnRemoveSection');
+      if(e) e.onclick=function(){
+        if(appState.dynamic.length===0){
+          alert('Keine Abschnitte vorhanden.');
+          return;
+        }
+        if(confirm('Letzten Abschnitt entfernen?')){
+          appState.dynamic.pop();
+          drawDynamic();
+          sync();
+        }
+      };
     })();
   </script>
 </body>
