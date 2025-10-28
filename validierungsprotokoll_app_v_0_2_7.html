@@ -119,11 +119,16 @@
     
     /* Move buttons - Drag handle style */
     .move-btns{display:flex;flex-direction:column;gap:2px;margin-right:4px}
-    .move-handle{width:28px;height:56px;padding:4px;border:1px solid #cbd5e1;background:#fff;border-radius:6px;cursor:move;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:all 0.2s}
+    .move-handle{width:28px;height:56px;padding:4px;border:1px solid #cbd5e1;background:#fff;border-radius:6px;cursor:grab;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:all 0.2s}
     .move-handle:hover{background:#f1f5f9;border-color:#64748b}
+    .move-handle:active{cursor:grabbing;background:#e2e8f0}
     .move-handle:before{content:'';width:18px;height:2px;background:#94a3b8;border-radius:1px}
     .move-handle:after{content:'';width:18px;height:2px;background:#94a3b8;border-radius:1px}
     .move-handle span{width:18px;height:2px;background:#94a3b8;border-radius:1px;display:block}
+    
+    /* Drag feedback */
+    .check.dragging{opacity:0.5;background:#f1f5f9}
+    .check.drag-over{border-top:3px solid var(--primary);background:#fef2f2}
 
     /* Date Input Style */
     input[type="text"].date-input{font-family:'Courier New', monospace;letter-spacing:2px}
@@ -491,28 +496,69 @@
       return false;
     }
 
-    function mkCheckRow(item, syncFn, delFn, moveUpFn, moveDownFn, isFirst, isLast){
+    function mkCheckRow(item, syncFn, delFn, moveUpFn, moveDownFn, isFirst, isLast, items){
       var row = document.createElement('div'); row.className='check';
+      row.draggable = true;
       
       // Drag handle for moving rows
       var moveDiv = document.createElement('div'); moveDiv.className='move-btns';
       var handle = document.createElement('div'); handle.className='move-handle';
-      handle.title='Zeile verschieben';
+      handle.title='Zeile ziehen zum Verschieben';
       var handleLine = document.createElement('span');
       handle.appendChild(handleLine);
+      moveDiv.appendChild(handle);
       
-      // Click on top half = move up, bottom half = move down
-      handle.onclick = function(e){
-        var rect = handle.getBoundingClientRect();
-        var clickY = e.clientY - rect.top;
-        if(clickY < rect.height / 2 && moveUpFn){
-          moveUpFn();
-        } else if(clickY >= rect.height / 2 && moveDownFn){
-          moveDownFn();
+      // Drag and drop events
+      var draggedIndex = -1;
+      
+      row.ondragstart = function(e){
+        draggedIndex = items.indexOf(item);
+        row.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', row.innerHTML);
+      };
+      
+      row.ondragend = function(e){
+        row.classList.remove('dragging');
+        var allRows = document.querySelectorAll('.check');
+        for(var i=0; i<allRows.length; i++){
+          allRows[i].classList.remove('drag-over');
         }
       };
       
-      moveDiv.appendChild(handle);
+      row.ondragover = function(e){
+        if(e.preventDefault) e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        row.classList.add('drag-over');
+        return false;
+      };
+      
+      row.ondragenter = function(e){
+        row.classList.add('drag-over');
+      };
+      
+      row.ondragleave = function(e){
+        row.classList.remove('drag-over');
+      };
+      
+      row.ondrop = function(e){
+        if(e.stopPropagation) e.stopPropagation();
+        row.classList.remove('drag-over');
+        
+        var dropIndex = items.indexOf(item);
+        if(draggedIndex !== dropIndex && draggedIndex !== -1){
+          var draggedItem = items[draggedIndex];
+          items.splice(draggedIndex, 1);
+          items.splice(dropIndex, 0, draggedItem);
+          syncFn();
+          // Re-render to update the list
+          if(moveUpFn && moveDownFn){
+            // Trigger re-render by calling one of the parent functions
+            syncFn();
+          }
+        }
+        return false;
+      };
       
       var code = document.createElement('input'); code.className='tiny'; code.type='text'; code.value=item.code||'';
       code.onchange = function(){ item.code = code.value; syncFn(); };
@@ -552,6 +598,11 @@
 
     function renderList(containerSel, items, syncFn){
       var container = $(containerSel); container.innerHTML='';
+      
+      var reRender = function(){
+        renderList(containerSel, items, syncFn);
+      };
+      
       for(var i=0;i<items.length;i++){
         (function(idx){
           var moveUp = function(){
@@ -559,7 +610,7 @@
               var temp = items[idx];
               items[idx] = items[idx-1];
               items[idx-1] = temp;
-              renderList(containerSel, items, syncFn);
+              reRender();
               syncFn();
             }
           };
@@ -568,22 +619,23 @@
               var temp = items[idx];
               items[idx] = items[idx+1];
               items[idx+1] = temp;
-              renderList(containerSel, items, syncFn);
+              reRender();
               syncFn();
             }
           };
           var row = mkCheckRow(
             items[idx], 
-            syncFn, 
+            function(){ syncFn(); reRender(); },
             function(){ 
               items.splice(idx,1); 
-              renderList(containerSel, items, syncFn); 
+              reRender();
               syncFn(); 
             },
             moveUp,
             moveDown,
             idx === 0,
-            idx === items.length - 1
+            idx === items.length - 1,
+            items
           );
           container.appendChild(row);
         })(i);
@@ -715,19 +767,23 @@
       
       var addBtn = document.createElement('button');
       addBtn.className = 'btn';
-      addBtn.textContent = '+ Zeile';
-      addBtn.onclick = function(){
+      addBtn.textContent = '➕ Zeile';
+      addBtn.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
         if(!section.rows) section.rows = [];
-        section.rows.push({text:'', ok:false, note:'', code:'', info:''});
+        section.rows.push({text:'Neue Anforderung', ok:false, note:'', code:'', info:''});
         drawDynamic();
         sync();
       };
       
       var delBtn = document.createElement('button');
       delBtn.className = 'btn danger';
-      delBtn.textContent = 'Löschen';
-      delBtn.onclick = function(){
-        if(confirm('Abschnitt löschen?')){
+      delBtn.textContent = '🗑️ Löschen';
+      delBtn.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(confirm('Abschnitt wirklich löschen?')){
           appState.dynamic.splice(idx,1);
           drawDynamic();
           sync();
@@ -769,7 +825,7 @@
             };
             var row = mkCheckRow(
               section.rows[rowIdx], 
-              sync, 
+              function(){ sync(); drawDynamic(); },
               function(){
                 section.rows.splice(rowIdx,1);
                 drawDynamic();
@@ -778,7 +834,8 @@
               moveUp,
               moveDown,
               rowIdx === 0,
-              rowIdx === section.rows.length - 1
+              rowIdx === section.rows.length - 1,
+              section.rows
             );
             list.appendChild(row);
           })(r);
@@ -801,9 +858,11 @@
       var delBtn = document.createElement('button');
       delBtn.className = 'btn danger';
       delBtn.style.marginTop = '8px';
-      delBtn.textContent = 'Löschen';
-      delBtn.onclick = function(){
-        if(confirm('Abschnitt löschen?')){
+      delBtn.textContent = '🗑️ Löschen';
+      delBtn.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(confirm('Abschnitt wirklich löschen?')){
           appState.dynamic.splice(idx,1);
           drawDynamic();
           sync();
@@ -873,9 +932,11 @@
       var delBtn = document.createElement('button');
       delBtn.className = 'btn danger';
       delBtn.style.marginTop = '8px';
-      delBtn.textContent = 'Löschen';
-      delBtn.onclick = function(){
-        if(confirm('Abschnitt löschen?')){
+      delBtn.textContent = '🗑️ Löschen';
+      delBtn.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(confirm('Abschnitt wirklich löschen?')){
           appState.dynamic.splice(idx,1);
           drawDynamic();
           sync();
@@ -944,9 +1005,11 @@
       var delBtn = document.createElement('button');
       delBtn.className = 'btn danger';
       delBtn.style.marginTop = '8px';
-      delBtn.textContent = 'Löschen';
-      delBtn.onclick = function(){
-        if(confirm('Abschnitt löschen?')){
+      delBtn.textContent = '🗑️ Löschen';
+      delBtn.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(confirm('Abschnitt wirklich löschen?')){
           appState.dynamic.splice(idx,1);
           drawDynamic();
           sync();
