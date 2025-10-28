@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – v3.1 Complete</title>
+  <title>CL Validierungsprotokoll – v3.2 Final</title>
   <style>
     :root{
       --primary:#8B1538; --bg:#F8F9FB; --text:#1E2434; --card:#ffffff; --muted:#e9edf3;
@@ -141,11 +141,7 @@
     .image-preview-item .delete-btn{position:absolute;top:4px;right:4px;background:#ef4444;color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;line-height:1}
     .image-preview-item .delete-btn:hover{background:#dc2626}
 
-    /* Signatur - Erweitert */
-    .sig-wrap{border:2px dashed #cbd5e1;border-radius:8px;padding:8px;background:#f8f9fb;margin-bottom:8px}
-    .sig-wrap canvas{width:100%;height:120px;display:block;background:#fff;border-radius:4px;touch-action:none}
-    .sig-controls{display:flex;gap:8px;align-items:center;margin-top:8px}
-    .sig-controls input[type="text"]{flex:1}
+    /* Signatur - Textarea */
     .sig-area{border:2px dashed #cbd5e1;border-radius:8px;padding:12px;background:#f8f9fb;min-height:120px;position:relative}
     .sig-area textarea{min-height:100px;border:1px solid #d1d5db;resize:vertical}
 
@@ -158,7 +154,7 @@
     .move-handle:after{content:'';width:18px;height:2px;background:#94a3b8;border-radius:1px}
     .move-handle span{width:18px;height:2px;background:#94a3b8;border-radius:1px;display:block}
 
-    /* Gruppen */
+    /* Gruppen mit Drag & Drop */
     .group{
       border:2px solid #e5e7eb;
       border-radius:12px;
@@ -166,6 +162,7 @@
       overflow:visible;
       background:#ffffff;
       transition:all 0.3s;
+      position:relative;
     }
     .group.disabled{
       opacity:0.5;
@@ -173,6 +170,14 @@
     }
     .group.collapsed .group-content{
       display:none;
+    }
+    .group.dragging{
+      opacity:0.5;
+      transform:scale(0.98);
+    }
+    .group.drag-over{
+      border-color:var(--primary);
+      border-style:dashed;
     }
     
     .group-header{
@@ -184,7 +189,6 @@
       color:#fff;
       border-radius:10px 10px 0 0;
       padding:14px 16px;
-      cursor:pointer;
       user-select:none;
     }
     .group-header:hover{
@@ -196,6 +200,42 @@
       align-items:center;
       gap:12px;
       flex:1;
+    }
+    
+    .group-move-handle{
+      background:rgba(255,255,255,0.2);
+      border:1px solid rgba(255,255,255,0.3);
+      border-radius:6px;
+      width:36px;
+      height:36px;
+      cursor:grab;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:3px;
+      transition:all 0.2s;
+    }
+    .group-move-handle:hover{
+      background:rgba(255,255,255,0.3);
+    }
+    .group-move-handle:active{
+      cursor:grabbing;
+    }
+    .group-move-handle::before,
+    .group-move-handle::after{
+      content:'';
+      width:20px;
+      height:2px;
+      background:#fff;
+      border-radius:1px;
+    }
+    .group-move-handle span{
+      width:20px;
+      height:2px;
+      background:#fff;
+      border-radius:1px;
+      display:block;
     }
     
     .group-collapse-btn{
@@ -318,7 +358,7 @@
     .section-type-card .icon{font-size:32px;margin-bottom:8px}
     .section-type-card .name{font-weight:700;color:var(--text)}
 
-    /* PRINT STYLES - 1:1 WIE UI */
+    /* PRINT STYLES - EXAKT 1:1 WIE UI */
     @media print {
       @page {
         size: A4;
@@ -326,9 +366,7 @@
       }
       
       body {
-        background: #fff;
-        padding: 0;
-        margin: 0;
+        background: #fff !important;
       }
       
       .container {
@@ -339,24 +377,26 @@
       
       .sheet {
         box-shadow: none;
-        border-radius: 0;
+        border-radius: 16px;
+        background: var(--card);
       }
       
-      /* Verstecke UI-Elemente */
+      /* Verstecke NUR Steuerelemente */
       .hamburger-container,
       .hamburger-menu,
       #pageBreakMarkers,
-      .btn,
       .group-btn,
       .group-toggle,
       .group-collapse-btn,
+      .group-move-handle,
       .move-handle,
       .move-btns,
       .group-add-section,
       .check .manage,
       .check .del,
-      .section-header .btn,
-      .sig-controls button {
+      .section-header .btn.icon,
+      .sig-controls button,
+      .collapse-btn {
         display: none !important;
       }
       
@@ -366,65 +406,109 @@
       }
       
       /* Immer ausgeklappt im Druck */
-      .group.collapsed .group-content {
+      .group.collapsed .group-content,
+      .section.collapsed .section-body {
         display: block !important;
       }
       
-      /* Gruppen-Header vereinfachen */
+      /* BEHALTE ALLE STYLES 1:1 */
+      header {
+        background: var(--primary);
+        color: #fff;
+        padding: 16px 20px;
+      }
+      
       .group-header {
         background: linear-gradient(135deg, #8B1538 0%, #a91d47 100%);
-        cursor: default;
-        page-break-after: avoid;
-        padding: 12px 16px;
+        color: #fff;
+        padding: 14px 16px;
+        border-radius: 10px 10px 0 0;
       }
       
       .group {
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        margin: 20px 0;
+        background: #ffffff;
         page-break-inside: avoid;
-        margin: 10mm 0;
-        border: 1px solid #e5e7eb;
       }
       
       .section {
+        padding: 18px 20px;
+        border-top: 1px solid var(--muted);
         page-break-inside: avoid;
       }
       
-      /* Behalte alle Styles 1:1 */
-      .check,
-      .spacing-section,
-      .text-section,
-      .image-section,
-      .sig-wrap,
+      .section-header {
+        background: #f8f9fb;
+        padding: 12px 16px;
+        margin: -18px -20px 16px -20px;
+        border-bottom: 2px solid var(--primary);
+      }
+      
+      .check {
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 8px 10px;
+      }
+      
+      .spacing-section {
+        background: #f8f9fb;
+        border: 2px dashed #cbd5e1;
+        border-radius: 8px;
+        padding: 12px;
+      }
+      
+      .text-section {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 12px;
+      }
+      
+      .image-section {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 12px;
+      }
+      
       .sig-area {
-        page-break-inside: avoid;
+        border: 2px dashed #cbd5e1;
+        border-radius: 8px;
+        padding: 12px;
+        background: #f8f9fb;
       }
       
-      /* Inputs als Text anzeigen */
-      input[type="text"]:not(.group-title-input),
+      /* Behalte alle Farben und Borders */
+      input[type="text"],
       input[type="date"],
       input[type="number"],
       textarea,
       select {
         border: 1px solid #d1d5db;
+        border-radius: 10px;
         background: #fff;
       }
       
       .group-title-input {
-        background: rgba(255,255,255,0.25);
+        background: rgba(255,255,255,0.15);
+        color: #fff;
         border: none;
       }
       
-      /* Signaturen */
-      .sig-wrap canvas,
-      .sig-area {
-        page-break-inside: avoid;
-      }
-      
-      /* Bilder */
-      .image-preview-item {
-        page-break-inside: avoid;
-      }
-      
       .image-preview-item .delete-btn {
+        display: none !important;
+      }
+      
+      /* Behalte Text-Editor Toolbar sichtbar */
+      .text-editor-toolbar {
+        background: #f8f9fb;
+        border: 1px solid #e5e7eb;
+        padding: 8px;
+      }
+      
+      .text-editor-toolbar button {
         display: none !important;
       }
     }
@@ -466,7 +550,7 @@
       <header>
         <div>
           <div class="title">CL Validierungsprotokoll</div>
-          <div class="version">Version 0.5.3 – Gruppen, Collapsible, Editierbare Zeilen</div>
+          <div class="version">Version 3.2 – Verschiebbare Gruppen</div>
         </div>
         <div style="text-align:right;font-size:12px">
           <div>Erstellt: <span id="stamp"></span></div>
@@ -585,8 +669,8 @@
             <div class="col-6">
               <label>Datum / Unterschrift Validierer</label>
               <div class="sig-area">
-                <textarea id="unterschriftValidierer" placeholder="Datum und Unterschrift eingeben oder Unterschrift hier zeichnen..."></textarea>
-                <div class="sig-controls" style="justify-content:flex-end">
+                <textarea id="unterschriftValidierer" placeholder="Datum und Unterschrift eingeben..."></textarea>
+                <div class="sig-controls" style="justify-content:flex-end;margin-top:8px">
                   <button class="btn icon" data-clear-text="unterschriftValidierer">🗑️ Löschen</button>
                 </div>
               </div>
@@ -594,8 +678,8 @@
             <div class="col-6">
               <label>Freigabe durch Betreiber - Datum / Unterschrift</label>
               <div class="sig-area">
-                <textarea id="freigabeBetreiber" placeholder="Datum und Unterschrift eingeben oder Unterschrift hier zeichnen..."></textarea>
-                <div class="sig-controls" style="justify-content:flex-end">
+                <textarea id="freigabeBetreiber" placeholder="Datum und Unterschrift eingeben..."></textarea>
+                <div class="sig-controls" style="justify-content:flex-end;margin-top:8px">
                   <button class="btn icon" data-clear-text="freigabeBetreiber">🗑️ Löschen</button>
                 </div>
               </div>
@@ -652,31 +736,8 @@
         </div>
       </div>
 
-      <!-- Dynamische Gruppen -->
+      <!-- Dynamische Gruppen (Verschiebbar) -->
       <div id="groupsContainer"></div>
-
-      <!-- Unterschriften (Finale Unterschriften) -->
-      <div class="section">
-        <div class="section-header"><h2>Finale Unterschriften</h2></div>
-        <div class="grid">
-          <div class="col-6">
-            <label>Validierer / Prüfer</label>
-            <div class="sig-wrap"><canvas id="sigValidierer"></canvas></div>
-            <div class="sig-controls">
-              <input type="text" id="nameValidierer" placeholder="Name eingeben" />
-              <button class="btn icon" data-clear="sigValidierer">🗑️</button>
-            </div>
-          </div>
-          <div class="col-6">
-            <label>Betreiber / Verantwortlicher</label>
-            <div class="sig-wrap"><canvas id="sigBetreiber"></canvas></div>
-            <div class="sig-controls">
-              <input type="text" id="nameBetreiber" placeholder="Name eingeben" />
-              <button class="btn icon" data-clear="sigBetreiber">🗑️</button>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -716,21 +777,14 @@
 
     /* State */
     var appState = {
-      // Deckblatt & Kopfdaten
       nameEinrichtung:'', standortInstallation:'', verantwortlichePerson:'', produkt:'',
       programmPaket:'', version:'', softwarepflege:'', arbeitsplaetze:'', angebundeneGeraete:'',
       bemerkungInstallation:'', validierungDatum:'', letzteValidierung:'', naechsteValidierung:'',
       checkValidierung:false, checkRevalidierung:false,
-      // Validierer & Freigabe
       validiererName:'', qualifikation:'', produktschulung:'',
       unterschriftValidierer:'', freigabeBetreiber:'',
-      // Listen
       kv:[], iq:[], oq:[],
-      // Gruppen
-      groups:[],
-      // Finale Unterschriften
-      nameValidierer:'', nameBetreiber:'',
-      sigValidierer:'', sigBetreiber:''
+      groups:[]
     };
 
     var currentGroupIndex = 0;
@@ -759,8 +813,7 @@
       'bemerkungInstallation','validierungDatum','letzteValidierung','naechsteValidierung',
       'checkValidierung','checkRevalidierung',
       'validiererName','qualifikation','produktschulung',
-      'unterschriftValidierer','freigabeBetreiber',
-      'nameValidierer','nameBetreiber'
+      'unterschriftValidierer','freigabeBetreiber'
     ];
 
     function sync(){
@@ -771,12 +824,12 @@
           else appState[k] = el.value;
         }
       });
-      localStorage.setItem('validierung_v3_complete', JSON.stringify(appState));
+      localStorage.setItem('validierung_v3_final', JSON.stringify(appState));
     }
 
     function loadState(){
       try{
-        var stored = localStorage.getItem('validierung_v3_complete');
+        var stored = localStorage.getItem('validierung_v3_final');
         if(!stored) return false;
         var data = JSON.parse(stored);
         Object.assign(appState, data);
@@ -822,82 +875,8 @@
 
     function resetAll(){
       if(!confirm('Alle Daten löschen?')) return;
-      localStorage.removeItem('validierung_v3_complete');
+      localStorage.removeItem('validierung_v3_final');
       location.reload();
-    }
-
-    /* Signaturen (Canvas) */
-    var sigPads = {};
-    function initSignature(id){
-      var canvas = document.getElementById(id);
-      if(!canvas) return;
-      var ctx = canvas.getContext('2d');
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      var drawing = false;
-      var lastX = 0, lastY = 0;
-
-      function getPos(e){
-        var rect = canvas.getBoundingClientRect();
-        var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-        var y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-        return {x:x, y:y};
-      }
-
-      function startDraw(e){
-        e.preventDefault();
-        drawing = true;
-        var pos = getPos(e);
-        lastX = pos.x; lastY = pos.y;
-      }
-
-      function draw(e){
-        if(!drawing) return;
-        e.preventDefault();
-        var pos = getPos(e);
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(pos.x, pos.y);
-        ctx.strokeStyle = '#1E2434';
-        ctx.lineWidth = 2;
-        ctx.lineCap = 'round';
-        ctx.stroke();
-        lastX = pos.x; lastY = pos.y;
-        appState[id] = canvas.toDataURL();
-        sync();
-      }
-
-      function stopDraw(e){
-        if(drawing){
-          drawing = false;
-          appState[id] = canvas.toDataURL();
-          sync();
-        }
-      }
-
-      canvas.addEventListener('mousedown', startDraw);
-      canvas.addEventListener('mousemove', draw);
-      canvas.addEventListener('mouseup', stopDraw);
-      canvas.addEventListener('mouseleave', stopDraw);
-      canvas.addEventListener('touchstart', startDraw);
-      canvas.addEventListener('touchmove', draw);
-      canvas.addEventListener('touchend', stopDraw);
-
-      sigPads[id] = {canvas:canvas, ctx:ctx};
-
-      if(appState[id]){
-        var img = new Image();
-        img.onload = function(){ ctx.drawImage(img, 0, 0); };
-        img.src = appState[id];
-      }
-    }
-
-    function clearSignature(id){
-      var pad = sigPads[id];
-      if(!pad) return;
-      pad.ctx.clearRect(0, 0, pad.canvas.width, pad.canvas.height);
-      appState[id] = '';
-      sync();
     }
 
     /* Listen (KV/IQ/OQ) */
@@ -936,7 +915,6 @@
         checkbox.onchange = function(){ item.ok = checkbox.checked; onUpdate(); };
         delBtn.onclick = function(){ items.splice(i, 1); renderList(selector, items, onUpdate); onUpdate(); };
 
-        // Drag & Drop
         var handle = row.querySelector('.move-handle');
         handle.ondragstart = function(e){ e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain', i); };
         row.ondragover = function(e){ e.preventDefault(); e.dataTransfer.dropEffect='move'; };
@@ -968,7 +946,7 @@
       });
     }
 
-    /* Gruppen rendern */
+    /* Gruppen rendern mit Drag & Drop */
     function drawGroups(){
       var host = document.getElementById('groupsContainer');
       if(!host) return;
@@ -981,14 +959,67 @@
       appState.groups.forEach(function(g, gIdx){
         var group = document.createElement('div');
         group.className = 'group';
+        group.setAttribute('draggable', 'true');
+        group.setAttribute('data-group-index', gIdx);
         if(!g.enabled) group.classList.add('disabled');
         if(g.collapsed) group.classList.add('collapsed');
+
+        // Drag & Drop für Gruppen
+        group.ondragstart = function(e){
+          e.stopPropagation();
+          group.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', gIdx);
+        };
+        
+        group.ondragend = function(e){
+          group.classList.remove('dragging');
+          $$('.group').forEach(function(g){ g.classList.remove('drag-over'); });
+        };
+        
+        group.ondragover = function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          var dragging = $('.group.dragging');
+          if(dragging && dragging !== group){
+            e.dataTransfer.dropEffect = 'move';
+            group.classList.add('drag-over');
+          }
+        };
+        
+        group.ondragleave = function(e){
+          if(!group.contains(e.relatedTarget)){
+            group.classList.remove('drag-over');
+          }
+        };
+        
+        group.ondrop = function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          group.classList.remove('drag-over');
+          
+          var fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
+          var toIndex = gIdx;
+          
+          if(fromIndex !== toIndex){
+            var movedGroup = appState.groups.splice(fromIndex, 1)[0];
+            appState.groups.splice(toIndex, 0, movedGroup);
+            drawGroups();
+            sync();
+          }
+        };
 
         var header = document.createElement('div');
         header.className = 'group-header';
         
         var titleSection = document.createElement('div');
         titleSection.className = 'group-title-section';
+        
+        // Move Handle
+        var moveHandle = document.createElement('div');
+        moveHandle.className = 'group-move-handle';
+        moveHandle.innerHTML = '<span></span>';
+        moveHandle.title = 'Gruppe verschieben';
         
         var collapseBtn = document.createElement('div');
         collapseBtn.className = 'group-collapse-btn';
@@ -1010,7 +1041,9 @@
           sync();
         };
         titleInput.onclick = function(e){ e.stopPropagation(); };
+        titleInput.ondragstart = function(e){ e.preventDefault(); };
         
+        titleSection.appendChild(moveHandle);
         titleSection.appendChild(collapseBtn);
         titleSection.appendChild(titleInput);
         
@@ -1477,7 +1510,6 @@
     }
 
     function initAll(){
-      // Menü
       var btn = $('#hamburgerBtn');
       var menu = $('#hamburgerMenu');
       if(btn && menu){
@@ -1494,7 +1526,6 @@
         });
       }
 
-      // Laden / Defaults
       if(!loadState()){
         appState.kv = clone(defaultKV);
         appState.iq = clone(iqItems);
@@ -1504,7 +1535,6 @@
       renderAll();
       $('#stamp').textContent = (new Date()).toLocaleString('de-DE');
 
-      // Buttons
       $('#btnSave').onclick = exportJSON;
       $('#btnLoad').onclick = importJSON;
       $('#btnPDF').onclick = function(){
@@ -1546,18 +1576,6 @@
         });
       };
 
-      // Signaturen (Canvas)
-      initSignature('sigValidierer');
-      initSignature('sigBetreiber');
-
-      // Clear-Buttons Signatur
-      $$('.sig-controls [data-clear]').forEach(function(b){
-        b.addEventListener('click', function(){
-          clearSignature(b.getAttribute('data-clear'));
-        });
-      });
-
-      // Clear-Buttons Textarea
       $$('[data-clear-text]').forEach(function(b){
         b.addEventListener('click', function(){
           var id = b.getAttribute('data-clear-text');
@@ -1567,7 +1585,6 @@
         });
       });
 
-      // Input-Sync
       formFields.forEach(function(id){
         var el = document.getElementById(id);
         if(el){
@@ -1576,7 +1593,6 @@
         }
       });
 
-      // Page Breaks
       if(window.ResizeObserver){
         new ResizeObserver(updatePageBreaks).observe($('#app'));
       }
