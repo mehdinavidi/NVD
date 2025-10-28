@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – v0.5.3</title>
+  <title>CL Validierungsprotokoll – v3.1 Complete</title>
   <style>
     :root{
       --primary:#8B1538; --bg:#F8F9FB; --text:#1E2434; --card:#ffffff; --muted:#e9edf3;
@@ -12,8 +12,43 @@
     *{box-sizing:border-box}
     html,body{height:100%}
     body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
-    .container{max-width:1100px;margin:0 auto;padding:16px;padding-top:80px}
+    
+    /* Normale Container - KEINE A4-Optik */
+    .container{max-width:1100px;margin:0 auto;padding:16px;padding-top:80px;position:relative}
     .sheet{background:var(--card);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.08);overflow:visible;position:relative}
+    
+    /* Seitenumbruch-Markierungen */
+    #pageBreakMarkers{
+      position:absolute;
+      left:0;
+      top:80px;
+      width:100%;
+      pointer-events:none;
+      z-index:100;
+    }
+    #pageBreakMarkers.hidden{display:none}
+    #pageBreakMarkers .page-break-line{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      width:calc(100% - 32px);
+      max-width:1100px;
+      border-top:2px dashed var(--primary);
+      opacity:0.4;
+    }
+    #pageBreakMarkers .page-break-label{
+      position:absolute;
+      right:40px;
+      transform:translateY(-50%);
+      background:var(--primary);
+      color:#fff;
+      padding:4px 12px;
+      border-radius:20px;
+      font-size:11px;
+      font-weight:700;
+      box-shadow:0 2px 8px rgba(139,21,56,0.3);
+    }
+
     header{background:var(--primary);color:#fff;padding:16px 20px;display:flex;gap:16px;align-items:center;justify-content:space-between}
     header .title{font-size:18px;font-weight:700}
     header .version{opacity:.9;font-size:12px}
@@ -26,7 +61,7 @@
     .hamburger-btn.active span:nth-child(1){transform:rotate(45deg) translate(5px, 5px)}
     .hamburger-btn.active span:nth-child(2){opacity:0}
     .hamburger-btn.active span:nth-child(3){transform:rotate(-45deg) translate(7px, -7px)}
-    .hamburger-menu{position:fixed;top:80px;right:16px;background:#fff;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.2);padding:12px;display:none;flex-direction:column;gap:8px;min-width:230px;z-index:4999}
+    .hamburger-menu{position:fixed;top:80px;right:16px;background:#fff;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.2);padding:12px;display:none;flex-direction:column;gap:8px;min-width:250px;z-index:4999}
     .hamburger-menu.active{display:flex}
     .hamburger-menu .btn{width:100%;text-align:left;justify-content:flex-start}
 
@@ -67,7 +102,6 @@
     .check .tiny{width:36px;height:28px;padding:4px 6px;font-size:12px;text-align:center}
     .check .info-btn{width:26px;height:26px;display:grid;place-items:center;border:1px solid #cbd5e1;border-radius:50%;cursor:pointer;background:#fff;font-weight:700;color:#334155;line-height:1}
     .check .info-btn:before{content:'i'}
-    /* Editierbarer Text in der Zeile */
     .check .label-input{
       flex:1; min-width:140px; padding:6px 8px; border:1px solid #d1d5db; border-radius:8px; background:#fff; font:inherit; outline:none;
     }
@@ -107,11 +141,13 @@
     .image-preview-item .delete-btn{position:absolute;top:4px;right:4px;background:#ef4444;color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;line-height:1}
     .image-preview-item .delete-btn:hover{background:#dc2626}
 
-    /* Signatur */
+    /* Signatur - Erweitert */
     .sig-wrap{border:2px dashed #cbd5e1;border-radius:8px;padding:8px;background:#f8f9fb;margin-bottom:8px}
     .sig-wrap canvas{width:100%;height:120px;display:block;background:#fff;border-radius:4px;touch-action:none}
-    .sig-controls{display:flex;gap:8px;align-items:center}
+    .sig-controls{display:flex;gap:8px;align-items:center;margin-top:8px}
     .sig-controls input[type="text"]{flex:1}
+    .sig-area{border:2px dashed #cbd5e1;border-radius:8px;padding:12px;background:#f8f9fb;min-height:120px;position:relative}
+    .sig-area textarea{min-height:100px;border:1px solid #d1d5db;resize:vertical}
 
     /* Move Handle */
     .move-btns{display:flex;flex-direction:column;gap:2px;margin-right:4px}
@@ -123,758 +159,1312 @@
     .move-handle span{width:18px;height:2px;background:#94a3b8;border-radius:1px;display:block}
 
     /* Gruppen */
-    .group{border-top:3px solid var(--muted); margin:10px 16px 20px; border-radius:12px; overflow:visible}
-    .group-header{display:flex;align-items:center;gap:10px;justify-content:space-between;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:12px;padding:10px 12px;margin-bottom:8px}
-    .group-title{display:flex;align-items:center;gap:10px}
-    .group-title input{border:1px solid transparent;background:transparent;font-weight:800;color:#1f2937;font-size:16px;padding:4px 6px;border-radius:8px;min-width:160px}
-    .group-title input:focus{border-color:#cbd5e1;background:#fff;outline:none}
-    .group-tools{display:flex;gap:8px;flex-wrap:wrap}
-    .group.disabled{opacity:.5}
-    @media print{ .group.disabled { display:none!important } }
+    .group{
+      border:2px solid #e5e7eb;
+      border-radius:12px;
+      margin:20px 0;
+      overflow:visible;
+      background:#ffffff;
+      transition:all 0.3s;
+    }
+    .group.disabled{
+      opacity:0.5;
+      background:#f9fafb;
+    }
+    .group.collapsed .group-content{
+      display:none;
+    }
+    
+    .group-header{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      justify-content:space-between;
+      background:linear-gradient(135deg, #8B1538 0%, #a91d47 100%);
+      color:#fff;
+      border-radius:10px 10px 0 0;
+      padding:14px 16px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .group-header:hover{
+      background:linear-gradient(135deg, #9a1740 0%, #ba2250 100%);
+    }
+    
+    .group-title-section{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex:1;
+    }
+    
+    .group-collapse-btn{
+      background:rgba(255,255,255,0.2);
+      border:1px solid rgba(255,255,255,0.3);
+      border-radius:6px;
+      width:32px;
+      height:32px;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      color:#fff;
+      font-size:18px;
+      font-weight:bold;
+      transition:all 0.2s;
+    }
+    .group-collapse-btn:hover{
+      background:rgba(255,255,255,0.3);
+      transform:scale(1.05);
+    }
+    .group.collapsed .group-collapse-btn::before{
+      content:'▼';
+    }
+    .group:not(.collapsed) .group-collapse-btn::before{
+      content:'▲';
+    }
+    
+    .group-title-input{
+      border:none;
+      background:rgba(255,255,255,0.15);
+      color:#fff;
+      font-weight:700;
+      font-size:17px;
+      padding:8px 12px;
+      border-radius:8px;
+      min-width:200px;
+      flex:1;
+      outline:none;
+    }
+    .group-title-input::placeholder{
+      color:rgba(255,255,255,0.7);
+    }
+    .group-title-input:focus{
+      background:rgba(255,255,255,0.25);
+      box-shadow:0 0 0 3px rgba(255,255,255,0.2);
+    }
+    
+    .group-actions{
+      display:flex;
+      gap:6px;
+      align-items:center;
+    }
+    
+    .group-toggle{
+      background:rgba(255,255,255,0.2);
+      border:1px solid rgba(255,255,255,0.3);
+      border-radius:6px;
+      padding:6px 12px;
+      color:#fff;
+      font-size:12px;
+      font-weight:700;
+      cursor:pointer;
+      transition:all 0.2s;
+      white-space:nowrap;
+    }
+    .group-toggle:hover{
+      background:rgba(255,255,255,0.3);
+    }
+    .group-toggle.active{
+      background:#11a36a;
+      border-color:#11a36a;
+    }
+    
+    .group-btn{
+      background:rgba(255,255,255,0.2);
+      border:1px solid rgba(255,255,255,0.3);
+      border-radius:6px;
+      width:32px;
+      height:32px;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      color:#fff;
+      font-size:16px;
+      transition:all 0.2s;
+    }
+    .group-btn:hover{
+      background:rgba(255,255,255,0.3);
+      transform:scale(1.05);
+    }
+    .group-btn.duplicate::before{content:'⧉'}
+    .group-btn.delete::before{content:'✕'}
+    .group-btn.delete:hover{
+      background:#ef4444;
+      border-color:#ef4444;
+    }
+    
+    .group-content{
+      padding:0;
+    }
+    
+    .group-add-section{
+      padding:16px;
+      text-align:center;
+      border-top:2px dashed #e5e7eb;
+      background:#f9fafb;
+    }
 
-    /* Seiten-Guides (A4) */
-    .page-guides{
-      position:absolute; inset:0; pointer-events:none; z-index:3000;
-      /* Höhe wird per JS gesetzt */
-    }
-    .page-guides .line{
-      position:absolute; left:0; right:0;
-      border-top:2px dashed rgba(148,163,184,.9);
-    }
-    .page-guides .tag{
-      position:absolute; right:8px; transform:translateY(-50%);
-      font-size:11px; color:#334155; background:rgba(255,255,255,.9);
-      padding:2px 6px; border-radius:6px; border:1px solid #cbd5e1
-    }
-    .page-guides.hidden{display:none}
-    @media print{ .page-guides{display:none!important} }
+    /* Modal */
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center}
+    .modal.active{display:flex}
+    .modal-content{background:#fff;border-radius:16px;padding:24px;max-width:600px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+    .modal-title{font-size:22px;font-weight:700;color:var(--primary)}
+    .modal-close{background:transparent;border:none;font-size:28px;cursor:pointer;color:#64748b;line-height:1}
+    .modal-close:hover{color:var(--primary)}
+    .section-type-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .section-type-card{padding:16px;border:2px solid #e5e7eb;border-radius:12px;cursor:pointer;text-align:center;transition:all 0.2s}
+    .section-type-card:hover{border-color:var(--primary);background:#fef2f2;transform:translateY(-2px)}
+    .section-type-card .icon{font-size:32px;margin-bottom:8px}
+    .section-type-card .name{font-weight:700;color:var(--text)}
 
-    /* Print: 1:1 UI */
-    @page{ size:auto; margin:12mm; }
-    @media print{
-      html, body{ height:auto!important; background:#fff!important; -webkit-print-color-adjust:exact; print-color-adjust:exact; color:#000 }
-      .container{ max-width:none; padding:0 }
-      .sheet{ border-radius:0; box-shadow:none }
-      .hamburger-container, .hamburger-menu, .btn, button, .image-upload-zone, .move-btns, .move-handle{ display:none!important }
-      .text-editor-toolbar{ display:none!important }
-      .text-editor-content{ border:1px solid #000!important; padding:8px }
-      .image-section{ border:1px solid #000 }
-      .image-preview-item{ border:1px solid #000 }
-      .section{ break-inside:avoid; page-break-inside:avoid }
-      /* Collapsed-UI: Inhalte werden trotzdem gedruckt */
-      .section.collapsed .section-body{ display:block !important }
+    /* PRINT STYLES - 1:1 WIE UI */
+    @media print {
+      @page {
+        size: A4;
+        margin: 12mm;
+      }
+      
+      body {
+        background: #fff;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .container {
+        max-width: 100%;
+        padding: 0;
+        padding-top: 0;
+      }
+      
+      .sheet {
+        box-shadow: none;
+        border-radius: 0;
+      }
+      
+      /* Verstecke UI-Elemente */
+      .hamburger-container,
+      .hamburger-menu,
+      #pageBreakMarkers,
+      .btn,
+      .group-btn,
+      .group-toggle,
+      .group-collapse-btn,
+      .move-handle,
+      .move-btns,
+      .group-add-section,
+      .check .manage,
+      .check .del,
+      .section-header .btn,
+      .sig-controls button {
+        display: none !important;
+      }
+      
+      /* Deaktivierte Gruppen ausblenden */
+      .group.disabled {
+        display: none !important;
+      }
+      
+      /* Immer ausgeklappt im Druck */
+      .group.collapsed .group-content {
+        display: block !important;
+      }
+      
+      /* Gruppen-Header vereinfachen */
+      .group-header {
+        background: linear-gradient(135deg, #8B1538 0%, #a91d47 100%);
+        cursor: default;
+        page-break-after: avoid;
+        padding: 12px 16px;
+      }
+      
+      .group {
+        page-break-inside: avoid;
+        margin: 10mm 0;
+        border: 1px solid #e5e7eb;
+      }
+      
+      .section {
+        page-break-inside: avoid;
+      }
+      
+      /* Behalte alle Styles 1:1 */
+      .check,
+      .spacing-section,
+      .text-section,
+      .image-section,
+      .sig-wrap,
+      .sig-area {
+        page-break-inside: avoid;
+      }
+      
+      /* Inputs als Text anzeigen */
+      input[type="text"]:not(.group-title-input),
+      input[type="date"],
+      input[type="number"],
+      textarea,
+      select {
+        border: 1px solid #d1d5db;
+        background: #fff;
+      }
+      
+      .group-title-input {
+        background: rgba(255,255,255,0.25);
+        border: none;
+      }
+      
+      /* Signaturen */
+      .sig-wrap canvas,
+      .sig-area {
+        page-break-inside: avoid;
+      }
+      
+      /* Bilder */
+      .image-preview-item {
+        page-break-inside: avoid;
+      }
+      
+      .image-preview-item .delete-btn {
+        display: none !important;
+      }
     }
 
-    .footer{display:flex;justify-content:space-between;gap:12px}
-    @media (max-width:768px){
-      .col-3, .col-4, .col-6, .col-8{grid-column:span 12}
-      .hamburger-container{top:12px;right:12px}
-      .hamburger-menu{right:12px;top:70px}
+    @media (max-width: 768px) {
+      .col-3, .col-4, .col-6, .col-8 { grid-column: span 12; }
+      .check { flex-wrap: wrap; }
+      .check .note { min-width: 100%; max-width: 100%; }
+      .group-actions { flex-wrap: wrap; }
     }
-
-    /* ========= Modals ========= */
-    .modal-backdrop{
-      position:fixed;inset:0;background:rgba(0,0,0,.35);
-      display:none;align-items:center;justify-content:center;z-index:6000
-    }
-    .modal{
-      background:#fff;border-radius:12px;max-width:520px;width:92%;
-      box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden;border:1px solid #e5e7eb
-    }
-    .modal header{background:#f8fafc;color:#111827;border-bottom:1px solid #e5e7eb;padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
-    .modal .content{padding:12px 14px}
-    .section-type-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:12px}
-    .section-type-card{padding:16px;border:2px solid #e5e7eb;border-radius:8px;cursor:pointer;text-align:center;transition:all .2s;background:#fff}
-    .section-type-card:hover{border-color:#8B1538;background:#fef2f2;transform:translateY(-1px);box-shadow:0 6px 16px rgba(139,21,56,.15)}
-    .section-type-card .icon{font-size:36px;margin-bottom:6px}
-    .section-type-card .name{font-weight:700;color:#1e293b;font-size:13px}
   </style>
 </head>
 <body>
-  <!-- Hamburger -->
+  <!-- Hamburger-Menü -->
   <div class="hamburger-container">
-    <button class="hamburger-btn" id="hamburgerBtn">
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menü">
       <span></span><span></span><span></span>
     </button>
     <div class="hamburger-menu" id="hamburgerMenu">
-      <button class="btn" id="btnSave"><span>💾</span> Speichern (JSON)</button>
-      <button class="btn" id="btnLoad"><span>📂</span> Laden (JSON)</button>
-      <button class="btn secondary" id="btnPDF"><span>🖨️</span> Drucken / PDF</button>
-      <button class="btn danger" id="btnReset"><span>🔄</span> Zurücksetzen</button>
-      <hr style="margin:8px 0;border:none;border-top:1px solid #e5e7eb">
-      <button class="btn secondary" id="btnNewGroup"><span>🧩</span> Neue Gruppe</button>
-      <button class="btn" id="btnNewSectionMenu"><span>➕</span> Abschnitt in akt. Gruppe</button>
-      <button class="btn switch" id="btnGuides"><span>📏</span> Seitenlinien (A4) <span id="guideState">Aus</span></button>
+      <button class="btn" id="btnNewGroup">➕ Neue Gruppe</button>
+      <button class="btn" id="btnNewSectionMenu">📝 Neuer Abschnitt</button>
+      <button class="btn switch" id="btnPageBreaks">
+        <span>Seitenumbrüche</span>
+        <span id="pageBreakState">Aus</span>
+      </button>
+      <button class="btn" id="btnPDF">🖨️ PDF drucken</button>
+      <button class="btn secondary" id="btnSave">💾 Speichern</button>
+      <button class="btn secondary" id="btnLoad">📂 Laden</button>
+      <button class="btn danger" id="btnReset">🔄 Reset</button>
     </div>
   </div>
 
+  <!-- Seitenumbruch-Markierungen -->
+  <div id="pageBreakMarkers" class="hidden"></div>
+
   <div class="container">
     <div class="sheet" id="app">
+      <!-- Header -->
       <header>
         <div>
           <div class="title">CL Validierungsprotokoll</div>
-          <div class="version">Version 0.5.3 • Gruppen, Guides, Collapsible, Editierbare Zeilen</div>
+          <div class="version">Version 0.5.3 – Gruppen, Collapsible, Editierbare Zeilen</div>
+        </div>
+        <div style="text-align:right;font-size:12px">
+          <div>Erstellt: <span id="stamp"></span></div>
         </div>
       </header>
 
-      <!-- KOPFDATEN -->
-      <div class="section collapsible" id="sec-kopf">
+      <!-- Deckblatt & Kopfdaten -->
+      <div class="section collapsible">
         <div class="section-header">
           <div class="row">
             <div class="title-wrap">
-              <button class="collapse-btn" data-toggle="#sec-kopf">▾</button>
+              <button class="collapse-btn">−</button>
               <h2>Deckblatt & Kopfdaten</h2>
             </div>
           </div>
         </div>
         <div class="section-body">
           <div class="grid">
-            <div class="col-6"><label>Name der Einrichtung</label><input type="text" id="instName" placeholder="z.B. Klinikum Musterstadt"/></div>
-            <div class="col-6"><label>Standort der Installation</label><input type="text" id="instOrt" placeholder="Ort / Abteilung"/></div>
-            <div class="col-6"><label>Verantwortliche Person (Betreiber)</label><input type="text" id="betreiber" placeholder="Name"/></div>
-            <div class="col-6"><label>Produkt</label><input type="text" id="produkt" placeholder="z.B. EuroSDS"/></div>
-            <div class="col-4"><label>Programm-Paket</label><input type="text" id="programmpaket" placeholder="z.B. Komplettpaket"/></div>
-            <div class="col-4"><label>Version</label><input type="text" id="version" placeholder="z.B. 6.4.x"/></div>
+            <div class="col-6">
+              <label>Name der Einrichtung</label>
+              <input type="text" id="nameEinrichtung" placeholder="z.B. Klinikum Musterstadt" />
+            </div>
+            <div class="col-6">
+              <label>Standort der Installation</label>
+              <input type="text" id="standortInstallation" placeholder="Ort / Abteilung" />
+            </div>
+            <div class="col-6">
+              <label>Verantwortliche Person (Betreiber)</label>
+              <input type="text" id="verantwortlichePerson" placeholder="Name" />
+            </div>
+            <div class="col-6">
+              <label>Produkt</label>
+              <input type="text" id="produkt" placeholder="z.B. EuroSDS" />
+            </div>
             <div class="col-4">
-              <label>Softwarepflege (EVB IT-Pflege S)</label>
-              <select id="evbPflege">
-                <option value="">Bitte wählen...</option><option>EVB IT-Pflege 1</option><option>EVB IT-Pflege 2</option><option>EVB IT-Pflege 3</option><option>EVB IT-Pflege 4</option><option>EVB IT-Pflege 5</option>
+              <label>Programm-Paket</label>
+              <input type="text" id="programmPaket" placeholder="z.B. Komplettpaket" />
+            </div>
+            <div class="col-4">
+              <label>Version</label>
+              <input type="text" id="version" placeholder="z.B. 6.4.x" />
+            </div>
+            <div class="col-4">
+              <label>Softwarepflege (SVB II-Pflege-S)</label>
+              <select id="softwarepflege">
+                <option value="">Bitte wählen...</option>
+                <option value="aktiv">Aktiv</option>
+                <option value="inaktiv">Inaktiv</option>
+                <option value="ausstehend">Ausstehend</option>
               </select>
             </div>
-            <div class="col-6"><label>Art/Anzahl der Arbeitsplätze</label><input type="text" id="arbeitsplaetze" placeholder="z.B. 8 Clients + 1 Notfallbackplatz"/></div>
-            <div class="col-6"><label>Angebundene Geräte</label><input type="text" id="geraete" placeholder="z.B. RDG, Steri, Foliengerät..."/></div>
-            <div class="col-12"><label>Bemerkung zur Installation</label><textarea id="bemerkung" rows="3"></textarea></div>
-            <div class="col-4"><label>Validierung durchgeführt am</label><input type="text" id="valAm" class="date-input" placeholder="TT.mm.jjjj"/></div>
-            <div class="col-4"><label>Letzte Validierung</label><input type="text" id="valLast" class="date-input" placeholder="TT.mm.jjjj"/></div>
-            <div class="col-4"><label>Nächste Validierung</label><input type="text" id="valNext" class="date-input" placeholder="TT.mm.jjjj"/></div>
-            <div class="col-6"><div class="checkbox-inline"><input type="checkbox" id="chkVal"/><label for="chkVal">Validierung</label></div></div>
-            <div class="col-6"><div class="checkbox-inline"><input type="checkbox" id="chkReval"/><label for="chkReval">Revalidierung</label></div></div>
+            <div class="col-6">
+              <label>Art/Anzahl der Arbeitsplätze</label>
+              <input type="text" id="arbeitsplaetze" placeholder="z.B. 8 Clients + 1 Notfallarbeitsplatz" />
+            </div>
+            <div class="col-6">
+              <label>Angebundene Geräte</label>
+              <input type="text" id="angebundeneGeraete" placeholder="z.B. RDG-Steril-Rollengeräte..." />
+            </div>
+            <div class="col-12">
+              <label>Bemerkung zur Installation</label>
+              <textarea id="bemerkungInstallation" placeholder="Weitere Informationen..."></textarea>
+            </div>
+            <div class="col-4">
+              <label>Validierung durchgeführt am</label>
+              <input type="date" id="validierungDatum" />
+            </div>
+            <div class="col-4">
+              <label>Letzte Validierung</label>
+              <input type="date" id="letzteValidierung" />
+            </div>
+            <div class="col-4">
+              <label>Nächste Validierung</label>
+              <input type="date" id="naechsteValidierung" />
+            </div>
+            <div class="col-6">
+              <div class="checkbox-inline">
+                <input type="checkbox" id="checkValidierung" />
+                <label for="checkValidierung">Validierung</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="checkbox-inline">
+                <input type="checkbox" id="checkRevalidierung" />
+                <label for="checkRevalidierung">Revalidierung</label>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- VALIDIERER & FREIGABE -->
-      <div class="section collapsible" id="sec-val">
+      <!-- Validierer & Freigabe -->
+      <div class="section collapsible">
         <div class="section-header">
           <div class="row">
             <div class="title-wrap">
-              <button class="collapse-btn" data-toggle="#sec-val">▾</button>
+              <button class="collapse-btn">−</button>
               <h2>Validierer & Freigabe</h2>
             </div>
           </div>
         </div>
         <div class="section-body">
           <div class="grid">
-            <div class="col-4"><label>Validierer (NEXUS / IPS)</label><input type="text" id="validiererName" placeholder="Name"/></div>
-            <div class="col-4"><label>Fachliche Qualifikation</label><input type="text" id="fachlicheQualifikation"/></div>
-            <div class="col-4"><label>Produktschulung (Programmpaket)</label><input type="text" id="produktschulung"/></div>
-            <div class="col-6">
-              <label>Datum / Unterschrift Validierer</label>
-              <div class="sig-wrap"><canvas id="sigValidierer" class="signature"></canvas></div>
-              <div class="sig-controls"><button class="btn" data-clear="sigValidierer">Löschen</button><input type="text" id="sigDate1" class="date-input" placeholder="TT.mm.jjjj"/></div>
+            <div class="col-4">
+              <label>Validierer (NEXUS / IPS)</label>
+              <input type="text" id="validiererName" placeholder="Name" />
+            </div>
+            <div class="col-4">
+              <label>Fachliche Qualifikation</label>
+              <input type="text" id="qualifikation" placeholder="Qualifikation" />
+            </div>
+            <div class="col-4">
+              <label>Produktschulung (Programmpaket)</label>
+              <input type="text" id="produktschulung" placeholder="Schulung" />
             </div>
             <div class="col-6">
-              <label>Freigabe durch Betreiber – Datum / Unterschrift</label>
-              <div class="sig-wrap"><canvas id="sigBetreiber" class="signature"></canvas></div>
-              <div class="sig-controls"><button class="btn" data-clear="sigBetreiber">Löschen</button><input type="text" id="sigDate2" class="date-input" placeholder="TT.mm.jjjj"/></div>
+              <label>Datum / Unterschrift Validierer</label>
+              <div class="sig-area">
+                <textarea id="unterschriftValidierer" placeholder="Datum und Unterschrift eingeben oder Unterschrift hier zeichnen..."></textarea>
+                <div class="sig-controls" style="justify-content:flex-end">
+                  <button class="btn icon" data-clear-text="unterschriftValidierer">🗑️ Löschen</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <label>Freigabe durch Betreiber - Datum / Unterschrift</label>
+              <div class="sig-area">
+                <textarea id="freigabeBetreiber" placeholder="Datum und Unterschrift eingeben oder Unterschrift hier zeichnen..."></textarea>
+                <div class="sig-controls" style="justify-content:flex-end">
+                  <button class="btn icon" data-clear-text="freigabeBetreiber">🗑️ Löschen</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Standard-Listen (KV/IQ/OQ) als fixe Gruppe -->
-      <div class="group" id="group-fixed">
-        <div class="group-header">
-          <div class="group-title">
-            <input type="text" value="Standardprüfungen (KV/IQ/OQ)" disabled />
-            <span class="chip" style="background:#eef2f7">fix</span>
-          </div>
-          <div class="group-tools" style="opacity:.5">
-            <button class="btn" disabled>Duplizieren</button>
-            <button class="btn danger" disabled>Löschen</button>
-            <button class="btn" disabled>Deaktivieren</button>
+      <!-- KV -->
+      <div class="section collapsible">
+        <div class="section-header">
+          <div class="row">
+            <div class="title-wrap">
+              <button class="collapse-btn">−</button>
+              <h2>KV – Kalibrierung & Validierung</h2>
+            </div>
+            <button class="btn icon" onclick="addKV()">+ Zeile</button>
           </div>
         </div>
+        <div class="section-body">
+          <div class="list" id="kvList"></div>
+        </div>
+      </div>
 
-        <div class="section collapsible" id="sec-kv">
-          <div class="section-header"><div class="row"><div class="title-wrap">
-            <button class="collapse-btn" data-toggle="#sec-kv">▾</button><h2>KV – Konstruktionsvalidierung</h2></div></div></div>
-          <div class="section-body">
-            <div class="list" id="kvList"></div>
-            <div style="margin-top:12px;display:flex;gap:8px">
-              <button class="btn" id="kvAddBtn">+ Zeile hinzufügen</button>
-              <button class="btn danger" id="kvRemoveBtn">− Letzte entfernen</button>
+      <!-- IQ -->
+      <div class="section collapsible">
+        <div class="section-header">
+          <div class="row">
+            <div class="title-wrap">
+              <button class="collapse-btn">−</button>
+              <h2>IQ – Installation Qualification</h2>
             </div>
+            <button class="btn icon" onclick="addIQ()">+ Zeile</button>
           </div>
         </div>
+        <div class="section-body">
+          <div class="list" id="iqList"></div>
+        </div>
+      </div>
 
-        <div class="section collapsible" id="sec-iq">
-          <div class="section-header"><div class="row"><div class="title-wrap">
-            <button class="collapse-btn" data-toggle="#sec-iq">▾</button><h2>IQ – Installationsqualifikation</h2></div></div></div>
-          <div class="section-body">
-            <div class="list" id="iqList"></div>
-            <div style="margin-top:12px;display:flex;gap:8px">
-              <button class="btn" id="iqAddBtn">+ Zeile hinzufügen</button>
-              <button class="btn danger" id="iqRemoveBtn">− Letzte entfernen</button>
+      <!-- OQ -->
+      <div class="section collapsible">
+        <div class="section-header">
+          <div class="row">
+            <div class="title-wrap">
+              <button class="collapse-btn">−</button>
+              <h2>OQ – Operational Qualification</h2>
             </div>
+            <button class="btn icon" onclick="addOQ()">+ Zeile</button>
           </div>
         </div>
-
-        <div class="section collapsible" id="sec-oq">
-          <div class="section-header"><div class="row"><div class="title-wrap">
-            <button class="collapse-btn" data-toggle="#sec-oq">▾</button><h2>OQ – Funktionsqualifikation</h2></div></div></div>
-          <div class="section-body">
-            <div class="list" id="oqList"></div>
-            <div style="margin-top:12px;display:flex;gap:8px">
-              <button class="btn" id="oqAddBtn">+ Zeile hinzufügen</button>
-              <button class="btn danger" id="oqRemoveBtn">− Letzte entfernen</button>
-            </div>
-          </div>
+        <div class="section-body">
+          <div class="list" id="oqList"></div>
         </div>
       </div>
 
       <!-- Dynamische Gruppen -->
-      <div id="groupsHost"></div>
+      <div id="groupsContainer"></div>
 
+      <!-- Unterschriften (Finale Unterschriften) -->
       <div class="section">
-        <div style="text-align:center;padding:20px;color:#64748b">
-          <p style="margin:0">Nutze oben im Menü <strong>🧩 Neue Gruppe</strong> und <strong>➕ Abschnitt in akt. Gruppe</strong>.</p>
-        </div>
-      </div>
-
-      <!-- Footer -->
-      <div class="section">
-        <div class="footer">
-          <div style="font-size:12px;color:#64748b">Erstellt am: <span id="stamp"></span></div>
-          <div style="font-size:12px;color:#64748b">CL Validierungsprotokoll v0.5.3</div>
-        </div>
-      </div>
-
-      <!-- Seiten-Guides Overlay -->
-      <div class="page-guides hidden" id="pageGuides"></div>
-    </div>
-  </div>
-
-  <!-- Info Modal -->
-  <div class="modal-backdrop" id="infoModal">
-    <div class="modal">
-      <header>
-        <span>Zusätzliche Informationen</span>
-        <button class="btn icon" id="infoClose">✕</button>
-      </header>
-      <div class="content">
-        <textarea id="infoTextarea" placeholder="Zusätzliche Informationen zu diesem Punkt..." style="width:100%;min-height:140px;border:1px solid #e5e7eb;border-radius:8px;padding:10px"></textarea>
-        <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
-          <button class="btn" id="infoCancel">Abbrechen</button>
-          <button class="btn secondary" id="infoSave">Speichern</button>
+        <div class="section-header"><h2>Finale Unterschriften</h2></div>
+        <div class="grid">
+          <div class="col-6">
+            <label>Validierer / Prüfer</label>
+            <div class="sig-wrap"><canvas id="sigValidierer"></canvas></div>
+            <div class="sig-controls">
+              <input type="text" id="nameValidierer" placeholder="Name eingeben" />
+              <button class="btn icon" data-clear="sigValidierer">🗑️</button>
+            </div>
+          </div>
+          <div class="col-6">
+            <label>Betreiber / Verantwortlicher</label>
+            <div class="sig-wrap"><canvas id="sigBetreiber"></canvas></div>
+            <div class="sig-controls">
+              <input type="text" id="nameBetreiber" placeholder="Name eingeben" />
+              <button class="btn icon" data-clear="sigBetreiber">🗑️</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Abschnittstyp Modal -->
-  <div class="modal-backdrop" id="sectionTypeModal">
-    <div class="modal">
-      <header>
-        <span>Abschnittstyp wählen</span>
-        <button class="btn icon" id="sectionTypeClose">✕</button>
-      </header>
+  <!-- Modal für Abschnittstypen -->
+  <div class="modal" id="sectionTypeModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Abschnittstyp wählen</div>
+        <button class="modal-close" id="sectionTypeClose">×</button>
+      </div>
       <div class="section-type-grid">
-        <div class="section-type-card" data-type="checklist"><div class="icon">✓</div><div class="name">Checkliste</div></div>
-        <div class="section-type-card" data-type="spacing"><div class="icon">↕</div><div class="name">Abstand</div></div>
-        <div class="section-type-card" data-type="text"><div class="icon">📝</div><div class="name">Text</div></div>
-        <div class="section-type-card" data-type="image"><div class="icon">🖼</div><div class="name">Bilder</div></div>
+        <div class="section-type-card" data-type="checklist">
+          <div class="icon">✓</div>
+          <div class="name">Checkliste</div>
+        </div>
+        <div class="section-type-card" data-type="spacing">
+          <div class="icon">↕</div>
+          <div class="name">Abstand</div>
+        </div>
+        <div class="section-type-card" data-type="text">
+          <div class="icon">📝</div>
+          <div class="name">Text</div>
+        </div>
+        <div class="section-type-card" data-type="image">
+          <div class="icon">🖼</div>
+          <div class="name">Bilder</div>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    /* ===== Helpers ===== */
+    'use strict';
     function $(s){ return document.querySelector(s); }
     function $$(s){ return document.querySelectorAll(s); }
     function clone(o){ return JSON.parse(JSON.stringify(o)); }
 
-    /* ===== State ===== */
-    var stateKey = 'clValidationAppState_v0_5_3';
-    var modalCtx = null;
-    var currentGroupIndex = 0; // aktive Gruppe fürs "Abschnitt hinzufügen"
+    /* State */
+    var appState = {
+      // Deckblatt & Kopfdaten
+      nameEinrichtung:'', standortInstallation:'', verantwortlichePerson:'', produkt:'',
+      programmPaket:'', version:'', softwarepflege:'', arbeitsplaetze:'', angebundeneGeraete:'',
+      bemerkungInstallation:'', validierungDatum:'', letzteValidierung:'', naechsteValidierung:'',
+      checkValidierung:false, checkRevalidierung:false,
+      // Validierer & Freigabe
+      validiererName:'', qualifikation:'', produktschulung:'',
+      unterschriftValidierer:'', freigabeBetreiber:'',
+      // Listen
+      kv:[], iq:[], oq:[],
+      // Gruppen
+      groups:[],
+      // Finale Unterschriften
+      nameValidierer:'', nameBetreiber:'',
+      sigValidierer:'', sigBetreiber:''
+    };
 
-    var NOTE_SUGGESTIONS = ['N/A', 'OK', 'Nicht anwendbar', 'Siehe Anhang', 'Manuell geprüft'];
+    var currentGroupIndex = 0;
 
-    var appState = { kv: [], iq: [], oq: [], groups: [] };
-
-    var defaultKV = [
-      {text:'Anforderungen definiert', ok:false, note:'', code:'KV-01', info:''},
-      {text:'Spezifikationen erstellt', ok:false, note:'', code:'KV-02', info:''}
+    /* Defaults */
+    var defaultKV=[
+      {text:'Konformität mit Spezifikation', ok:false, note:'', code:'KV-001', info:'Prüfung der technischen Spezifikationen'},
+      {text:'Messgenauigkeit überprüft', ok:false, note:'', code:'KV-002', info:'Vergleich mit kalibriertem Referenzgerät'},
+      {text:'Kalibrierzertifikat vorhanden', ok:false, note:'', code:'KV-003', info:'Aktuelles Zertifikat vom akkreditierten Labor'}
     ];
-    var iqItems = [
-      {text:'Hardware installiert', ok:false, note:'', code:'IQ-01', info:''},
-      {text:'Software installiert', ok:false, note:'', code:'IQ-02', info:''}
+    var iqItems=[
+      {text:'Lieferumfang vollständig', ok:false, note:'', code:'IQ-001', info:'Alle Komponenten und Zubehör vorhanden'},
+      {text:'Gerät unbeschädigt', ok:false, note:'', code:'IQ-002', info:'Sichtprüfung auf Transportschäden'},
+      {text:'Installation gemäß Handbuch', ok:false, note:'', code:'IQ-003', info:'Befolgen der Herstellervorgaben'}
     ];
-    var oqItems = [
-      {text:'Grundfunktionen getestet', ok:false, note:'', code:'OQ-01', info:''},
-      {text:'Schnittstellen geprüft', ok:false, note:'', code:'OQ-02', info:''}
+    var oqItems=[
+      {text:'Funktionstest erfolgreich', ok:false, note:'', code:'OQ-001', info:'Alle Basisfunktionen getestet'},
+      {text:'Alarmfunktionen getestet', ok:false, note:'', code:'OQ-002', info:'Akustische und optische Alarme'},
+      {text:'Temperaturkonstanz geprüft', ok:false, note:'', code:'OQ-003', info:'24h-Monitoring durchgeführt'}
     ];
 
-    /* ===== Load/Save ===== */
-    function ensureNoteOptions(){ if(NOTE_SUGGESTIONS.indexOf('N/A')===-1) NOTE_SUGGESTIONS.unshift('N/A'); }
-    function sync(){ localStorage.setItem(stateKey, JSON.stringify(collectAll())); }
+    /* Persistence */
+    var formFields = [
+      'nameEinrichtung','standortInstallation','verantwortlichePerson','produkt',
+      'programmPaket','version','softwarepflege','arbeitsplaetze','angebundeneGeraete',
+      'bemerkungInstallation','validierungDatum','letzteValidierung','naechsteValidierung',
+      'checkValidierung','checkRevalidierung',
+      'validiererName','qualifikation','produktschulung',
+      'unterschriftValidierer','freigabeBetreiber',
+      'nameValidierer','nameBetreiber'
+    ];
+
+    function sync(){
+      formFields.forEach(function(k){
+        var el = document.getElementById(k);
+        if(el){
+          if(el.type === 'checkbox') appState[k] = el.checked;
+          else appState[k] = el.value;
+        }
+      });
+      localStorage.setItem('validierung_v3_complete', JSON.stringify(appState));
+    }
+
     function loadState(){
       try{
-        var raw = localStorage.getItem(stateKey);
-        if(!raw) return false;
-        var data = JSON.parse(raw);
-        applyAll(data);
+        var stored = localStorage.getItem('validierung_v3_complete');
+        if(!stored) return false;
+        var data = JSON.parse(stored);
+        Object.assign(appState, data);
+        formFields.forEach(function(k){
+          var el = document.getElementById(k);
+          if(el){
+            if(el.type === 'checkbox') el.checked = appState[k] || false;
+            else el.value = appState[k] || '';
+          }
+        });
         return true;
-      }catch(e){ console.error(e); return false; }
+      }catch(e){ return false; }
     }
+
     function exportJSON(){
-      var blob = new Blob([JSON.stringify(collectAll(), null, 2)], {type:'application/json'});
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement('a'); a.href=url; a.download='validierung_'+Date.now()+'.json'; a.click();
-      URL.revokeObjectURL(url);
-      alert('Daten erfolgreich gespeichert!');
+      var blob = new Blob([JSON.stringify(appState, null, 2)], {type:'application/json'});
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'validierung_'+Date.now()+'.json';
+      a.click();
     }
+
     function importJSON(){
-      var input = document.createElement('input'); input.type='file'; input.accept='.json';
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'application/json';
       input.onchange = function(){
-        var f = input.files[0]; if(!f) return;
-        var r = new FileReader();
-        r.onload = function(e){
-          try{ applyAll(JSON.parse(e.target.result)); alert('Daten erfolgreich geladen!'); }
-          catch(err){ alert('Fehler beim Laden: '+err.message); }
+        var file = input.files[0];
+        if(!file) return;
+        var reader = new FileReader();
+        reader.onload = function(e){
+          try{
+            var data = JSON.parse(e.target.result);
+            Object.assign(appState, data);
+            renderAll();
+            alert('✓ Daten erfolgreich geladen');
+          }catch(err){ alert('✗ Fehler beim Laden: '+err.message); }
         };
-        r.readAsText(f);
+        reader.readAsText(file);
       };
       input.click();
     }
+
     function resetAll(){
-      if(!confirm('Alle Daten zurücksetzen?')) return;
-      localStorage.removeItem(stateKey); location.reload();
+      if(!confirm('Alle Daten löschen?')) return;
+      localStorage.removeItem('validierung_v3_complete');
+      location.reload();
     }
 
-    function collectAll(){
-      return {
-        meta:{ ts:(new Date()).toISOString(), version:'0.5.3' },
-        kopf:{
-          instName: $('#instName').value, instOrt: $('#instOrt').value, betreiber: $('#betreiber').value,
-          produkt: $('#produkt').value, programmpaket: $('#programmpaket').value, version: $('#version').value,
-          evbPflege: $('#evbPflege').value, arbeitsplaetze: $('#arbeitsplaetze').value, geraete: $('#geraete').value,
-          bemerkung: $('#bemerkung').value, valAm: $('#valAm').value, valLast: $('#valLast').value, valNext: $('#valNext').value,
-          chkVal: $('#chkVal').checked, chkReval: $('#chkReval').checked
-        },
-        validierer:{
-          validiererName: $('#validiererName').value, fachlicheQualifikation: $('#fachlicheQualifikation').value, produktschulung: $('#produktschulung').value
-        },
-        sign:{
-          validiererDate: $('#sigDate1').value, betreiberDate: $('#sigDate2').value,
-          sigValidierer: document.getElementById('sigValidierer').toDataURL('image/png'),
-          sigBetreiber: document.getElementById('sigBetreiber').toDataURL('image/png')
-        },
-        kv: appState.kv, iq: appState.iq, oq: appState.oq,
-        groups: appState.groups
-      };
-    }
-
-    function applyAll(data){
-      if(data.__note_suggestions && data.__note_suggestions.length){ NOTE_SUGGESTIONS = data.__note_suggestions; }
-      ensureNoteOptions();
-
-      if(data.kopf){
-        for(var k in data.kopf){ var el = document.getElementById(k); if(!el) continue; if(el.type==='checkbox') el.checked=!!data.kopf[k]; else el.value = data.kopf[k]||''; }
-      }
-      if(data.validierer){
-        for(var k2 in data.validierer){ var el2 = document.getElementById(k2); if(el2) el2.value = data.validierer[k2]||''; }
-      }
-      if(data.sign){
-        if(data.sign.validiererDate) $('#sigDate1').value=data.sign.validiererDate;
-        if(data.sign.betreiberDate) $('#sigDate2').value=data.sign.betreiberDate;
-      }
-
-      appState.kv = data.kv && data.kv.length ? data.kv : clone(defaultKV);
-      appState.iq = data.iq && data.iq.length ? data.iq : clone(iqItems);
-      appState.oq = data.oq && data.oq.length ? data.oq : clone(oqItems);
-
-      // Gruppen
-      if(Array.isArray(data.groups) && data.groups.length){
-        appState.groups = data.groups;
-      }else{
-        appState.groups = [{ id: Date.now(), title:'Gruppe 1', enabled:true, sections:[] }];
-      }
-      currentGroupIndex = Math.min(currentGroupIndex, appState.groups.length-1);
-
-      renderAll();
-    }
-
-    /* ===== Signatur ===== */
+    /* Signaturen (Canvas) */
+    var sigPads = {};
     function initSignature(id){
-      var c = document.getElementById(id), ctx = c.getContext('2d'); var drawing=false, last=null;
-      function pos(e){ var r=c.getBoundingClientRect(); var cx=(e.touches?e.touches[0].clientX:e.clientX)-r.left; var cy=(e.touches?e.touches[0].clientY:e.clientY)-r.top; var ratio= (c.width/r.width); return {x:cx*ratio,y:cy*ratio}; }
-      function start(e){ drawing=true; last=pos(e); if(e && !e.touches && e.preventDefault) e.preventDefault(); }
-      function move(e){ if(!drawing) return; var p=pos(e); ctx.lineCap='round'; ctx.lineJoin='round'; ctx.lineWidth=2; ctx.strokeStyle='#111827'; ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; if(e && !e.touches && e.preventDefault) e.preventDefault(); }
-      function end(){ drawing=false; }
-      c.addEventListener('mousedown',start); c.addEventListener('mousemove',move); window.addEventListener('mouseup',end);
-      c.addEventListener('touchstart', start, {passive:true}); c.addEventListener('touchmove', move, {passive:true}); window.addEventListener('touchend',end);
-      function resize(){ var r=c.getBoundingClientRect(), ratio=window.devicePixelRatio||1; c.width=Math.floor(r.width*ratio); c.height=Math.floor(r.height*ratio); }
-      resize(); if(window.ResizeObserver){ new ResizeObserver(resize).observe(c); } else { window.addEventListener('resize',resize); }
-    }
-    function clearSignature(id){ var c=document.getElementById(id); c.getContext('2d').clearRect(0,0,c.width,c.height); }
+      var canvas = document.getElementById(id);
+      if(!canvas) return;
+      var ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      var drawing = false;
+      var lastX = 0, lastY = 0;
 
-    /* ===== Zeilenbau (Checklisten) — EDITIERBAR ===== */
-    function mkCheckRow(item, syncFn, delFn, items){
-      var row=document.createElement('div'); row.className='check';
-      var draggedIndex=-1; row.draggable=true;
-
-      // Drag-Handle
-      var moveDiv=document.createElement('div'); moveDiv.className='move-btns';
-      var handle=document.createElement('div'); handle.className='move-handle';
-      handle.title='Zeile ziehen zum Verschieben'; handle.appendChild(document.createElement('span'));
-      moveDiv.appendChild(handle);
-
-      row.ondragstart=function(e){ draggedIndex=items.indexOf(item); row.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; };
-      row.ondragend=function(){ row.classList.remove('dragging'); document.querySelectorAll('.check').forEach(el=>el.classList.remove('drag-over')); };
-      row.ondragover=function(e){ e.preventDefault(); row.classList.add('drag-over'); };
-      row.ondragleave=function(){ row.classList.remove('drag-over'); };
-      row.ondrop=function(e){
-        e.stopPropagation(); row.classList.remove('drag-over');
-        var dropIndex=items.indexOf(item);
-        if(draggedIndex!==dropIndex && draggedIndex>-1){
-          var dragged=items[draggedIndex]; items.splice(draggedIndex,1); items.splice(dropIndex,0,dragged);
-          syncFn();
-        }
-      };
-
-      // Spalten
-      var code=document.createElement('input');
-      code.className='tiny'; code.type='text'; code.placeholder='Code';
-      code.value=item.code||''; code.oninput=function(){ item.code=code.value; syncFn(); };
-
-      var infoBtn=document.createElement('div');
-      infoBtn.className='info-btn';
-      infoBtn.onclick=function(){ openInfo(item, syncFn); };
-      if(item.info){ infoBtn.style.background='#dbeafe'; infoBtn.style.borderColor='#3b82f6'; }
-
-      // Editierbarer Text
-      var labelInput=document.createElement('input');
-      labelInput.type='text';
-      labelInput.className='label-input';
-      labelInput.placeholder='Text der Anforderung / Prüfung';
-      labelInput.value=(item.text||'');
-      labelInput.oninput=function(){ item.text=labelInput.value; syncFn(); };
-      labelInput.addEventListener('keydown', function(ev){ if(ev.key==='Enter'){ labelInput.blur(); } });
-
-      var manage=document.createElement('div'); manage.className='manage';
-
-      var note=document.createElement('input');
-      note.className='note'; note.type='text'; note.placeholder='Notiz';
-      note.value=item.note||'';
-      note.oninput=function(){ item.note=note.value; syncFn(); };
-
-      var delBtn=document.createElement('button');
-      delBtn.className='btn danger del'; delBtn.textContent='×';
-      delBtn.onclick=function(){ if(confirm('Zeile löschen?')) delFn(); };
-
-      var cb=document.createElement('input');
-      cb.className='main'; cb.type='checkbox'; cb.checked=!!item.ok;
-      cb.onchange=function(){ item.ok=cb.checked; syncFn(); };
-
-      // Zusammenbauen
-      manage.appendChild(note);
-      row.appendChild(moveDiv);
-      row.appendChild(code);
-      row.appendChild(infoBtn);
-      row.appendChild(labelInput);
-      row.appendChild(manage);
-      row.appendChild(delBtn);
-      row.appendChild(cb);
-
-      return row;
-    }
-
-    function openInfo(item, saveFn){ modalCtx={item,saveFn}; $('#infoTextarea').value=item.info||''; $('#infoModal').style.display='flex'; }
-    function closeInfo(){ $('#infoModal').style.display='none'; modalCtx=null; }
-    $('#infoClose')?.addEventListener('click', closeInfo);
-    $('#infoCancel')?.addEventListener('click', closeInfo);
-    $('#infoSave')?.addEventListener('click', function(){ if(modalCtx && modalCtx.item){ modalCtx.item.info=$('#infoTextarea').value; modalCtx.saveFn && modalCtx.saveFn(); } closeInfo(); });
-
-    /* ===== Rendering Listen & Gruppen ===== */
-    function renderList(containerSel, items, syncFn){
-      var host=$(containerSel); host.innerHTML='';
-      items.forEach(function(it, idx){
-        var row = mkCheckRow(it, function(){ syncFn(); renderList(containerSel, items, syncFn); }, function(){ items.splice(idx,1); syncFn(); renderList(containerSel, items, syncFn); }, items);
-        host.appendChild(row);
-      });
-    }
-
-    /* Collapsible helpers */
-    function wireCollapseButton(btn){
-      var sel = btn.getAttribute('data-toggle');
-      if(!sel) return;
-      btn.addEventListener('click', function(e){
-        e.preventDefault();
-        var sec = document.querySelector(sel);
-        if(!sec) return;
-        var collapsed = sec.classList.toggle('collapsed');
-        btn.textContent = collapsed ? '▸' : '▾';
-      });
-    }
-    function initCollapsibles(){
-      $$('.collapse-btn').forEach(wireCollapseButton);
-    }
-
-    // Abschnitte (für Gruppen)
-    function renderChecklistSection(container, section, sectionsArray, idx){
-      container.classList.add('collapsible');
-      if(section._collapsed) container.classList.add('collapsed');
-
-      var header=document.createElement('div');
-      header.className='section-header';
-      header.innerHTML = '<div class="row"><div class="title-wrap"></div></div>';
-      var titleWrap = header.querySelector('.title-wrap');
-
-      var toggle=document.createElement('button'); toggle.className='collapse-btn'; toggle.textContent=section._collapsed?'▸':'▾';
-      toggle.addEventListener('click', function(){ section._collapsed=!section._collapsed; container.classList.toggle('collapsed', !!section._collapsed); toggle.textContent = section._collapsed?'▸':'▾'; sync(); });
-      titleWrap.appendChild(toggle);
-
-      var title=document.createElement('input');
-      title.type='text'; title.value=section.title||'Checkliste';
-      Object.assign(title.style,{fontSize:'20px',fontWeight:'700',color:'var(--primary)',border:'1px solid transparent',background:'transparent',padding:'4px 8px'});
-      title.onchange=function(){ section.title=title.value; sync(); };
-      titleWrap.appendChild(title);
-
-      var tools=document.createElement('div'); tools.style.display='flex'; tools.style.gap='8px'; tools.style.marginLeft='auto';
-      var addBtn=document.createElement('button'); addBtn.className='btn'; addBtn.textContent='➕ Zeile';
-      addBtn.onclick=function(e){ e.preventDefault(); (section.rows||(section.rows=[])).push({text:'Neue Anforderung', ok:false, note:'', code:'', info:''}); drawGroups(); sync(); };
-      var delBtn=document.createElement('button'); delBtn.className='btn danger'; delBtn.textContent='🗑️ Löschen';
-      delBtn.onclick=function(e){ e.preventDefault(); if(confirm('Abschnitt löschen?')){ sectionsArray.splice(idx,1); drawGroups(); sync(); } };
-      tools.appendChild(addBtn); tools.appendChild(delBtn);
-      header.querySelector('.row').appendChild(tools);
-      container.appendChild(header);
-
-      var body=document.createElement('div'); body.className='section-body';
-      var list=document.createElement('div'); list.className='list';
-      (section.rows||[]).forEach(function(r, i){
-        var rowEl = mkCheckRow(r, function(){ sync(); drawGroups(); }, function(){ section.rows.splice(i,1); sync(); drawGroups(); }, section.rows);
-        list.appendChild(rowEl);
-      });
-      body.appendChild(list);
-      container.appendChild(body);
-    }
-
-    function renderSpacingSection(container, section, sectionsArray, idx){
-      container.classList.add('collapsible');
-      if(section._collapsed) container.classList.add('collapsed');
-
-      var header=document.createElement('div'); header.className='section-header';
-      var row=document.createElement('div'); row.className='row';
-      var titleWrap=document.createElement('div'); titleWrap.className='title-wrap';
-      var toggle=document.createElement('button'); toggle.className='collapse-btn'; toggle.textContent=section._collapsed?'▸':'▾';
-      toggle.onclick=function(){ section._collapsed=!section._collapsed; container.classList.toggle('collapsed', !!section._collapsed); toggle.textContent=section._collapsed?'▸':'▾'; sync(); };
-      var title=document.createElement('h2'); title.textContent=section.title||'Abstand-Abschnitt'; title.contentEditable='true'; title.onblur=function(){ section.title=title.textContent; sync(); };
-      titleWrap.appendChild(toggle); titleWrap.appendChild(title);
-
-      var delBtn=document.createElement('button'); delBtn.className='btn danger'; delBtn.textContent='🗑️ Löschen';
-      delBtn.onclick=function(e){ e.preventDefault(); if(confirm('Abschnitt löschen?')){ sectionsArray.splice(idx,1); drawGroups(); sync(); } };
-
-      row.appendChild(titleWrap); row.appendChild(delBtn); header.appendChild(row); container.appendChild(header);
-
-      var body=document.createElement('div'); body.className='section-body';
-      var wrap=document.createElement('div'); wrap.className='spacing-section';
-      var controls=document.createElement('div'); controls.className='controls';
-      var lab=document.createElement('label'); lab.textContent='Höhe (cm): '; lab.style.marginRight='8px';
-      var inp=document.createElement('input'); Object.assign(inp,{type:'number',min:'0.5',max:'29',step:'0.5'}); inp.value=section.heightCm||5; inp.style.width='80px';
-      var info=document.createElement('span'); info.textContent=' (Max: 29 cm A4)'; info.style.fontSize='12px'; info.style.color='#64748b';
-      controls.appendChild(lab); controls.appendChild(inp); controls.appendChild(info);
-      var prev=document.createElement('div'); prev.className='preview'; prev.textContent='Abstand: '+(section.heightCm||5)+' cm';
-      prev.style.height=((section.heightCm||5) * 37.795275591)+'px';
-      inp.onchange=function(){ var v=parseFloat(inp.value)||5; if(v>29) v=29; if(v<0.5) v=0.5; section.heightCm=v; prev.textContent='Abstand: '+v+' cm'; prev.style.height=(v*37.795275591)+'px'; sync(); };
-
-      wrap.appendChild(controls); wrap.appendChild(prev); body.appendChild(wrap); container.appendChild(body);
-    }
-
-    function renderTextSection(container, section, sectionsArray, idx){
-      container.classList.add('collapsible');
-      if(section._collapsed) container.classList.add('collapsed');
-
-      var header=document.createElement('div'); header.className='section-header';
-      var row=document.createElement('div'); row.className='row';
-      var titleWrap=document.createElement('div'); titleWrap.className='title-wrap';
-      var toggle=document.createElement('button'); toggle.className='collapse-btn'; toggle.textContent=section._collapsed?'▸':'▾';
-      toggle.onclick=function(){ section._collapsed=!section._collapsed; container.classList.toggle('collapsed', !!section._collapsed); toggle.textContent=section._collapsed?'▸':'▾'; sync(); };
-      var title=document.createElement('h2'); title.textContent=section.title||'Text-Abschnitt'; title.contentEditable='true'; title.onblur=function(){ section.title=title.textContent; sync(); };
-      titleWrap.appendChild(toggle); titleWrap.appendChild(title);
-
-      var delBtn=document.createElement('button'); delBtn.className='btn danger'; delBtn.textContent='🗑️ Löschen';
-      delBtn.onclick=function(){ if(confirm('Abschnitt löschen?')){ sectionsArray.splice(idx,1); drawGroups(); sync(); } };
-
-      row.appendChild(titleWrap); row.appendChild(delBtn); header.appendChild(row); container.appendChild(header);
-
-      var body=document.createElement('div'); body.className='section-body';
-      var textDiv=document.createElement('div'); textDiv.className='text-section';
-      var toolbar=document.createElement('div'); toolbar.className='text-editor-toolbar';
-      [['B','bold'],['I','italic'],['U','underline'],['•','insertUnorderedList'],['1.','insertOrderedList'],['←','justifyLeft'],['↔','justifyCenter'],['→','justifyRight']]
-        .forEach(function([icon,cmd]){ var b=document.createElement('button'); b.textContent=icon; b.onclick=function(e){e.preventDefault();document.execCommand(cmd,false,null); editor.focus();}; toolbar.appendChild(b); });
-      var editor=document.createElement('div'); editor.className='text-editor-content'; editor.contentEditable='true'; editor.innerHTML=section.content||'';
-      editor.oninput=function(){ section.content=editor.innerHTML; sync(); };
-      textDiv.appendChild(toolbar); textDiv.appendChild(editor);
-      body.appendChild(textDiv); container.appendChild(body);
-    }
-
-    function renderImageSection(container, section, sectionsArray, idx){
-      container.classList.add('collapsible');
-      if(section._collapsed) container.classList.add('collapsed');
-
-      var header=document.createElement('div'); header.className='section-header';
-      var row=document.createElement('div'); row.className='row';
-      var titleWrap=document.createElement('div'); titleWrap.className='title-wrap';
-      var toggle=document.createElement('button'); toggle.className='collapse-btn'; toggle.textContent=section._collapsed?'▸':'▾';
-      toggle.onclick=function(){ section._collapsed=!section._collapsed; container.classList.toggle('collapsed', !!section._collapsed); toggle.textContent=section._collapsed?'▸':'▾'; sync(); };
-      var title=document.createElement('h2'); title.textContent=section.title||'Bild-Abschnitt'; title.contentEditable='true'; title.onblur=function(){ section.title=title.textContent; sync(); };
-      titleWrap.appendChild(toggle); titleWrap.appendChild(title);
-
-      var delBtn=document.createElement('button'); delBtn.className='btn danger'; delBtn.textContent='🗑️ Löschen';
-      delBtn.onclick=function(){ if(confirm('Abschnitt löschen?')){ sectionsArray.splice(idx,1); drawGroups(); sync(); } };
-
-      row.appendChild(titleWrap); row.appendChild(delBtn); header.appendChild(row); container.appendChild(header);
-
-      var body=document.createElement('div'); body.className='section-body';
-      var imageDiv=document.createElement('div'); imageDiv.className='image-section';
-      var uploadZone=document.createElement('div'); uploadZone.className='image-upload-zone';
-      var txt=document.createElement('div'); txt.innerHTML='<div style="font-size:48px;margin-bottom:8px">📷</div><div><strong>Bilder hinzufügen</strong></div><div style="font-size:13px;color:#64748b;margin-top:4px">Klicken oder Dateien hierher ziehen • Kamera auf Mobilgeräten</div>';
-      uploadZone.appendChild(txt);
-      var fileInput=document.createElement('input'); fileInput.type='file'; fileInput.accept='image/*'; fileInput.multiple=true; fileInput.capture='environment'; fileInput.style.display='none';
-      fileInput.onchange=function(){ handleFiles(fileInput.files, section); };
-      uploadZone.onclick=function(){ fileInput.click(); };
-      uploadZone.ondragover=function(e){ e.preventDefault(); uploadZone.classList.add('dragover'); };
-      uploadZone.ondragleave=function(){ uploadZone.classList.remove('dragover'); };
-      uploadZone.ondrop=function(e){ e.preventDefault(); uploadZone.classList.remove('dragover'); handleFiles(e.dataTransfer.files, section); };
-      imageDiv.appendChild(uploadZone); imageDiv.appendChild(fileInput);
-
-      if(section.images && section.images.length){
-        var preview=document.createElement('div'); preview.className='image-preview';
-        section.images.forEach(function(src, imgIdx){
-          var item=document.createElement('div'); item.className='image-preview-item';
-          var img=document.createElement('img'); img.src=src;
-          var del=document.createElement('button'); del.className='delete-btn'; del.textContent='×';
-          del.onclick=function(){ section.images.splice(imgIdx,1); drawGroups(); sync(); };
-          item.appendChild(img); item.appendChild(del); preview.appendChild(item);
-        });
-        imageDiv.appendChild(preview);
+      function getPos(e){
+        var rect = canvas.getBoundingClientRect();
+        var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+        var y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+        return {x:x, y:y};
       }
-      body.appendChild(imageDiv); container.appendChild(body);
+
+      function startDraw(e){
+        e.preventDefault();
+        drawing = true;
+        var pos = getPos(e);
+        lastX = pos.x; lastY = pos.y;
+      }
+
+      function draw(e){
+        if(!drawing) return;
+        e.preventDefault();
+        var pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.strokeStyle = '#1E2434';
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+        lastX = pos.x; lastY = pos.y;
+        appState[id] = canvas.toDataURL();
+        sync();
+      }
+
+      function stopDraw(e){
+        if(drawing){
+          drawing = false;
+          appState[id] = canvas.toDataURL();
+          sync();
+        }
+      }
+
+      canvas.addEventListener('mousedown', startDraw);
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('mouseup', stopDraw);
+      canvas.addEventListener('mouseleave', stopDraw);
+      canvas.addEventListener('touchstart', startDraw);
+      canvas.addEventListener('touchmove', draw);
+      canvas.addEventListener('touchend', stopDraw);
+
+      sigPads[id] = {canvas:canvas, ctx:ctx};
+
+      if(appState[id]){
+        var img = new Image();
+        img.onload = function(){ ctx.drawImage(img, 0, 0); };
+        img.src = appState[id];
+      }
     }
 
-    function handleFiles(files, section){
-      if(!section.images) section.images=[];
-      Array.from(files).forEach(function(file){
-        if(!file.type.match('image.*')) return;
-        var r=new FileReader();
-        r.onload=function(e){
-          section.images.push(e.target.result);
-          drawGroups(); sync();
-          if(guidesOn) requestAnimationFrame(updatePageGuides);
+    function clearSignature(id){
+      var pad = sigPads[id];
+      if(!pad) return;
+      pad.ctx.clearRect(0, 0, pad.canvas.width, pad.canvas.height);
+      appState[id] = '';
+      sync();
+    }
+
+    /* Listen (KV/IQ/OQ) */
+    function renderList(selector, items, onUpdate){
+      var container = document.querySelector(selector);
+      if(!container) return;
+      container.innerHTML = '';
+      items.forEach(function(item, i){
+        var row = document.createElement('div');
+        row.className = 'check';
+        row.innerHTML = `
+          <div class="move-btns">
+            <div class="move-handle" draggable="true" data-index="${i}">
+              <span></span>
+            </div>
+          </div>
+          <input type="text" class="tiny" value="${item.code||''}" placeholder="Code" />
+          <button class="info-btn" title="${item.info||''}"></button>
+          <input type="text" class="label-input" value="${item.text}" placeholder="Prüfpunkt..." />
+          <input type="text" class="note" value="${item.note||''}" placeholder="Bemerkung..." />
+          <input type="checkbox" ${item.ok?'checked':''} />
+          <div class="manage">
+            <button class="btn icon tiny del">✕</button>
+          </div>
+        `;
+
+        var codeInput = row.querySelector('.tiny');
+        var labelInput = row.querySelector('.label-input');
+        var noteInput = row.querySelector('.note');
+        var checkbox = row.querySelector('input[type="checkbox"]');
+        var delBtn = row.querySelector('.del');
+
+        codeInput.oninput = function(){ item.code = codeInput.value; onUpdate(); };
+        labelInput.oninput = function(){ item.text = labelInput.value; onUpdate(); };
+        noteInput.oninput = function(){ item.note = noteInput.value; onUpdate(); };
+        checkbox.onchange = function(){ item.ok = checkbox.checked; onUpdate(); };
+        delBtn.onclick = function(){ items.splice(i, 1); renderList(selector, items, onUpdate); onUpdate(); };
+
+        // Drag & Drop
+        var handle = row.querySelector('.move-handle');
+        handle.ondragstart = function(e){ e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain', i); };
+        row.ondragover = function(e){ e.preventDefault(); e.dataTransfer.dropEffect='move'; };
+        row.ondrop = function(e){
+          e.preventDefault();
+          var from = parseInt(e.dataTransfer.getData('text/plain'));
+          var to = i;
+          if(from !== to){
+            var item = items.splice(from, 1)[0];
+            items.splice(to, 0, item);
+            renderList(selector, items, onUpdate);
+            onUpdate();
+          }
         };
-        r.readAsDataURL(file);
+
+        container.appendChild(row);
       });
     }
 
-    /* ===== Gruppen Render ===== */
+    /* Collapse */
+    function initCollapsibles(){
+      $$('.section.collapsible').forEach(function(section){
+        var btn = section.querySelector('.collapse-btn');
+        if(!btn) return;
+        btn.onclick = function(){
+          section.classList.toggle('collapsed');
+          btn.textContent = section.classList.contains('collapsed') ? '+' : '−';
+        };
+      });
+    }
+
+    /* Gruppen rendern */
     function drawGroups(){
-      var host = document.getElementById('groupsHost'); host.innerHTML='';
+      var host = document.getElementById('groupsContainer');
+      if(!host) return;
+      host.innerHTML = '';
+
+      if(!appState.groups || appState.groups.length === 0){
+        appState.groups = [{ id: Date.now(), title:'Gruppe 1', enabled:true, collapsed:false, sections:[] }];
+      }
+
       appState.groups.forEach(function(g, gIdx){
-        var group=document.createElement('div'); group.className='group'+(g.enabled===false?' disabled':'');
+        var group = document.createElement('div');
+        group.className = 'group';
+        if(!g.enabled) group.classList.add('disabled');
+        if(g.collapsed) group.classList.add('collapsed');
 
-        var header=document.createElement('div'); header.className='group-header';
-        var titleWrap=document.createElement('div'); titleWrap.className='group-title';
-        var title=document.createElement('input'); title.value=g.title||('Gruppe '+(gIdx+1));
-        title.onchange=function(){ g.title=title.value; sync(); };
-        var chip=document.createElement('span'); chip.className='chip'; chip.textContent='Gruppe '+(gIdx+1);
-        titleWrap.appendChild(title); titleWrap.appendChild(chip);
-
-        var tools=document.createElement('div'); tools.className='group-tools';
-        var btnSel=document.createElement('button'); btnSel.className='btn'; btnSel.textContent='Auswählen'; btnSel.onclick=function(){ currentGroupIndex=gIdx; alert('Aktive Gruppe: '+(g.title||('Gruppe '+(gIdx+1)))); };
-        var btnDup=document.createElement('button'); btnDup.className='btn'; btnDup.textContent='Duplizieren';
-        btnDup.onclick=function(){ var copy=clone(g); copy.id=Date.now()+Math.random(); copy.title=(g.title||('Gruppe '+(gIdx+1)))+' (Kopie)'; appState.groups.splice(gIdx+1,0,copy); currentGroupIndex=gIdx+1; drawGroups(); sync(); };
-        var btnDel=document.createElement('button'); btnDel.className='btn danger'; btnDel.textContent='Löschen';
-        btnDel.onclick=function(){ if(confirm('Gruppe löschen?')){ appState.groups.splice(gIdx,1); currentGroupIndex=0; drawGroups(); sync(); } };
-        var btnToggle=document.createElement('button'); btnToggle.className='btn'; btnToggle.textContent=(g.enabled===false?'Aktivieren':'Deaktivieren');
-        btnToggle.onclick=function(){ g.enabled = !(g.enabled!==false); drawGroups(); sync(); };
-
-        tools.appendChild(btnSel); tools.appendChild(btnDup); tools.appendChild(btnDel); tools.appendChild(btnToggle);
-        header.appendChild(titleWrap); header.appendChild(tools);
-        group.appendChild(header);
-
-        // Abschnitte rendern
-        (g.sections||[]).forEach(function(s, sIdx){
-          var sectionDiv=document.createElement('div'); sectionDiv.className='section';
-          if(s.type==='checklist') renderChecklistSection(sectionDiv, s, g.sections, sIdx);
-          else if(s.type==='spacing') renderSpacingSection(sectionDiv, s, g.sections, sIdx);
-          else if(s.type==='text') renderTextSection(sectionDiv, s, g.sections, sIdx);
-          else if(s.type==='image') renderImageSection(sectionDiv, s, g.sections, sIdx);
-          group.appendChild(sectionDiv);
+        var header = document.createElement('div');
+        header.className = 'group-header';
+        
+        var titleSection = document.createElement('div');
+        titleSection.className = 'group-title-section';
+        
+        var collapseBtn = document.createElement('div');
+        collapseBtn.className = 'group-collapse-btn';
+        collapseBtn.onclick = function(e){
+          e.stopPropagation();
+          g.collapsed = !g.collapsed;
+          drawGroups();
+          sync();
+        };
+        
+        var titleInput = document.createElement('input');
+        titleInput.type = 'text';
+        titleInput.className = 'group-title-input';
+        titleInput.value = g.title || 'Gruppe ' + (gIdx + 1);
+        titleInput.placeholder = 'Gruppenname...';
+        titleInput.oninput = function(e){
+          e.stopPropagation();
+          g.title = titleInput.value;
+          sync();
+        };
+        titleInput.onclick = function(e){ e.stopPropagation(); };
+        
+        titleSection.appendChild(collapseBtn);
+        titleSection.appendChild(titleInput);
+        
+        var actions = document.createElement('div');
+        actions.className = 'group-actions';
+        
+        var toggleBtn = document.createElement('div');
+        toggleBtn.className = 'group-toggle' + (g.enabled ? ' active' : '');
+        toggleBtn.textContent = g.enabled ? '✓ Aktiviert' : '✗ Deaktiviert';
+        toggleBtn.onclick = function(e){
+          e.stopPropagation();
+          g.enabled = !g.enabled;
+          drawGroups();
+          sync();
+        };
+        
+        var duplicateBtn = document.createElement('div');
+        duplicateBtn.className = 'group-btn duplicate';
+        duplicateBtn.title = 'Gruppe duplizieren';
+        duplicateBtn.onclick = function(e){
+          e.stopPropagation();
+          var newGroup = clone(g);
+          newGroup.id = Date.now() + Math.random();
+          newGroup.title = g.title + ' (Kopie)';
+          appState.groups.splice(gIdx + 1, 0, newGroup);
+          drawGroups();
+          sync();
+        };
+        
+        var deleteBtn = document.createElement('div');
+        deleteBtn.className = 'group-btn delete';
+        deleteBtn.title = 'Gruppe löschen';
+        deleteBtn.onclick = function(e){
+          e.stopPropagation();
+          if(confirm('Gruppe "' + g.title + '" wirklich löschen?')){
+            appState.groups.splice(gIdx, 1);
+            drawGroups();
+            sync();
+          }
+        };
+        
+        actions.appendChild(toggleBtn);
+        actions.appendChild(duplicateBtn);
+        actions.appendChild(deleteBtn);
+        
+        header.appendChild(titleSection);
+        header.appendChild(actions);
+        
+        var content = document.createElement('div');
+        content.className = 'group-content';
+        
+        if(!g.sections) g.sections = [];
+        
+        g.sections.forEach(function(s, sIdx){
+          var sectionDiv = document.createElement('div');
+          sectionDiv.className = 'section';
+          
+          if(s.type === 'checklist') renderChecklistSection(sectionDiv, s, g.sections, sIdx);
+          else if(s.type === 'spacing') renderSpacingSection(sectionDiv, s, g.sections, sIdx);
+          else if(s.type === 'text') renderTextSection(sectionDiv, s, g.sections, sIdx);
+          else if(s.type === 'image') renderImageSection(sectionDiv, s, g.sections, sIdx);
+          
+          content.appendChild(sectionDiv);
         });
-
+        
+        var addSection = document.createElement('div');
+        addSection.className = 'group-add-section';
+        var addBtn = document.createElement('button');
+        addBtn.className = 'btn';
+        addBtn.innerHTML = '➕ Abschnitt hinzufügen';
+        addBtn.onclick = function(){
+          currentGroupIndex = gIdx;
+          addDynamicSection();
+        };
+        addSection.appendChild(addBtn);
+        content.appendChild(addSection);
+        
+        group.appendChild(header);
+        group.appendChild(content);
         host.appendChild(group);
       });
 
-      updatePageGuides(); // Guides nach jedem Render neu berechnen
-      initCollapsibles(); // Collapse-Buttons verdrahten
+      updatePageBreaks();
+      initCollapsibles();
     }
 
-    /* ===== Abschnitte hinzufügen (Modal) ===== */
-    var pendingSectionCallback=null;
-    function showSectionTypeModal(cb){ pendingSectionCallback=cb; $('#sectionTypeModal').style.display='flex'; }
-    function closeSectionTypeModal(){ $('#sectionTypeModal').style.display='none'; pendingSectionCallback=null; }
-    $('#sectionTypeClose').onclick = closeSectionTypeModal;
-    $('#sectionTypeModal').addEventListener('click', function(e){ if(e.target===this) closeSectionTypeModal(); });
-    document.addEventListener('DOMContentLoaded', function(){
-      $$('.section-type-card').forEach(function(card){
-        card.onclick=function(e){
-          e.preventDefault(); e.stopPropagation();
-          var type=card.getAttribute('data-type');
-          if(pendingSectionCallback){ var cb=pendingSectionCallback; closeSectionTypeModal(); cb(type); } else { closeSectionTypeModal(); }
+    /* Checklisten-Abschnitt */
+    function renderChecklistSection(host, section, sections, sIdx){
+      var header = document.createElement('div');
+      header.className = 'section-header';
+      header.innerHTML = `
+        <div class="row">
+          <div class="title-wrap">
+            <button class="collapse-btn">−</button>
+            <input type="text" value="${section.title||'Checkliste'}" placeholder="Titel..." 
+                   style="border:1px solid transparent;background:transparent;font-weight:700;color:var(--primary);font-size:18px;padding:4px 6px;border-radius:8px" />
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn icon">+ Zeile</button>
+            <button class="btn icon del">✕</button>
+          </div>
+        </div>
+      `;
+      
+      var titleInput = header.querySelector('input');
+      titleInput.oninput = function(){ section.title = titleInput.value; sync(); };
+      
+      var addBtn = header.querySelector('.btn.icon:not(.del)');
+      addBtn.onclick = function(){
+        if(!section.rows) section.rows = [];
+        section.rows.push({text:'Neuer Punkt', ok:false, note:''});
+        renderChecklistSection(host, section, sections, sIdx);
+        sync();
+      };
+      
+      var delBtn = header.querySelector('.btn.del');
+      delBtn.onclick = function(){
+        if(confirm('Abschnitt löschen?')){
+          sections.splice(sIdx, 1);
+          drawGroups();
+          sync();
+        }
+      };
+      
+      var body = document.createElement('div');
+      body.className = 'section-body';
+      var list = document.createElement('div');
+      list.className = 'list';
+      
+      if(!section.rows) section.rows = [];
+      section.rows.forEach(function(row, rIdx){
+        var rowDiv = document.createElement('div');
+        rowDiv.className = 'check';
+        rowDiv.innerHTML = `
+          <input type="text" class="label-input" value="${row.text}" placeholder="Punkt..." />
+          <input type="text" class="note" value="${row.note||''}" placeholder="Bemerkung..." />
+          <input type="checkbox" ${row.ok?'checked':''} />
+          <button class="btn icon tiny del">✕</button>
+        `;
+        
+        var labelInput = rowDiv.querySelector('.label-input');
+        var noteInput = rowDiv.querySelector('.note');
+        var checkbox = rowDiv.querySelector('input[type="checkbox"]');
+        var delRowBtn = rowDiv.querySelector('.del');
+        
+        labelInput.oninput = function(){ row.text = labelInput.value; sync(); };
+        noteInput.oninput = function(){ row.note = noteInput.value; sync(); };
+        checkbox.onchange = function(){ row.ok = checkbox.checked; sync(); };
+        delRowBtn.onclick = function(){
+          section.rows.splice(rIdx, 1);
+          renderChecklistSection(host, section, sections, sIdx);
+          sync();
+        };
+        
+        list.appendChild(rowDiv);
+      });
+      
+      body.appendChild(list);
+      host.innerHTML = '';
+      host.appendChild(header);
+      host.appendChild(body);
+      
+      var collapseBtn = header.querySelector('.collapse-btn');
+      collapseBtn.onclick = function(){
+        host.classList.toggle('collapsed');
+        collapseBtn.textContent = host.classList.contains('collapsed') ? '+' : '−';
+      };
+    }
+
+    /* Abstand-Abschnitt */
+    function renderSpacingSection(host, section, sections, sIdx){
+      if(!section.heightCm) section.heightCm = 5;
+      
+      var header = document.createElement('div');
+      header.className = 'section-header';
+      header.innerHTML = `
+        <div class="row">
+          <h2>Abstand</h2>
+          <button class="btn icon del">✕</button>
+        </div>
+      `;
+      
+      var delBtn = header.querySelector('.del');
+      delBtn.onclick = function(){
+        if(confirm('Abschnitt löschen?')){
+          sections.splice(sIdx, 1);
+          drawGroups();
+          sync();
+        }
+      };
+      
+      var body = document.createElement('div');
+      body.className = 'section-body';
+      body.innerHTML = `
+        <div class="spacing-section">
+          <div class="controls">
+            <label style="margin:0">Höhe (cm):</label>
+            <input type="number" value="${section.heightCm}" min="1" max="20" style="width:80px" />
+          </div>
+          <div class="preview" style="height:${section.heightCm * 10}px">↕ ${section.heightCm} cm Abstand</div>
+        </div>
+      `;
+      
+      var heightInput = body.querySelector('input[type="number"]');
+      var preview = body.querySelector('.preview');
+      heightInput.oninput = function(){
+        section.heightCm = parseFloat(heightInput.value) || 5;
+        preview.style.height = (section.heightCm * 10) + 'px';
+        preview.textContent = '↕ ' + section.heightCm + ' cm Abstand';
+        sync();
+      };
+      
+      host.innerHTML = '';
+      host.appendChild(header);
+      host.appendChild(body);
+    }
+
+    /* Text-Abschnitt */
+    function renderTextSection(host, section, sections, sIdx){
+      if(!section.content) section.content = '';
+      
+      var header = document.createElement('div');
+      header.className = 'section-header';
+      header.innerHTML = `
+        <div class="row">
+          <input type="text" value="${section.title||'Text'}" placeholder="Titel..." 
+                 style="border:1px solid transparent;background:transparent;font-weight:700;color:var(--primary);font-size:18px;padding:4px 6px;border-radius:8px" />
+          <button class="btn icon del">✕</button>
+        </div>
+      `;
+      
+      var titleInput = header.querySelector('input');
+      titleInput.oninput = function(){ section.title = titleInput.value; sync(); };
+      
+      var delBtn = header.querySelector('.del');
+      delBtn.onclick = function(){
+        if(confirm('Abschnitt löschen?')){
+          sections.splice(sIdx, 1);
+          drawGroups();
+          sync();
+        }
+      };
+      
+      var body = document.createElement('div');
+      body.className = 'section-body';
+      body.innerHTML = `
+        <div class="text-section">
+          <div class="text-editor-toolbar">
+            <button data-cmd="bold"><strong>B</strong></button>
+            <button data-cmd="italic"><em>I</em></button>
+            <button data-cmd="underline"><u>U</u></button>
+          </div>
+          <div class="text-editor-content" contenteditable="true">${section.content}</div>
+        </div>
+      `;
+      
+      var editor = body.querySelector('.text-editor-content');
+      var toolbar = body.querySelector('.text-editor-toolbar');
+      
+      editor.oninput = function(){
+        section.content = editor.innerHTML;
+        sync();
+      };
+      
+      toolbar.querySelectorAll('button').forEach(function(btn){
+        btn.onclick = function(){
+          document.execCommand(btn.getAttribute('data-cmd'), false, null);
+          editor.focus();
         };
       });
+      
+      host.innerHTML = '';
+      host.appendChild(header);
+      host.appendChild(body);
+    }
+
+    /* Bild-Abschnitt */
+    function renderImageSection(host, section, sections, sIdx){
+      if(!section.images) section.images = [];
+      
+      var header = document.createElement('div');
+      header.className = 'section-header';
+      header.innerHTML = `
+        <div class="row">
+          <input type="text" value="${section.title||'Bilder'}" placeholder="Titel..." 
+                 style="border:1px solid transparent;background:transparent;font-weight:700;color:var(--primary);font-size:18px;padding:4px 6px;border-radius:8px" />
+          <button class="btn icon del">✕</button>
+        </div>
+      `;
+      
+      var titleInput = header.querySelector('input');
+      titleInput.oninput = function(){ section.title = titleInput.value; sync(); };
+      
+      var delBtn = header.querySelector('.del');
+      delBtn.onclick = function(){
+        if(confirm('Abschnitt löschen?')){
+          sections.splice(sIdx, 1);
+          drawGroups();
+          sync();
+        }
+      };
+      
+      var body = document.createElement('div');
+      body.className = 'section-body';
+      body.innerHTML = `
+        <div class="image-section">
+          <div class="image-upload-zone">
+            📸 Klicken oder Bilder hierher ziehen
+            <input type="file" accept="image/*" multiple style="display:none" />
+          </div>
+          <div class="image-preview"></div>
+        </div>
+      `;
+      
+      var zone = body.querySelector('.image-upload-zone');
+      var fileInput = zone.querySelector('input[type="file"]');
+      var preview = body.querySelector('.image-preview');
+      
+      zone.onclick = function(){ fileInput.click(); };
+      
+      zone.ondragover = function(e){
+        e.preventDefault();
+        zone.classList.add('dragover');
+      };
+      zone.ondragleave = function(){ zone.classList.remove('dragover'); };
+      zone.ondrop = function(e){
+        e.preventDefault();
+        zone.classList.remove('dragover');
+        handleFiles(e.dataTransfer.files);
+      };
+      
+      fileInput.onchange = function(){ handleFiles(fileInput.files); };
+      
+      function handleFiles(files){
+        Array.from(files).forEach(function(file){
+          if(!file.type.startsWith('image/')) return;
+          var reader = new FileReader();
+          reader.onload = function(e){
+            section.images.push(e.target.result);
+            renderImageSection(host, section, sections, sIdx);
+            sync();
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+      
+      section.images.forEach(function(src, imgIdx){
+        var item = document.createElement('div');
+        item.className = 'image-preview-item';
+        item.innerHTML = `
+          <img src="${src}" />
+          <button class="delete-btn">✕</button>
+        `;
+        var delImgBtn = item.querySelector('.delete-btn');
+        delImgBtn.onclick = function(){
+          section.images.splice(imgIdx, 1);
+          renderImageSection(host, section, sections, sIdx);
+          sync();
+        };
+        preview.appendChild(item);
+      });
+      
+      host.innerHTML = '';
+      host.appendChild(header);
+      host.appendChild(body);
+    }
+
+    /* Modal */
+    var pendingSectionCallback = null;
+    function showSectionTypeModal(cb){
+      pendingSectionCallback = cb;
+      $('#sectionTypeModal').classList.add('active');
+    }
+    function closeSectionTypeModal(){
+      $('#sectionTypeModal').classList.remove('active');
+      pendingSectionCallback = null;
+    }
+    
+    $('#sectionTypeClose').onclick = closeSectionTypeModal;
+    $('#sectionTypeModal').onclick = function(e){
+      if(e.target === this) closeSectionTypeModal();
+    };
+    
+    $$('.section-type-card').forEach(function(card){
+      card.onclick = function(){
+        var type = card.getAttribute('data-type');
+        if(pendingSectionCallback){
+          var cb = pendingSectionCallback;
+          closeSectionTypeModal();
+          cb(type);
+        }
+      };
     });
 
     function addDynamicSection(){
       showSectionTypeModal(function(type){
-        var g = appState.groups[currentGroupIndex] || (appState.groups[0]);
-        if(!g) { appState.groups=[{id:Date.now(), title:'Gruppe 1', enabled:true, sections:[]}]; g=appState.groups[0]; }
-        var section={ type:type||'checklist', title:'Neuer Abschnitt', id:Date.now(), _collapsed:false };
-        if(section.type==='checklist') section.rows=[];
-        if(section.type==='spacing') section.heightCm=5;
-        if(section.type==='text') section.content='';
-        if(section.type==='image') section.images=[];
-        (g.sections||(g.sections=[])).push(section);
-        drawGroups(); sync();
+        var g = appState.groups[currentGroupIndex];
+        if(!g){
+          appState.groups = [{ id: Date.now(), title:'Gruppe 1', enabled:true, collapsed:false, sections:[] }];
+          g = appState.groups[0];
+          currentGroupIndex = 0;
+        }
+        
+        var section = {
+          type: type || 'checklist',
+          title: 'Neuer Abschnitt',
+          id: Date.now()
+        };
+        
+        if(section.type === 'checklist') section.rows = [];
+        if(section.type === 'spacing') section.heightCm = 5;
+        if(section.type === 'text') section.content = '';
+        if(section.type === 'image') section.images = [];
+        
+        if(!g.sections) g.sections = [];
+        g.sections.push(section);
+        
+        drawGroups();
+        sync();
       });
     }
 
-    /* ===== Seiten-Guides (A4) —— Fix ===== */
-    var guidesOn=false;
-    function updatePageGuides(){
-      var host = document.getElementById('pageGuides');
-      if(!host) return;
-      host.innerHTML = '';
-      if(!guidesOn) return;
+    /* Seitenumbruch-Markierungen */
+    var pageBreaksOn = false;
+    function updatePageBreaks(){
+      var container = document.getElementById('pageBreakMarkers');
+      if(!container) return;
+      container.innerHTML = '';
+      if(!pageBreaksOn) return;
 
       var contentEl = document.getElementById('app');
       var totalH = Math.max(contentEl.scrollHeight, contentEl.offsetHeight);
-      host.style.height = totalH + 'px';
-
-      var pageHeightPx = 1032; // ~A4 Nutzfläche bei 12mm Rand
+      
+      var pageHeightPx = 1032;
       var count = Math.floor(totalH / pageHeightPx);
-      for(var i=1;i<=count;i++){
+      
+      for(var i = 1; i <= count; i++){
         var y = i * pageHeightPx;
-        var line = document.createElement('div'); line.className='line'; line.style.top = y + 'px';
-        var tag  = document.createElement('div'); tag.className='tag';  tag.style.top = y + 'px';
-        tag.textContent = 'Seitenumbruch ('+i+')';
-        host.appendChild(line); host.appendChild(tag);
+        
+        var line = document.createElement('div');
+        line.className = 'page-break-line';
+        line.style.top = y + 'px';
+        
+        var label = document.createElement('div');
+        label.className = 'page-break-label';
+        label.style.top = y + 'px';
+        label.textContent = 'Seite ' + (i + 1);
+        
+        container.appendChild(line);
+        container.appendChild(label);
       }
     }
 
-    /* ===== Init ===== */
+    /* Init */
     function addKV(){ appState.kv.push({text:'Neue KV-Anforderung', ok:false, note:'', code:'', info:''}); renderAll(); sync(); }
     function addIQ(){ appState.iq.push({text:'Neue IQ-Prüfung', ok:false, note:'', code:'', info:''}); renderAll(); sync(); }
     function addOQ(){ appState.oq.push({text:'Neue OQ-Prüfung', ok:false, note:'', code:'', info:''}); renderAll(); sync(); }
@@ -888,50 +1478,119 @@
 
     function initAll(){
       // Menü
-      var btn=$('#hamburgerBtn'), menu=$('#hamburgerMenu');
+      var btn = $('#hamburgerBtn');
+      var menu = $('#hamburgerMenu');
       if(btn && menu){
-        btn.onclick=function(e){ e.stopPropagation(); btn.classList.toggle('active'); menu.classList.toggle('active'); };
-        document.addEventListener('click', function(e){ var inside=menu.contains(e.target), hb=btn.contains(e.target); if(!inside && !hb){ btn.classList.remove('active'); menu.classList.remove('active'); } });
+        btn.onclick = function(e){
+          e.stopPropagation();
+          btn.classList.toggle('active');
+          menu.classList.toggle('active');
+        };
+        document.addEventListener('click', function(e){
+          if(!menu.contains(e.target) && !btn.contains(e.target)){
+            btn.classList.remove('active');
+            menu.classList.remove('active');
+          }
+        });
       }
+
       // Laden / Defaults
       if(!loadState()){
-        appState.kv = clone(defaultKV); appState.iq = clone(iqItems); appState.oq = clone(oqItems);
-        appState.groups = [{ id: Date.now(), title:'Gruppe 1', enabled:true, sections:[] }];
+        appState.kv = clone(defaultKV);
+        appState.iq = clone(iqItems);
+        appState.oq = clone(oqItems);
+        appState.groups = [{ id: Date.now(), title:'Gruppe 1', enabled:true, collapsed:false, sections:[] }];
       }
       renderAll();
       $('#stamp').textContent = (new Date()).toLocaleString('de-DE');
 
       // Buttons
-      $('#btnSave').onclick=exportJSON;
-      $('#btnLoad').onclick=importJSON;
-      $('#btnPDF').onclick=function(){ btn.classList.remove('active'); menu.classList.remove('active'); window.print(); };
-      $('#btnReset').onclick=resetAll;
-      $('#btnNewSectionMenu').onclick=function(e){ e.preventDefault(); e.stopPropagation(); addDynamicSection(); setTimeout(function(){ btn.classList.remove('active'); menu.classList.remove('active'); }, 100); };
-      $('#btnNewGroup').onclick=function(){ appState.groups.push({ id: Date.now()+Math.random(), title:'Neue Gruppe', enabled:true, sections:[] }); currentGroupIndex = appState.groups.length-1; drawGroups(); sync(); };
-      document.getElementById('btnGuides').onclick = function(){
-        guidesOn = !guidesOn;
-        var overlay = document.getElementById('pageGuides');
-        overlay.classList.toggle('hidden', !guidesOn);
-        document.getElementById('guideState').textContent = guidesOn ? 'An' : 'Aus';
+      $('#btnSave').onclick = exportJSON;
+      $('#btnLoad').onclick = importJSON;
+      $('#btnPDF').onclick = function(){
+        btn.classList.remove('active');
+        menu.classList.remove('active');
+        window.print();
+      };
+      $('#btnReset').onclick = resetAll;
+      $('#btnNewSectionMenu').onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        addDynamicSection();
+        setTimeout(function(){
+          btn.classList.remove('active');
+          menu.classList.remove('active');
+        }, 100);
+      };
+      $('#btnNewGroup').onclick = function(){
+        appState.groups.push({
+          id: Date.now() + Math.random(),
+          title: 'Neue Gruppe',
+          enabled: true,
+          collapsed: false,
+          sections: []
+        });
+        currentGroupIndex = appState.groups.length - 1;
+        drawGroups();
+        sync();
+      };
+      
+      $('#btnPageBreaks').onclick = function(){
+        pageBreaksOn = !pageBreaksOn;
+        var overlay = $('#pageBreakMarkers');
+        overlay.classList.toggle('hidden', !pageBreaksOn);
+        $('#pageBreakState').textContent = pageBreaksOn ? 'An' : 'Aus';
         requestAnimationFrame(function(){
-          updatePageGuides();
-          requestAnimationFrame(updatePageGuides);
+          updatePageBreaks();
+          requestAnimationFrame(updatePageBreaks);
         });
       };
 
-      // Signaturen
-      initSignature('sigValidierer'); initSignature('sigBetreiber');
+      // Signaturen (Canvas)
+      initSignature('sigValidierer');
+      initSignature('sigBetreiber');
 
       // Clear-Buttons Signatur
-      $$('.sig-controls [data-clear]').forEach(function(b){ b.addEventListener('click', function(){ clearSignature(b.getAttribute('data-clear')); }); });
+      $$('.sig-controls [data-clear]').forEach(function(b){
+        b.addEventListener('click', function(){
+          clearSignature(b.getAttribute('data-clear'));
+        });
+      });
 
-      // Guides neu berechnen bei Resize/Mutationen
-      if(window.ResizeObserver){ new ResizeObserver(updatePageGuides).observe(document.getElementById('app')); }
-      window.addEventListener('resize', updatePageGuides);
-      new MutationObserver(function(){ if(guidesOn) updatePageGuides(); }).observe(document.getElementById('app'), {childList:true,subtree:true});
+      // Clear-Buttons Textarea
+      $$('[data-clear-text]').forEach(function(b){
+        b.addEventListener('click', function(){
+          var id = b.getAttribute('data-clear-text');
+          var el = document.getElementById(id);
+          if(el) el.value = '';
+          sync();
+        });
+      });
+
+      // Input-Sync
+      formFields.forEach(function(id){
+        var el = document.getElementById(id);
+        if(el){
+          if(el.type === 'checkbox') el.onchange = sync;
+          else el.oninput = sync;
+        }
+      });
+
+      // Page Breaks
+      if(window.ResizeObserver){
+        new ResizeObserver(updatePageBreaks).observe($('#app'));
+      }
+      window.addEventListener('resize', updatePageBreaks);
+      new MutationObserver(function(){
+        if(pageBreaksOn) updatePageBreaks();
+      }).observe($('#app'), {childList:true, subtree:true});
     }
 
-    if(document.readyState==='loading'){ window.addEventListener('DOMContentLoaded', initAll); } else { initAll(); }
+    if(document.readyState === 'loading'){
+      window.addEventListener('DOMContentLoaded', initAll);
+    } else {
+      initAll();
+    }
   </script>
 </body>
 </html>
