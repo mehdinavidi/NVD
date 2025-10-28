@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – v3.2 Final</title>
+  <title>CL Validierungsprotokoll – v3.3 Fixed</title>
   <style>
     :root{
       --primary:#8B1538; --bg:#F8F9FB; --text:#1E2434; --card:#ffffff; --muted:#e9edf3;
@@ -13,7 +13,6 @@
     html,body{height:100%}
     body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
     
-    /* Normale Container - KEINE A4-Optik */
     .container{max-width:1100px;margin:0 auto;padding:16px;padding-top:80px;position:relative}
     .sheet{background:var(--card);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.08);overflow:visible;position:relative}
     
@@ -95,11 +94,11 @@
     input[type="text"]:focus,input[type="date"]:focus,input[type="number"]:focus,textarea:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(139,21,56,.1)}
     textarea{min-height:80px;resize:vertical}
 
-    /* Check-Zeilen */
+    /* Check-Zeilen mit Code + Move Handle */
     .list{display:flex;flex-direction:column;gap:8px}
     .check{display:flex;gap:10px;align-items:center;padding:8px 10px;border:1px solid #e5e7eb;border-radius:10px;min-height:40px}
     .check .move-btns{margin-right:4px}
-    .check .tiny{width:36px;height:28px;padding:4px 6px;font-size:12px;text-align:center}
+    .check .tiny{width:60px;height:28px;padding:4px 6px;font-size:12px;text-align:center}
     .check .info-btn{width:26px;height:26px;display:grid;place-items:center;border:1px solid #cbd5e1;border-radius:50%;cursor:pointer;background:#fff;font-weight:700;color:#334155;line-height:1}
     .check .info-btn:before{content:'i'}
     .check .label-input{
@@ -366,7 +365,9 @@
       }
       
       body {
-        background: #fff !important;
+        background: #F8F9FB !important;
+        padding: 0;
+        margin: 0;
       }
       
       .container {
@@ -376,9 +377,9 @@
       }
       
       .sheet {
-        box-shadow: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,.08);
         border-radius: 16px;
-        background: var(--card);
+        background: #ffffff;
       }
       
       /* Verstecke NUR Steuerelemente */
@@ -396,7 +397,9 @@
       .check .del,
       .section-header .btn.icon,
       .sig-controls button,
-      .collapse-btn {
+      .collapse-btn,
+      .image-preview-item .delete-btn,
+      .text-editor-toolbar button {
         display: none !important;
       }
       
@@ -411,9 +414,9 @@
         display: block !important;
       }
       
-      /* BEHALTE ALLE STYLES 1:1 */
+      /* EXAKTE KOPIE DER UI-STYLES */
       header {
-        background: var(--primary);
+        background: #8B1538;
         color: #fff;
         padding: 16px 20px;
       }
@@ -435,7 +438,7 @@
       
       .section {
         padding: 18px 20px;
-        border-top: 1px solid var(--muted);
+        border-top: 1px solid #e9edf3;
         page-break-inside: avoid;
       }
       
@@ -443,13 +446,16 @@
         background: #f8f9fb;
         padding: 12px 16px;
         margin: -18px -20px 16px -20px;
-        border-bottom: 2px solid var(--primary);
+        border-bottom: 2px solid #8B1538;
       }
       
       .check {
         border: 1px solid #e5e7eb;
         border-radius: 10px;
         padding: 8px 10px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
       }
       
       .spacing-section {
@@ -466,11 +472,34 @@
         padding: 12px;
       }
       
+      .text-editor-toolbar {
+        background: #f8f9fb;
+        border: 1px solid #e5e7eb;
+        padding: 8px;
+        border-radius: 6px 6px 0 0;
+      }
+      
+      .text-editor-content {
+        padding: 12px;
+        border: 1px solid #e5e7eb;
+        border-top: none;
+        border-radius: 0 0 6px 6px;
+        background: #fff;
+      }
+      
       .image-section {
         background: #fff;
         border: 1px solid #e5e7eb;
         border-radius: 8px;
         padding: 12px;
+      }
+      
+      .image-upload-zone {
+        border: 2px dashed #cbd5e1;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        background: #f8f9fb;
       }
       
       .sig-area {
@@ -480,7 +509,7 @@
         background: #f8f9fb;
       }
       
-      /* Behalte alle Farben und Borders */
+      /* Behalte alle Input-Styles */
       input[type="text"],
       input[type="date"],
       input[type="number"],
@@ -489,27 +518,35 @@
         border: 1px solid #d1d5db;
         border-radius: 10px;
         background: #fff;
+        padding: 10px;
       }
       
       .group-title-input {
         background: rgba(255,255,255,0.15);
         color: #fff;
         border: none;
+        padding: 8px 12px;
+        border-radius: 8px;
       }
       
-      .image-preview-item .delete-btn {
-        display: none !important;
+      .check .tiny {
+        width: 60px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 4px 6px;
+        text-align: center;
       }
       
-      /* Behalte Text-Editor Toolbar sichtbar */
-      .text-editor-toolbar {
-        background: #f8f9fb;
-        border: 1px solid #e5e7eb;
-        padding: 8px;
+      .check .label-input {
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 6px 8px;
       }
       
-      .text-editor-toolbar button {
-        display: none !important;
+      .check .note {
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 6px 8px;
       }
     }
 
@@ -550,7 +587,7 @@
       <header>
         <div>
           <div class="title">CL Validierungsprotokoll</div>
-          <div class="version">Version 3.2 – Verschiebbare Gruppen</div>
+          <div class="version">Version 3.3 – Fixed</div>
         </div>
         <div style="text-align:right;font-size:12px">
           <div>Erstellt: <span id="stamp"></span></div>
@@ -824,12 +861,12 @@
           else appState[k] = el.value;
         }
       });
-      localStorage.setItem('validierung_v3_final', JSON.stringify(appState));
+      localStorage.setItem('validierung_v3_fixed', JSON.stringify(appState));
     }
 
     function loadState(){
       try{
-        var stored = localStorage.getItem('validierung_v3_final');
+        var stored = localStorage.getItem('validierung_v3_fixed');
         if(!stored) return false;
         var data = JSON.parse(stored);
         Object.assign(appState, data);
@@ -875,11 +912,11 @@
 
     function resetAll(){
       if(!confirm('Alle Daten löschen?')) return;
-      localStorage.removeItem('validierung_v3_final');
+      localStorage.removeItem('validierung_v3_fixed');
       location.reload();
     }
 
-    /* Listen (KV/IQ/OQ) */
+    /* Listen (KV/IQ/OQ) mit Code + Move Handle + funktionierendem Delete */
     function renderList(selector, items, onUpdate){
       var container = document.querySelector(selector);
       if(!container) return;
@@ -913,18 +950,33 @@
         labelInput.oninput = function(){ item.text = labelInput.value; onUpdate(); };
         noteInput.oninput = function(){ item.note = noteInput.value; onUpdate(); };
         checkbox.onchange = function(){ item.ok = checkbox.checked; onUpdate(); };
-        delBtn.onclick = function(){ items.splice(i, 1); renderList(selector, items, onUpdate); onUpdate(); };
+        
+        // FIXED: Delete Button
+        delBtn.onclick = function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          items.splice(i, 1);
+          renderList(selector, items, onUpdate);
+          onUpdate();
+        };
 
+        // Drag & Drop
         var handle = row.querySelector('.move-handle');
-        handle.ondragstart = function(e){ e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain', i); };
-        row.ondragover = function(e){ e.preventDefault(); e.dataTransfer.dropEffect='move'; };
+        handle.ondragstart = function(e){ 
+          e.dataTransfer.effectAllowed='move'; 
+          e.dataTransfer.setData('text/plain', i); 
+        };
+        row.ondragover = function(e){ 
+          e.preventDefault(); 
+          e.dataTransfer.dropEffect='move'; 
+        };
         row.ondrop = function(e){
           e.preventDefault();
           var from = parseInt(e.dataTransfer.getData('text/plain'));
           var to = i;
           if(from !== to){
-            var item = items.splice(from, 1)[0];
-            items.splice(to, 0, item);
+            var movedItem = items.splice(from, 1)[0];
+            items.splice(to, 0, movedItem);
             renderList(selector, items, onUpdate);
             onUpdate();
           }
@@ -1073,10 +1125,12 @@
           sync();
         };
         
+        // FIXED: Delete Button
         var deleteBtn = document.createElement('div');
         deleteBtn.className = 'group-btn delete';
         deleteBtn.title = 'Gruppe löschen';
         deleteBtn.onclick = function(e){
+          e.preventDefault();
           e.stopPropagation();
           if(confirm('Gruppe "' + g.title + '" wirklich löschen?')){
             appState.groups.splice(gIdx, 1);
@@ -1130,7 +1184,7 @@
       initCollapsibles();
     }
 
-    /* Checklisten-Abschnitt */
+    /* Checklisten-Abschnitt mit Code + Move Handle + funktionierendem Delete */
     function renderChecklistSection(host, section, sections, sIdx){
       var header = document.createElement('div');
       header.className = 'section-header';
@@ -1142,8 +1196,8 @@
                    style="border:1px solid transparent;background:transparent;font-weight:700;color:var(--primary);font-size:18px;padding:4px 6px;border-radius:8px" />
           </div>
           <div style="display:flex;gap:8px">
-            <button class="btn icon">+ Zeile</button>
-            <button class="btn icon del">✕</button>
+            <button class="btn icon add-row-btn">+ Zeile</button>
+            <button class="btn icon del-section-btn">✕</button>
           </div>
         </div>
       `;
@@ -1151,16 +1205,21 @@
       var titleInput = header.querySelector('input');
       titleInput.oninput = function(){ section.title = titleInput.value; sync(); };
       
-      var addBtn = header.querySelector('.btn.icon:not(.del)');
-      addBtn.onclick = function(){
+      var addBtn = header.querySelector('.add-row-btn');
+      addBtn.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
         if(!section.rows) section.rows = [];
-        section.rows.push({text:'Neuer Punkt', ok:false, note:''});
+        section.rows.push({text:'Neuer Punkt', ok:false, note:'', code:''});
         renderChecklistSection(host, section, sections, sIdx);
         sync();
       };
       
-      var delBtn = header.querySelector('.btn.del');
-      delBtn.onclick = function(){
+      // FIXED: Delete Button
+      var delBtn = header.querySelector('.del-section-btn');
+      delBtn.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
         if(confirm('Abschnitt löschen?')){
           sections.splice(sIdx, 1);
           drawGroups();
@@ -1178,24 +1237,58 @@
         var rowDiv = document.createElement('div');
         rowDiv.className = 'check';
         rowDiv.innerHTML = `
+          <div class="move-btns">
+            <div class="move-handle" draggable="true">
+              <span></span>
+            </div>
+          </div>
+          <input type="text" class="tiny" value="${row.code||''}" placeholder="Code" />
           <input type="text" class="label-input" value="${row.text}" placeholder="Punkt..." />
           <input type="text" class="note" value="${row.note||''}" placeholder="Bemerkung..." />
           <input type="checkbox" ${row.ok?'checked':''} />
           <button class="btn icon tiny del">✕</button>
         `;
         
+        var codeInput = rowDiv.querySelector('.tiny');
         var labelInput = rowDiv.querySelector('.label-input');
         var noteInput = rowDiv.querySelector('.note');
         var checkbox = rowDiv.querySelector('input[type="checkbox"]');
         var delRowBtn = rowDiv.querySelector('.del');
         
+        codeInput.oninput = function(){ row.code = codeInput.value; sync(); };
         labelInput.oninput = function(){ row.text = labelInput.value; sync(); };
         noteInput.oninput = function(){ row.note = noteInput.value; sync(); };
         checkbox.onchange = function(){ row.ok = checkbox.checked; sync(); };
-        delRowBtn.onclick = function(){
+        
+        // FIXED: Delete Button
+        delRowBtn.onclick = function(e){
+          e.preventDefault();
+          e.stopPropagation();
           section.rows.splice(rIdx, 1);
           renderChecklistSection(host, section, sections, sIdx);
           sync();
+        };
+        
+        // Drag & Drop
+        var handle = rowDiv.querySelector('.move-handle');
+        handle.ondragstart = function(e){ 
+          e.dataTransfer.effectAllowed='move'; 
+          e.dataTransfer.setData('text/plain', rIdx); 
+        };
+        rowDiv.ondragover = function(e){ 
+          e.preventDefault(); 
+          e.dataTransfer.dropEffect='move'; 
+        };
+        rowDiv.ondrop = function(e){
+          e.preventDefault();
+          var from = parseInt(e.dataTransfer.getData('text/plain'));
+          var to = rIdx;
+          if(from !== to){
+            var movedRow = section.rows.splice(from, 1)[0];
+            section.rows.splice(to, 0, movedRow);
+            renderChecklistSection(host, section, sections, sIdx);
+            sync();
+          }
         };
         
         list.appendChild(rowDiv);
@@ -1226,8 +1319,11 @@
         </div>
       `;
       
+      // FIXED: Delete Button
       var delBtn = header.querySelector('.del');
-      delBtn.onclick = function(){
+      delBtn.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
         if(confirm('Abschnitt löschen?')){
           sections.splice(sIdx, 1);
           drawGroups();
@@ -1278,8 +1374,11 @@
       var titleInput = header.querySelector('input');
       titleInput.oninput = function(){ section.title = titleInput.value; sync(); };
       
+      // FIXED: Delete Button
       var delBtn = header.querySelector('.del');
-      delBtn.onclick = function(){
+      delBtn.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
         if(confirm('Abschnitt löschen?')){
           sections.splice(sIdx, 1);
           drawGroups();
@@ -1337,8 +1436,11 @@
       var titleInput = header.querySelector('input');
       titleInput.oninput = function(){ section.title = titleInput.value; sync(); };
       
+      // FIXED: Delete Button
       var delBtn = header.querySelector('.del');
-      delBtn.onclick = function(){
+      delBtn.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
         if(confirm('Abschnitt löschen?')){
           sections.splice(sIdx, 1);
           drawGroups();
@@ -1398,7 +1500,9 @@
           <button class="delete-btn">✕</button>
         `;
         var delImgBtn = item.querySelector('.delete-btn');
-        delImgBtn.onclick = function(){
+        delImgBtn.onclick = function(e){
+          e.preventDefault();
+          e.stopPropagation();
           section.images.splice(imgIdx, 1);
           renderImageSection(host, section, sections, sIdx);
           sync();
