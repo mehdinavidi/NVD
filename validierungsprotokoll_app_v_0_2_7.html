@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – v0.5.1 (Gruppen, Guides, Collapsible)</title>
+  <title>CL Validierungsprotokoll – v0.5.3</title>
   <style>
     :root{
       --primary:#8B1538; --bg:#F8F9FB; --text:#1E2434; --card:#ffffff; --muted:#e9edf3;
@@ -67,7 +67,11 @@
     .check .tiny{width:36px;height:28px;padding:4px 6px;font-size:12px;text-align:center}
     .check .info-btn{width:26px;height:26px;display:grid;place-items:center;border:1px solid #cbd5e1;border-radius:50%;cursor:pointer;background:#fff;font-weight:700;color:#334155;line-height:1}
     .check .info-btn:before{content:'i'}
-    .check .label{flex:1;line-height:1.2}
+    /* Editierbarer Text in der Zeile */
+    .check .label-input{
+      flex:1; min-width:140px; padding:6px 8px; border:1px solid #d1d5db; border-radius:8px; background:#fff; font:inherit; outline:none;
+    }
+    .check .label-input:focus{border-color:var(--primary); box-shadow:0 0 0 3px rgba(139,21,56,.10)}
     .check .note{min-width:200px;max-width:260px;font-size:12px;padding:6px 8px;height:28px}
     .check .manage{display:flex;gap:6px}
     .check .del{margin-left:4px}
@@ -129,9 +133,19 @@
     @media print{ .group.disabled { display:none!important } }
 
     /* Seiten-Guides (A4) */
-    .page-guides{position:absolute;inset:0;pointer-events:none;z-index:3000}
-    .page-guides .line{position:absolute;left:0;right:0;border-top:1px dashed var(--guide);opacity:.8}
-    .page-guides .tag{position:absolute;right:8px;transform:translateY(-50%);font-size:11px;color:#64748b;background:#ffffffaa;padding:2px 6px;border-radius:6px;border:1px solid #cbd5e1}
+    .page-guides{
+      position:absolute; inset:0; pointer-events:none; z-index:3000;
+      /* Höhe wird per JS gesetzt */
+    }
+    .page-guides .line{
+      position:absolute; left:0; right:0;
+      border-top:2px dashed rgba(148,163,184,.9);
+    }
+    .page-guides .tag{
+      position:absolute; right:8px; transform:translateY(-50%);
+      font-size:11px; color:#334155; background:rgba(255,255,255,.9);
+      padding:2px 6px; border-radius:6px; border:1px solid #cbd5e1
+    }
     .page-guides.hidden{display:none}
     @media print{ .page-guides{display:none!important} }
 
@@ -147,7 +161,7 @@
       .image-section{ border:1px solid #000 }
       .image-preview-item{ border:1px solid #000 }
       .section{ break-inside:avoid; page-break-inside:avoid }
-      /* Collapsed-UI druckt trotzdem Inhalt */
+      /* Collapsed-UI: Inhalte werden trotzdem gedruckt */
       .section.collapsed .section-body{ display:block !important }
     }
 
@@ -158,7 +172,7 @@
       .hamburger-menu{right:12px;top:70px}
     }
 
-    /* ========= Modal (Fix für Popup) ========= */
+    /* ========= Modals ========= */
     .modal-backdrop{
       position:fixed;inset:0;background:rgba(0,0,0,.35);
       display:none;align-items:center;justify-content:center;z-index:6000
@@ -199,7 +213,7 @@
       <header>
         <div>
           <div class="title">CL Validierungsprotokoll</div>
-          <div class="version">Version 0.5.1 • Gruppen, Guides, Collapsible</div>
+          <div class="version">Version 0.5.3 • Gruppen, Guides, Collapsible, Editierbare Zeilen</div>
         </div>
       </header>
 
@@ -332,7 +346,7 @@
       <div class="section">
         <div class="footer">
           <div style="font-size:12px;color:#64748b">Erstellt am: <span id="stamp"></span></div>
-          <div style="font-size:12px;color:#64748b">CL Validierungsprotokoll v0.5.1</div>
+          <div style="font-size:12px;color:#64748b">CL Validierungsprotokoll v0.5.3</div>
         </div>
       </div>
 
@@ -381,7 +395,7 @@
     function clone(o){ return JSON.parse(JSON.stringify(o)); }
 
     /* ===== State ===== */
-    var stateKey = 'clValidationAppState_v0_5_1';
+    var stateKey = 'clValidationAppState_v0_5_3';
     var modalCtx = null;
     var currentGroupIndex = 0; // aktive Gruppe fürs "Abschnitt hinzufügen"
 
@@ -441,7 +455,7 @@
 
     function collectAll(){
       return {
-        meta:{ ts:(new Date()).toISOString(), version:'0.5.1' },
+        meta:{ ts:(new Date()).toISOString(), version:'0.5.3' },
         kopf:{
           instName: $('#instName').value, instOrt: $('#instOrt').value, betreiber: $('#betreiber').value,
           produkt: $('#produkt').value, programmpaket: $('#programmpaket').value, version: $('#version').value,
@@ -506,32 +520,77 @@
     }
     function clearSignature(id){ var c=document.getElementById(id); c.getContext('2d').clearRect(0,0,c.width,c.height); }
 
-    /* ===== Zeilenbau (Checklisten) ===== */
+    /* ===== Zeilenbau (Checklisten) — EDITIERBAR ===== */
     function mkCheckRow(item, syncFn, delFn, items){
       var row=document.createElement('div'); row.className='check';
       var draggedIndex=-1; row.draggable=true;
 
+      // Drag-Handle
       var moveDiv=document.createElement('div'); moveDiv.className='move-btns';
-      var handle=document.createElement('div'); handle.className='move-handle'; handle.title='Zeile ziehen zum Verschieben'; handle.appendChild(document.createElement('span')); moveDiv.appendChild(handle);
+      var handle=document.createElement('div'); handle.className='move-handle';
+      handle.title='Zeile ziehen zum Verschieben'; handle.appendChild(document.createElement('span'));
+      moveDiv.appendChild(handle);
 
       row.ondragstart=function(e){ draggedIndex=items.indexOf(item); row.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; };
-      row.ondragend=function(){ row.classList.remove('dragging'); $$('.check').forEach(el=>el.classList.remove('drag-over')); };
+      row.ondragend=function(){ row.classList.remove('dragging'); document.querySelectorAll('.check').forEach(el=>el.classList.remove('drag-over')); };
       row.ondragover=function(e){ e.preventDefault(); row.classList.add('drag-over'); };
       row.ondragleave=function(){ row.classList.remove('drag-over'); };
-      row.ondrop=function(e){ e.stopPropagation(); row.classList.remove('drag-over'); var dropIndex=items.indexOf(item);
-        if(draggedIndex!==dropIndex && draggedIndex>-1){ var dragged=items[draggedIndex]; items.splice(draggedIndex,1); items.splice(dropIndex,0,dragged); syncFn(); } };
+      row.ondrop=function(e){
+        e.stopPropagation(); row.classList.remove('drag-over');
+        var dropIndex=items.indexOf(item);
+        if(draggedIndex!==dropIndex && draggedIndex>-1){
+          var dragged=items[draggedIndex]; items.splice(draggedIndex,1); items.splice(dropIndex,0,dragged);
+          syncFn();
+        }
+      };
 
-      var code=document.createElement('input'); code.className='tiny'; code.type='text'; code.value=item.code||''; code.onchange=function(){ item.code=code.value; syncFn(); };
-      var infoBtn=document.createElement('div'); infoBtn.className='info-btn'; infoBtn.onclick=function(){ openInfo(item, syncFn); }; if(item.info){ infoBtn.style.background='#dbeafe'; infoBtn.style.borderColor='#3b82f6'; }
-      var label=document.createElement('div'); label.className='label'; label.textContent=item.text;
+      // Spalten
+      var code=document.createElement('input');
+      code.className='tiny'; code.type='text'; code.placeholder='Code';
+      code.value=item.code||''; code.oninput=function(){ item.code=code.value; syncFn(); };
+
+      var infoBtn=document.createElement('div');
+      infoBtn.className='info-btn';
+      infoBtn.onclick=function(){ openInfo(item, syncFn); };
+      if(item.info){ infoBtn.style.background='#dbeafe'; infoBtn.style.borderColor='#3b82f6'; }
+
+      // Editierbarer Text
+      var labelInput=document.createElement('input');
+      labelInput.type='text';
+      labelInput.className='label-input';
+      labelInput.placeholder='Text der Anforderung / Prüfung';
+      labelInput.value=(item.text||'');
+      labelInput.oninput=function(){ item.text=labelInput.value; syncFn(); };
+      labelInput.addEventListener('keydown', function(ev){ if(ev.key==='Enter'){ labelInput.blur(); } });
+
       var manage=document.createElement('div'); manage.className='manage';
-      var note=document.createElement('input'); note.className='note'; note.type='text'; note.value=item.note||''; note.onchange=function(){ item.note=note.value; syncFn(); }; manage.appendChild(note);
-      var delBtn=document.createElement('button'); delBtn.className='btn danger del'; delBtn.textContent='×'; delBtn.onclick=function(){ if(confirm('Zeile löschen?')) delFn(); };
-      var cb=document.createElement('input'); cb.className='main'; cb.type='checkbox'; cb.checked=!!item.ok; cb.onchange=function(){ item.ok=cb.checked; syncFn(); };
 
-      row.appendChild(moveDiv); row.appendChild(code); row.appendChild(infoBtn); row.appendChild(label); row.appendChild(manage); row.appendChild(delBtn); row.appendChild(cb);
+      var note=document.createElement('input');
+      note.className='note'; note.type='text'; note.placeholder='Notiz';
+      note.value=item.note||'';
+      note.oninput=function(){ item.note=note.value; syncFn(); };
+
+      var delBtn=document.createElement('button');
+      delBtn.className='btn danger del'; delBtn.textContent='×';
+      delBtn.onclick=function(){ if(confirm('Zeile löschen?')) delFn(); };
+
+      var cb=document.createElement('input');
+      cb.className='main'; cb.type='checkbox'; cb.checked=!!item.ok;
+      cb.onchange=function(){ item.ok=cb.checked; syncFn(); };
+
+      // Zusammenbauen
+      manage.appendChild(note);
+      row.appendChild(moveDiv);
+      row.appendChild(code);
+      row.appendChild(infoBtn);
+      row.appendChild(labelInput);
+      row.appendChild(manage);
+      row.appendChild(delBtn);
+      row.appendChild(cb);
+
       return row;
     }
+
     function openInfo(item, saveFn){ modalCtx={item,saveFn}; $('#infoTextarea').value=item.info||''; $('#infoModal').style.display='flex'; }
     function closeInfo(){ $('#infoModal').style.display='none'; modalCtx=null; }
     $('#infoClose')?.addEventListener('click', closeInfo);
@@ -709,7 +768,13 @@
       if(!section.images) section.images=[];
       Array.from(files).forEach(function(file){
         if(!file.type.match('image.*')) return;
-        var r=new FileReader(); r.onload=function(e){ section.images.push(e.target.result); drawGroups(); sync(); }; r.readAsDataURL(file);
+        var r=new FileReader();
+        r.onload=function(e){
+          section.images.push(e.target.result);
+          drawGroups(); sync();
+          if(guidesOn) requestAnimationFrame(updatePageGuides);
+        };
+        r.readAsDataURL(file);
       });
     }
 
@@ -753,16 +818,15 @@
       });
 
       updatePageGuides(); // Guides nach jedem Render neu berechnen
-      initCollapsibles(); // Buttons in neu gerenderten Abschnitten verdrahten
+      initCollapsibles(); // Collapse-Buttons verdrahten
     }
 
-    /* ===== Abschnitte hinzufügen ===== */
+    /* ===== Abschnitte hinzufügen (Modal) ===== */
     var pendingSectionCallback=null;
     function showSectionTypeModal(cb){ pendingSectionCallback=cb; $('#sectionTypeModal').style.display='flex'; }
     function closeSectionTypeModal(){ $('#sectionTypeModal').style.display='none'; pendingSectionCallback=null; }
     $('#sectionTypeClose').onclick = closeSectionTypeModal;
     $('#sectionTypeModal').addEventListener('click', function(e){ if(e.target===this) closeSectionTypeModal(); });
-    // Modal-Karten
     document.addEventListener('DOMContentLoaded', function(){
       $$('.section-type-card').forEach(function(card){
         card.onclick=function(e){
@@ -787,20 +851,25 @@
       });
     }
 
-    /* ===== Seiten-Guides (A4) ===== */
+    /* ===== Seiten-Guides (A4) —— Fix ===== */
     var guidesOn=false;
     function updatePageGuides(){
-      var host=document.getElementById('pageGuides'); if(!host) return;
-      host.innerHTML='';
+      var host = document.getElementById('pageGuides');
+      if(!host) return;
+      host.innerHTML = '';
       if(!guidesOn) return;
-      var contentEl=document.getElementById('app');
-      var pageHeightPx = 1032; // grobe Nutzfläche bei 12mm Rändern
-      var totalH = contentEl.scrollHeight;
+
+      var contentEl = document.getElementById('app');
+      var totalH = Math.max(contentEl.scrollHeight, contentEl.offsetHeight);
+      host.style.height = totalH + 'px';
+
+      var pageHeightPx = 1032; // ~A4 Nutzfläche bei 12mm Rand
       var count = Math.floor(totalH / pageHeightPx);
       for(var i=1;i<=count;i++){
-        var y = i*pageHeightPx;
-        var line=document.createElement('div'); line.className='line'; line.style.top = y+'px';
-        var tag=document.createElement('div'); tag.className='tag'; tag.style.top = y+'px'; tag.textContent='Seitenumbruch ('+i+')';
+        var y = i * pageHeightPx;
+        var line = document.createElement('div'); line.className='line'; line.style.top = y + 'px';
+        var tag  = document.createElement('div'); tag.className='tag';  tag.style.top = y + 'px';
+        tag.textContent = 'Seitenumbruch ('+i+')';
         host.appendChild(line); host.appendChild(tag);
       }
     }
@@ -839,7 +908,16 @@
       $('#btnReset').onclick=resetAll;
       $('#btnNewSectionMenu').onclick=function(e){ e.preventDefault(); e.stopPropagation(); addDynamicSection(); setTimeout(function(){ btn.classList.remove('active'); menu.classList.remove('active'); }, 100); };
       $('#btnNewGroup').onclick=function(){ appState.groups.push({ id: Date.now()+Math.random(), title:'Neue Gruppe', enabled:true, sections:[] }); currentGroupIndex = appState.groups.length-1; drawGroups(); sync(); };
-      $('#btnGuides').onclick=function(){ guidesOn=!guidesOn; var overlay=$('#pageGuides'); overlay.classList.toggle('hidden', !guidesOn); $('#guideState').textContent = guidesOn ? 'An' : 'Aus'; updatePageGuides(); };
+      document.getElementById('btnGuides').onclick = function(){
+        guidesOn = !guidesOn;
+        var overlay = document.getElementById('pageGuides');
+        overlay.classList.toggle('hidden', !guidesOn);
+        document.getElementById('guideState').textContent = guidesOn ? 'An' : 'Aus';
+        requestAnimationFrame(function(){
+          updatePageGuides();
+          requestAnimationFrame(updatePageGuides);
+        });
+      };
 
       // Signaturen
       initSignature('sigValidierer'); initSignature('sigBetreiber');
