@@ -249,9 +249,46 @@
       .section-header {
         page-break-after: avoid;
         break-after: avoid;
-        margin: -4mm -5mm 4mm -5mm !important;
-        padding: 3mm 5mm !important;
+        margin: -4mm -5mm 2mm -5mm !important;
+        padding: 3mm 5mm 2mm 5mm !important;
         background: #f8f9fb !important;
+        position: relative !important;
+      }
+      
+      /* Spaltenüberschriften-Zeile für Listen */
+      .section:has(.list) .list::before {
+        content: '' !important;
+        display: grid !important;
+        grid-template-columns: 5% 65% 20% 10% !important;
+        width: calc(100% + 0.5pt) !important;
+        margin: 0 0 0 -0.25pt !important;
+        background: linear-gradient(to bottom, #e8eaf0, #f0f1f3) !important;
+        border: 1pt solid #8B1538 !important;
+        border-bottom: 1.5pt solid #8B1538 !important;
+        font-weight: 700 !important;
+        font-size: 9pt !important;
+        color: #1E2434 !important;
+        padding: 2.5mm 0 !important;
+        page-break-after: avoid !important;
+        box-shadow: 0 1pt 2pt rgba(0,0,0,0.05) !important;
+      }
+      
+      /* Spaltenüberschriften als Grid-Items simulieren */
+      .section:has(.list) .list {
+        position: relative !important;
+      }
+      
+      .section:has(.list) .list::after {
+        content: 'Code' !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 2.5% !important;
+        transform: translateX(-50%) translateY(2.5mm) !important;
+        font-weight: 700 !important;
+        font-size: 9pt !important;
+        color: #1E2434 !important;
+        text-align: center !important;
+        pointer-events: none !important;
       }
       
       h2, h3 {
@@ -259,42 +296,139 @@
         break-after: avoid;
       }
       
-      /* Check-Items optimieren */
+      /* Tabellen-Layout für Checklisten mit Grid */
+      .list {
+        display: block !important;
+        width: 100% !important;
+        margin: 3mm 0 !important;
+        gap: 0 !important;
+        border: 1pt solid #8B1538 !important;
+        page-break-inside: auto;
+      }
+      
+      /* Table Header Row (wird via JavaScript eingefügt) */
+      .table-header-row {
+        display: grid !important;
+        grid-template-columns: 5% 65% 20% 10% !important;
+        background: #e8eaf0 !important;
+        border-bottom: 1.5pt solid #8B1538 !important;
+        font-weight: 700 !important;
+        font-size: 9pt !important;
+        color: #1E2434 !important;
+        padding: 2.5mm 0 !important;
+        page-break-after: avoid !important;
+        margin: 0 !important;
+      }
+      
+      .table-header-row > div {
+        padding: 2mm !important;
+        border-right: 0.5pt solid #cbd5e1 !important;
+        display: flex !important;
+        align-items: center !important;
+      }
+      
+      .table-header-row > div:first-child {
+        justify-content: center !important;
+      }
+      
+      .table-header-row > div:nth-child(2) {
+        padding-left: 3mm !important;
+      }
+      
+      .table-header-row > div:last-child {
+        border-right: none !important;
+        justify-content: center !important;
+      }
+      
+      /* Check-Items als Grid-Zeilen */
       .check {
+        display: grid !important;
+        grid-template-columns: 5% 65% 20% 10% !important;
+        grid-template-areas: "code label note checkbox" !important;
         page-break-inside: avoid;
         break-inside: avoid;
-        padding: 2mm 3mm !important;
-        margin: 1mm 0 !important;
-        border: 0.5pt solid #e5e7eb !important;
-        min-height: auto !important;
-      }
-      
-      .check .label-input {
-        border: none !important;
-        background: transparent !important;
         padding: 0 !important;
-        font-size: 10pt !important;
+        margin: 0 !important;
+        border: none !important;
+        border-top: 0.5pt solid #e5e7eb !important;
+        min-height: auto !important;
+        gap: 0 !important;
+        align-items: stretch !important;
+        width: 100% !important;
       }
       
-      .check .tiny {
-        font-size: 9pt !important;
-        padding: 1mm 2mm !important;
-        border: 0.5pt solid #d1d5db !important;
-        height: auto !important;
+      .check:first-child {
+        border-top: none !important;
       }
       
-      .check .note {
-        font-size: 9pt !important;
-        padding: 1mm 2mm !important;
-        border: 0.5pt solid #d1d5db !important;
-        max-width: none !important;
-        height: auto !important;
-      }
-      
+      .check .tiny,
+      .check .label-input,
+      .check .note,
       .check input[type="checkbox"] {
-        width: 4mm !important;
-        height: 4mm !important;
+        border: none !important;
+        border-right: 0.5pt solid #e5e7eb !important;
+        padding: 2mm !important;
+        background: white !important;
+        margin: 0 !important;
+        height: auto !important;
+        min-height: 8mm !important;
+        display: flex !important;
+        align-items: center !important;
+      }
+      
+      /* Code-Spalte (5%) */
+      .check .tiny {
+        grid-area: code !important;
+        font-size: 9pt !important;
+        font-weight: 600 !important;
+        text-align: center !important;
+        color: #8B1538 !important;
+        justify-content: center !important;
+        width: 100% !important;
+        max-width: none !important;
+      }
+      
+      /* Prüfpunkt-Spalte (65%) */
+      .check .label-input {
+        grid-area: label !important;
+        font-size: 10pt !important;
+        padding-left: 3mm !important;
+        line-height: 1.4 !important;
+        width: 100% !important;
+      }
+      
+      /* Bemerkung-Spalte (20%) */
+      .check .note {
+        grid-area: note !important;
+        font-size: 9pt !important;
+        color: #64748b !important;
+        font-style: italic !important;
+        width: 100% !important;
+        max-width: none !important;
+      }
+      
+      /* OK-Spalte (10%) */
+      .check input[type="checkbox"] {
+        grid-area: checkbox !important;
+        width: 5mm !important;
+        height: 5mm !important;
+        margin: auto !important;
         border: 1pt solid #666 !important;
+        border-radius: 2px !important;
+        justify-self: center !important;
+      }
+      
+      /* Alternating row colors */
+      .check:nth-child(even) .tiny,
+      .check:nth-child(even) .label-input,
+      .check:nth-child(even) .note,
+      .check:nth-child(even) input[type="checkbox"] {
+        background: #f9fafb !important;
+      }
+      
+      /* Rechten Border für letzte Zelle entfernen */
+      .check input[type="checkbox"] {
+        border-right: none !important;
       }
       
       /* Grid-Layout für Print */
@@ -2221,6 +2355,25 @@
       new MutationObserver(function(){
         if(pageBreaksOn) updatePageBreaks();
       }).observe($('#app'), {childList:true, subtree:true});
+      
+      /* Tabellen-Header für Print automatisch einfügen */
+      window.addEventListener('beforeprint', function(){
+        $$('.list').forEach(function(list){
+          if(!list.querySelector('.table-header-row')){
+            var header = document.createElement('div');
+            header.className = 'table-header-row';
+            header.style.cssText = 'display:grid !important;grid-template-columns:5% 65% 20% 10% !important;background:#e8eaf0;border:1pt solid #8B1538;border-bottom:1.5pt solid #8B1538;font-weight:700;font-size:9pt;color:#1E2434;padding:2.5mm 0;page-break-after:avoid;margin:0;';
+            header.innerHTML = '<div style="padding:2mm;text-align:center;border-right:0.5pt solid #cbd5e1">Code</div><div style="padding:2mm 2mm 2mm 3mm;border-right:0.5pt solid #cbd5e1">Prüfpunkt</div><div style="padding:2mm;border-right:0.5pt solid #cbd5e1">Bemerkung</div><div style="padding:2mm;text-align:center">OK</div>';
+            list.insertBefore(header, list.firstChild);
+          }
+        });
+      });
+      
+      window.addEventListener('afterprint', function(){
+        $$('.table-header-row').forEach(function(header){
+          header.remove();
+        });
+      });
     }
 
     if(document.readyState === 'loading'){
