@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="de">
 <head>
   <meta charset="UTF-8">
@@ -139,7 +140,7 @@
       transform:translateX(-1px) scale(0.98);
     }
     body.dark-theme .action-buttons{
-      background:linear-gradient(135deg, rgba(26,32,44,0.98) 0%, rgba(15,20,25,0.98) 100%);
+      background:rgba(37,45,61,0.98);
       border-color:rgba(139,21,56,0.3);
       box-shadow:0 15px 40px rgba(0,0,0,0.6), 0 5px 15px rgba(0,0,0,0.4);
     }
@@ -149,42 +150,43 @@
     body.dark-theme .action-buttons .btn:hover{
       box-shadow:0 6px 20px rgba(139,21,56,0.5);
     }
-    body.dark-theme{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%)}
-    body.dark-theme .container{background:#0f1419;color:#e2e8f0;box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+    body.dark-theme{background:#1E2434}
+    body.dark-theme .container{background:#252d3d;color:#e2e8f0;box-shadow:0 20px 60px rgba(0,0,0,0.4)}
     body.dark-theme h1{color:#fff;-webkit-text-fill-color:#fff}
-    body.dark-theme h2{background:linear-gradient(135deg,#4c51bf 0%,#553c9a 100%);box-shadow:0 4px 15px rgba(76,81,191,0.3)}
+    body.dark-theme h2{background:#8B1538;box-shadow:0 4px 15px rgba(139,21,56,0.3)}
     body.dark-theme .revision{color:#a0aec0}
     body.dark-theme input,body.dark-theme select,body.dark-theme textarea{
-      background:#1a202c;color:#e2e8f0;border-color:#2d3748;
+      background:#2a3240;color:#e2e8f0;border-color:#3a4150;
     }
     body.dark-theme input:hover,body.dark-theme select:hover,body.dark-theme textarea:hover{
-      border-color:#4a5568;background:#242c3a;
+      border-color:#4a5568;background:#323b4d;
     }
     body.dark-theme input:focus,body.dark-theme select:focus,body.dark-theme textarea:focus{
-      border-color:#8B1538;background:#242c3a;
+      border-color:#8B1538;background:#323b4d;
     }
     body.dark-theme input::placeholder,body.dark-theme textarea::placeholder{color:#718096}
-    body.dark-theme .section{border-bottom-color:#2d3748}
+    body.dark-theme .section{border-bottom-color:#3a4150}
     body.dark-theme .label{color:#cbd5e0}
     body.dark-theme .hint{color:#718096}
-    body.dark-theme .cost-box{background:#1a202c;border-color:#2d3748}
+    body.dark-theme .cost-box{background:#2a3240;border-color:#3a4150}
     body.dark-theme .total-box{
-      background:linear-gradient(135deg,#4c51bf 0%,#553c9a 100%);
-      box-shadow:0 8px 25px rgba(76,81,191,0.3);
+      background:#8B1538;
+      box-shadow:0 8px 25px rgba(139,21,56,0.3);
     }
-    body.dark-theme .sig-preview{background:#1a202c;border-color:#2d3748}
+    body.dark-theme .sig-preview{background:#2a3240;border-color:#3a4150}
     body.dark-theme .placeholder{color:#718096}
-    body.dark-theme .report-item{background:#1a202c;border-left-color:#1E2434;color:#e2e8f0}
-    body.dark-theme .modal-content{background:#0f1419;color:#e2e8f0}
+    body.dark-theme .report-item{background:#2a3240;border-left-color:#8B1538;color:#e2e8f0}
+    body.dark-theme .modal-content{background:#252d3d;color:#e2e8f0}
     body.dark-theme .canvas-box{border-color:#8B1538;background:#fff}
     body.dark-theme .close{color:#cbd5e0}
-    body.dark-theme .reports{background:#0f1419}
-    body.dark-theme .reports h2{background:linear-gradient(135deg,#4c51bf 0%,#553c9a 100%)}
-    body.dark-theme .info-modal-content{background:#0f1419;color:#e2e8f0}
-    body.dark-theme .info-modal-content h2{color:#fff;border-bottom-color:#1E2434}
+    body.dark-theme .reports{background:#252d3d}
+    body.dark-theme .reports h2{background:#8B1538;color:#fff}
+    body.dark-theme .info-modal-content{background:#252d3d;color:#e2e8f0}
+    body.dark-theme .info-modal-content h2{color:#fff;border-bottom-color:#8B1538}
     body.dark-theme .info-modal-content h3{color:#cbd5e0}
-    body.dark-theme .info-modal-content code{background:#1a202c;color:#81e6d9}
-    body.dark-theme .approval-box{background:#1a202c;border-color:#2d3748}
+    body.dark-theme .info-modal-content code{background:#2a3240;color:#81e6d9}
+    body.dark-theme .approval-box{background:#2a3240;border-color:#3a4150}
+    body.dark-theme .section .cost-box[style*="e8eaf0"]{background:#2a3240 !important;border-color:#3a4150}
 
     /* ====== Kopfbereich ====== */
     .header-grid{
@@ -280,7 +282,7 @@
       background:#6B7280;
       transform:scale(1.05);box-shadow:0 4px 12px rgba(107,114,128,0.4);
     }
-    body.dark-theme .cost-item{background:#1a202c;border-color:#2d3748}
+    body.dark-theme .cost-item{background:#2a3240;border-color:#3a4150}
     body.dark-theme .cost-item:hover{border-color:#4a5568}
 
     /* ====== OCR Amount Selection ====== */
@@ -731,6 +733,7 @@
       }
     }
   </style>
+
 </head>
 <body>
   <!-- Burger Menu Toggle (Mobile only) -->
@@ -741,6 +744,7 @@
   </button>
 
   <!-- All Buttons in one Container -->
+
   <div class="action-buttons" id="mobileMenu">
     <button class="btn btn-save" onclick="saveReport()" title="Speichern">
       <span class="btn-icon">💾</span><span class="btn-text"> Speichern</span>
@@ -758,345 +762,352 @@
       <span class="btn-icon">📥</span><span class="btn-text"> Importieren</span>
     </button>
     <input type="file" id="jsonFile" accept=".json" style="display:none" onchange="importJSON(this.files[0])">
-    
-    <!-- Divider -->
-    <div class="btn-divider" style="height:1px;background:rgba(139,21,56,0.2);margin:8px 0"></div>
-    
-    <!-- Theme Toggle -->
-    <button class="btn btn-save" onclick="toggleTheme()" title="Dark Mode">
-      <span class="btn-icon">🌓</span><span class="btn-text"> Dark Mode</span>
-    </button>
-    
-    <!-- Info Toggle -->
-    <button class="btn btn-save" onclick="openInfo()" title="Info & Hilfe">
-      <span class="btn-icon">ℹ️</span><span class="btn-text"> Info & Hilfe</span>
-    </button>
+
+```
+<!-- Divider -->
+<div class="btn-divider" style="height:1px;background:rgba(139,21,56,0.2);margin:8px 0"></div>
+
+<!-- Theme Toggle -->
+<button class="btn btn-save" onclick="toggleTheme()" title="Dark Mode">
+  <span class="btn-icon">🌓</span><span class="btn-text"> Dark Mode</span>
+</button>
+
+<!-- Info Toggle -->
+<button class="btn btn-save" onclick="openInfo()" title="Info & Hilfe">
+  <span class="btn-icon">ℹ️</span><span class="btn-text"> Info & Hilfe</span>
+</button>
+```
+
   </div>
 
   <div class="container">
     <h1>Reisekostenabrechnung Nexus/IPS</h1>
     <div class="revision">v2.0.1 – Rev. 02-20/01</div>
 
-    <!-- Kopfdaten -->
-    <div class="section">
-      <div class="header-grid">
-        <div class="full-width">
-          <label class="label" for="name">Name:</label>
-          <input type="text" id="name" placeholder="Name des Reisenden">
-        </div>
+```
+<!-- Kopfdaten -->
+<div class="section">
+  <div class="header-grid">
+    <div class="full-width">
+      <label class="label" for="name">Name:</label>
+      <input type="text" id="name" placeholder="Name des Reisenden">
+    </div>
 
-        <div class="header-row">
-          <div>
-            <label class="label" for="beginn">Beginn:</label>
-            <input type="datetime-local" id="beginn">
-            <div class="hint">Format: dd.mm.yyyy HH:MM</div>
-          </div>
-          <div>
-            <label class="label" for="ende">Ende:</label>
-            <input type="datetime-local" id="ende">
-            <div class="hint">Format: dd.mm.yyyy HH:MM</div>
-          </div>
-        </div>
-
-        <div class="full-width">
-          <label class="label" for="anlass">Anlass:</label>
-          <input type="text" id="anlass" placeholder="Grund der Reise">
-        </div>
-
-        <div class="full-width">
-          <label class="label" for="reiseziel">Reiseziel(e):</label>
-          <input type="text" id="reiseziel" placeholder="Zielort(e) der Reise">
-        </div>
+    <div class="header-row">
+      <div>
+        <label class="label" for="beginn">Beginn:</label>
+        <input type="datetime-local" id="beginn">
+        <div class="hint">Format: dd.mm.yyyy HH:MM</div>
+      </div>
+      <div>
+        <label class="label" for="ende">Ende:</label>
+        <input type="datetime-local" id="ende">
+        <div class="hint">Format: dd.mm.yyyy HH:MM</div>
       </div>
     </div>
 
-    <!-- I. Fahrtkosten -->
-    <h2>I. Fahrtkosten</h2>
-    <div class="cost-section">
-      <!-- KFZ Type Selection -->
-      <div class="cost-box" style="background:linear-gradient(135deg,#fef2f2 0%,#fee2e2 100%)">
-        <label class="label" for="kfz_type" style="color:#8B1538">Fahrzeugtyp (Pflichtfeld) *</label>
-        <select id="kfz_type" required onchange="handleKFZTypeChange()" style="border-color:#8B1538;font-weight:600">
-          <option value="">-- Bitte wählen --</option>
-          <option value="eigenes_auto">Eigenes Auto (Privat-KFZ)</option>
-          <option value="mietwagen">Mietwagen</option>
-          <option value="firmenauto">Firmenauto (Firmen-KFZ)</option>
-        </select>
-        <div class="hint" style="color:#8B1538">⚠️ Bitte wählen Sie den verwendeten Fahrzeugtyp aus</div>
-      </div>
-
-      <!-- Firmen-KFZ Section -->
-      <div class="cost-box" id="firmen_kfz_section" style="display:none;background:linear-gradient(135deg,#e6f7ff 0%,#cceeff 100%)">
-        <label class="label">Firmenauto (Firmen-KFZ)</label>
-        <div style="padding:15px;background:#fff;border-radius:8px;border-left:4px solid #0ea5e9">
-          <div style="font-size:16px;margin-bottom:10px">ℹ️ <strong>Keine direkten Fahrtkosten</strong></div>
-          <div style="color:#475569;line-height:1.6">
-            Bei Nutzung eines Firmenautos entstehen keine direkten Fahrtkosten, da das Fahrzeug vom Unternehmen gestellt wird.
-            <br><br>
-            <strong>Tatsächliche Kosten</strong> (z.B. Tanken, Parkgebühren, Maut) tragen Sie bitte unter 
-            <strong style="color:#0ea5e9">→ IV. Reise-Nebenkosten</strong> ein.
-          </div>
-        </div>
-      </div>
-
-      <!-- Privat-KFZ Section -->
-      <div class="cost-box" id="privat_kfz_section" style="display:none">
-        <label class="label">Eigenes Auto (Privat-KFZ):</label>
-        <div class="cost-row">
-          <div>
-            <label class="label" for="privat_km">Kilometer</label>
-            <input type="number" id="privat_km" step="0.01" placeholder="Anzahl km" oninput="calcPrivatKFZ()">
-          </div>
-          <div>
-            <label class="label" for="privat_rate">€/km</label>
-            <input type="number" id="privat_rate" step="0.01" value="0.30" oninput="calcPrivatKFZ()">
-          </div>
-          <div>
-            <label class="label">Betrag</label>
-            <div class="calc-field" id="privat_sum">0,00 €</div>
-          </div>
-        </div>
-        <div class="hint">[pauschal 0,30 €/km bzw. individueller km-Satz]</div>
-      </div>
-
-      <!-- Mietwagen Section -->
-      <div class="cost-box" id="mietwagen_section" style="display:none">
-        <label class="label" for="mietwagen">Mietwagen (im Voraus bezahlt):</label>
-        <input type="number" id="mietwagen" step="0.01" placeholder="Betrag in €" oninput="calcFahrtkosten()">
-        <div class="hint" style="color:#059669">ℹ️ Mietwagen wird nicht in die Gesamtsumme einberechnet (Vorauszahlung)</div>
-        <div class="calc-field" id="mietwagen_sum" style="opacity:0.6">0,00 € (nicht berechnet)</div>
-      </div>
-
-      <!-- Öffentliche Verkehrsmittel -->
-      <div class="cost-box">
-        <label class="label">Öffentliche Verkehrsmittel, Taxi (lt. Belegen):</label>
-        <div class="hint">z.B. Bahntickets, Taxi, ÖPNV, Bus, usw.</div>
-        
-        <!-- OCR Upload -->
-        <div class="ocr-upload-box" id="ocrUploadOeffentlich">
-          <div style="font-size:40px;margin-bottom:10px">🚆</div>
-          <div style="font-weight:600;margin-bottom:5px">Tickets & Quittungen hochladen</div>
-          <div style="font-size:12px;color:#718096">Klicken oder Dateien hierher ziehen (JPG, PNG, PDF)</div>
-          <input type="file" id="ocrFileOeffentlich" accept="image/*,.pdf" capture="environment" multiple style="display:none" onchange="handleOCRUpload(event, 'oeffentlich')">
-          <button type="button" class="btn-ocr-upload" onclick="document.getElementById('ocrFileOeffentlich').click()">📁 Dateien auswählen</button>
-        </div>
-        <div class="ocr-preview" id="ocrPreviewOeffentlich"></div>
-        
-        <div id="oeffentlichItems"></div>
-        <button type="button" class="btn-add-item" onclick="addOeffentlichItem()">+ Ticket/Fahrt manuell hinzufügen</button>
-        <div class="calc-field" id="oeffentlich_sum" style="margin-top:10px">0,00 €</div>
-      </div>
+    <div class="full-width">
+      <label class="label" for="anlass">Anlass:</label>
+      <input type="text" id="anlass" placeholder="Grund der Reise">
     </div>
 
-    <!-- II. Verpflegungsmehraufwand -->
-    <h2>II. Verpflegungsmehraufwand <span style="font-size:12px;font-weight:normal">(Auslandspauschalen)</span></h2>
-    <div class="cost-section">
-      <div class="cost-box">
-        <label class="label">8 - 24 Std.</label>
-        <div class="cost-row-split">
-          <div>
-            <label class="label" for="verpfl_inland_8_24">Tage Inland (x 14 €)</label>
-            <input type="number" id="verpfl_inland_8_24" step="1" placeholder="Anzahl Tage" oninput="calcVerpflegung()">
-          </div>
-          <div>
-            <label class="label" for="verpfl_ausland_8_24">Tage Ausland</label>
-            <input type="number" id="verpfl_ausland_8_24" step="1" placeholder="Anzahl Tage" oninput="calcVerpflegung()">
-          </div>
-        </div>
-        <div class="cost-row-split">
-          <div></div>
-          <div>
-            <label class="label" for="verpfl_ausland_8_24_rate">Pauschale (€)</label>
-            <input type="number" id="verpfl_ausland_8_24_rate" step="0.01" placeholder="€ pro Tag" oninput="calcVerpflegung()">
-          </div>
-        </div>
-        <div class="calc-field" id="verpfl_8_24_sum">0,00 €</div>
-      </div>
-
-      <div class="cost-box">
-        <label class="label">24 Std.</label>
-        <div class="cost-row-split">
-          <div>
-            <label class="label" for="verpfl_inland_24">Tage Inland (x 28 €)</label>
-            <input type="number" id="verpfl_inland_24" step="1" placeholder="Anzahl Tage" oninput="calcVerpflegung()">
-          </div>
-          <div>
-            <label class="label" for="verpfl_ausland_24">Tage Ausland</label>
-            <input type="number" id="verpfl_ausland_24" step="1" placeholder="Anzahl Tage" oninput="calcVerpflegung()">
-          </div>
-        </div>
-        <div class="cost-row-split">
-          <div></div>
-          <div>
-            <label class="label" for="verpfl_ausland_24_rate">Pauschale (€)</label>
-            <input type="number" id="verpfl_ausland_24_rate" step="0.01" placeholder="€ pro Tag" oninput="calcVerpflegung()">
-          </div>
-        </div>
-        <div class="calc-field" id="verpfl_24_sum">0,00 €</div>
-      </div>
-
-      <div class="total-label">Verpflegung gesamt:</div>
-      <div class="calc-field" id="verpfl_total" style="font-size:18px">0,00 €</div>
+    <div class="full-width">
+      <label class="label" for="reiseziel">Reiseziel(e):</label>
+      <input type="text" id="reiseziel" placeholder="Zielort(e) der Reise">
     </div>
+  </div>
+</div>
 
-    <!-- III. Übernachtungskosten -->
-    <h2>III. Übernachtungskosten</h2>
-    <div class="cost-section">
-      <div class="cost-box">
-        <label class="label">1. Tatsächliche Kosten (gem. Belegen) / Pauschalen:</label>
-        
-        <!-- OCR Upload -->
-        <div class="ocr-upload-box" id="ocrUploadUebernachtung">
-          <div style="font-size:40px;margin-bottom:10px">📄</div>
-          <div style="font-weight:600;margin-bottom:5px">Belege hochladen & automatisch auslesen</div>
-          <div style="font-size:12px;color:#718096">Klicken oder Dateien hierher ziehen (JPG, PNG, PDF)</div>
-          <input type="file" id="ocrFileUebernachtung" accept="image/*,.pdf" capture="environment" multiple style="display:none" onchange="handleOCRUpload(event, 'uebernachtung')">
-          <button type="button" class="btn-ocr-upload" onclick="document.getElementById('ocrFileUebernachtung').click()">📁 Dateien auswählen</button>
-        </div>
-        <div class="ocr-preview" id="ocrPreviewUebernachtung"></div>
-        
-        <div id="uebernachtungItems"></div>
-        <button type="button" class="btn-add-item" onclick="addUebernachtungItem()">+ Kosten manuell hinzufügen</button>
-        <div class="calc-field" id="uebernachtung_gesamt" style="margin-top:10px">0,00 €</div>
+<!-- I. Fahrtkosten -->
+<h2>I. Fahrtkosten</h2>
+<div class="cost-section">
+  <!-- KFZ Type Selection -->
+  <div class="cost-box" style="background:linear-gradient(135deg,#fef2f2 0%,#fee2e2 100%)">
+    <label class="label" for="kfz_type" style="color:#8B1538">Fahrzeugtyp (Pflichtfeld) *</label>
+    <select id="kfz_type" required onchange="handleKFZTypeChange()" style="border-color:#8B1538;font-weight:600">
+      <option value="">-- Bitte wählen --</option>
+      <option value="eigenes_auto">Eigenes Auto (Privat-KFZ)</option>
+      <option value="mietwagen">Mietwagen</option>
+      <option value="firmenauto">Firmenauto (Firmen-KFZ)</option>
+    </select>
+    <div class="hint" style="color:#8B1538">⚠️ Bitte wählen Sie den verwendeten Fahrzeugtyp aus</div>
+  </div>
+
+  <!-- Firmen-KFZ Section -->
+  <div class="cost-box" id="firmen_kfz_section" style="display:none;background:linear-gradient(135deg,#e6f7ff 0%,#cceeff 100%)">
+    <label class="label">Firmenauto (Firmen-KFZ)</label>
+    <div style="padding:15px;background:#fff;border-radius:8px;border-left:4px solid #0ea5e9">
+      <div style="font-size:16px;margin-bottom:10px">ℹ️ <strong>Keine direkten Fahrtkosten</strong></div>
+      <div style="color:#475569;line-height:1.6">
+        Bei Nutzung eines Firmenautos entstehen keine direkten Fahrtkosten, da das Fahrzeug vom Unternehmen gestellt wird.
+        <br><br>
+        <strong>Tatsächliche Kosten</strong> (z.B. Tanken, Parkgebühren, Maut) tragen Sie bitte unter 
+        <strong style="color:#0ea5e9">→ IV. Reise-Nebenkosten</strong> ein.
       </div>
-
-      <div class="cost-box">
-        <label class="label" style="color:#E74C3C">Abzüge</label>
-        
-        <div class="cost-row-split">
-          <div>
-            <label class="label" for="fruehstueck_inland">Frühstück Inland (Anzahl x 5,60 €)</label>
-            <input type="number" id="fruehstueck_inland" step="1" placeholder="Anzahl" oninput="calcUebernachtung()">
-          </div>
-          <div>
-            <label class="label" for="fruehstueck_ausland">Frühstück Ausland (Anzahl)</label>
-            <input type="number" id="fruehstueck_ausland" step="1" placeholder="Anzahl" oninput="calcUebernachtung()">
-          </div>
-        </div>
-        <div class="cost-row-split">
-          <div></div>
-          <div>
-            <label class="label" for="fruehstueck_ausland_rate">Pauschale (€)</label>
-            <input type="number" id="fruehstueck_ausland_rate" step="0.01" placeholder="€ pro Frühstück" oninput="calcUebernachtung()">
-          </div>
-        </div>
-
-        <div class="cost-row-split">
-          <div>
-            <label class="label" for="mittag_inland">Mittag/Abend Inland (Anzahl x 11,20 €)</label>
-            <input type="number" id="mittag_inland" step="1" placeholder="Anzahl" oninput="calcUebernachtung()">
-          </div>
-          <div>
-            <label class="label" for="mittag_ausland">Mittag/Abend Ausland (Anzahl)</label>
-            <input type="number" id="mittag_ausland" step="1" placeholder="Anzahl" oninput="calcUebernachtung()">
-          </div>
-        </div>
-        <div class="cost-row-split">
-          <div></div>
-          <div>
-            <label class="label" for="mittag_ausland_rate">Pauschale (€)</label>
-            <input type="number" id="mittag_ausland_rate" step="0.01" placeholder="€ pro Mahlzeit" oninput="calcUebernachtung()">
-          </div>
-        </div>
-
-        <div class="total-label" style="color:#E74C3C">Abzüge gesamt:</div>
-        <div class="calc-field" id="abzuege_sum" style="color:#E74C3C">- 0,00 €</div>
-      </div>
-
-      <div class="total-label">Ergebnis Übernachtung:</div>
-      <div class="calc-field" id="uebernachtung_total" style="font-size:18px">0,00 €</div>
-    </div>
-
-    <!-- IV. Reise-Nebenkosten -->
-    <h2>IV. Reise-Nebenkosten</h2>
-    <div class="cost-section">
-      <div class="cost-box">
-        <label class="label">Tatsächliche Kosten (ggf. Eigenbelege)</label>
-        <div class="hint">z.B. für Telekommunikation, Porto, Parken, usw.</div>
-        
-        <!-- OCR Upload -->
-        <div class="ocr-upload-box" id="ocrUploadNebenkosten">
-          <div style="font-size:40px;margin-bottom:10px">📄</div>
-          <div style="font-weight:600;margin-bottom:5px">Belege hochladen & automatisch auslesen</div>
-          <div style="font-size:12px;color:#718096">Klicken oder Dateien hierher ziehen (JPG, PNG, PDF)</div>
-          <input type="file" id="ocrFileNebenkosten" accept="image/*,.pdf" capture="environment" multiple style="display:none" onchange="handleOCRUpload(event, 'nebenkosten')">
-          <button type="button" class="btn-ocr-upload" onclick="document.getElementById('ocrFileNebenkosten').click()">📁 Dateien auswählen</button>
-        </div>
-        <div class="ocr-preview" id="ocrPreviewNebenkosten"></div>
-        
-        <div id="nebenkostenItems"></div>
-        <button type="button" class="btn-add-item" onclick="addNebenkostenItem()">+ Kosten manuell hinzufügen</button>
-        <div class="calc-field" id="nebenkosten_sum" style="margin-top:10px">0,00 €</div>
-      </div>
-    </div>
-
-    <!-- Gesamtsumme -->
-    <div class="total-box">
-      <div class="total-label">Reisekosten gesamt:</div>
-      <div id="gesamtsumme">0,00 €</div>
-    </div>
-
-    <!-- Unterschrift -->
-    <div class="section">
-      <h2>Unterschrift</h2>
-      <div class="cost-section">
-        <div class="cost-box" style="background:linear-gradient(135deg,#e8eaf0 0%,#dfe2e8 100%)">
-          <div class="cost-row-split">
-            <div>
-              <label class="label" for="datum">Datum:</label>
-              <input type="date" id="datum">
-            </div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
-              <button class="btn btn-sig" onclick="openSigModal()" style="font-size:16px;padding:14px 24px;background:#8B1538">
-                ✍️ Unterschrift zeichnen
-              </button>
-              <button class="btn btn-sig" onclick="document.getElementById('sigFileInput').click()" style="font-size:16px;padding:14px 24px;background:#8B1538">
-                📁 Bild hochladen
-              </button>
-              <input type="file" id="sigFileInput" accept="image/png,image/jpeg,image/jpg" style="display:none" onchange="handleSignatureUpload(event)">
-            </div>
-          </div>
-        </div>
-        
-        <div class="cost-box">
-          <label class="label">Unterschrift Vorschau:</label>
-          <div class="sig-preview" id="sigPrev">
-            <span class="placeholder">Noch keine Unterschrift - Klicken Sie auf "Unterschrift zeichnen" oder "Bild hochladen"</span>
-          </div>
-          <button class="btn" onclick="clearSignature()" id="clearSigBtn" style="display:none;background:#6B7280;margin-top:10px">
-            🗑️ Unterschrift löschen
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Freigabe-Felder -->
-    <div class="approval-box">
-      <label class="label">Freigabe / Bearbeitung:</label>
-      <div class="approval-grid">
-        <div class="approval-item">
-          <label class="label" for="geprueft">geprüft:</label>
-          <input type="text" id="geprueft" placeholder="Name/Kürzel">
-        </div>
-        <div class="approval-item">
-          <label class="label" for="ausgezahlt">ausgezahlt:</label>
-          <input type="text" id="ausgezahlt" placeholder="Name/Kürzel">
-        </div>
-        <div class="approval-item">
-          <label class="label" for="gebucht">gebucht:</label>
-          <input type="text" id="gebucht" placeholder="Name/Kürzel">
-        </div>
-      </div>
-    </div>
-
-    <!-- Gespeicherte Abrechnungen -->
-    <div class="reports" id="reports">
-      <h2>Gespeicherte Abrechnungen</h2>
-      <div id="reportsList"></div>
     </div>
   </div>
 
+  <!-- Privat-KFZ Section -->
+  <div class="cost-box" id="privat_kfz_section" style="display:none">
+    <label class="label">Eigenes Auto (Privat-KFZ):</label>
+    <div class="cost-row">
+      <div>
+        <label class="label" for="privat_km">Kilometer</label>
+        <input type="number" id="privat_km" step="0.01" placeholder="Anzahl km" oninput="calcPrivatKFZ()">
+      </div>
+      <div>
+        <label class="label" for="privat_rate">€/km</label>
+        <input type="number" id="privat_rate" step="0.01" value="0.30" oninput="calcPrivatKFZ()">
+      </div>
+      <div>
+        <label class="label">Betrag</label>
+        <div class="calc-field" id="privat_sum">0,00 €</div>
+      </div>
+    </div>
+    <div class="hint">[pauschal 0,30 €/km bzw. individueller km-Satz]</div>
+  </div>
+
+  <!-- Mietwagen Section -->
+  <div class="cost-box" id="mietwagen_section" style="display:none">
+    <label class="label" for="mietwagen">Mietwagen (im Voraus bezahlt):</label>
+    <input type="number" id="mietwagen" step="0.01" placeholder="Betrag in €" oninput="calcFahrtkosten()">
+    <div class="hint" style="color:#059669">ℹ️ Mietwagen wird nicht in die Gesamtsumme einberechnet (Vorauszahlung)</div>
+    <div class="calc-field" id="mietwagen_sum" style="opacity:0.6">0,00 € (nicht berechnet)</div>
+  </div>
+
+  <!-- Öffentliche Verkehrsmittel -->
+  <div class="cost-box">
+    <label class="label">Öffentliche Verkehrsmittel, Taxi (lt. Belegen):</label>
+    <div class="hint">z.B. Bahntickets, Taxi, ÖPNV, Bus, usw.</div>
+    
+    <!-- OCR Upload -->
+    <div class="ocr-upload-box" id="ocrUploadOeffentlich">
+      <div style="font-size:40px;margin-bottom:10px">🚆</div>
+      <div style="font-weight:600;margin-bottom:5px">Tickets & Quittungen hochladen</div>
+      <div style="font-size:12px;color:#718096">Klicken oder Dateien hierher ziehen (JPG, PNG, PDF)</div>
+      <input type="file" id="ocrFileOeffentlich" accept="image/*,.pdf" capture="environment" multiple style="display:none" onchange="handleOCRUpload(event, 'oeffentlich')">
+      <button type="button" class="btn-ocr-upload" onclick="document.getElementById('ocrFileOeffentlich').click()">📁 Dateien auswählen</button>
+    </div>
+    <div class="ocr-preview" id="ocrPreviewOeffentlich"></div>
+    
+    <div id="oeffentlichItems"></div>
+    <button type="button" class="btn-add-item" onclick="addOeffentlichItem()">+ Ticket/Fahrt manuell hinzufügen</button>
+    <div class="calc-field" id="oeffentlich_sum" style="margin-top:10px">0,00 €</div>
+  </div>
+</div>
+
+<!-- II. Verpflegungsmehraufwand -->
+<h2>II. Verpflegungsmehraufwand <span style="font-size:12px;font-weight:normal">(Auslandspauschalen)</span></h2>
+<div class="cost-section">
+  <div class="cost-box">
+    <label class="label">8 - 24 Std.</label>
+    <div class="cost-row-split">
+      <div>
+        <label class="label" for="verpfl_inland_8_24">Tage Inland (x 14 €)</label>
+        <input type="number" id="verpfl_inland_8_24" step="1" placeholder="Anzahl Tage" oninput="calcVerpflegung()">
+      </div>
+      <div>
+        <label class="label" for="verpfl_ausland_8_24">Tage Ausland</label>
+        <input type="number" id="verpfl_ausland_8_24" step="1" placeholder="Anzahl Tage" oninput="calcVerpflegung()">
+      </div>
+    </div>
+    <div class="cost-row-split">
+      <div></div>
+      <div>
+        <label class="label" for="verpfl_ausland_8_24_rate">Pauschale (€)</label>
+        <input type="number" id="verpfl_ausland_8_24_rate" step="0.01" placeholder="€ pro Tag" oninput="calcVerpflegung()">
+      </div>
+    </div>
+    <div class="calc-field" id="verpfl_8_24_sum">0,00 €</div>
+  </div>
+
+  <div class="cost-box">
+    <label class="label">24 Std.</label>
+    <div class="cost-row-split">
+      <div>
+        <label class="label" for="verpfl_inland_24">Tage Inland (x 28 €)</label>
+        <input type="number" id="verpfl_inland_24" step="1" placeholder="Anzahl Tage" oninput="calcVerpflegung()">
+      </div>
+      <div>
+        <label class="label" for="verpfl_ausland_24">Tage Ausland</label>
+        <input type="number" id="verpfl_ausland_24" step="1" placeholder="Anzahl Tage" oninput="calcVerpflegung()">
+      </div>
+    </div>
+    <div class="cost-row-split">
+      <div></div>
+      <div>
+        <label class="label" for="verpfl_ausland_24_rate">Pauschale (€)</label>
+        <input type="number" id="verpfl_ausland_24_rate" step="0.01" placeholder="€ pro Tag" oninput="calcVerpflegung()">
+      </div>
+    </div>
+    <div class="calc-field" id="verpfl_24_sum">0,00 €</div>
+  </div>
+
+  <div class="total-label">Verpflegung gesamt:</div>
+  <div class="calc-field" id="verpfl_total" style="font-size:18px">0,00 €</div>
+</div>
+
+<!-- III. Übernachtungskosten -->
+<h2>III. Übernachtungskosten</h2>
+<div class="cost-section">
+  <div class="cost-box">
+    <label class="label">1. Tatsächliche Kosten (gem. Belegen) / Pauschalen:</label>
+    
+    <!-- OCR Upload -->
+    <div class="ocr-upload-box" id="ocrUploadUebernachtung">
+      <div style="font-size:40px;margin-bottom:10px">📄</div>
+      <div style="font-weight:600;margin-bottom:5px">Belege hochladen & automatisch auslesen</div>
+      <div style="font-size:12px;color:#718096">Klicken oder Dateien hierher ziehen (JPG, PNG, PDF)</div>
+      <input type="file" id="ocrFileUebernachtung" accept="image/*,.pdf" capture="environment" multiple style="display:none" onchange="handleOCRUpload(event, 'uebernachtung')">
+      <button type="button" class="btn-ocr-upload" onclick="document.getElementById('ocrFileUebernachtung').click()">📁 Dateien auswählen</button>
+    </div>
+    <div class="ocr-preview" id="ocrPreviewUebernachtung"></div>
+    
+    <div id="uebernachtungItems"></div>
+    <button type="button" class="btn-add-item" onclick="addUebernachtungItem()">+ Kosten manuell hinzufügen</button>
+    <div class="calc-field" id="uebernachtung_gesamt" style="margin-top:10px">0,00 €</div>
+  </div>
+
+  <div class="cost-box">
+    <label class="label" style="color:#E74C3C">Abzüge</label>
+    
+    <div class="cost-row-split">
+      <div>
+        <label class="label" for="fruehstueck_inland">Frühstück Inland (Anzahl x 5,60 €)</label>
+        <input type="number" id="fruehstueck_inland" step="1" placeholder="Anzahl" oninput="calcUebernachtung()">
+      </div>
+      <div>
+        <label class="label" for="fruehstueck_ausland">Frühstück Ausland (Anzahl)</label>
+        <input type="number" id="fruehstueck_ausland" step="1" placeholder="Anzahl" oninput="calcUebernachtung()">
+      </div>
+    </div>
+    <div class="cost-row-split">
+      <div></div>
+      <div>
+        <label class="label" for="fruehstueck_ausland_rate">Pauschale (€)</label>
+        <input type="number" id="fruehstueck_ausland_rate" step="0.01" placeholder="€ pro Frühstück" oninput="calcUebernachtung()">
+      </div>
+    </div>
+
+    <div class="cost-row-split">
+      <div>
+        <label class="label" for="mittag_inland">Mittag/Abend Inland (Anzahl x 11,20 €)</label>
+        <input type="number" id="mittag_inland" step="1" placeholder="Anzahl" oninput="calcUebernachtung()">
+      </div>
+      <div>
+        <label class="label" for="mittag_ausland">Mittag/Abend Ausland (Anzahl)</label>
+        <input type="number" id="mittag_ausland" step="1" placeholder="Anzahl" oninput="calcUebernachtung()">
+      </div>
+    </div>
+    <div class="cost-row-split">
+      <div></div>
+      <div>
+        <label class="label" for="mittag_ausland_rate">Pauschale (€)</label>
+        <input type="number" id="mittag_ausland_rate" step="0.01" placeholder="€ pro Mahlzeit" oninput="calcUebernachtung()">
+      </div>
+    </div>
+
+    <div class="total-label" style="color:#E74C3C">Abzüge gesamt:</div>
+    <div class="calc-field" id="abzuege_sum" style="color:#E74C3C">- 0,00 €</div>
+  </div>
+
+  <div class="total-label">Ergebnis Übernachtung:</div>
+  <div class="calc-field" id="uebernachtung_total" style="font-size:18px">0,00 €</div>
+</div>
+
+<!-- IV. Reise-Nebenkosten -->
+<h2>IV. Reise-Nebenkosten</h2>
+<div class="cost-section">
+  <div class="cost-box">
+    <label class="label">Tatsächliche Kosten (ggf. Eigenbelege)</label>
+    <div class="hint">z.B. für Telekommunikation, Porto, Parken, usw.</div>
+    
+    <!-- OCR Upload -->
+    <div class="ocr-upload-box" id="ocrUploadNebenkosten">
+      <div style="font-size:40px;margin-bottom:10px">📄</div>
+      <div style="font-weight:600;margin-bottom:5px">Belege hochladen & automatisch auslesen</div>
+      <div style="font-size:12px;color:#718096">Klicken oder Dateien hierher ziehen (JPG, PNG, PDF)</div>
+      <input type="file" id="ocrFileNebenkosten" accept="image/*,.pdf" capture="environment" multiple style="display:none" onchange="handleOCRUpload(event, 'nebenkosten')">
+      <button type="button" class="btn-ocr-upload" onclick="document.getElementById('ocrFileNebenkosten').click()">📁 Dateien auswählen</button>
+    </div>
+    <div class="ocr-preview" id="ocrPreviewNebenkosten"></div>
+    
+    <div id="nebenkostenItems"></div>
+    <button type="button" class="btn-add-item" onclick="addNebenkostenItem()">+ Kosten manuell hinzufügen</button>
+    <div class="calc-field" id="nebenkosten_sum" style="margin-top:10px">0,00 €</div>
+  </div>
+</div>
+
+<!-- Gesamtsumme -->
+<div class="total-box">
+  <div class="total-label">Reisekosten gesamt:</div>
+  <div id="gesamtsumme">0,00 €</div>
+</div>
+
+<!-- Unterschrift -->
+<div class="section">
+  <h2>Unterschrift</h2>
+  <div class="cost-section">
+    <div class="cost-box" style="background:linear-gradient(135deg,#e8eaf0 0%,#dfe2e8 100%)">
+      <div class="cost-row-split">
+        <div>
+          <label class="label" for="datum">Datum:</label>
+          <input type="date" id="datum">
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-sig" onclick="openSigModal()" style="font-size:16px;padding:14px 24px;background:#8B1538">
+            ✍️ Unterschrift zeichnen
+          </button>
+          <button class="btn btn-sig" onclick="document.getElementById('sigFileInput').click()" style="font-size:16px;padding:14px 24px;background:#8B1538">
+            📁 Bild hochladen
+          </button>
+          <input type="file" id="sigFileInput" accept="image/png,image/jpeg,image/jpg" style="display:none" onchange="handleSignatureUpload(event)">
+        </div>
+      </div>
+    </div>
+    
+    <div class="cost-box">
+      <label class="label">Unterschrift Vorschau:</label>
+      <div class="sig-preview" id="sigPrev">
+        <span class="placeholder">Noch keine Unterschrift - Klicken Sie auf "Unterschrift zeichnen" oder "Bild hochladen"</span>
+      </div>
+      <button class="btn" onclick="clearSignature()" id="clearSigBtn" style="display:none;background:#6B7280;margin-top:10px">
+        🗑️ Unterschrift löschen
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Freigabe-Felder -->
+<div class="approval-box">
+  <label class="label">Freigabe / Bearbeitung:</label>
+  <div class="approval-grid">
+    <div class="approval-item">
+      <label class="label" for="geprueft">geprüft:</label>
+      <input type="text" id="geprueft" placeholder="Name/Kürzel">
+    </div>
+    <div class="approval-item">
+      <label class="label" for="ausgezahlt">ausgezahlt:</label>
+      <input type="text" id="ausgezahlt" placeholder="Name/Kürzel">
+    </div>
+    <div class="approval-item">
+      <label class="label" for="gebucht">gebucht:</label>
+      <input type="text" id="gebucht" placeholder="Name/Kürzel">
+    </div>
+  </div>
+</div>
+
+<!-- Gespeicherte Abrechnungen -->
+<div class="reports" id="reports">
+  <h2>Gespeicherte Abrechnungen</h2>
+  <div id="reportsList"></div>
+</div>
+```
+
+  </div>
+
   <!-- Unterschrift Modal -->
+
   <div id="sigModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeSigModal()">&times;</span>
@@ -1114,160 +1125,174 @@
   </div>
 
   <!-- OCR Betrag Auswahl Modal -->
+
   <div id="ocrAmountModal" class="modal">
     <div class="modal-content" style="max-width:900px">
       <span class="close" onclick="closeOCRAmountModal()">&times;</span>
       <div class="modal-title">💰 Betrag auswählen</div>
+
+```
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
+    <!-- Beleg Vorschau -->
+    <div>
+      <label style="font-weight:600;display:block;margin-bottom:8px">📄 Beleg Vorschau:</label>
+      <div id="ocrAmountPreview" style="border:2px solid #e2e8f0;border-radius:8px;overflow:hidden;background:#f9fafb;max-height:400px;display:flex;align-items:center;justify-content:center">
+        <img id="ocrAmountImage" style="max-width:100%;max-height:400px;object-fit:contain" alt="Beleg">
+      </div>
+    </div>
+    
+    <!-- Betrag Auswahl -->
+    <div>
+      <p style="color:#6B7280;margin-bottom:15px">Kein Betrag automatisch erkannt. Bitte wählen Sie einen Betrag aus oder geben Sie ihn manuell ein:</p>
       
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
-        <!-- Beleg Vorschau -->
-        <div>
-          <label style="font-weight:600;display:block;margin-bottom:8px">📄 Beleg Vorschau:</label>
-          <div id="ocrAmountPreview" style="border:2px solid #e2e8f0;border-radius:8px;overflow:hidden;background:#f9fafb;max-height:400px;display:flex;align-items:center;justify-content:center">
-            <img id="ocrAmountImage" style="max-width:100%;max-height:400px;object-fit:contain" alt="Beleg">
-          </div>
+      <div id="ocrAmountSuggestions" style="margin-bottom:20px"></div>
+      
+      <div style="margin-top:20px">
+        <label style="font-weight:600;display:block;margin-bottom:8px">Oder manuell eingeben:</label>
+        <div style="display:flex;gap:10px;align-items:center">
+          <input type="number" id="ocrManualAmount" step="0.01" placeholder="Betrag in €" 
+                 style="flex:1;padding:12px;border:2px solid #e2e8f0;border-radius:8px;font-size:16px"
+                 onkeypress="if(event.key==='Enter') confirmManualAmount()">
+          <button class="modal-btn btn-ok" onclick="confirmManualAmount()">✅ Übernehmen</button>
         </div>
         
-        <!-- Betrag Auswahl -->
-        <div>
-          <p style="color:#6B7280;margin-bottom:15px">Kein Betrag automatisch erkannt. Bitte wählen Sie einen Betrag aus oder geben Sie ihn manuell ein:</p>
-          
-          <div id="ocrAmountSuggestions" style="margin-bottom:20px"></div>
-          
-          <div style="margin-top:20px">
-            <label style="font-weight:600;display:block;margin-bottom:8px">Oder manuell eingeben:</label>
-            <div style="display:flex;gap:10px;align-items:center">
-              <input type="number" id="ocrManualAmount" step="0.01" placeholder="Betrag in €" 
-                     style="flex:1;padding:12px;border:2px solid #e2e8f0;border-radius:8px;font-size:16px"
-                     onkeypress="if(event.key==='Enter') confirmManualAmount()">
-              <button class="modal-btn btn-ok" onclick="confirmManualAmount()">✅ Übernehmen</button>
-            </div>
-            
-            <!-- Beschreibung anpassen -->
-            <div style="margin-top:15px">
-              <label style="font-weight:600;display:block;margin-bottom:8px">📝 Beschreibung:</label>
-              <input type="text" id="ocrManualDescription" placeholder="z.B. Hotel München"
-                     style="width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:8px;font-size:14px">
-            </div>
-          </div>
+        <!-- Beschreibung anpassen -->
+        <div style="margin-top:15px">
+          <label style="font-weight:600;display:block;margin-bottom:8px">📝 Beschreibung:</label>
+          <input type="text" id="ocrManualDescription" placeholder="z.B. Hotel München"
+                 style="width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:8px;font-size:14px">
         </div>
-      </div>
-      
-      <div class="modal-btns">
-        <button class="modal-btn btn-cancel" onclick="closeOCRAmountModal()">❌ Abbrechen</button>
       </div>
     </div>
   </div>
+  
+  <div class="modal-btns">
+    <button class="modal-btn btn-cancel" onclick="closeOCRAmountModal()">❌ Abbrechen</button>
+  </div>
+</div>
+```
+
+  </div>
 
   <!-- Info Modal -->
+
   <div id="infoModal" class="info-modal">
     <div class="info-modal-content">
       <span class="close" onclick="closeInfo()">&times;</span>
       <h2>Reisekostenabrechnung Nexus/IPS</h2>
       <p><strong>Version:</strong> 2.0.1 (angepasst an Rev. 02-20/01)</p>
-      
-      <h3>🎉 Neue Features in v2.0.1</h3>
-      <ul>
-        <li><strong>🔗 Verknüpfte Belege:</strong> Zeilen und hochgeladene Belege sind miteinander verbunden</li>
-        <li><strong>🗑️ Automatisches Löschen:</strong> Beim Löschen einer Zeile wird der zugehörige Beleg automatisch mitgelöscht und umgekehrt</li>
-        <li><strong>📎 Visuelle Markierung:</strong> Zeilen mit Belegen haben einen grünen Rand und ein Büroklammer-Symbol</li>
-        <li><strong>💡 Tooltip-Hinweise:</strong> Beim Hover über den Löschen-Button sehen Sie, ob auch ein Beleg betroffen ist</li>
+
+```
+  <h3>🎉 Neue Features in v2.0.1</h3>
+  <ul>
+    <li><strong>🔗 Verknüpfte Belege:</strong> Zeilen und hochgeladene Belege sind miteinander verbunden</li>
+    <li><strong>🗑️ Automatisches Löschen:</strong> Beim Löschen einer Zeile wird der zugehörige Beleg automatisch mitgelöscht und umgekehrt</li>
+    <li><strong>📎 Visuelle Markierung:</strong> Zeilen mit Belegen haben einen grünen Rand und ein Büroklammer-Symbol</li>
+    <li><strong>💡 Tooltip-Hinweise:</strong> Beim Hover über den Löschen-Button sehen Sie, ob auch ein Beleg betroffen ist</li>
+  </ul>
+
+  <h3>📋 Alle Funktionen</h3>
+  <ul>
+    <li><strong>Vollständige Erfassung:</strong> Alle Felder gemäß Original-Vorlage</li>
+    <li><strong>Automatische Berechnungen:</strong> Alle Summen werden automatisch berechnet</li>
+    <li><strong>🚗 Fahrzeugtyp-Auswahl:</strong> Firmenauto (keine Kosten), Privat-KFZ (0,30 €/km) oder Mietwagen</li>
+    <li><strong>📄 OCR-Beleg-Erkennung:</strong> Automatische Texterkennung aus Bildern und PDFs</li>
+    <li><strong>📦 ZIP-Export:</strong> Erstellt eine ZIP-Datei mit PDF und allen hochgeladenen Belegen</li>
+    <li><strong>🖱️ Drag & Drop:</strong> Belege einfach per Drag & Drop hochladen</li>
+    <li><strong>➕ Multiple Items:</strong> Beliebig viele Einträge für Übernachtung, Nebenkosten und öffentliche Verkehrsmittel</li>
+    <li><strong>💾 Speichern & Laden:</strong> Abrechnungen lokal speichern und wiederverwenden</li>
+    <li><strong>📤 JSON Export/Import:</strong> Daten sichern und übertragen</li>
+    <li><strong>🌓 Dark Mode:</strong> Augenschonende Darstellung</li>
+    <li><strong>📱 Mobile optimiert:</strong> Funktioniert perfekt auf allen Geräten</li>
+  </ul>
+
+  <h3>💡 Bedienung</h3>
+  <ul>
+    <li><strong>Kopfdaten:</strong> Name, Reisezeitraum (mit Uhrzeit), Anlass und Reiseziel eingeben</li>
+    <li><strong>Fahrtkosten:</strong> 
+      <ul style="margin-left:20px;margin-top:5px">
+        <li>Firmenauto: Keine direkten Kosten (Tankbelege etc. unter Nebenkosten)</li>
+        <li>Privat-KFZ: Kilometer × Pauschale (Standard: 0,30 €/km)</li>
+        <li>Mietwagen: Vorauszahlung (wird nicht zur Gesamtsumme addiert)</li>
+        <li>Öffentliche Verkehrsmittel: Beliebig viele Tickets hinzufügen</li>
       </ul>
-
-      <h3>📋 Alle Funktionen</h3>
-      <ul>
-        <li><strong>Vollständige Erfassung:</strong> Alle Felder gemäß Original-Vorlage</li>
-        <li><strong>Automatische Berechnungen:</strong> Alle Summen werden automatisch berechnet</li>
-        <li><strong>🚗 Fahrzeugtyp-Auswahl:</strong> Firmenauto (keine Kosten), Privat-KFZ (0,30 €/km) oder Mietwagen</li>
-        <li><strong>📄 OCR-Beleg-Erkennung:</strong> Automatische Texterkennung aus Bildern und PDFs</li>
-        <li><strong>📦 ZIP-Export:</strong> Erstellt eine ZIP-Datei mit PDF und allen hochgeladenen Belegen</li>
-        <li><strong>🖱️ Drag & Drop:</strong> Belege einfach per Drag & Drop hochladen</li>
-        <li><strong>➕ Multiple Items:</strong> Beliebig viele Einträge für Übernachtung, Nebenkosten und öffentliche Verkehrsmittel</li>
-        <li><strong>💾 Speichern & Laden:</strong> Abrechnungen lokal speichern und wiederverwenden</li>
-        <li><strong>📤 JSON Export/Import:</strong> Daten sichern und übertragen</li>
-        <li><strong>🌓 Dark Mode:</strong> Augenschonende Darstellung</li>
-        <li><strong>📱 Mobile optimiert:</strong> Funktioniert perfekt auf allen Geräten</li>
+    </li>
+    <li><strong>Verpflegung:</strong> Inland (14/28 €) und Ausland mit individuellen Pauschalen</li>
+    <li><strong>Übernachtung:</strong> 
+      <ul style="margin-left:20px;margin-top:5px">
+        <li>Tatsächliche Kosten (beliebig viele Hotelrechnungen)</li>
+        <li>Abzüge für enthaltene Mahlzeiten</li>
+        <li>Automatische Berechnung des Endergebnisses</li>
       </ul>
+    </li>
+    <li><strong>Nebenkosten:</strong> Parken, Telekommunikation, Porto, Tankbelege (Firmenauto), etc.</li>
+    <li><strong>Unterschrift:</strong> Digital zeichnen oder Bild hochladen (PNG/JPG)</li>
+    <li><strong>Freigabe:</strong> Felder für Prüfung, Auszahlung und Buchung</li>
+  </ul>
 
-      <h3>💡 Bedienung</h3>
-      <ul>
-        <li><strong>Kopfdaten:</strong> Name, Reisezeitraum (mit Uhrzeit), Anlass und Reiseziel eingeben</li>
-        <li><strong>Fahrtkosten:</strong> 
-          <ul style="margin-left:20px;margin-top:5px">
-            <li>Firmenauto: Keine direkten Kosten (Tankbelege etc. unter Nebenkosten)</li>
-            <li>Privat-KFZ: Kilometer × Pauschale (Standard: 0,30 €/km)</li>
-            <li>Mietwagen: Vorauszahlung (wird nicht zur Gesamtsumme addiert)</li>
-            <li>Öffentliche Verkehrsmittel: Beliebig viele Tickets hinzufügen</li>
-          </ul>
-        </li>
-        <li><strong>Verpflegung:</strong> Inland (14/28 €) und Ausland mit individuellen Pauschalen</li>
-        <li><strong>Übernachtung:</strong> 
-          <ul style="margin-left:20px;margin-top:5px">
-            <li>Tatsächliche Kosten (beliebig viele Hotelrechnungen)</li>
-            <li>Abzüge für enthaltene Mahlzeiten</li>
-            <li>Automatische Berechnung des Endergebnisses</li>
-          </ul>
-        </li>
-        <li><strong>Nebenkosten:</strong> Parken, Telekommunikation, Porto, Tankbelege (Firmenauto), etc.</li>
-        <li><strong>Unterschrift:</strong> Digital zeichnen oder Bild hochladen (PNG/JPG)</li>
-        <li><strong>Freigabe:</strong> Felder für Prüfung, Auszahlung und Buchung</li>
-      </ul>
+  <h3>📷 OCR-Beleg-Upload</h3>
+  <p><strong>So funktioniert es:</strong></p>
+  <ul>
+    <li>Klicken Sie auf die Upload-Box oder ziehen Sie Dateien per Drag & Drop hinein</li>
+    <li>Unterstützte Formate: JPG, PNG, PDF</li>
+    <li>Die OCR-Engine erkennt automatisch Beträge im Dokument</li>
+    <li>Sie können aus gefundenen Beträgen auswählen oder manuell eingeben</li>
+    <li>Jeder Beleg wird automatisch mit der erstellten Zeile verknüpft</li>
+    <li>🔗 Beim Löschen der Zeile wird automatisch der Beleg mitgelöscht</li>
+    <li>🔗 Beim Löschen des Belegs wird automatisch die Zeile mitgelöscht</li>
+    <li>Zeilen mit Belegen sind mit einem grünen Rand und 📎 markiert</li>
+  </ul>
 
-      <h3>📷 OCR-Beleg-Upload</h3>
-      <p><strong>So funktioniert es:</strong></p>
-      <ul>
-        <li>Klicken Sie auf die Upload-Box oder ziehen Sie Dateien per Drag & Drop hinein</li>
-        <li>Unterstützte Formate: JPG, PNG, PDF</li>
-        <li>Die OCR-Engine erkennt automatisch Beträge im Dokument</li>
-        <li>Sie können aus gefundenen Beträgen auswählen oder manuell eingeben</li>
-        <li>Jeder Beleg wird automatisch mit der erstellten Zeile verknüpft</li>
-        <li>🔗 Beim Löschen der Zeile wird automatisch der Beleg mitgelöscht</li>
-        <li>🔗 Beim Löschen des Belegs wird automatisch die Zeile mitgelöscht</li>
-        <li>Zeilen mit Belegen sind mit einem grünen Rand und 📎 markiert</li>
-      </ul>
+  <h3>💾 Speichern & Laden</h3>
+  <p>Klicken Sie auf "Abrechnung speichern" um die Daten lokal im Browser zu speichern. Gespeicherte Abrechnungen können jederzeit wieder geladen werden. Alle hochgeladenen Belege werden mit gespeichert.</p>
 
-      <h3>💾 Speichern & Laden</h3>
-      <p>Klicken Sie auf "Abrechnung speichern" um die Daten lokal im Browser zu speichern. Gespeicherte Abrechnungen können jederzeit wieder geladen werden. Alle hochgeladenen Belege werden mit gespeichert.</p>
+  <h3>📦 PDF/ZIP Export</h3>
+  <p><strong>Zwei Export-Optionen:</strong></p>
+  <ul>
+    <li><strong>Ohne Belege:</strong> Nur PDF-Datei wird heruntergeladen</li>
+    <li><strong>Mit Belegen:</strong> ZIP-Datei mit PDF und allen hochgeladenen Belegen in Unterordnern</li>
+  </ul>
+  <p>Das PDF wird im Original-Layout der Nexus/IPS Vorlage erstellt.</p>
 
-      <h3>📦 PDF/ZIP Export</h3>
-      <p><strong>Zwei Export-Optionen:</strong></p>
-      <ul>
-        <li><strong>Ohne Belege:</strong> Nur PDF-Datei wird heruntergeladen</li>
-        <li><strong>Mit Belegen:</strong> ZIP-Datei mit PDF und allen hochgeladenen Belegen in Unterordnern</li>
-      </ul>
-      <p>Das PDF wird im Original-Layout der Nexus/IPS Vorlage erstellt.</p>
+  <h3>📤 JSON Export/Import</h3>
+  <p>Exportieren Sie Ihre Abrechnung als JSON-Datei um sie zu sichern oder auf einem anderen Gerät zu importieren. Alle Daten und Belege werden exportiert.</p>
 
-      <h3>📤 JSON Export/Import</h3>
-      <p>Exportieren Sie Ihre Abrechnung als JSON-Datei um sie zu sichern oder auf einem anderen Gerät zu importieren. Alle Daten und Belege werden exportiert.</p>
+  <h3>🌓 Dark Mode</h3>
+  <p>Klicken Sie auf das Mond-Symbol 🌙 oben rechts um zwischen hellem und dunklem Design zu wechseln. Ihre Auswahl wird automatisch gespeichert.</p>
 
-      <h3>🌓 Dark Mode</h3>
-      <p>Klicken Sie auf das Mond-Symbol 🌙 oben rechts um zwischen hellem und dunklem Design zu wechseln. Ihre Auswahl wird automatisch gespeichert.</p>
+  <h3>💡 Tipps</h3>
+  <ul>
+    <li>Speichern Sie regelmäßig während der Eingabe</li>
+    <li>Nutzen Sie OCR für schnellere Beleg-Erfassung</li>
+    <li>Prüfen Sie erkannte Beträge immer manuell</li>
+    <li>Der grüne Rand zeigt verknüpfte Belege an</li>
+    <li>Alle Summen werden automatisch berechnet</li>
+    <li>Die App funktioniert auch offline (nach dem ersten Laden)</li>
+  </ul>
 
-      <h3>💡 Tipps</h3>
-      <ul>
-        <li>Speichern Sie regelmäßig während der Eingabe</li>
-        <li>Nutzen Sie OCR für schnellere Beleg-Erfassung</li>
-        <li>Prüfen Sie erkannte Beträge immer manuell</li>
-        <li>Der grüne Rand zeigt verknüpfte Belege an</li>
-        <li>Alle Summen werden automatisch berechnet</li>
-        <li>Die App funktioniert auch offline (nach dem ersten Laden)</li>
-      </ul>
+  <button class="btn btn-pdf" onclick="closeInfo()">Schließen</button>
+</div>
+```
 
-      <button class="btn btn-pdf" onclick="closeInfo()">Schließen</button>
-    </div>
   </div>
 
   <!-- Toast Notification -->
+
   <div id="toast" class="toast"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
   <script>
     // PDF.js Worker konfigurieren
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
   </script>
+
   <script>
     // ====== Globale Variablen ======
     let canvas, ctx;
@@ -3109,7 +3134,9 @@
     // Setup drag and drop for OCR
     setupDragAndDrop();
   </script>
+
   <!-- Image Lightbox Modal -->
+
   <div id="imageLightbox" class="modal" style="z-index:2000;background:rgba(0,0,0,0.95)">
     <div class="modal-content" style="max-width:95vw;max-height:95vh;padding:0;background:transparent;box-shadow:none;border:none">
       <span class="close" onclick="closeLightbox()" style="color:#fff;font-size:40px;position:absolute;top:20px;right:30px;z-index:2001">&times;</span>
