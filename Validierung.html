@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – v3.5 Ultra Compact</title>
+  <title>CL Validierungsprotokoll – v4.0 Professional</title>
   <style>
     :root{
       --primary:#8B1538; --bg:#F8F9FB; --text:#1E2434; --card:#ffffff; --muted:#e9edf3;
@@ -12,746 +13,1005 @@
     *{box-sizing:border-box}
     html,body{height:100%}
     body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+
+```
+.container{max-width:1100px;margin:0 auto;padding:16px;padding-top:80px;position:relative}
+.sheet{background:var(--card);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.08);overflow:visible;position:relative}
+
+/* Seitenumbruch-Markierungen */
+#pageBreakMarkers{
+  position:absolute;
+  left:0;
+  top:80px;
+  width:100%;
+  pointer-events:none;
+  z-index:100;
+}
+#pageBreakMarkers.hidden{display:none}
+#pageBreakMarkers .page-break-line{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  width:calc(100% - 32px);
+  max-width:1100px;
+  border-top:2px dashed var(--primary);
+  opacity:0.4;
+}
+#pageBreakMarkers .page-break-label{
+  position:absolute;
+  right:40px;
+  transform:translateY(-50%);
+  background:var(--primary);
+  color:#fff;
+  padding:4px 12px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:700;
+  box-shadow:0 2px 8px rgba(139,21,56,0.3);
+}
+
+header{background:var(--primary);color:#fff;padding:16px 20px;display:flex;gap:16px;align-items:center;justify-content:space-between}
+header .title{font-size:18px;font-weight:700}
+header .version{opacity:.9;font-size:12px}
+
+/* Sticky Hamburger */
+.hamburger-container{position:fixed;top:16px;right:16px;z-index:5000}
+.hamburger-btn{width:50px;height:50px;background:var(--primary);border:none;border-radius:50%;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:0 4px 20px rgba(0,0,0,.2);transition:all 0.3s}
+.hamburger-btn:hover{transform:scale(1.05)}
+.hamburger-btn span{width:24px;height:3px;background:#fff;border-radius:2px;transition:all 0.3s}
+.hamburger-btn.active span:nth-child(1){transform:rotate(45deg) translate(5px, 5px)}
+.hamburger-btn.active span:nth-child(2){opacity:0}
+.hamburger-btn.active span:nth-child(3){transform:rotate(-45deg) translate(7px, -7px)}
+.hamburger-menu{position:fixed;top:80px;right:16px;background:#fff;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.2);padding:12px;display:none;flex-direction:column;gap:8px;min-width:250px;z-index:4999}
+.hamburger-menu.active{display:flex}
+.hamburger-menu .btn{width:100%;text-align:left;justify-content:flex-start}
+
+.btn{appearance:none;border:0;border-radius:12px;padding:10px 14px;font-weight:700;background:#ffffff;color:var(--primary);cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.06);display:flex;align-items:center;gap:8px}
+.btn:hover{transform:translateY(-1px);box-shadow:0 5px 15px rgba(0,0,0,.1)}
+.btn.outline{background:transparent;border:2px solid #fff;color:#fff}
+.btn.danger{background:var(--err);color:#fff}
+.btn.secondary{background:#1e293b;color:#fff}
+.btn.icon{padding:6px 8px;border-radius:8px}
+.btn.switch{justify-content:space-between}
+
+/* Sections */
+.section{padding:18px 20px;border-top:1px solid var(--muted)}
+.section.collapsible .section-body{transition:max-height .25s ease}
+.section.collapsed .section-body{display:none}
+.section .collapse-btn{
+  background:#fff;border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;font-size:14px;
+  width:30px;height:30px;display:grid;place-items:center;margin-right:8px;color:#1f2937
+}
+.section .collapse-btn:hover{background:#f1f5f9}
+.section h2{margin:0;font-size:18px;color:var(--primary)}
+.section-header{background:#f8f9fb;padding:12px 16px;margin:-18px -20px 16px -20px;border-bottom:2px solid var(--primary)}
+.section-header .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.section-header .title-wrap{display:flex;align-items:center;gap:8px}
+
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
+.col-3{grid-column:span 3} .col-4{grid-column:span 4} .col-6{grid-column:span 6} .col-8{grid-column:span 8} .col-12{grid-column:span 12}
+
+label{display:block;font-size:12px;margin-bottom:6px;color:#334155;font-weight:600}
+input[type="text"],input[type="date"],input[type="number"],textarea,select{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:10px;background:#fff;outline:none;font-family:inherit}
+input[type="text"]:focus,input[type="date"]:focus,input[type="number"]:focus,textarea:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(139,21,56,.1)}
+textarea{min-height:80px;resize:vertical}
+
+/* Check-Zeilen mit Code + Move Handle */
+.list{display:flex;flex-direction:column;gap:8px}
+.check{display:flex;gap:10px;align-items:center;padding:8px 10px;border:1px solid #e5e7eb;border-radius:10px;min-height:40px}
+.check .move-btns{margin-right:4px}
+.check .tiny{width:60px;height:28px;padding:4px 6px;font-size:12px;text-align:center}
+.check .info-btn{width:26px;height:26px;display:grid;place-items:center;border:1px solid #cbd5e1;border-radius:50%;cursor:pointer;background:#fff;font-weight:700;color:#334155;line-height:1}
+.check .info-btn:before{content:'i'}
+.check .label-input{
+  flex:1; min-width:140px; padding:6px 8px; border:1px solid #d1d5db; border-radius:8px; background:#fff; font:inherit; outline:none;
+}
+.check .label-input:focus{border-color:var(--primary); box-shadow:0 0 0 3px rgba(139,21,56,.10)}
+.check .note{min-width:200px;max-width:260px;font-size:12px;padding:6px 8px;height:28px}
+.check .manage{display:flex;gap:6px}
+.check .del{margin-left:4px}
+.check input[type="checkbox"]{width:18px;height:18px;margin-left:auto}
+
+/* Inline Checkbox */
+.checkbox-inline{display:flex;align-items:center;gap:8px}
+.checkbox-inline input[type="checkbox"]{width:18px;height:18px;margin:0}
+.checkbox-inline label{margin:0;font-weight:normal}
+
+/* Abstand-Abschnitt */
+.spacing-section{background:#f8f9fb;border:2px dashed #cbd5e1;border-radius:8px;padding:12px;margin:8px 0}
+.spacing-section .controls{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.spacing-section .preview{background:#fff;border:1px solid #e5e7eb;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:13px}
+
+/* Text-Abschnitt */
+.text-section{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:12px;margin:8px 0}
+.text-editor-toolbar{display:flex;gap:4px;padding:8px;background:#f8f9fb;border:1px solid #e5e7eb;border-radius:6px 6px 0 0;flex-wrap:wrap}
+.text-editor-toolbar button{padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;background:#fff;cursor:pointer;font-size:13px}
+.text-editor-toolbar button:hover{background:#f1f5f9}
+.text-editor-toolbar button.active{background:#dbeafe;border-color:#3b82f6}
+.text-editor-content{min-height:120px;padding:12px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 6px 6px;background:#fff;outline:none}
+.text-editor-content:focus{border-color:#3b82f6}
+
+/* Bild-Abschnitt */
+.image-section{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:12px;margin:8px 0}
+.image-upload-zone{border:2px dashed #cbd5e1;border-radius:8px;padding:20px;text-align:center;background:#f8f9fb;cursor:pointer;transition:all 0.2s}
+.image-upload-zone:hover{border-color:#8B1538;background:#fef2f2}
+.image-upload-zone.dragover{border-color:#8B1538;background:#fee2e2}
+.image-preview{display:grid;grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));gap:10px;margin-top:12px}
+.image-preview-item{position:relative;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;aspect-ratio:4/3}
+.image-preview-item img{width:100%;height:100%;object-fit:cover}
+.image-preview-item .delete-btn{position:absolute;top:4px;right:4px;background:#ef4444;color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;line-height:1}
+.image-preview-item .delete-btn:hover{background:#dc2626}
+
+/* Signatur - Textarea */
+.sig-area{border:2px dashed #cbd5e1;border-radius:8px;padding:12px;background:#f8f9fb;min-height:120px;position:relative}
+.sig-area textarea{min-height:100px;border:1px solid #d1d5db;resize:vertical}
+
+/* Move Handle */
+.move-btns{display:flex;flex-direction:column;gap:2px;margin-right:4px}
+.move-handle{width:28px;height:56px;padding:4px;border:1px solid #cbd5e1;background:#fff;border-radius:6px;cursor:grab;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:all 0.2s}
+.move-handle:hover{background:#f1f5f9;border-color:#64748b}
+.move-handle:active{cursor:grabbing;background:#e2e8f0}
+.move-handle:before{content:'';width:18px;height:2px;background:#94a3b8;border-radius:1px}
+.move-handle:after{content:'';width:18px;height:2px;background:#94a3b8;border-radius:1px}
+.move-handle span{width:18px;height:2px;background:#94a3b8;border-radius:1px;display:block}
+
+/* Gruppen mit Drag & Drop */
+.group{
+  border:2px solid #e5e7eb;
+  border-radius:12px;
+  margin:20px 0;
+  overflow:visible;
+  background:#ffffff;
+  transition:all 0.3s;
+  position:relative;
+}
+.group.disabled{
+  opacity:0.5;
+  background:#f9fafb;
+}
+.group.collapsed .group-content{
+  display:none;
+}
+.group.dragging{
+  opacity:0.5;
+  transform:scale(0.98);
+}
+.group.drag-over{
+  border-color:var(--primary);
+  border-style:dashed;
+}
+
+.group-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  justify-content:space-between;
+  background:linear-gradient(135deg, #8B1538 0%, #a91d47 100%);
+  color:#fff;
+  border-radius:10px 10px 0 0;
+  padding:14px 16px;
+  user-select:none;
+}
+.group-header:hover{
+  background:linear-gradient(135deg, #9a1740 0%, #ba2250 100%);
+}
+
+.group-title-section{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex:1;
+}
+
+.group-move-handle{
+  background:rgba(255,255,255,0.2);
+  border:1px solid rgba(255,255,255,0.3);
+  border-radius:6px;
+  width:36px;
+  height:36px;
+  cursor:grab;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  transition:all 0.2s;
+}
+.group-move-handle:hover{
+  background:rgba(255,255,255,0.3);
+}
+.group-move-handle:active{
+  cursor:grabbing;
+}
+.group-move-handle::before,
+.group-move-handle::after{
+  content:'';
+  width:20px;
+  height:2px;
+  background:#fff;
+  border-radius:1px;
+}
+.group-move-handle span{
+  width:20px;
+  height:2px;
+  background:#fff;
+  border-radius:1px;
+  display:block;
+}
+
+.group-collapse-btn{
+  background:rgba(255,255,255,0.2);
+  border:1px solid rgba(255,255,255,0.3);
+  border-radius:6px;
+  width:32px;
+  height:32px;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  color:#fff;
+  font-size:18px;
+  font-weight:bold;
+  transition:all 0.2s;
+}
+.group-collapse-btn:hover{
+  background:rgba(255,255,255,0.3);
+  transform:scale(1.05);
+}
+.group.collapsed .group-collapse-btn::before{
+  content:'▼';
+}
+.group:not(.collapsed) .group-collapse-btn::before{
+  content:'▲';
+}
+
+.group-title-input{
+  border:none;
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+  font-weight:700;
+  font-size:17px;
+  padding:8px 12px;
+  border-radius:8px;
+  min-width:200px;
+  flex:1;
+  outline:none;
+}
+.group-title-input::placeholder{
+  color:rgba(255,255,255,0.7);
+}
+.group-title-input:focus{
+  background:rgba(255,255,255,0.25);
+  box-shadow:0 0 0 3px rgba(255,255,255,0.2);
+}
+
+.group-actions{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+
+.group-toggle{
+  background:rgba(255,255,255,0.2);
+  border:1px solid rgba(255,255,255,0.3);
+  border-radius:6px;
+  padding:6px 12px;
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  transition:all 0.2s;
+  white-space:nowrap;
+}
+.group-toggle:hover{
+  background:rgba(255,255,255,0.3);
+}
+.group-toggle.active{
+  background:#11a36a;
+  border-color:#11a36a;
+}
+
+.group-btn{
+  background:rgba(255,255,255,0.2);
+  border:1px solid rgba(255,255,255,0.3);
+  border-radius:6px;
+  width:32px;
+  height:32px;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  color:#fff;
+  font-size:16px;
+  transition:all 0.2s;
+}
+.group-btn:hover{
+  background:rgba(255,255,255,0.3);
+  transform:scale(1.05);
+}
+.group-btn.duplicate::before{content:'⧉'}
+.group-btn.delete::before{content:'✕'}
+.group-btn.delete:hover{
+  background:#ef4444;
+  border-color:#ef4444;
+}
+
+.group-content{
+  padding:0;
+}
+
+.group-add-section{
+  padding:16px;
+  text-align:center;
+  border-top:2px dashed #e5e7eb;
+  background:#f9fafb;
+}
+
+/* Modal */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center}
+.modal.active{display:flex}
+.modal-content{background:#fff;border-radius:16px;padding:24px;max-width:600px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.modal-title{font-size:22px;font-weight:700;color:var(--primary)}
+.modal-close{background:transparent;border:none;font-size:28px;cursor:pointer;color:#64748b;line-height:1}
+.modal-close:hover{color:var(--primary)}
+.section-type-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.section-type-card{padding:16px;border:2px solid #e5e7eb;border-radius:12px;cursor:pointer;text-align:center;transition:all 0.2s}
+.section-type-card:hover{border-color:var(--primary);background:#fef2f2;transform:translateY(-2px)}
+.section-type-card .icon{font-size:32px;margin-bottom:8px}
+.section-type-card .name{font-weight:700;color:var(--text)}
+
+/* PROFESSIONELLE PRINT-STYLES FÜR PDF */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 25mm 20mm 30mm 20mm;
     
-    .container{max-width:1100px;margin:0 auto;padding:16px;padding-top:80px;position:relative}
-    .sheet{background:var(--card);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.08);overflow:visible;position:relative}
-    
-    /* Seitenumbruch-Markierungen */
-    #pageBreakMarkers{
-      position:absolute;
-      left:0;
-      top:80px;
-      width:100%;
-      pointer-events:none;
-      z-index:100;
-    }
-    #pageBreakMarkers.hidden{display:none}
-    #pageBreakMarkers .page-break-line{
-      position:absolute;
-      left:50%;
-      transform:translateX(-50%);
-      width:calc(100% - 32px);
-      max-width:1100px;
-      border-top:2px dashed var(--primary);
-      opacity:0.4;
-    }
-    #pageBreakMarkers .page-break-label{
-      position:absolute;
-      right:40px;
-      transform:translateY(-50%);
-      background:var(--primary);
-      color:#fff;
-      padding:4px 12px;
-      border-radius:20px;
-      font-size:11px;
-      font-weight:700;
-      box-shadow:0 2px 8px rgba(139,21,56,0.3);
-    }
-
-    header{background:var(--primary);color:#fff;padding:16px 20px;display:flex;gap:16px;align-items:center;justify-content:space-between}
-    header .title{font-size:18px;font-weight:700}
-    header .version{opacity:.9;font-size:12px}
-
-    /* Sticky Hamburger */
-    .hamburger-container{position:fixed;top:16px;right:16px;z-index:5000}
-    .hamburger-btn{width:50px;height:50px;background:var(--primary);border:none;border-radius:50%;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:0 4px 20px rgba(0,0,0,.2);transition:all 0.3s}
-    .hamburger-btn:hover{transform:scale(1.05)}
-    .hamburger-btn span{width:24px;height:3px;background:#fff;border-radius:2px;transition:all 0.3s}
-    .hamburger-btn.active span:nth-child(1){transform:rotate(45deg) translate(5px, 5px)}
-    .hamburger-btn.active span:nth-child(2){opacity:0}
-    .hamburger-btn.active span:nth-child(3){transform:rotate(-45deg) translate(7px, -7px)}
-    .hamburger-menu{position:fixed;top:80px;right:16px;background:#fff;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.2);padding:12px;display:none;flex-direction:column;gap:8px;min-width:250px;z-index:4999}
-    .hamburger-menu.active{display:flex}
-    .hamburger-menu .btn{width:100%;text-align:left;justify-content:flex-start}
-
-    .btn{appearance:none;border:0;border-radius:12px;padding:10px 14px;font-weight:700;background:#ffffff;color:var(--primary);cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.06);display:flex;align-items:center;gap:8px}
-    .btn:hover{transform:translateY(-1px);box-shadow:0 5px 15px rgba(0,0,0,.1)}
-    .btn.outline{background:transparent;border:2px solid #fff;color:#fff}
-    .btn.danger{background:var(--err);color:#fff}
-    .btn.secondary{background:#1e293b;color:#fff}
-    .btn.icon{padding:6px 8px;border-radius:8px}
-    .btn.switch{justify-content:space-between}
-
-    /* Sections */
-    .section{padding:18px 20px;border-top:1px solid var(--muted)}
-    .section.collapsible .section-body{transition:max-height .25s ease}
-    .section.collapsed .section-body{display:none}
-    .section .collapse-btn{
-      background:#fff;border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;font-size:14px;
-      width:30px;height:30px;display:grid;place-items:center;margin-right:8px;color:#1f2937
-    }
-    .section .collapse-btn:hover{background:#f1f5f9}
-    .section h2{margin:0;font-size:18px;color:var(--primary)}
-    .section-header{background:#f8f9fb;padding:12px 16px;margin:-18px -20px 16px -20px;border-bottom:2px solid var(--primary)}
-    .section-header .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .section-header .title-wrap{display:flex;align-items:center;gap:8px}
-
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
-    .col-3{grid-column:span 3} .col-4{grid-column:span 4} .col-6{grid-column:span 6} .col-8{grid-column:span 8} .col-12{grid-column:span 12}
-
-    label{display:block;font-size:12px;margin-bottom:6px;color:#334155;font-weight:600}
-    input[type="text"],input[type="date"],input[type="number"],textarea,select{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:10px;background:#fff;outline:none;font-family:inherit}
-    input[type="text"]:focus,input[type="date"]:focus,input[type="number"]:focus,textarea:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(139,21,56,.1)}
-    textarea{min-height:80px;resize:vertical}
-
-    /* Check-Zeilen mit Code + Move Handle */
-    .list{display:flex;flex-direction:column;gap:8px}
-    .check{display:flex;gap:10px;align-items:center;padding:8px 10px;border:1px solid #e5e7eb;border-radius:10px;min-height:40px}
-    .check .move-btns{margin-right:4px}
-    .check .tiny{width:60px;height:28px;padding:4px 6px;font-size:12px;text-align:center}
-    .check .info-btn{width:26px;height:26px;display:grid;place-items:center;border:1px solid #cbd5e1;border-radius:50%;cursor:pointer;background:#fff;font-weight:700;color:#334155;line-height:1}
-    .check .info-btn:before{content:'i'}
-    .check .label-input{
-      flex:1; min-width:140px; padding:6px 8px; border:1px solid #d1d5db; border-radius:8px; background:#fff; font:inherit; outline:none;
-    }
-    .check .label-input:focus{border-color:var(--primary); box-shadow:0 0 0 3px rgba(139,21,56,.10)}
-    .check .note{min-width:200px;max-width:260px;font-size:12px;padding:6px 8px;height:28px}
-    .check .manage{display:flex;gap:6px}
-    .check .del{margin-left:4px}
-    .check input[type="checkbox"]{width:18px;height:18px;margin-left:auto}
-
-    /* Inline Checkbox */
-    .checkbox-inline{display:flex;align-items:center;gap:8px}
-    .checkbox-inline input[type="checkbox"]{width:18px;height:18px;margin:0}
-    .checkbox-inline label{margin:0;font-weight:normal}
-
-    /* Abstand-Abschnitt */
-    .spacing-section{background:#f8f9fb;border:2px dashed #cbd5e1;border-radius:8px;padding:12px;margin:8px 0}
-    .spacing-section .controls{display:flex;gap:10px;align-items:center;margin-bottom:10px}
-    .spacing-section .preview{background:#fff;border:1px solid #e5e7eb;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:13px}
-
-    /* Text-Abschnitt */
-    .text-section{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:12px;margin:8px 0}
-    .text-editor-toolbar{display:flex;gap:4px;padding:8px;background:#f8f9fb;border:1px solid #e5e7eb;border-radius:6px 6px 0 0;flex-wrap:wrap}
-    .text-editor-toolbar button{padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;background:#fff;cursor:pointer;font-size:13px}
-    .text-editor-toolbar button:hover{background:#f1f5f9}
-    .text-editor-toolbar button.active{background:#dbeafe;border-color:#3b82f6}
-    .text-editor-content{min-height:120px;padding:12px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 6px 6px;background:#fff;outline:none}
-    .text-editor-content:focus{border-color:#3b82f6}
-
-    /* Bild-Abschnitt */
-    .image-section{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:12px;margin:8px 0}
-    .image-upload-zone{border:2px dashed #cbd5e1;border-radius:8px;padding:20px;text-align:center;background:#f8f9fb;cursor:pointer;transition:all 0.2s}
-    .image-upload-zone:hover{border-color:#8B1538;background:#fef2f2}
-    .image-upload-zone.dragover{border-color:#8B1538;background:#fee2e2}
-    .image-preview{display:grid;grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));gap:10px;margin-top:12px}
-    .image-preview-item{position:relative;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;aspect-ratio:4/3}
-    .image-preview-item img{width:100%;height:100%;object-fit:cover}
-    .image-preview-item .delete-btn{position:absolute;top:4px;right:4px;background:#ef4444;color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;line-height:1}
-    .image-preview-item .delete-btn:hover{background:#dc2626}
-
-    /* Signatur - Textarea */
-    .sig-area{border:2px dashed #cbd5e1;border-radius:8px;padding:12px;background:#f8f9fb;min-height:120px;position:relative}
-    .sig-area textarea{min-height:100px;border:1px solid #d1d5db;resize:vertical}
-
-    /* Move Handle */
-    .move-btns{display:flex;flex-direction:column;gap:2px;margin-right:4px}
-    .move-handle{width:28px;height:56px;padding:4px;border:1px solid #cbd5e1;background:#fff;border-radius:6px;cursor:grab;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:all 0.2s}
-    .move-handle:hover{background:#f1f5f9;border-color:#64748b}
-    .move-handle:active{cursor:grabbing;background:#e2e8f0}
-    .move-handle:before{content:'';width:18px;height:2px;background:#94a3b8;border-radius:1px}
-    .move-handle:after{content:'';width:18px;height:2px;background:#94a3b8;border-radius:1px}
-    .move-handle span{width:18px;height:2px;background:#94a3b8;border-radius:1px;display:block}
-
-    /* Gruppen mit Drag & Drop */
-    .group{
-      border:2px solid #e5e7eb;
-      border-radius:12px;
-      margin:20px 0;
-      overflow:visible;
-      background:#ffffff;
-      transition:all 0.3s;
-      position:relative;
-    }
-    .group.disabled{
-      opacity:0.5;
-      background:#f9fafb;
-    }
-    .group.collapsed .group-content{
-      display:none;
-    }
-    .group.dragging{
-      opacity:0.5;
-      transform:scale(0.98);
-    }
-    .group.drag-over{
-      border-color:var(--primary);
-      border-style:dashed;
+    @top-left {
+      content: "Validierungsprotokoll";
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-size: 8pt;
+      color: #64748b;
+      font-weight: 600;
     }
     
-    .group-header{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      justify-content:space-between;
-      background:linear-gradient(135deg, #8B1538 0%, #a91d47 100%);
-      color:#fff;
-      border-radius:10px 10px 0 0;
-      padding:14px 16px;
-      user-select:none;
-    }
-    .group-header:hover{
-      background:linear-gradient(135deg, #9a1740 0%, #ba2250 100%);
+    @top-right {
+      content: "Erstellt: 29.10.2025";
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-size: 8pt;
+      color: #64748b;
     }
     
-    .group-title-section{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      flex:1;
+    @bottom-left {
+      content: "© CL Validierung • Vertraulich";
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-size: 8pt;
+      color: #94a3b8;
     }
     
-    .group-move-handle{
-      background:rgba(255,255,255,0.2);
-      border:1px solid rgba(255,255,255,0.3);
-      border-radius:6px;
-      width:36px;
-      height:36px;
-      cursor:grab;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:3px;
-      transition:all 0.2s;
-    }
-    .group-move-handle:hover{
-      background:rgba(255,255,255,0.3);
-    }
-    .group-move-handle:active{
-      cursor:grabbing;
-    }
-    .group-move-handle::before,
-    .group-move-handle::after{
-      content:'';
-      width:20px;
-      height:2px;
-      background:#fff;
-      border-radius:1px;
-    }
-    .group-move-handle span{
-      width:20px;
-      height:2px;
-      background:#fff;
-      border-radius:1px;
-      display:block;
+    @bottom-center {
+      content: "Seite " counter(page) " von " counter(pages);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-size: 9pt;
+      color: #64748b;
+      font-weight: 600;
     }
     
-    .group-collapse-btn{
-      background:rgba(255,255,255,0.2);
-      border:1px solid rgba(255,255,255,0.3);
-      border-radius:6px;
-      width:32px;
-      height:32px;
-      display:grid;
-      place-items:center;
-      cursor:pointer;
-      color:#fff;
-      font-size:18px;
-      font-weight:bold;
-      transition:all 0.2s;
+    @bottom-right {
+      content: "DOK-ID: VAL-2025-001";
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-size: 8pt;
+      color: #64748b;
+      font-style: italic;
     }
-    .group-collapse-btn:hover{
-      background:rgba(255,255,255,0.3);
-      transform:scale(1.05);
-    }
-    .group.collapsed .group-collapse-btn::before{
-      content:'▼';
-    }
-    .group:not(.collapsed) .group-collapse-btn::before{
-      content:'▲';
+  }
+  
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  body {
+    background: #ffffff !important;
+    padding: 0;
+    margin: 0;
+    font-size: 10pt;
+    line-height: 1.4;
+  }
+  
+  .container {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sheet {
+    box-shadow: none;
+    border-radius: 0;
+    background: #ffffff;
+    page-break-after: auto;
+  }
+  
+  /* Verstecke UI-Elemente */
+  .hamburger-container,
+  .hamburger-menu,
+  #pageBreakMarkers,
+  .group-btn,
+  .group-toggle,
+  .group-collapse-btn,
+  .group-move-handle,
+  .move-handle,
+  .move-btns,
+  .group-add-section,
+  .check .manage,
+  .check .del,
+  .section-header .btn.icon,
+  .sig-controls button,
+  .collapse-btn,
+  .image-preview-item .delete-btn,
+  .text-editor-toolbar button,
+  .info-btn {
+    display: none !important;
+  }
+  
+  /* Deaktivierte Gruppen ausblenden */
+  .group.disabled {
+    display: none !important;
+  }
+  
+  /* Immer ausgeklappt */
+  .group.collapsed .group-content,
+  .section.collapsed .section-body {
+    display: block !important;
+  }
+  
+  
+  /* PROFESSIONELLER HEADER */
+  header {
+    background: linear-gradient(135deg, #8B1538 0%, #6d1129 100%);
+    color: #fff;
+    padding: 18px 24px;
+    margin: -25mm -20mm 8mm -20mm;
+    page-break-after: avoid;
+    border-bottom: 4px solid #8B1538;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(139, 21, 56, 0.15);
+  }
+  
+  header .logo-area {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    float: left;
+    margin-right: 16px;
+    font-size: 24pt;
+    font-weight: 700;
+  }
+  
+  header .header-content {
+    overflow: hidden;
+  }
+  
+  header .title {
+    font-size: 20pt;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.3px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  header .subtitle {
+    font-size: 10pt;
+    opacity: 0.9;
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+  
+  header .version {
+    font-size: 8.5pt;
+    opacity: 0.85;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 4px 10px;
+    border-radius: 12px;
+    display: inline-block;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  
+  header .doc-meta {
+    position: absolute;
+    top: 18px;
+    right: 24px;
+    text-align: right;
+    font-size: 8.5pt;
+    opacity: 0.9;
+    line-height: 1.6;
+  }
+  
+  header .doc-meta strong {
+    font-weight: 700;
+    font-size: 9pt;
+  }
+  
+  
+  /* PROFESSIONELLE DOKUMENTEN-INFO-BOX */
+  .doc-info-box {
+    border: 2pt solid #8B1538;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
+    padding: 16px 20px;
+    margin: 10mm 0;
+    page-break-inside: avoid;
+    box-shadow: 0 2px 8px rgba(139, 21, 56, 0.1);
+  }
+  
+  .doc-info-box .doc-info-header {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #8B1538;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1.5pt solid #f1f5f9;
+    letter-spacing: 0.3px;
+  }
+  
+  .doc-info-box .doc-info-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 16px;
+    font-size: 9.5pt;
+    line-height: 1.6;
+  }
+  
+  .doc-info-box .doc-info-label {
+    font-weight: 700;
+    color: #475569;
+  }
+  
+  .doc-info-box .doc-info-value {
+    color: #1e293b;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  
+  .doc-info-box .doc-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 8.5pt;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  
+  .doc-info-box .doc-status.validated {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1pt solid #10b981;
+  }
+  
+  .doc-info-box .doc-status.draft {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1pt solid #f59e0b;
+  }
+  
+  /* PROFESSIONELLE UNTERSCHRIFTEN-FELDER */
+  .sig-area {
+    border: 1.5pt solid #cbd5e1;
+    border-radius: 6px;
+    padding: 8px;
+    background: #f8fafc;
+    min-height: 70px;
+    page-break-inside: avoid;
+    position: relative;
+    margin-top: 12px;
+  }
+  
+  .sig-area::before {
+    content: '';
+    position: absolute;
+    bottom: 30px;
+    left: 12px;
+    right: 12px;
+    border-bottom: 1.5pt solid #64748b;
+  }
+  
+  .sig-area .sig-label {
+    position: absolute;
+    bottom: 8px;
+    left: 12px;
+    font-size: 7.5pt;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .sig-area .sig-date {
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
+    font-size: 7.5pt;
+    color: #64748b;
+    font-style: italic;
+  }
+  
+  .sig-area textarea {
+    border: none;
+    background: transparent;
+    font-size: 10pt;
+    min-height: 45px;
+    padding: 4px;
+    margin-bottom: 25px;
+  }
+  
+  /* PROFESSIONELLE TABELLEN */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    page-break-inside: auto;
+    margin: 6mm 0;
+    font-size: 9pt;
+  }
+  
+  thead {
+    display: table-header-group;
+    background: #f1f5f9;
+  }
+  
+  thead tr {
+    page-break-after: avoid;
+  }
+  
+  tbody tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+  
+  th, td {
+    border: 1pt solid #cbd5e1;
+    padding: 6px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  
+  th {
+    font-weight: 700;
+    color: #1e293b;
+    background: #f8fafc;
+    font-size: 9.5pt;
+    letter-spacing: 0.3px;
+  }
+  
+  tbody tr:nth-child(even) {
+    background: #f9fafb;
+  }
+  
+  tbody tr:nth-child(odd) {
+    background: #ffffff;
+  }
+  
+  
+  /* PROFESSIONELLE GRUPPEN */
+  .group {
+    border: 1.5pt solid #cbd5e1;
+    border-radius: 6px;
+    margin: 2mm 0;
+    background: #ffffff;
+    page-break-inside: avoid;
+    overflow: hidden;
+  }
+  
+  .group:first-of-type {
+    margin-top: 0;
+  }
+  
+  .group:last-of-type {
+    margin-bottom: 0;
+  }
+  
+  .group-header {
+    background: #f8fafc;
+    border-bottom: 2pt solid #8B1538;
+    color: #1e293b;
+    padding: 12px 16px;
+    border-radius: 0;
+    page-break-after: avoid;
+  }
+  
+  .group-title-input {
+    background: transparent;
+    color: #8B1538;
+    border: none;
+    padding: 0;
+    font-size: 13pt;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+  
+  .group-content {
+    padding: 0;
+  }
+  
+  /* PROFESSIONELLE SECTIONS */
+  .section {
+    padding: 8px 14px;
+    border-top: none;
+    page-break-inside: avoid;
+    margin-bottom: 0;
+  }
+  
+  .section + .section {
+    border-top: 1pt solid #f1f5f9;
+    padding-top: 8px;
+  }
+  
+  .section:first-child {
+    border-top: none;
+  }
+  
+  .section-header {
+    background: #f1f5f9;
+    padding: 8px 12px;
+    margin: -8px -14px 8px -14px;
+    border-bottom: 1.5pt solid #cbd5e1;
+    page-break-after: avoid;
+  }
+  
+  .section-header h2 {
+    color: #1e293b;
+    font-size: 11pt;
+    font-weight: 700;
+    margin: 0;
+  }
+  
+  /* PROFESSIONELLE LABELS */
+  label {
+    font-size: 9pt;
+    color: #475569;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  
+  /* PROFESSIONELLE INPUTS */
+  input[type="text"],
+  input[type="date"],
+  input[type="number"],
+  textarea,
+  select {
+    border: 1pt solid #cbd5e1;
+    border-radius: 4px;
+    background: #ffffff;
+    padding: 6px 10px;
+    font-size: 10pt;
+    line-height: 1.4;
+  }
+  
+  .grid {
+    gap: 6px;
+  }
+  
+  /* PROFESSIONELLE CHECKLISTEN */
+  .list {
+    gap: 3px;
+  }
+  
+  .check {
+    border: 1pt solid #e2e8f0;
+    border-radius: 4px;
+    padding: 4px 8px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    page-break-inside: avoid;
+    background: #ffffff;
+    min-height: 24px;
+  }
+  
+  .check .tiny {
+    width: 50px;
+    border: 1pt solid #cbd5e1;
+    border-radius: 4px;
+    padding: 4px 6px;
+    text-align: center;
+    font-size: 9pt;
+    background: #f8fafc;
+    font-weight: 600;
+  }
+  
+  .check .label-input {
+    border: none;
+    padding: 4px 6px;
+    font-size: 10pt;
+    flex: 1;
+    background: transparent;
+  }
+  
+  .check .note {
+    border: 1pt solid #e2e8f0;
+    border-radius: 4px;
+    padding: 3px 6px;
+    font-size: 8.5pt;
+    min-width: 120px;
+    max-width: 180px;
+    background: #f8fafc;
+  }
+  
+  .check input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    margin-left: auto;
+    border: 1.5pt solid #64748b;
+  }
+  
+  /* PROFESSIONELLE CHECKBOX-INLINE */
+  .checkbox-inline {
+    page-break-inside: avoid;
+  }
+  
+  .checkbox-inline input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    border: 1.5pt solid #64748b;
+  }
+  
+  .checkbox-inline label {
+    font-size: 10pt;
+    color: #334155;
+  }
+  
+  /* PROFESSIONELLE ABSTAND-SECTION */
+  .spacing-section {
+    background: #f8fafc;
+    border: 1.5pt dashed #cbd5e1;
+    border-radius: 4px;
+    padding: 8px;
+    page-break-inside: avoid;
+  }
+  
+  .spacing-section .controls {
+    display: none;
+  }
+  
+  .spacing-section .preview {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-size: 9pt;
+    font-style: italic;
+  }
+  
+  /* PROFESSIONELLE TEXT-SECTION */
+  .text-section {
+    background: #ffffff;
+    border: 1pt solid #e2e8f0;
+    border-radius: 4px;
+    padding: 8px;
+    page-break-inside: avoid;
+  }
+  
+  .text-editor-toolbar {
+    display: none;
+  }
+  
+  .text-editor-content {
+    padding: 8px 0;
+    border: none;
+    background: transparent;
+    font-size: 10pt;
+    line-height: 1.6;
+  }
+  
+  /* PROFESSIONELLE BILD-SECTION */
+  .image-section {
+    background: #ffffff;
+    border: 1pt solid #e2e8f0;
+    border-radius: 4px;
+    padding: 8px;
+    page-break-inside: avoid;
+  }
+  
+  .image-upload-zone {
+    display: none;
+  }
+  
+  .image-preview {
+    gap: 6px;
+  }
+  
+  .image-preview-item {
+    border: 1pt solid #e2e8f0;
+    border-radius: 4px;
+    page-break-inside: avoid;
+  }
+  
+  /* PROFESSIONELLE SIGNATUR-BEREICHE */
+  
+  .sig-controls {
+    display: none;
+  }
+  
+  /* SEITENUMBRUCH-KONTROLLE */
+  .section-header,
+  .group-header {
+    page-break-after: avoid;
+  }
+  
+  .section,
+  .group,
+  .check {
+    page-break-inside: avoid;
+  }
+  
+  h2 {
+    page-break-after: avoid;
+  }
+  
+  /* BESSERE LESBARKEIT */
+  p, li, div {
+    orphans: 3;
+    widows: 3;
+  }
+  
+  /* FUSSZEILE MIT SEITENZAHL */
+  @page {
+    @bottom-right {
+      content: "Seite " counter(page);
+      font-size: 9pt;
+      color: #64748b;
     }
     
-    .group-title-input{
-      border:none;
-      background:rgba(255,255,255,0.15);
-      color:#fff;
-      font-weight:700;
-      font-size:17px;
-      padding:8px 12px;
-      border-radius:8px;
-      min-width:200px;
-      flex:1;
-      outline:none;
+    @bottom-left {
+      content: "CL Validierungsprotokoll";
+      font-size: 9pt;
+      color: #64748b;
     }
-    .group-title-input::placeholder{
-      color:rgba(255,255,255,0.7);
-    }
-    .group-title-input:focus{
-      background:rgba(255,255,255,0.25);
-      box-shadow:0 0 0 3px rgba(255,255,255,0.2);
-    }
-    
-    .group-actions{
-      display:flex;
-      gap:6px;
-      align-items:center;
-    }
-    
-    .group-toggle{
-      background:rgba(255,255,255,0.2);
-      border:1px solid rgba(255,255,255,0.3);
-      border-radius:6px;
-      padding:6px 12px;
-      color:#fff;
-      font-size:12px;
-      font-weight:700;
-      cursor:pointer;
-      transition:all 0.2s;
-      white-space:nowrap;
-    }
-    .group-toggle:hover{
-      background:rgba(255,255,255,0.3);
-    }
-    .group-toggle.active{
-      background:#11a36a;
-      border-color:#11a36a;
-    }
-    
-    .group-btn{
-      background:rgba(255,255,255,0.2);
-      border:1px solid rgba(255,255,255,0.3);
-      border-radius:6px;
-      width:32px;
-      height:32px;
-      display:grid;
-      place-items:center;
-      cursor:pointer;
-      color:#fff;
-      font-size:16px;
-      transition:all 0.2s;
-    }
-    .group-btn:hover{
-      background:rgba(255,255,255,0.3);
-      transform:scale(1.05);
-    }
-    .group-btn.duplicate::before{content:'⧉'}
-    .group-btn.delete::before{content:'✕'}
-    .group-btn.delete:hover{
-      background:#ef4444;
-      border-color:#ef4444;
-    }
-    
-    .group-content{
-      padding:0;
-    }
-    
-    .group-add-section{
-      padding:16px;
-      text-align:center;
-      border-top:2px dashed #e5e7eb;
-      background:#f9fafb;
-    }
+  }
+}
 
-    /* Modal */
-    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center}
-    .modal.active{display:flex}
-    .modal-content{background:#fff;border-radius:16px;padding:24px;max-width:600px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-    .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-    .modal-title{font-size:22px;font-weight:700;color:var(--primary)}
-    .modal-close{background:transparent;border:none;font-size:28px;cursor:pointer;color:#64748b;line-height:1}
-    .modal-close:hover{color:var(--primary)}
-    .section-type-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-    .section-type-card{padding:16px;border:2px solid #e5e7eb;border-radius:12px;cursor:pointer;text-align:center;transition:all 0.2s}
-    .section-type-card:hover{border-color:var(--primary);background:#fef2f2;transform:translateY(-2px)}
-    .section-type-card .icon{font-size:32px;margin-bottom:8px}
-    .section-type-card .name{font-weight:700;color:var(--text)}
+@media (max-width: 768px) {
+  .col-3, .col-4, .col-6, .col-8 { grid-column: span 12; }
+  .check { flex-wrap: wrap; }
+  .check .note { min-width: 100%; max-width: 100%; }
+  .group-actions { flex-wrap: wrap; }
+}
+  
+  /* ORPHANS & WIDOWS PREVENTION */
+  * {
+    orphans: 3;
+    widows: 3;
+  }
+  
+  .check, .checkbox-inline {
+    orphans: 2;
+    widows: 2;
+  }
+  
+  /* STATUS-BADGES FÜR CHECKBOXEN */
+  input[type="checkbox"]:checked + label::before {
+    content: '✓ ';
+    color: #10b981;
+    font-weight: 700;
+    margin-right: 4px;
+  }
+  
+  /* PROFESSIONELLE CODE/ID FELDER */
+  .tiny,
+  .check .tiny,
+  input[readonly] {
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 0.3px;
+  }
+  
+  /* VERBESSERTE LESBARKEIT */
+  p, li, .check .label-input {
+    line-height: 1.5;
+  }
+```
 
-    /* PROFESSIONELLE PRINT-STYLES FÜR PDF */
-    @media print {
-      @page {
-        size: A4 portrait;
-        margin: 20mm 15mm 25mm 15mm;
-        
-        @bottom-center {
-          content: "Seite " counter(page) " von " counter(pages);
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-          font-size: 9pt;
-          color: #64748b;
-        }
-      }
-      
-      * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        color-adjust: exact !important;
-      }
-      
-      body {
-        background: #ffffff !important;
-        padding: 0;
-        margin: 0;
-        font-size: 10pt;
-        line-height: 1.4;
-      }
-      
-      .container {
-        max-width: 100%;
-        padding: 0;
-        margin: 0;
-      }
-      
-      .sheet {
-        box-shadow: none;
-        border-radius: 0;
-        background: #ffffff;
-        page-break-after: auto;
-      }
-      
-      /* Verstecke UI-Elemente */
-      .hamburger-container,
-      .hamburger-menu,
-      #pageBreakMarkers,
-      .group-btn,
-      .group-toggle,
-      .group-collapse-btn,
-      .group-move-handle,
-      .move-handle,
-      .move-btns,
-      .group-add-section,
-      .check .manage,
-      .check .del,
-      .section-header .btn.icon,
-      .sig-controls button,
-      .collapse-btn,
-      .image-preview-item .delete-btn,
-      .text-editor-toolbar button,
-      .info-btn {
-        display: none !important;
-      }
-      
-      /* Deaktivierte Gruppen ausblenden */
-      .group.disabled {
-        display: none !important;
-      }
-      
-      /* Immer ausgeklappt */
-      .group.collapsed .group-content,
-      .section.collapsed .section-body {
-        display: block !important;
-      }
-      
-      /* PROFESSIONELLER HEADER */
-      header {
-        background: linear-gradient(135deg, #8B1538 0%, #6d1129 100%);
-        color: #fff;
-        padding: 20px 25px;
-        margin: -20mm -15mm 8mm -15mm;
-        page-break-after: avoid;
-        border-bottom: 3px solid #8B1538;
-      }
-      
-      header .title {
-        font-size: 20pt;
-        font-weight: 700;
-        margin-bottom: 4px;
-        letter-spacing: -0.3px;
-      }
-      
-      header .version {
-        font-size: 10pt;
-        opacity: 0.95;
-      }
-      
-      /* PROFESSIONELLE GRUPPEN */
-      .group {
-        border: 1.5pt solid #cbd5e1;
-        border-radius: 6px;
-        margin: 2mm 0;
-        background: #ffffff;
-        page-break-inside: avoid;
-        overflow: hidden;
-      }
-      
-      .group:first-of-type {
-        margin-top: 0;
-      }
-      
-      .group:last-of-type {
-        margin-bottom: 0;
-      }
-      
-      .group-header {
-        background: #f8fafc;
-        border-bottom: 2pt solid #8B1538;
-        color: #1e293b;
-        padding: 12px 16px;
-        border-radius: 0;
-        page-break-after: avoid;
-      }
-      
-      .group-title-input {
-        background: transparent;
-        color: #8B1538;
-        border: none;
-        padding: 0;
-        font-size: 13pt;
-        font-weight: 700;
-        letter-spacing: -0.2px;
-      }
-      
-      .group-content {
-        padding: 0;
-      }
-      
-      /* PROFESSIONELLE SECTIONS */
-      .section {
-        padding: 8px 14px;
-        border-top: none;
-        page-break-inside: avoid;
-        margin-bottom: 0;
-      }
-      
-      .section + .section {
-        border-top: 1pt solid #f1f5f9;
-        padding-top: 8px;
-      }
-      
-      .section:first-child {
-        border-top: none;
-      }
-      
-      .section-header {
-        background: #f1f5f9;
-        padding: 8px 12px;
-        margin: -8px -14px 8px -14px;
-        border-bottom: 1.5pt solid #cbd5e1;
-        page-break-after: avoid;
-      }
-      
-      .section-header h2 {
-        color: #1e293b;
-        font-size: 11pt;
-        font-weight: 700;
-        margin: 0;
-      }
-      
-      /* PROFESSIONELLE LABELS */
-      label {
-        font-size: 9pt;
-        color: #475569;
-        font-weight: 600;
-        margin-bottom: 4px;
-      }
-      
-      /* PROFESSIONELLE INPUTS */
-      input[type="text"],
-      input[type="date"],
-      input[type="number"],
-      textarea,
-      select {
-        border: 1pt solid #cbd5e1;
-        border-radius: 4px;
-        background: #ffffff;
-        padding: 6px 10px;
-        font-size: 10pt;
-        line-height: 1.4;
-      }
-      
-      .grid {
-        gap: 6px;
-      }
-      
-      /* PROFESSIONELLE CHECKLISTEN */
-      .list {
-        gap: 3px;
-      }
-      
-      .check {
-        border: 1pt solid #e2e8f0;
-        border-radius: 4px;
-        padding: 4px 8px;
-        display: flex;
-        gap: 6px;
-        align-items: center;
-        page-break-inside: avoid;
-        background: #ffffff;
-        min-height: 24px;
-      }
-      
-      .check .tiny {
-        width: 50px;
-        border: 1pt solid #cbd5e1;
-        border-radius: 4px;
-        padding: 4px 6px;
-        text-align: center;
-        font-size: 9pt;
-        background: #f8fafc;
-        font-weight: 600;
-      }
-      
-      .check .label-input {
-        border: none;
-        padding: 4px 6px;
-        font-size: 10pt;
-        flex: 1;
-        background: transparent;
-      }
-      
-      .check .note {
-        border: 1pt solid #e2e8f0;
-        border-radius: 4px;
-        padding: 3px 6px;
-        font-size: 8.5pt;
-        min-width: 120px;
-        max-width: 180px;
-        background: #f8fafc;
-      }
-      
-      .check input[type="checkbox"] {
-        width: 14px;
-        height: 14px;
-        margin-left: auto;
-        border: 1.5pt solid #64748b;
-      }
-      
-      /* PROFESSIONELLE CHECKBOX-INLINE */
-      .checkbox-inline {
-        page-break-inside: avoid;
-      }
-      
-      .checkbox-inline input[type="checkbox"] {
-        width: 14px;
-        height: 14px;
-        border: 1.5pt solid #64748b;
-      }
-      
-      .checkbox-inline label {
-        font-size: 10pt;
-        color: #334155;
-      }
-      
-      /* PROFESSIONELLE ABSTAND-SECTION */
-      .spacing-section {
-        background: #f8fafc;
-        border: 1.5pt dashed #cbd5e1;
-        border-radius: 4px;
-        padding: 8px;
-        page-break-inside: avoid;
-      }
-      
-      .spacing-section .controls {
-        display: none;
-      }
-      
-      .spacing-section .preview {
-        background: transparent;
-        border: none;
-        color: #64748b;
-        font-size: 9pt;
-        font-style: italic;
-      }
-      
-      /* PROFESSIONELLE TEXT-SECTION */
-      .text-section {
-        background: #ffffff;
-        border: 1pt solid #e2e8f0;
-        border-radius: 4px;
-        padding: 8px;
-        page-break-inside: avoid;
-      }
-      
-      .text-editor-toolbar {
-        display: none;
-      }
-      
-      .text-editor-content {
-        padding: 8px 0;
-        border: none;
-        background: transparent;
-        font-size: 10pt;
-        line-height: 1.6;
-      }
-      
-      /* PROFESSIONELLE BILD-SECTION */
-      .image-section {
-        background: #ffffff;
-        border: 1pt solid #e2e8f0;
-        border-radius: 4px;
-        padding: 8px;
-        page-break-inside: avoid;
-      }
-      
-      .image-upload-zone {
-        display: none;
-      }
-      
-      .image-preview {
-        gap: 6px;
-      }
-      
-      .image-preview-item {
-        border: 1pt solid #e2e8f0;
-        border-radius: 4px;
-        page-break-inside: avoid;
-      }
-      
-      /* PROFESSIONELLE SIGNATUR-BEREICHE */
-      .sig-area {
-        border: 1.5pt solid #cbd5e1;
-        border-radius: 4px;
-        padding: 8px;
-        background: #f8fafc;
-        min-height: 60px;
-        page-break-inside: avoid;
-      }
-      
-      .sig-area textarea {
-        border: none;
-        background: transparent;
-        font-size: 10pt;
-        min-height: 50px;
-        padding: 4px;
-      }
-      
-      .sig-controls {
-        display: none;
-      }
-      
-      /* SEITENUMBRUCH-KONTROLLE */
-      .section-header,
-      .group-header {
-        page-break-after: avoid;
-      }
-      
-      .section,
-      .group,
-      .check {
-        page-break-inside: avoid;
-      }
-      
-      h2 {
-        page-break-after: avoid;
-      }
-      
-      /* BESSERE LESBARKEIT */
-      p, li, div {
-        orphans: 3;
-        widows: 3;
-      }
-      
-      /* FUSSZEILE MIT SEITENZAHL */
-      @page {
-        @bottom-right {
-          content: "Seite " counter(page);
-          font-size: 9pt;
-          color: #64748b;
-        }
-        
-        @bottom-left {
-          content: "CL Validierungsprotokoll";
-          font-size: 9pt;
-          color: #64748b;
-        }
-      }
-    }
-
-    @media (max-width: 768px) {
-      .col-3, .col-4, .col-6, .col-8 { grid-column: span 12; }
-      .check { flex-wrap: wrap; }
-      .check .note { min-width: 100%; max-width: 100%; }
-      .group-actions { flex-wrap: wrap; }
-    }
   </style>
 </head>
 <body>
@@ -775,6 +1035,7 @@
   </div>
 
   <!-- Seitenumbruch-Markierungen -->
+
   <div id="pageBreakMarkers" class="hidden"></div>
 
   <div class="container">
@@ -790,191 +1051,195 @@
         </div>
       </header>
 
-      <!-- Deckblatt & Kopfdaten -->
-      <div class="section collapsible">
-        <div class="section-header">
-          <div class="row">
-            <div class="title-wrap">
-              <button class="collapse-btn">−</button>
-              <h2>Deckblatt & Kopfdaten</h2>
-            </div>
+```
+  <!-- Deckblatt & Kopfdaten -->
+  <div class="section collapsible">
+    <div class="section-header">
+      <div class="row">
+        <div class="title-wrap">
+          <button class="collapse-btn">−</button>
+          <h2>Deckblatt & Kopfdaten</h2>
+        </div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="grid">
+        <div class="col-6">
+          <label>Name der Einrichtung</label>
+          <input type="text" id="nameEinrichtung" placeholder="z.B. Klinikum Musterstadt" />
+        </div>
+        <div class="col-6">
+          <label>Standort der Installation</label>
+          <input type="text" id="standortInstallation" placeholder="Ort / Abteilung" />
+        </div>
+        <div class="col-6">
+          <label>Verantwortliche Person (Betreiber)</label>
+          <input type="text" id="verantwortlichePerson" placeholder="Name" />
+        </div>
+        <div class="col-6">
+          <label>Produkt</label>
+          <input type="text" id="produkt" placeholder="z.B. EuroSDS" />
+        </div>
+        <div class="col-4">
+          <label>Programm-Paket</label>
+          <input type="text" id="programmPaket" placeholder="z.B. Komplettpaket" />
+        </div>
+        <div class="col-4">
+          <label>Version</label>
+          <input type="text" id="version" placeholder="z.B. 6.4.x" />
+        </div>
+        <div class="col-4">
+          <label>Softwarepflege (SVB II-Pflege-S)</label>
+          <select id="softwarepflege">
+            <option value="">Bitte wählen...</option>
+            <option value="aktiv">Aktiv</option>
+            <option value="inaktiv">Inaktiv</option>
+            <option value="ausstehend">Ausstehend</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label>Art/Anzahl der Arbeitsplätze</label>
+          <input type="text" id="arbeitsplaetze" placeholder="z.B. 8 Clients + 1 Notfallarbeitsplatz" />
+        </div>
+        <div class="col-6">
+          <label>Angebundene Geräte</label>
+          <input type="text" id="angebundeneGeraete" placeholder="z.B. RDG-Steril-Rollengeräte..." />
+        </div>
+        <div class="col-12">
+          <label>Bemerkung zur Installation</label>
+          <textarea id="bemerkungInstallation" placeholder="Weitere Informationen..."></textarea>
+        </div>
+        <div class="col-4">
+          <label>Validierung durchgeführt am</label>
+          <input type="date" id="validierungDatum" />
+        </div>
+        <div class="col-4">
+          <label>Letzte Validierung</label>
+          <input type="date" id="letzteValidierung" />
+        </div>
+        <div class="col-4">
+          <label>Nächste Validierung</label>
+          <input type="date" id="naechsteValidierung" />
+        </div>
+        <div class="col-6">
+          <div class="checkbox-inline">
+            <input type="checkbox" id="checkValidierung" />
+            <label for="checkValidierung">Validierung</label>
           </div>
         </div>
-        <div class="section-body">
-          <div class="grid">
-            <div class="col-6">
-              <label>Name der Einrichtung</label>
-              <input type="text" id="nameEinrichtung" placeholder="z.B. Klinikum Musterstadt" />
-            </div>
-            <div class="col-6">
-              <label>Standort der Installation</label>
-              <input type="text" id="standortInstallation" placeholder="Ort / Abteilung" />
-            </div>
-            <div class="col-6">
-              <label>Verantwortliche Person (Betreiber)</label>
-              <input type="text" id="verantwortlichePerson" placeholder="Name" />
-            </div>
-            <div class="col-6">
-              <label>Produkt</label>
-              <input type="text" id="produkt" placeholder="z.B. EuroSDS" />
-            </div>
-            <div class="col-4">
-              <label>Programm-Paket</label>
-              <input type="text" id="programmPaket" placeholder="z.B. Komplettpaket" />
-            </div>
-            <div class="col-4">
-              <label>Version</label>
-              <input type="text" id="version" placeholder="z.B. 6.4.x" />
-            </div>
-            <div class="col-4">
-              <label>Softwarepflege (SVB II-Pflege-S)</label>
-              <select id="softwarepflege">
-                <option value="">Bitte wählen...</option>
-                <option value="aktiv">Aktiv</option>
-                <option value="inaktiv">Inaktiv</option>
-                <option value="ausstehend">Ausstehend</option>
-              </select>
-            </div>
-            <div class="col-6">
-              <label>Art/Anzahl der Arbeitsplätze</label>
-              <input type="text" id="arbeitsplaetze" placeholder="z.B. 8 Clients + 1 Notfallarbeitsplatz" />
-            </div>
-            <div class="col-6">
-              <label>Angebundene Geräte</label>
-              <input type="text" id="angebundeneGeraete" placeholder="z.B. RDG-Steril-Rollengeräte..." />
-            </div>
-            <div class="col-12">
-              <label>Bemerkung zur Installation</label>
-              <textarea id="bemerkungInstallation" placeholder="Weitere Informationen..."></textarea>
-            </div>
-            <div class="col-4">
-              <label>Validierung durchgeführt am</label>
-              <input type="date" id="validierungDatum" />
-            </div>
-            <div class="col-4">
-              <label>Letzte Validierung</label>
-              <input type="date" id="letzteValidierung" />
-            </div>
-            <div class="col-4">
-              <label>Nächste Validierung</label>
-              <input type="date" id="naechsteValidierung" />
-            </div>
-            <div class="col-6">
-              <div class="checkbox-inline">
-                <input type="checkbox" id="checkValidierung" />
-                <label for="checkValidierung">Validierung</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="checkbox-inline">
-                <input type="checkbox" id="checkRevalidierung" />
-                <label for="checkRevalidierung">Revalidierung</label>
-              </div>
-            </div>
+        <div class="col-6">
+          <div class="checkbox-inline">
+            <input type="checkbox" id="checkRevalidierung" />
+            <label for="checkRevalidierung">Revalidierung</label>
           </div>
         </div>
       </div>
-
-      <!-- Validierer & Freigabe -->
-      <div class="section collapsible">
-        <div class="section-header">
-          <div class="row">
-            <div class="title-wrap">
-              <button class="collapse-btn">−</button>
-              <h2>Validierer & Freigabe</h2>
-            </div>
-          </div>
-        </div>
-        <div class="section-body">
-          <div class="grid">
-            <div class="col-4">
-              <label>Validierer (NEXUS / IPS)</label>
-              <input type="text" id="validiererName" placeholder="Name" />
-            </div>
-            <div class="col-4">
-              <label>Fachliche Qualifikation</label>
-              <input type="text" id="qualifikation" placeholder="Qualifikation" />
-            </div>
-            <div class="col-4">
-              <label>Produktschulung (Programmpaket)</label>
-              <input type="text" id="produktschulung" placeholder="Schulung" />
-            </div>
-            <div class="col-6">
-              <label>Datum / Unterschrift Validierer</label>
-              <div class="sig-area">
-                <textarea id="unterschriftValidierer" placeholder="Datum und Unterschrift eingeben..."></textarea>
-                <div class="sig-controls" style="justify-content:flex-end;margin-top:8px">
-                  <button class="btn icon" data-clear-text="unterschriftValidierer">🗑️ Löschen</button>
-                </div>
-              </div>
-            </div>
-            <div class="col-6">
-              <label>Freigabe durch Betreiber - Datum / Unterschrift</label>
-              <div class="sig-area">
-                <textarea id="freigabeBetreiber" placeholder="Datum und Unterschrift eingeben..."></textarea>
-                <div class="sig-controls" style="justify-content:flex-end;margin-top:8px">
-                  <button class="btn icon" data-clear-text="freigabeBetreiber">🗑️ Löschen</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- KV -->
-      <div class="section collapsible">
-        <div class="section-header">
-          <div class="row">
-            <div class="title-wrap">
-              <button class="collapse-btn">−</button>
-              <h2>KV – Kalibrierung & Validierung</h2>
-            </div>
-            <button class="btn icon" onclick="addKV()">+ Zeile</button>
-          </div>
-        </div>
-        <div class="section-body">
-          <div class="list" id="kvList"></div>
-        </div>
-      </div>
-
-      <!-- IQ -->
-      <div class="section collapsible">
-        <div class="section-header">
-          <div class="row">
-            <div class="title-wrap">
-              <button class="collapse-btn">−</button>
-              <h2>IQ – Installation Qualification</h2>
-            </div>
-            <button class="btn icon" onclick="addIQ()">+ Zeile</button>
-          </div>
-        </div>
-        <div class="section-body">
-          <div class="list" id="iqList"></div>
-        </div>
-      </div>
-
-      <!-- OQ -->
-      <div class="section collapsible">
-        <div class="section-header">
-          <div class="row">
-            <div class="title-wrap">
-              <button class="collapse-btn">−</button>
-              <h2>OQ – Operational Qualification</h2>
-            </div>
-            <button class="btn icon" onclick="addOQ()">+ Zeile</button>
-          </div>
-        </div>
-        <div class="section-body">
-          <div class="list" id="oqList"></div>
-        </div>
-      </div>
-
-      <!-- Dynamische Gruppen (Verschiebbar) -->
-      <div id="groupsContainer"></div>
     </div>
   </div>
 
+  <!-- Validierer & Freigabe -->
+  <div class="section collapsible">
+    <div class="section-header">
+      <div class="row">
+        <div class="title-wrap">
+          <button class="collapse-btn">−</button>
+          <h2>Validierer & Freigabe</h2>
+        </div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="grid">
+        <div class="col-4">
+          <label>Validierer (NEXUS / IPS)</label>
+          <input type="text" id="validiererName" placeholder="Name" />
+        </div>
+        <div class="col-4">
+          <label>Fachliche Qualifikation</label>
+          <input type="text" id="qualifikation" placeholder="Qualifikation" />
+        </div>
+        <div class="col-4">
+          <label>Produktschulung (Programmpaket)</label>
+          <input type="text" id="produktschulung" placeholder="Schulung" />
+        </div>
+        <div class="col-6">
+          <label>Datum / Unterschrift Validierer</label>
+          <div class="sig-area">
+            <textarea id="unterschriftValidierer" placeholder="Datum und Unterschrift eingeben..."></textarea>
+            <div class="sig-controls" style="justify-content:flex-end;margin-top:8px">
+              <button class="btn icon" data-clear-text="unterschriftValidierer">🗑️ Löschen</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <label>Freigabe durch Betreiber - Datum / Unterschrift</label>
+          <div class="sig-area">
+            <textarea id="freigabeBetreiber" placeholder="Datum und Unterschrift eingeben..."></textarea>
+            <div class="sig-controls" style="justify-content:flex-end;margin-top:8px">
+              <button class="btn icon" data-clear-text="freigabeBetreiber">🗑️ Löschen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KV -->
+  <div class="section collapsible">
+    <div class="section-header">
+      <div class="row">
+        <div class="title-wrap">
+          <button class="collapse-btn">−</button>
+          <h2>KV – Kalibrierung & Validierung</h2>
+        </div>
+        <button class="btn icon" onclick="addKV()">+ Zeile</button>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="list" id="kvList"></div>
+    </div>
+  </div>
+
+  <!-- IQ -->
+  <div class="section collapsible">
+    <div class="section-header">
+      <div class="row">
+        <div class="title-wrap">
+          <button class="collapse-btn">−</button>
+          <h2>IQ – Installation Qualification</h2>
+        </div>
+        <button class="btn icon" onclick="addIQ()">+ Zeile</button>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="list" id="iqList"></div>
+    </div>
+  </div>
+
+  <!-- OQ -->
+  <div class="section collapsible">
+    <div class="section-header">
+      <div class="row">
+        <div class="title-wrap">
+          <button class="collapse-btn">−</button>
+          <h2>OQ – Operational Qualification</h2>
+        </div>
+        <button class="btn icon" onclick="addOQ()">+ Zeile</button>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="list" id="oqList"></div>
+    </div>
+  </div>
+
+  <!-- Dynamische Gruppen (Verschiebbar) -->
+  <div id="groupsContainer"></div>
+</div>
+```
+
+  </div>
+
   <!-- Modal für Abschnittstypen -->
+
   <div class="modal" id="sectionTypeModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -1908,5 +2173,6 @@
       initAll();
     }
   </script>
+
 </body>
 </html>
