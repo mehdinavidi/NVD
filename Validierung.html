@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – v3.3 Fixed</title>
+  <title>CL Validierungsprotokoll – v3.4 Optimized Spacing</title>
   <style>
     :root{
       --primary:#8B1538; --bg:#F8F9FB; --text:#1E2434; --card:#ffffff; --muted:#e9edf3;
@@ -92,34 +92,23 @@
     label{display:block;font-size:12px;margin-bottom:6px;color:#334155;font-weight:600}
     input[type="text"],input[type="date"],input[type="number"],textarea,select{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:10px;background:#fff;outline:none;font-family:inherit}
     input[type="text"]:focus,input[type="date"]:focus,input[type="number"]:focus,textarea:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(139,21,56,.1)}
-    textarea{min-height:80px;resize:vertical;line-height:1.5}
-    textarea.tiny,textarea.label-input,textarea.note{
-      resize:none;
-      overflow:hidden;
-      font-family:inherit;
-      line-height:1.4;
-    }
-    textarea.tiny::-webkit-resizer,
-    textarea.label-input::-webkit-resizer,
-    textarea.note::-webkit-resizer {
-      display:none;
-    }
+    textarea{min-height:80px;resize:vertical}
 
     /* Check-Zeilen mit Code + Move Handle */
     .list{display:flex;flex-direction:column;gap:8px}
-    .check{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid #e5e7eb;border-radius:10px;min-height:40px}
-    .check .move-btns{margin-right:4px;margin-top:4px}
-    .check .tiny{width:80px;min-height:28px;padding:4px 6px;font-size:12px;text-align:center;word-wrap:break-word;white-space:normal;display:flex;align-items:center;justify-content:center}
-    .check .info-btn{width:26px;height:26px;display:grid;place-items:center;border:1px solid #cbd5e1;border-radius:50%;cursor:pointer;background:#fff;font-weight:700;color:#334155;line-height:1;flex-shrink:0;margin-top:2px}
+    .check{display:flex;gap:10px;align-items:center;padding:8px 10px;border:1px solid #e5e7eb;border-radius:10px;min-height:40px}
+    .check .move-btns{margin-right:4px}
+    .check .tiny{width:60px;height:28px;padding:4px 6px;font-size:12px;text-align:center}
+    .check .info-btn{width:26px;height:26px;display:grid;place-items:center;border:1px solid #cbd5e1;border-radius:50%;cursor:pointer;background:#fff;font-weight:700;color:#334155;line-height:1}
     .check .info-btn:before{content:'i'}
     .check .label-input{
-      flex:1; min-width:140px; min-height:28px; padding:6px 8px; border:1px solid #d1d5db; border-radius:8px; background:#fff; font:inherit; outline:none; resize:vertical; overflow-y:auto; white-space:pre-wrap; word-wrap:break-word;
+      flex:1; min-width:140px; padding:6px 8px; border:1px solid #d1d5db; border-radius:8px; background:#fff; font:inherit; outline:none;
     }
     .check .label-input:focus{border-color:var(--primary); box-shadow:0 0 0 3px rgba(139,21,56,.10)}
-    .check .note{min-width:200px;max-width:260px;font-size:12px;padding:6px 8px;min-height:28px;resize:vertical;word-wrap:break-word;white-space:pre-wrap}
-    .check .manage{display:flex;gap:6px;margin-top:4px}
+    .check .note{min-width:200px;max-width:260px;font-size:12px;padding:6px 8px;height:28px}
+    .check .manage{display:flex;gap:6px}
     .check .del{margin-left:4px}
-    .check input[type="checkbox"]{width:18px;height:18px;margin-left:auto;margin-top:6px;flex-shrink:0}
+    .check input[type="checkbox"]{width:18px;height:18px;margin-left:auto}
 
     /* Inline Checkbox */
     .checkbox-inline{display:flex;align-items:center;gap:8px}
@@ -163,643 +152,6 @@
     .move-handle:before{content:'';width:18px;height:2px;background:#94a3b8;border-radius:1px}
     .move-handle:after{content:'';width:18px;height:2px;background:#94a3b8;border-radius:1px}
     .move-handle span{width:18px;height:2px;background:#94a3b8;border-radius:1px;display:block}
-
-    /* ========================================
-       PROFESSIONELLE PDF/PRINT STYLES
-       ======================================== */
-    @media print {
-      /* Grundlegende Print-Einstellungen */
-      * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        color-adjust: exact !important;
-      }
-      
-      @page {
-        size: A4 portrait;
-        margin: 15mm 15mm 20mm 15mm;
-      }
-      
-      html, body {
-        width: 210mm;
-        height: 297mm;
-        background: white !important;
-        margin: 0;
-        padding: 0;
-      }
-      
-      /* Container anpassen */
-      .container {
-        max-width: 100% !important;
-        width: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        padding-top: 0 !important;
-      }
-      
-      .sheet {
-        box-shadow: none !important;
-        border-radius: 0 !important;
-        page-break-after: auto;
-      }
-      
-      /* Header für jede Seite */
-      header {
-        position: running(header);
-        background: var(--primary) !important;
-        padding: 8mm 10mm !important;
-        margin: 0 !important;
-        page-break-after: avoid;
-      }
-      
-      /* Elemente ausblenden, die nicht gedruckt werden sollen */
-      .hamburger-container,
-      .hamburger-menu,
-      .btn,
-      .collapse-btn,
-      .move-btns,
-      .move-handle,
-      .del,
-      .manage,
-      .info-btn,
-      #pageBreakMarkers,
-      [data-clear-text],
-      .section-header .row .btn {
-        display: none !important;
-      }
-      
-      /* Gruppen-Controls ausblenden */
-      .group-header .controls,
-      .group-header .group-toggle {
-        display: none !important;
-      }
-      
-      /* Alle Gruppen und Sections einblenden */
-      .group.collapsed .group-content,
-      .section.collapsed .section-body {
-        display: block !important;
-        max-height: none !important;
-      }
-      
-      /* Seitenumbrüche optimieren */
-      .group {
-        page-break-inside: avoid;
-        break-inside: avoid;
-        orphans: 3;
-        widows: 3;
-        margin: 8mm 0 !important;
-        border: none !important;
-        background: transparent !important;
-      }
-      
-      /* Gruppentitel ohne weißen Rahmen */
-      .group-header {
-        background: transparent !important;
-        border: none !important;
-        padding: 0 0 3mm 0 !important;
-        margin: 0 !important;
-      }
-      
-      /* Verstecke Move-Handle, Collapse-Button und Actions */
-      .group-move-handle,
-      .group-collapse-btn,
-      .group-actions,
-      .group-toggle,
-      .group-btn {
-        display: none !important;
-      }
-      
-      /* Group title section transparent */
-      .group-title-section {
-        background: transparent !important;
-        border: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        display: block !important;
-      }
-      
-      /* Style group-title-input wie normaler Titel */
-      .group-title-input {
-        border: none !important;
-        background: transparent !important;
-        padding: 2mm 0 !important;
-        margin: 0 0 3mm 0 !important;
-        color: var(--primary) !important;
-        font-weight: 700 !important;
-        font-size: 16pt !important;
-        box-shadow: none !important;
-        outline: none !important;
-        width: 100% !important;
-        display: block !important;
-        border-bottom: 2pt solid var(--primary) !important;
-        padding-bottom: 2mm !important;
-      }
-      
-      .group-header h3,
-      .group-title {
-        color: var(--primary) !important;
-        font-size: 16pt !important;
-        font-weight: 700 !important;
-        margin: 0 0 3mm 0 !important;
-        padding: 0 0 2mm 0 !important;
-        background: transparent !important;
-        border: none !important;
-        border-bottom: 2pt solid var(--primary) !important;
-      }
-      
-      /* Section ohne weißen Rahmen */
-      .section {
-        page-break-inside: avoid;
-        break-inside: avoid;
-        padding: 3mm 0 !important;
-        border: none !important;
-        background: transparent !important;
-        margin: 4mm 0 !important;
-      }
-      
-      .section-header {
-        page-break-after: avoid;
-        break-after: avoid;
-        margin: 0 0 3mm 0 !important;
-        padding: 0 !important;
-        background: transparent !important;
-        border: none !important;
-      }
-      
-      .section-header h2 {
-        color: var(--primary) !important;
-        font-size: 13pt !important;
-        font-weight: 700 !important;
-        margin: 0 0 2mm 0 !important;
-        padding: 2mm 0 !important;
-        background: transparent !important;
-        border: none !important;
-        border-bottom: 1.5pt solid var(--primary) !important;
-      }
-      
-      /* Verstecke Controls und Buttons in Headers */
-      .section-header .row > div:last-child,
-      .group-header .controls,
-      .section-header button,
-      .group-header button,
-      .section-header .collapse-btn,
-      .group-header .collapse-btn {
-        display: none !important;
-      }
-      
-      /* Row Container transparent machen */
-      .section-header .row,
-      .section-header .title-wrap {
-        background: transparent !important;
-        border: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        display: block !important;
-      }
-      
-      /* Title-wrap sollte nur das Input zeigen */
-      .section-header .title-wrap {
-        display: block !important;
-        width: 100% !important;
-      }
-      
-      /* Style Title-Inputs wie normalen Text */
-      .section-header input,
-      .group-header input {
-        border: none !important;
-        background: transparent !important;
-        padding: 2mm 0 !important;
-        margin: 0 !important;
-        color: var(--primary) !important;
-        font-weight: 700 !important;
-        box-shadow: none !important;
-        outline: none !important;
-        width: 100% !important;
-        display: block !important;
-      }
-      
-      .section-header input {
-        font-size: 13pt !important;
-        border-bottom: 1.5pt solid var(--primary) !important;
-        padding-bottom: 2mm !important;
-        margin-bottom: 3mm !important;
-      }
-      
-      .group-header input {
-        font-size: 16pt !important;
-        border-bottom: 2pt solid var(--primary) !important;
-        padding-bottom: 2mm !important;
-        margin-bottom: 3mm !important;
-      }
-      
-      h2, h3 {
-        page-break-after: avoid;
-        break-after: avoid;
-      }
-      
-      /* Tabellen-Layout für Checklisten mit Grid */
-      .list {
-        display: block !important;
-        width: 100% !important;
-        margin: 3mm 0 !important;
-        gap: 0 !important;
-        border: 1pt solid #8B1538 !important;
-        page-break-inside: auto;
-        overflow: hidden !important;
-      }
-      
-      /* Table Header Row (wird via JavaScript eingefügt) */
-      .table-header-row {
-        display: grid !important;
-        grid-template-columns: 8% 62% 20% 10% !important;
-        background: #e8eaf0 !important;
-        border-bottom: 1.5pt solid #8B1538 !important;
-        font-weight: 700 !important;
-        font-size: 9pt !important;
-        color: #1E2434 !important;
-        padding: 2.5mm 0 !important;
-        page-break-after: avoid !important;
-        margin: 0 !important;
-      }
-      
-      .table-header-row > div {
-        padding: 2mm !important;
-        border-right: 0.5pt solid #cbd5e1 !important;
-        display: flex !important;
-        align-items: center !important;
-      }
-      
-      .table-header-row > div:first-child {
-        justify-content: center !important;
-      }
-      
-      .table-header-row > div:nth-child(2) {
-        padding-left: 3mm !important;
-      }
-      
-      .table-header-row > div:last-child {
-        border-right: none !important;
-        justify-content: center !important;
-      }
-      
-      /* Check-Items als Grid-Zeilen */
-      .check {
-        display: grid !important;
-        grid-template-columns: 8% 62% 20% 10% !important;
-        grid-template-areas: "code label note checkbox" !important;
-        page-break-inside: avoid;
-        break-inside: avoid;
-        padding: 0 !important;
-        margin: 0 !important;
-        border: none !important;
-        border-top: 0.5pt solid #e5e7eb !important;
-        min-height: auto !important;
-        gap: 0 !important;
-        align-items: stretch !important;
-        width: 100% !important;
-      }
-      
-      .check:first-child {
-        border-top: none !important;
-      }
-      
-      .check .tiny,
-      .check .label-input,
-      .check .note,
-      .check input[type="checkbox"] {
-        border: none !important;
-        border-right: 0.5pt solid #e5e7eb !important;
-        padding: 2mm !important;
-        background: white !important;
-        margin: 0 !important;
-        min-height: 10mm !important;
-        display: flex !important;
-        align-items: flex-start !important;
-      }
-      
-      /* Textareas in Tabellen ohne extra Border */
-      .check textarea {
-        border: none !important;
-        box-shadow: none !important;
-        outline: none !important;
-        padding: 2mm !important;
-        background: transparent !important;
-      }
-      
-      /* Code-Spalte (8%) - mehrzeilig */
-      .check .tiny {
-        grid-area: code !important;
-        font-size: 9pt !important;
-        font-weight: 600 !important;
-        text-align: center !important;
-        color: #8B1538 !important;
-        justify-content: center !important;
-        width: 100% !important;
-        max-width: none !important;
-        padding-top: 3mm !important;
-        word-wrap: break-word !important;
-        white-space: normal !important;
-        line-height: 1.3 !important;
-        resize: none !important;
-        overflow: visible !important;
-        border-right: 0.5pt solid #e5e7eb !important;
-      }
-      
-      /* Prüfpunkt-Spalte (62%) - mehrzeilig */
-      .check .label-input {
-        grid-area: label !important;
-        font-size: 10pt !important;
-        padding: 2.5mm 3mm !important;
-        line-height: 1.5 !important;
-        width: 100% !important;
-        white-space: normal !important;
-        word-wrap: break-word !important;
-        min-height: 10mm !important;
-        resize: none !important;
-        overflow: visible !important;
-        border-right: 0.5pt solid #e5e7eb !important;
-      }
-      
-      /* Bemerkung-Spalte (20%) - mehrzeilig */
-      .check .note {
-        grid-area: note !important;
-        font-size: 9pt !important;
-        color: #64748b !important;
-        font-style: italic !important;
-        width: 100% !important;
-        max-width: none !important;
-        white-space: normal !important;
-        word-wrap: break-word !important;
-        padding-top: 3mm !important;
-        line-height: 1.4 !important;
-        resize: none !important;
-        overflow: visible !important;
-        border-right: 0.5pt solid #e5e7eb !important;
-      }
-      
-      /* Platzhalter im Print ausblenden */
-      .check .tiny::placeholder,
-      .check .label-input::placeholder,
-      .check .note::placeholder {
-        color: transparent !important;
-        opacity: 0 !important;
-      }
-      
-      /* Leere Felder minimal sichtbar machen */
-      .check .tiny:empty::before,
-      .check .label-input:empty::before,
-      .check .note:empty::before {
-        content: '' !important;
-        color: transparent !important;
-      }
-      
-      /* OK-Spalte (10%) */
-      .check input[type="checkbox"] {
-        grid-area: checkbox !important;
-        width: 5mm !important;
-        height: 5mm !important;
-        margin: auto !important;
-        border: 1pt solid #666 !important;
-        border-radius: 2px !important;
-        justify-self: center !important;
-        align-self: center !important;
-      }
-      
-      /* Alternating row colors */
-      .check:nth-child(even) .tiny,
-      .check:nth-child(even) .label-input,
-      .check:nth-child(even) .note,
-      .check:nth-child(even) input[type="checkbox"] {
-        background: #f9fafb !important;
-      }
-      
-      /* Rechten Border für letzte Zelle entfernen */
-      .check input[type="checkbox"] {
-        border-right: none !important;
-      }
-      
-      /* Grid-Layout für Print */
-      .grid {
-        display: grid !important;
-        grid-template-columns: repeat(12, 1fr) !important;
-        gap: 3mm !important;
-        page-break-inside: avoid;
-      }
-      
-      /* Formular-Felder */
-      input[type="text"],
-      input[type="date"],
-      input[type="number"],
-      textarea,
-      select {
-        border: 0.5pt solid #d1d5db !important;
-        background: white !important;
-        padding: 2mm !important;
-        font-size: 10pt !important;
-        border-radius: 1mm !important;
-      }
-      
-      /* Textarea spezifische Optimierungen */
-      textarea {
-        resize: none !important;
-        overflow: visible !important;
-        -webkit-appearance: none !important;
-        -moz-appearance: none !important;
-        appearance: none !important;
-      }
-      
-      /* Entferne alle Browser-Standard Textarea-Styles */
-      textarea::-webkit-resizer {
-        display: none !important;
-      }
-      
-      textarea::-webkit-scrollbar {
-        display: none !important;
-      }
-      
-      label {
-        font-size: 9pt !important;
-        margin-bottom: 1mm !important;
-        font-weight: 600 !important;
-        color: #334155 !important;
-      }
-      
-      /* Textabschnitte */
-      .text-section {
-        page-break-inside: auto;
-        border: 0.5pt solid #e5e7eb !important;
-        padding: 3mm !important;
-        margin: 2mm 0 !important;
-      }
-      
-      .text-editor-toolbar {
-        display: none !important;
-      }
-      
-      .text-editor-content {
-        border: none !important;
-        padding: 0 !important;
-        min-height: auto !important;
-        font-size: 10pt !important;
-        line-height: 1.5 !important;
-      }
-      
-      /* Bildabschnitte */
-      .image-section {
-        page-break-inside: avoid;
-        border: 0.5pt solid #e5e7eb !important;
-        padding: 3mm !important;
-      }
-      
-      .image-upload-zone {
-        display: none !important;
-      }
-      
-      .image-preview {
-        display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important;
-        gap: 3mm !important;
-      }
-      
-      .image-preview-item {
-        page-break-inside: avoid;
-        border: 0.5pt solid #e5e7eb !important;
-      }
-      
-      .image-preview-item .delete-btn {
-        display: none !important;
-      }
-      
-      .image-preview-item img {
-        max-width: 100%;
-        height: auto;
-      }
-      
-      /* Spacing Sections - unsichtbar aber mit Abstand */
-      .spacing-section {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-        margin: 0 !important;
-      }
-      
-      .spacing-section .controls {
-        display: none !important;
-      }
-      
-      .spacing-section .preview {
-        border: none !important;
-        background: transparent !important;
-        color: transparent !important;
-        font-size: 0 !important;
-      }
-      
-      /* Section mit Spacing - Titel und Border ausblenden */
-      .section:has(.spacing-section) .section-header {
-        display: none !important;
-      }
-      
-      .section:has(.spacing-section) {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-      }
-      
-      /* Signatur-Bereich */
-      .sig-area {
-        page-break-inside: avoid;
-        border: 1pt solid #cbd5e1 !important;
-        padding: 3mm !important;
-        min-height: 25mm !important;
-      }
-      
-      .sig-area textarea {
-        border: none !important;
-        background: transparent !important;
-        min-height: 20mm !important;
-        font-size: 10pt !important;
-      }
-      
-      /* Tabellen-ähnliche Darstellung */
-      table, .table-like {
-        page-break-inside: avoid;
-        width: 100%;
-        border-collapse: collapse;
-      }
-      
-      /* Schriftgrößen anpassen */
-      body {
-        font-size: 10pt !important;
-        line-height: 1.4 !important;
-      }
-      
-      h2 {
-        font-size: 14pt !important;
-        margin: 0 0 2mm 0 !important;
-      }
-      
-      h3 {
-        font-size: 12pt !important;
-        margin: 2mm 0 !important;
-      }
-      
-      /* Farben für Print optimieren */
-      .section-header {
-        border-bottom: 1.5pt solid var(--primary) !important;
-      }
-      
-      /* Checkbox-Inline */
-      .checkbox-inline {
-        page-break-inside: avoid;
-      }
-      
-      /* Disabled Gruppen */
-      .group.disabled {
-        opacity: 0.6 !important;
-        background: #f9fafb !important;
-      }
-      
-      /* Fußzeile mit Seitenzahl */
-      @page {
-        @bottom-right {
-          content: "Seite " counter(page) " von " counter(pages);
-          font-size: 9pt;
-          color: #64748b;
-        }
-        
-        @bottom-left {
-          content: "Validierungsprotokoll v3.3";
-          font-size: 9pt;
-          color: #64748b;
-        }
-        
-        @bottom-center {
-          content: "Erstellt: " attr(data-timestamp);
-          font-size: 9pt;
-          color: #64748b;
-        }
-      }
-      
-      /* Verhindere Umbrüche innerhalb wichtiger Elemente */
-      .grid > div {
-        page-break-inside: avoid;
-      }
-      
-      /* Liste ohne Gaps für bessere Darstellung */
-      .list {
-        gap: 1mm !important;
-      }
-      
-      /* Links für Print */
-      a[href]:after {
-        content: none !important;
-      }
-      
-      /* Optimierung für Chrome/Edge PDF-Export */
-      * {
-        box-sizing: border-box !important;
-      }
-    }
 
     /* Gruppen mit Drag & Drop */
     .group{
@@ -1105,10 +457,18 @@
       .group {
         border: 1.5pt solid #cbd5e1;
         border-radius: 6px;
-        margin: 8mm 0;
+        margin: 3mm 0;
         background: #ffffff;
         page-break-inside: avoid;
         overflow: hidden;
+      }
+      
+      .group:first-of-type {
+        margin-top: 0;
+      }
+      
+      .group:last-of-type {
+        margin-bottom: 0;
       }
       
       .group-header {
@@ -1136,10 +496,15 @@
       
       /* PROFESSIONELLE SECTIONS */
       .section {
-        padding: 12px 16px;
+        padding: 8px 14px;
         border-top: none;
         page-break-inside: avoid;
-        margin-bottom: 4mm;
+        margin-bottom: 0;
+      }
+      
+      .section + .section {
+        border-top: 1pt solid #f1f5f9;
+        padding-top: 8px;
       }
       
       .section:first-child {
@@ -1755,24 +1120,16 @@
       items.forEach(function(item, i){
         var row = document.createElement('div');
         row.className = 'check';
-        
-        // Escape HTML für textarea
-        var escapeHtml = function(text) {
-          var div = document.createElement('div');
-          div.textContent = text || '';
-          return div.innerHTML;
-        };
-        
         row.innerHTML = `
           <div class="move-btns">
             <div class="move-handle" draggable="true" data-index="${i}">
               <span></span>
             </div>
           </div>
-          <textarea class="tiny" placeholder="Code" rows="1">${escapeHtml(item.code)}</textarea>
-          <button class="info-btn" title="${escapeHtml(item.info)}"></button>
-          <textarea class="label-input" placeholder="Prüfpunkt..." rows="1">${escapeHtml(item.text)}</textarea>
-          <textarea class="note" placeholder="Bemerkung..." rows="1">${escapeHtml(item.note)}</textarea>
+          <input type="text" class="tiny" value="${item.code||''}" placeholder="Code" />
+          <button class="info-btn" title="${item.info||''}"></button>
+          <input type="text" class="label-input" value="${item.text}" placeholder="Prüfpunkt..." />
+          <input type="text" class="note" value="${item.note||''}" placeholder="Bemerkung..." />
           <input type="checkbox" ${item.ok?'checked':''} />
           <div class="manage">
             <button class="btn icon tiny del">✕</button>
@@ -1784,36 +1141,11 @@
         var noteInput = row.querySelector('.note');
         var checkbox = row.querySelector('input[type="checkbox"]');
         var delBtn = row.querySelector('.del');
-        
-        // Auto-resize textareas
-        var autoResize = function(textarea) {
-          textarea.style.height = 'auto';
-          textarea.style.height = textarea.scrollHeight + 'px';
-        };
 
-        codeInput.oninput = function(){ 
-          item.code = codeInput.value; 
-          autoResize(codeInput);
-          onUpdate(); 
-        };
-        labelInput.oninput = function(){ 
-          item.text = labelInput.value; 
-          autoResize(labelInput);
-          onUpdate(); 
-        };
-        noteInput.oninput = function(){ 
-          item.note = noteInput.value; 
-          autoResize(noteInput);
-          onUpdate(); 
-        };
+        codeInput.oninput = function(){ item.code = codeInput.value; onUpdate(); };
+        labelInput.oninput = function(){ item.text = labelInput.value; onUpdate(); };
+        noteInput.oninput = function(){ item.note = noteInput.value; onUpdate(); };
         checkbox.onchange = function(){ item.ok = checkbox.checked; onUpdate(); };
-        
-        // Initial resize
-        setTimeout(function(){
-          autoResize(codeInput);
-          autoResize(labelInput);
-          autoResize(noteInput);
-        }, 0);
         
         // FIXED: Delete Button
         delBtn.onclick = function(e){
@@ -2100,23 +1432,15 @@
       section.rows.forEach(function(row, rIdx){
         var rowDiv = document.createElement('div');
         rowDiv.className = 'check';
-        
-        // Escape HTML für textarea
-        var escapeHtml = function(text) {
-          var div = document.createElement('div');
-          div.textContent = text || '';
-          return div.innerHTML;
-        };
-        
         rowDiv.innerHTML = `
           <div class="move-btns">
             <div class="move-handle" draggable="true">
               <span></span>
             </div>
           </div>
-          <textarea class="tiny" placeholder="Code" rows="1">${escapeHtml(row.code)}</textarea>
-          <textarea class="label-input" placeholder="Punkt..." rows="1">${escapeHtml(row.text)}</textarea>
-          <textarea class="note" placeholder="Bemerkung..." rows="1">${escapeHtml(row.note)}</textarea>
+          <input type="text" class="tiny" value="${row.code||''}" placeholder="Code" />
+          <input type="text" class="label-input" value="${row.text}" placeholder="Punkt..." />
+          <input type="text" class="note" value="${row.note||''}" placeholder="Bemerkung..." />
           <input type="checkbox" ${row.ok?'checked':''} />
           <button class="btn icon tiny del">✕</button>
         `;
@@ -2127,35 +1451,10 @@
         var checkbox = rowDiv.querySelector('input[type="checkbox"]');
         var delRowBtn = rowDiv.querySelector('.del');
         
-        // Auto-resize textareas
-        var autoResize = function(textarea) {
-          textarea.style.height = 'auto';
-          textarea.style.height = textarea.scrollHeight + 'px';
-        };
-        
-        codeInput.oninput = function(){ 
-          row.code = codeInput.value; 
-          autoResize(codeInput);
-          sync(); 
-        };
-        labelInput.oninput = function(){ 
-          row.text = labelInput.value; 
-          autoResize(labelInput);
-          sync(); 
-        };
-        noteInput.oninput = function(){ 
-          row.note = noteInput.value; 
-          autoResize(noteInput);
-          sync(); 
-        };
+        codeInput.oninput = function(){ row.code = codeInput.value; sync(); };
+        labelInput.oninput = function(){ row.text = labelInput.value; sync(); };
+        noteInput.oninput = function(){ row.note = noteInput.value; sync(); };
         checkbox.onchange = function(){ row.ok = checkbox.checked; sync(); };
-        
-        // Initial resize
-        setTimeout(function(){
-          autoResize(codeInput);
-          autoResize(labelInput);
-          autoResize(noteInput);
-        }, 0);
         
         // FIXED: Delete Button
         delRowBtn.onclick = function(e){
@@ -2601,25 +1900,6 @@
       new MutationObserver(function(){
         if(pageBreaksOn) updatePageBreaks();
       }).observe($('#app'), {childList:true, subtree:true});
-      
-      /* Tabellen-Header für Print automatisch einfügen */
-      window.addEventListener('beforeprint', function(){
-        $$('.list').forEach(function(list){
-          if(!list.querySelector('.table-header-row')){
-            var header = document.createElement('div');
-            header.className = 'table-header-row';
-            header.style.cssText = 'display:grid !important;grid-template-columns:8% 62% 20% 10% !important;background:#e8eaf0;border-bottom:1.5pt solid #8B1538;font-weight:700;font-size:9pt;color:#1E2434;padding:2.5mm 0;page-break-after:avoid;margin:0;';
-            header.innerHTML = '<div style="padding:2mm;text-align:center;border-right:0.5pt solid #cbd5e1;display:flex;align-items:center;justify-content:center;">Code</div><div style="padding:2mm 2mm 2mm 3mm;border-right:0.5pt solid #cbd5e1;display:flex;align-items:center;">Prüfpunkt</div><div style="padding:2mm;border-right:0.5pt solid #cbd5e1;display:flex;align-items:center;">Bemerkung</div><div style="padding:2mm;text-align:center;display:flex;align-items:center;justify-content:center;">OK</div>';
-            list.insertBefore(header, list.firstChild);
-          }
-        });
-      });
-      
-      window.addEventListener('afterprint', function(){
-        $$('.table-header-row').forEach(function(header){
-          header.remove();
-        });
-      });
     }
 
     if(document.readyState === 'loading'){
