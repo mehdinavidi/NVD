@@ -3,50 +3,72 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – v3.4.0</title>
+  <title>CL Validierungsprotokoll – v3.3 Fixed</title>
   <style>
     :root{
-      --primary:#8B1538; --bg:#F8F9FB; --text:#1E2434; --card:#ffffff; --muted:#e5e7eb;
+      --primary:#8B1538; --bg:#F8F9FB; --text:#1E2434; --card:#ffffff; --muted:#e9edf3;
       --ok:#11a36a; --warn:#d97706; --err:#c81e1e; --guide:#94a3b8;
-      /* ProPrint Theme */
-      --print-margin: 12mm;
-      --print-fg:#111827; --print-muted:#4b5563; --print-border:#d1d5db; --print-accent:#8B1538; --print-bg:#ffffff;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
-
+    
     .container{max-width:1100px;margin:0 auto;padding:16px;padding-top:80px;position:relative}
     .sheet{background:var(--card);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.08);overflow:visible;position:relative}
-
+    
     /* Seitenumbruch-Markierungen */
-    #pageBreakMarkers{position:absolute;left:0;top:0;width:100%;pointer-events:none;z-index:100}
+    #pageBreakMarkers{
+      position:absolute;
+      left:0;
+      top:80px;
+      width:100%;
+      pointer-events:none;
+      z-index:100;
+    }
     #pageBreakMarkers.hidden{display:none}
     #pageBreakMarkers .page-break-line{
-      position:absolute;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:1100px;border-top:2px dashed var(--primary);opacity:.4
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      width:calc(100% - 32px);
+      max-width:1100px;
+      border-top:2px dashed var(--primary);
+      opacity:0.4;
     }
     #pageBreakMarkers .page-break-label{
-      position:absolute;right:40px;transform:translateY(-50%);background:var(--primary);color:#fff;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;box-shadow:0 2px 8px rgba(139,21,56,.3)
+      position:absolute;
+      right:40px;
+      transform:translateY(-50%);
+      background:var(--primary);
+      color:#fff;
+      padding:4px 12px;
+      border-radius:20px;
+      font-size:11px;
+      font-weight:700;
+      box-shadow:0 2px 8px rgba(139,21,56,0.3);
     }
 
     header{background:var(--primary);color:#fff;padding:16px 20px;display:flex;gap:16px;align-items:center;justify-content:space-between}
     header .title{font-size:18px;font-weight:700}
     header .version{opacity:.9;font-size:12px}
 
-    /* Hamburger */
+    /* Sticky Hamburger */
     .hamburger-container{position:fixed;top:16px;right:16px;z-index:5000}
-    .hamburger-btn{width:50px;height:50px;background:var(--primary);border:none;border-radius:50%;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:0 4px 20px rgba(0,0,0,.2);transition:all .3s}
+    .hamburger-btn{width:50px;height:50px;background:var(--primary);border:none;border-radius:50%;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:0 4px 20px rgba(0,0,0,.2);transition:all 0.3s}
     .hamburger-btn:hover{transform:scale(1.05)}
-    .hamburger-btn span{width:24px;height:3px;background:#fff;border-radius:2px;transition:all .3s}
+    .hamburger-btn span{width:24px;height:3px;background:#fff;border-radius:2px;transition:all 0.3s}
     .hamburger-btn.active span:nth-child(1){transform:rotate(45deg) translate(5px, 5px)}
     .hamburger-btn.active span:nth-child(2){opacity:0}
     .hamburger-btn.active span:nth-child(3){transform:rotate(-45deg) translate(7px, -7px)}
-    .hamburger-menu{position:fixed;top:80px;right:16px;background:#fff;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.2);padding:12px;display:none;flex-direction:column;gap:8px;min-width:300px;z-index:4999}
+    .hamburger-menu{position:fixed;top:80px;right:16px;background:#fff;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.2);padding:12px;display:none;flex-direction:column;gap:8px;min-width:250px;z-index:4999}
     .hamburger-menu.active{display:flex}
-    .btn{appearance:none;border:0;border-radius:12px;padding:10px 14px;font-weight:700;background:#fff;color:var(--primary);cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.06);display:flex;align-items:center;gap:8px}
+    .hamburger-menu .btn{width:100%;text-align:left;justify-content:flex-start}
+
+    .btn{appearance:none;border:0;border-radius:12px;padding:10px 14px;font-weight:700;background:#ffffff;color:var(--primary);cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.06);display:flex;align-items:center;gap:8px}
     .btn:hover{transform:translateY(-1px);box-shadow:0 5px 15px rgba(0,0,0,.1)}
-    .btn.secondary{background:#1e293b;color:#fff}
+    .btn.outline{background:transparent;border:2px solid #fff;color:#fff}
     .btn.danger{background:var(--err);color:#fff}
+    .btn.secondary{background:#1e293b;color:#fff}
     .btn.icon{padding:6px 8px;border-radius:8px}
     .btn.switch{justify-content:space-between}
 
@@ -54,7 +76,10 @@
     .section{padding:18px 20px;border-top:1px solid var(--muted)}
     .section.collapsible .section-body{transition:max-height .25s ease}
     .section.collapsed .section-body{display:none}
-    .section .collapse-btn{background:#fff;border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;font-size:14px;width:30px;height:30px;display:grid;place-items:center;margin-right:8px;color:#1f2937}
+    .section .collapse-btn{
+      background:#fff;border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;font-size:14px;
+      width:30px;height:30px;display:grid;place-items:center;margin-right:8px;color:#1f2937
+    }
     .section .collapse-btn:hover{background:#f1f5f9}
     .section h2{margin:0;font-size:18px;color:var(--primary)}
     .section-header{background:#f8f9fb;padding:12px 16px;margin:-18px -20px 16px -20px;border-bottom:2px solid var(--primary)}
@@ -69,49 +94,588 @@
     input[type="text"]:focus,input[type="date"]:focus,input[type="number"]:focus,textarea:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(139,21,56,.1)}
     textarea{min-height:80px;resize:vertical}
 
-    /* Listen */
+    /* Check-Zeilen mit Code + Move Handle */
     .list{display:flex;flex-direction:column;gap:8px}
     .check{display:flex;gap:10px;align-items:center;padding:8px 10px;border:1px solid #e5e7eb;border-radius:10px;min-height:40px}
+    .check .move-btns{margin-right:4px}
     .check .tiny{width:60px;height:28px;padding:4px 6px;font-size:12px;text-align:center}
-    .check .label-input{flex:1;min-width:140px;padding:6px 8px;border:1px solid #d1d5db;border-radius:8px;background:#fff;outline:none}
+    .check .info-btn{width:26px;height:26px;display:grid;place-items:center;border:1px solid #cbd5e1;border-radius:50%;cursor:pointer;background:#fff;font-weight:700;color:#334155;line-height:1}
+    .check .info-btn:before{content:'i'}
+    .check .label-input{
+      flex:1; min-width:140px; padding:6px 8px; border:1px solid #d1d5db; border-radius:8px; background:#fff; font:inherit; outline:none;
+    }
+    .check .label-input:focus{border-color:var(--primary); box-shadow:0 0 0 3px rgba(139,21,56,.10)}
     .check .note{min-width:200px;max-width:260px;font-size:12px;padding:6px 8px;height:28px}
+    .check .manage{display:flex;gap:6px}
+    .check .del{margin-left:4px}
     .check input[type="checkbox"]{width:18px;height:18px;margin-left:auto}
 
-    /* Abschnittstypen */
+    /* Inline Checkbox */
+    .checkbox-inline{display:flex;align-items:center;gap:8px}
+    .checkbox-inline input[type="checkbox"]{width:18px;height:18px;margin:0}
+    .checkbox-inline label{margin:0;font-weight:normal}
+
+    /* Abstand-Abschnitt */
     .spacing-section{background:#f8f9fb;border:2px dashed #cbd5e1;border-radius:8px;padding:12px;margin:8px 0}
     .spacing-section .controls{display:flex;gap:10px;align-items:center;margin-bottom:10px}
     .spacing-section .preview{background:#fff;border:1px solid #e5e7eb;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:13px}
 
+    /* Text-Abschnitt */
     .text-section{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:12px;margin:8px 0}
     .text-editor-toolbar{display:flex;gap:4px;padding:8px;background:#f8f9fb;border:1px solid #e5e7eb;border-radius:6px 6px 0 0;flex-wrap:wrap}
+    .text-editor-toolbar button{padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;background:#fff;cursor:pointer;font-size:13px}
+    .text-editor-toolbar button:hover{background:#f1f5f9}
+    .text-editor-toolbar button.active{background:#dbeafe;border-color:#3b82f6}
     .text-editor-content{min-height:120px;padding:12px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 6px 6px;background:#fff;outline:none}
+    .text-editor-content:focus{border-color:#3b82f6}
 
+    /* Bild-Abschnitt */
     .image-section{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:12px;margin:8px 0}
-    .image-upload-zone{border:2px dashed #cbd5e1;border-radius:8px;padding:20px;text-align:center;background:#f8f9fb;cursor:pointer;transition:all .2s}
+    .image-upload-zone{border:2px dashed #cbd5e1;border-radius:8px;padding:20px;text-align:center;background:#f8f9fb;cursor:pointer;transition:all 0.2s}
     .image-upload-zone:hover{border-color:#8B1538;background:#fef2f2}
     .image-upload-zone.dragover{border-color:#8B1538;background:#fee2e2}
     .image-preview{display:grid;grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));gap:10px;margin-top:12px}
     .image-preview-item{position:relative;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;aspect-ratio:4/3}
     .image-preview-item img{width:100%;height:100%;object-fit:cover}
     .image-preview-item .delete-btn{position:absolute;top:4px;right:4px;background:#ef4444;color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;line-height:1}
+    .image-preview-item .delete-btn:hover{background:#dc2626}
 
-    /* Gruppen */
-    .group{border:2px solid #e5e7eb;border-radius:12px;margin:20px 0;background:#fff;transition:all .3s}
-    .group.disabled{opacity:.55;background:#f9fafb}
-    .group.collapsed .group-content{display:none}
-    .group-header{display:flex;align-items:center;gap:10px;justify-content:space-between;background:linear-gradient(135deg,#8B1538 0%,#a91d47 100%);color:#fff;border-radius:10px 10px 0 0;padding:14px 16px}
-    .group-title-section{display:flex;align-items:center;gap:12px;flex:1}
-    .group-move-handle{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:6px;width:36px;height:36px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:grab}
-    .group-move-handle::before,.group-move-handle::after{content:'';width:20px;height:2px;background:#fff;border-radius:1px}
-    .group-collapse-btn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:6px;width:32px;height:32px;display:grid;place-items:center;cursor:pointer;color:#fff;font-size:18px;font-weight:700}
-    .group.collapsed .group-collapse-btn::before{content:'▼'}
-    .group:not(.collapsed) .group-collapse-btn::before{content:'▲'}
-    .group-title-input{border:none;background:rgba(255,255,255,.15);color:#fff;font-weight:700;font-size:17px;padding:8px 12px;border-radius:8px;min-width:200px;flex:1;outline:none}
-    .group-actions{display:flex;gap:6px;align-items:center}
-    .group-toggle{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:6px 12px;color:#fff;font-size:12px;font-weight:700;cursor:pointer}
-    .group-btn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:6px;width:32px;height:32px;display:grid;place-items:center;cursor:pointer;color:#fff;font-size:16px}
+    /* Signatur - Textarea */
+    .sig-area{border:2px dashed #cbd5e1;border-radius:8px;padding:12px;background:#f8f9fb;min-height:120px;position:relative}
+    .sig-area textarea{min-height:100px;border:1px solid #d1d5db;resize:vertical}
+
+    /* Move Handle */
+    .move-btns{display:flex;flex-direction:column;gap:2px;margin-right:4px}
+    .move-handle{width:28px;height:56px;padding:4px;border:1px solid #cbd5e1;background:#fff;border-radius:6px;cursor:grab;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:all 0.2s}
+    .move-handle:hover{background:#f1f5f9;border-color:#64748b}
+    .move-handle:active{cursor:grabbing;background:#e2e8f0}
+    .move-handle:before{content:'';width:18px;height:2px;background:#94a3b8;border-radius:1px}
+    .move-handle:after{content:'';width:18px;height:2px;background:#94a3b8;border-radius:1px}
+    .move-handle span{width:18px;height:2px;background:#94a3b8;border-radius:1px;display:block}
+
+    /* ========================================
+       PROFESSIONELLE PDF/PRINT STYLES
+       ======================================== */
+    @media print {
+      /* Grundlegende Print-Einstellungen */
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      
+      @page {
+        size: A4 portrait;
+        margin: 15mm 15mm 20mm 15mm;
+      }
+      
+      html, body {
+        width: 210mm;
+        height: 297mm;
+        background: white !important;
+        margin: 0;
+        padding: 0;
+      }
+      
+      /* Container anpassen */
+      .container {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        padding-top: 0 !important;
+      }
+      
+      .sheet {
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-after: auto;
+      }
+      
+      /* Header für jede Seite */
+      header {
+        position: running(header);
+        background: var(--primary) !important;
+        padding: 8mm 10mm !important;
+        margin: 0 !important;
+        page-break-after: avoid;
+      }
+      
+      /* Elemente ausblenden, die nicht gedruckt werden sollen */
+      .hamburger-container,
+      .hamburger-menu,
+      .btn,
+      .collapse-btn,
+      .move-btns,
+      .move-handle,
+      .del,
+      .manage,
+      .info-btn,
+      #pageBreakMarkers,
+      [data-clear-text],
+      .section-header .row .btn {
+        display: none !important;
+      }
+      
+      /* Gruppen-Controls ausblenden */
+      .group-header .controls,
+      .group-header .group-toggle {
+        display: none !important;
+      }
+      
+      /* Alle Gruppen und Sections einblenden */
+      .group.collapsed .group-content,
+      .section.collapsed .section-body {
+        display: block !important;
+        max-height: none !important;
+      }
+      
+      /* Seitenumbrüche optimieren */
+      .group {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        orphans: 3;
+        widows: 3;
+        margin: 8mm 0 !important;
+        border: 1.5pt solid #e5e7eb !important;
+      }
+      
+      .section {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        padding: 4mm 5mm !important;
+      }
+      
+      .section-header {
+        page-break-after: avoid;
+        break-after: avoid;
+        margin: -4mm -5mm 4mm -5mm !important;
+        padding: 3mm 5mm !important;
+        background: #f8f9fb !important;
+      }
+      
+      h2, h3 {
+        page-break-after: avoid;
+        break-after: avoid;
+      }
+      
+      /* Check-Items optimieren */
+      .check {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        padding: 2mm 3mm !important;
+        margin: 1mm 0 !important;
+        border: 0.5pt solid #e5e7eb !important;
+        min-height: auto !important;
+      }
+      
+      .check .label-input {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        font-size: 10pt !important;
+      }
+      
+      .check .tiny {
+        font-size: 9pt !important;
+        padding: 1mm 2mm !important;
+        border: 0.5pt solid #d1d5db !important;
+        height: auto !important;
+      }
+      
+      .check .note {
+        font-size: 9pt !important;
+        padding: 1mm 2mm !important;
+        border: 0.5pt solid #d1d5db !important;
+        max-width: none !important;
+        height: auto !important;
+      }
+      
+      .check input[type="checkbox"] {
+        width: 4mm !important;
+        height: 4mm !important;
+        border: 1pt solid #666 !important;
+      }
+      
+      /* Grid-Layout für Print */
+      .grid {
+        display: grid !important;
+        grid-template-columns: repeat(12, 1fr) !important;
+        gap: 3mm !important;
+        page-break-inside: avoid;
+      }
+      
+      /* Formular-Felder */
+      input[type="text"],
+      input[type="date"],
+      input[type="number"],
+      textarea,
+      select {
+        border: 0.5pt solid #d1d5db !important;
+        background: white !important;
+        padding: 2mm !important;
+        font-size: 10pt !important;
+        border-radius: 1mm !important;
+      }
+      
+      label {
+        font-size: 9pt !important;
+        margin-bottom: 1mm !important;
+        font-weight: 600 !important;
+        color: #334155 !important;
+      }
+      
+      /* Textabschnitte */
+      .text-section {
+        page-break-inside: auto;
+        border: 0.5pt solid #e5e7eb !important;
+        padding: 3mm !important;
+        margin: 2mm 0 !important;
+      }
+      
+      .text-editor-toolbar {
+        display: none !important;
+      }
+      
+      .text-editor-content {
+        border: none !important;
+        padding: 0 !important;
+        min-height: auto !important;
+        font-size: 10pt !important;
+        line-height: 1.5 !important;
+      }
+      
+      /* Bildabschnitte */
+      .image-section {
+        page-break-inside: avoid;
+        border: 0.5pt solid #e5e7eb !important;
+        padding: 3mm !important;
+      }
+      
+      .image-upload-zone {
+        display: none !important;
+      }
+      
+      .image-preview {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 3mm !important;
+      }
+      
+      .image-preview-item {
+        page-break-inside: avoid;
+        border: 0.5pt solid #e5e7eb !important;
+      }
+      
+      .image-preview-item .delete-btn {
+        display: none !important;
+      }
+      
+      .image-preview-item img {
+        max-width: 100%;
+        height: auto;
+      }
+      
+      /* Spacing Sections */
+      .spacing-section {
+        border: none !important;
+        background: transparent !important;
+      }
+      
+      .spacing-section .controls {
+        display: none !important;
+      }
+      
+      .spacing-section .preview {
+        border: none !important;
+        background: transparent !important;
+      }
+      
+      /* Signatur-Bereich */
+      .sig-area {
+        page-break-inside: avoid;
+        border: 1pt solid #cbd5e1 !important;
+        padding: 3mm !important;
+        min-height: 25mm !important;
+      }
+      
+      .sig-area textarea {
+        border: none !important;
+        background: transparent !important;
+        min-height: 20mm !important;
+        font-size: 10pt !important;
+      }
+      
+      /* Tabellen-ähnliche Darstellung */
+      table, .table-like {
+        page-break-inside: avoid;
+        width: 100%;
+        border-collapse: collapse;
+      }
+      
+      /* Schriftgrößen anpassen */
+      body {
+        font-size: 10pt !important;
+        line-height: 1.4 !important;
+      }
+      
+      h2 {
+        font-size: 14pt !important;
+        margin: 0 0 2mm 0 !important;
+      }
+      
+      h3 {
+        font-size: 12pt !important;
+        margin: 2mm 0 !important;
+      }
+      
+      /* Farben für Print optimieren */
+      .section-header {
+        border-bottom: 1.5pt solid var(--primary) !important;
+      }
+      
+      /* Checkbox-Inline */
+      .checkbox-inline {
+        page-break-inside: avoid;
+      }
+      
+      /* Disabled Gruppen */
+      .group.disabled {
+        opacity: 0.6 !important;
+        background: #f9fafb !important;
+      }
+      
+      /* Fußzeile mit Seitenzahl */
+      @page {
+        @bottom-right {
+          content: "Seite " counter(page) " von " counter(pages);
+          font-size: 9pt;
+          color: #64748b;
+        }
+        
+        @bottom-left {
+          content: "Validierungsprotokoll v3.3";
+          font-size: 9pt;
+          color: #64748b;
+        }
+        
+        @bottom-center {
+          content: "Erstellt: " attr(data-timestamp);
+          font-size: 9pt;
+          color: #64748b;
+        }
+      }
+      
+      /* Verhindere Umbrüche innerhalb wichtiger Elemente */
+      .grid > div {
+        page-break-inside: avoid;
+      }
+      
+      /* Liste ohne Gaps für bessere Darstellung */
+      .list {
+        gap: 1mm !important;
+      }
+      
+      /* Links für Print */
+      a[href]:after {
+        content: none !important;
+      }
+      
+      /* Optimierung für Chrome/Edge PDF-Export */
+      * {
+        box-sizing: border-box !important;
+      }
+    }
+
+    /* Gruppen mit Drag & Drop */
+    .group{
+      border:2px solid #e5e7eb;
+      border-radius:12px;
+      margin:20px 0;
+      overflow:visible;
+      background:#ffffff;
+      transition:all 0.3s;
+      position:relative;
+    }
+    .group.disabled{
+      opacity:0.5;
+      background:#f9fafb;
+    }
+    .group.collapsed .group-content{
+      display:none;
+    }
+    .group.dragging{
+      opacity:0.5;
+      transform:scale(0.98);
+    }
+    .group.drag-over{
+      border-color:var(--primary);
+      border-style:dashed;
+    }
+    
+    .group-header{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      justify-content:space-between;
+      background:linear-gradient(135deg, #8B1538 0%, #a91d47 100%);
+      color:#fff;
+      border-radius:10px 10px 0 0;
+      padding:14px 16px;
+      user-select:none;
+    }
+    .group-header:hover{
+      background:linear-gradient(135deg, #9a1740 0%, #ba2250 100%);
+    }
+    
+    .group-title-section{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex:1;
+    }
+    
+    .group-move-handle{
+      background:rgba(255,255,255,0.2);
+      border:1px solid rgba(255,255,255,0.3);
+      border-radius:6px;
+      width:36px;
+      height:36px;
+      cursor:grab;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:3px;
+      transition:all 0.2s;
+    }
+    .group-move-handle:hover{
+      background:rgba(255,255,255,0.3);
+    }
+    .group-move-handle:active{
+      cursor:grabbing;
+    }
+    .group-move-handle::before,
+    .group-move-handle::after{
+      content:'';
+      width:20px;
+      height:2px;
+      background:#fff;
+      border-radius:1px;
+    }
+    .group-move-handle span{
+      width:20px;
+      height:2px;
+      background:#fff;
+      border-radius:1px;
+      display:block;
+    }
+    
+    .group-collapse-btn{
+      background:rgba(255,255,255,0.2);
+      border:1px solid rgba(255,255,255,0.3);
+      border-radius:6px;
+      width:32px;
+      height:32px;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      color:#fff;
+      font-size:18px;
+      font-weight:bold;
+      transition:all 0.2s;
+    }
+    .group-collapse-btn:hover{
+      background:rgba(255,255,255,0.3);
+      transform:scale(1.05);
+    }
+    .group.collapsed .group-collapse-btn::before{
+      content:'▼';
+    }
+    .group:not(.collapsed) .group-collapse-btn::before{
+      content:'▲';
+    }
+    
+    .group-title-input{
+      border:none;
+      background:rgba(255,255,255,0.15);
+      color:#fff;
+      font-weight:700;
+      font-size:17px;
+      padding:8px 12px;
+      border-radius:8px;
+      min-width:200px;
+      flex:1;
+      outline:none;
+    }
+    .group-title-input::placeholder{
+      color:rgba(255,255,255,0.7);
+    }
+    .group-title-input:focus{
+      background:rgba(255,255,255,0.25);
+      box-shadow:0 0 0 3px rgba(255,255,255,0.2);
+    }
+    
+    .group-actions{
+      display:flex;
+      gap:6px;
+      align-items:center;
+    }
+    
+    .group-toggle{
+      background:rgba(255,255,255,0.2);
+      border:1px solid rgba(255,255,255,0.3);
+      border-radius:6px;
+      padding:6px 12px;
+      color:#fff;
+      font-size:12px;
+      font-weight:700;
+      cursor:pointer;
+      transition:all 0.2s;
+      white-space:nowrap;
+    }
+    .group-toggle:hover{
+      background:rgba(255,255,255,0.3);
+    }
+    .group-toggle.active{
+      background:#11a36a;
+      border-color:#11a36a;
+    }
+    
+    .group-btn{
+      background:rgba(255,255,255,0.2);
+      border:1px solid rgba(255,255,255,0.3);
+      border-radius:6px;
+      width:32px;
+      height:32px;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      color:#fff;
+      font-size:16px;
+      transition:all 0.2s;
+    }
+    .group-btn:hover{
+      background:rgba(255,255,255,0.3);
+      transform:scale(1.05);
+    }
     .group-btn.duplicate::before{content:'⧉'}
     .group-btn.delete::before{content:'✕'}
+    .group-btn.delete:hover{
+      background:#ef4444;
+      border-color:#ef4444;
+    }
+    
+    .group-content{
+      padding:0;
+    }
+    
+    .group-add-section{
+      padding:16px;
+      text-align:center;
+      border-top:2px dashed #e5e7eb;
+      background:#f9fafb;
+    }
 
     /* Modal */
     .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center}
@@ -120,85 +684,394 @@
     .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
     .modal-title{font-size:22px;font-weight:700;color:var(--primary)}
     .modal-close{background:transparent;border:none;font-size:28px;cursor:pointer;color:#64748b;line-height:1}
+    .modal-close:hover{color:var(--primary)}
     .section-type-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-    .section-type-card{padding:16px;border:2px solid #e5e7eb;border-radius:12px;cursor:pointer;text-align:center;transition:all .2s}
+    .section-type-card{padding:16px;border:2px solid #e5e7eb;border-radius:12px;cursor:pointer;text-align:center;transition:all 0.2s}
     .section-type-card:hover{border-color:var(--primary);background:#fef2f2;transform:translateY(-2px)}
     .section-type-card .icon{font-size:32px;margin-bottom:8px}
     .section-type-card .name{font-weight:700;color:var(--text)}
 
-    /* Nur im Druck sichtbar */
-    .only-print{display:none}
-
-    /* ---------- Druck: UI-1:1 (Standard) ---------- */
-    @media print{
-      @page{size:A4;margin:var(--print-margin)}
-      body{background:#fff !important;padding:0;margin:0}
-      .container{max-width:100%;padding:0}
-      .sheet{box-shadow:none;border-radius:0;background:#fff}
-      .hamburger-container,.hamburger-menu,#pageBreakMarkers,.group-btn,.group-toggle,.group-collapse-btn,.group-move-handle,.image-preview-item .delete-btn,.text-editor-toolbar button,.btn,.check .del,.section-header .btn.icon,.sig-controls button,.collapse-btn{display:none !important}
-      .group.disabled{display:none !important}
-      .group.collapsed .group-content,.section.collapsed .section-body{display:block !important}
-      header{background:#8B1538;color:#fff;padding:12px 16px;border-bottom:2px solid #8B1538}
-      .group-header{background:linear-gradient(135deg,#8B1538 0%,#a91d47 100%);color:#fff;padding:10px 12px}
-      .group,.section{page-break-inside:avoid}
-      .section{padding:14px 16px;border-top:1px solid var(--print-border)}
-      .section-header{background:#f8f9fb;padding:10px 12px;margin:-14px -16px 12px -16px;border-bottom:2px solid #8B1538}
-      input,textarea,select{border:1px solid var(--print-border)!important;background:#fff!important;color:#111!important}
-      .check{border:1px solid var(--print-border);border-radius:8px}
+    /* PROFESSIONELLE PRINT-STYLES FÜR PDF */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 20mm 15mm 25mm 15mm;
+        
+        @bottom-center {
+          content: "Seite " counter(page) " von " counter(pages);
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+          font-size: 9pt;
+          color: #64748b;
+        }
+      }
+      
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      
+      body {
+        background: #ffffff !important;
+        padding: 0;
+        margin: 0;
+        font-size: 10pt;
+        line-height: 1.4;
+      }
+      
+      .container {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .sheet {
+        box-shadow: none;
+        border-radius: 0;
+        background: #ffffff;
+        page-break-after: auto;
+      }
+      
+      /* Verstecke UI-Elemente */
+      .hamburger-container,
+      .hamburger-menu,
+      #pageBreakMarkers,
+      .group-btn,
+      .group-toggle,
+      .group-collapse-btn,
+      .group-move-handle,
+      .move-handle,
+      .move-btns,
+      .group-add-section,
+      .check .manage,
+      .check .del,
+      .section-header .btn.icon,
+      .sig-controls button,
+      .collapse-btn,
+      .image-preview-item .delete-btn,
+      .text-editor-toolbar button,
+      .info-btn {
+        display: none !important;
+      }
+      
+      /* Deaktivierte Gruppen ausblenden */
+      .group.disabled {
+        display: none !important;
+      }
+      
+      /* Immer ausgeklappt */
+      .group.collapsed .group-content,
+      .section.collapsed .section-body {
+        display: block !important;
+      }
+      
+      /* PROFESSIONELLER HEADER */
+      header {
+        background: linear-gradient(135deg, #8B1538 0%, #6d1129 100%);
+        color: #fff;
+        padding: 20px 25px;
+        margin: -20mm -15mm 8mm -15mm;
+        page-break-after: avoid;
+        border-bottom: 3px solid #8B1538;
+      }
+      
+      header .title {
+        font-size: 20pt;
+        font-weight: 700;
+        margin-bottom: 4px;
+        letter-spacing: -0.3px;
+      }
+      
+      header .version {
+        font-size: 10pt;
+        opacity: 0.95;
+      }
+      
+      /* PROFESSIONELLE GRUPPEN */
+      .group {
+        border: 1.5pt solid #cbd5e1;
+        border-radius: 6px;
+        margin: 8mm 0;
+        background: #ffffff;
+        page-break-inside: avoid;
+        overflow: hidden;
+      }
+      
+      .group-header {
+        background: #f8fafc;
+        border-bottom: 2pt solid #8B1538;
+        color: #1e293b;
+        padding: 12px 16px;
+        border-radius: 0;
+        page-break-after: avoid;
+      }
+      
+      .group-title-input {
+        background: transparent;
+        color: #8B1538;
+        border: none;
+        padding: 0;
+        font-size: 13pt;
+        font-weight: 700;
+        letter-spacing: -0.2px;
+      }
+      
+      .group-content {
+        padding: 0;
+      }
+      
+      /* PROFESSIONELLE SECTIONS */
+      .section {
+        padding: 12px 16px;
+        border-top: none;
+        page-break-inside: avoid;
+        margin-bottom: 4mm;
+      }
+      
+      .section:first-child {
+        border-top: none;
+      }
+      
+      .section-header {
+        background: #f1f5f9;
+        padding: 10px 14px;
+        margin: -12px -16px 10px -16px;
+        border-bottom: 1.5pt solid #cbd5e1;
+        page-break-after: avoid;
+      }
+      
+      .section-header h2 {
+        color: #1e293b;
+        font-size: 12pt;
+        font-weight: 700;
+        margin: 0;
+      }
+      
+      /* PROFESSIONELLE LABELS */
+      label {
+        font-size: 9pt;
+        color: #475569;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      
+      /* PROFESSIONELLE INPUTS */
+      input[type="text"],
+      input[type="date"],
+      input[type="number"],
+      textarea,
+      select {
+        border: 1pt solid #cbd5e1;
+        border-radius: 4px;
+        background: #ffffff;
+        padding: 6px 10px;
+        font-size: 10pt;
+        line-height: 1.4;
+      }
+      
+      .grid {
+        gap: 8px;
+      }
+      
+      /* PROFESSIONELLE CHECKLISTEN */
+      .list {
+        gap: 4px;
+      }
+      
+      .check {
+        border: 1pt solid #e2e8f0;
+        border-radius: 4px;
+        padding: 6px 10px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        page-break-inside: avoid;
+        background: #ffffff;
+        min-height: 32px;
+      }
+      
+      .check .tiny {
+        width: 50px;
+        border: 1pt solid #cbd5e1;
+        border-radius: 4px;
+        padding: 4px 6px;
+        text-align: center;
+        font-size: 9pt;
+        background: #f8fafc;
+        font-weight: 600;
+      }
+      
+      .check .label-input {
+        border: none;
+        padding: 4px 6px;
+        font-size: 10pt;
+        flex: 1;
+        background: transparent;
+      }
+      
+      .check .note {
+        border: 1pt solid #e2e8f0;
+        border-radius: 4px;
+        padding: 4px 8px;
+        font-size: 9pt;
+        min-width: 150px;
+        max-width: 200px;
+        background: #f8fafc;
+      }
+      
+      .check input[type="checkbox"] {
+        width: 14px;
+        height: 14px;
+        margin-left: auto;
+        border: 1.5pt solid #64748b;
+      }
+      
+      /* PROFESSIONELLE CHECKBOX-INLINE */
+      .checkbox-inline {
+        page-break-inside: avoid;
+      }
+      
+      .checkbox-inline input[type="checkbox"] {
+        width: 14px;
+        height: 14px;
+        border: 1.5pt solid #64748b;
+      }
+      
+      .checkbox-inline label {
+        font-size: 10pt;
+        color: #334155;
+      }
+      
+      /* PROFESSIONELLE ABSTAND-SECTION */
+      .spacing-section {
+        background: #f8fafc;
+        border: 1.5pt dashed #cbd5e1;
+        border-radius: 4px;
+        padding: 10px;
+        page-break-inside: avoid;
+      }
+      
+      .spacing-section .controls {
+        display: none;
+      }
+      
+      .spacing-section .preview {
+        background: transparent;
+        border: none;
+        color: #64748b;
+        font-size: 9pt;
+        font-style: italic;
+      }
+      
+      /* PROFESSIONELLE TEXT-SECTION */
+      .text-section {
+        background: #ffffff;
+        border: 1pt solid #e2e8f0;
+        border-radius: 4px;
+        padding: 10px;
+        page-break-inside: avoid;
+      }
+      
+      .text-editor-toolbar {
+        display: none;
+      }
+      
+      .text-editor-content {
+        padding: 8px 0;
+        border: none;
+        background: transparent;
+        font-size: 10pt;
+        line-height: 1.6;
+      }
+      
+      /* PROFESSIONELLE BILD-SECTION */
+      .image-section {
+        background: #ffffff;
+        border: 1pt solid #e2e8f0;
+        border-radius: 4px;
+        padding: 10px;
+        page-break-inside: avoid;
+      }
+      
+      .image-upload-zone {
+        display: none;
+      }
+      
+      .image-preview {
+        gap: 8px;
+      }
+      
+      .image-preview-item {
+        border: 1pt solid #e2e8f0;
+        border-radius: 4px;
+        page-break-inside: avoid;
+      }
+      
+      /* PROFESSIONELLE SIGNATUR-BEREICHE */
+      .sig-area {
+        border: 1.5pt solid #cbd5e1;
+        border-radius: 4px;
+        padding: 10px;
+        background: #f8fafc;
+        min-height: 80px;
+        page-break-inside: avoid;
+      }
+      
+      .sig-area textarea {
+        border: none;
+        background: transparent;
+        font-size: 10pt;
+        min-height: 60px;
+        padding: 4px;
+      }
+      
+      .sig-controls {
+        display: none;
+      }
+      
+      /* SEITENUMBRUCH-KONTROLLE */
+      .section-header,
+      .group-header {
+        page-break-after: avoid;
+      }
+      
+      .section,
+      .group,
+      .check {
+        page-break-inside: avoid;
+      }
+      
+      h2 {
+        page-break-after: avoid;
+      }
+      
+      /* BESSERE LESBARKEIT */
+      p, li, div {
+        orphans: 3;
+        widows: 3;
+      }
+      
+      /* FUSSZEILE MIT SEITENZAHL */
+      @page {
+        @bottom-right {
+          content: "Seite " counter(page);
+          font-size: 9pt;
+          color: #64748b;
+        }
+        
+        @bottom-left {
+          content: "CL Validierungsprotokoll";
+          font-size: 9pt;
+          color: #64748b;
+        }
+      }
     }
 
-    /* ---------- Druck: ProPrint aktiv ---------- */
-    @media print{
-      body.preview-print-pro .only-print{display:block !important}
-      body.preview-print-pro header{background:#fff !important;color:#000 !important;border-bottom:1px solid var(--print-border)!important}
-      body.preview-print-pro .group-header{background:#f5f6f8 !important;color:#111 !important}
-      body.preview-print-pro #printHeader.print-pro,
-      body.preview-print-pro #printFooter.print-pro{
-        position:fixed;left:0;right:0;color:var(--print-fg);font-size:11px;-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#fff
-      }
-      body.preview-print-pro #printHeader.print-pro{
-        top:0;height:28mm;padding:6mm 0;border-bottom:1px solid var(--print-border);display:flex;align-items:flex-end;justify-content:space-between
-      }
-      body.preview-print-pro #printHeader .ph-left{margin-left:var(--print-margin)}
-      body.preview-print-pro #printHeader .ph-right{margin-right:var(--print-margin);text-align:right}
-      body.preview-print-pro #printHeader .ph-title{font-weight:800;font-size:15px}
-      body.preview-print-pro #printHeader .ph-sub{color:var(--print-muted);margin-top:4px}
-      body.preview-print-pro #printFooter.print-pro{
-        bottom:0;height:12mm;border-top:1px solid var(--print-border);display:flex;align-items:center;justify-content:space-between
-      }
-      body.preview-print-pro #printFooter .pf-left{margin-left:var(--print-margin);color:var(--print-muted)}
-      body.preview-print-pro #printFooter .pf-right{margin-right:var(--print-margin)}
-      body.preview-print-pro .pageNumber:after{content:counter(page)}
-      body.preview-print-pro .totalPages:after{content:counter(pages)}
-      @supports not (content:counter(pages)){ body.preview-print-pro #printFooter .pageSep, body.preview-print-pro #printFooter .totalPages{display:none} }
-      body.preview-print-pro{margin-top:30mm;margin-bottom:16mm}
-      /* Deckblatt NUR wenn nicht hidden */
-      body.preview-print-pro #printCover.print-pro[hidden]{display:none !important}
-      body.preview-print-pro #printCover.print-pro:not([hidden]){
-        break-after:page;border:2px solid var(--print-border);border-radius:8px;padding:16mm 14mm;background:#fff;display:block !important
-      }
-      body.preview-print-pro .hamburger-container,
-      body.preview-print-pro .hamburger-menu,
-      body.preview-print-pro #pageBreakMarkers,
-      body.preview-print-pro .btn,
-      body.preview-print-pro .check .del,
-      body.preview-print-pro .section-header .btn.icon,
-      body.preview-print-pro .sig-controls button,
-      body.preview-print-pro .collapse-btn{display:none !important}
-      body.preview-print-pro .group,.section{page-break-inside:avoid}
-    }
-
-    /* ProPrint Vorschau am Bildschirm – nur Header/Footer, kein Deckblatt */
-    body.preview-print-pro #printHeader.print-pro,
-    body.preview-print-pro #printFooter.print-pro{display:block;position:sticky}
-    body.preview-print-pro #printCover.print-pro{display:none}
-    body.preview-print-pro{background:#fff}
-
-    @media (max-width:768px){
-      .col-3,.col-4,.col-6,.col-8{grid-column:span 12}
-      .check{flex-wrap:wrap}
-      .check .note{min-width:100%;max-width:100%}
-      .group-actions{flex-wrap:wrap}
+    @media (max-width: 768px) {
+      .col-3, .col-4, .col-6, .col-8 { grid-column: span 12; }
+      .check { flex-wrap: wrap; }
+      .check .note { min-width: 100%; max-width: 100%; }
+      .group-actions { flex-wrap: wrap; }
     }
   </style>
 </head>
@@ -211,10 +1084,11 @@
     <div class="hamburger-menu" id="hamburgerMenu">
       <button class="btn" id="btnNewGroup">➕ Neue Gruppe</button>
       <button class="btn" id="btnNewSectionMenu">📝 Neuer Abschnitt</button>
-      <button class="btn switch" id="btnPageBreaks"><span>Seitenumbrüche</span><span id="pageBreakState">Aus</span></button>
-      <button class="btn switch" id="btnPrintTheme"><span>Druckvorlage (Pro)</span><span id="printThemeState">Aus</span></button>
-      <button class="btn switch" id="btnCoverToggle"><span>Deckblatt (Pro)</span><span id="coverState">Aus</span></button>
-      <button class="btn" id="btnPDF">📄 PDF drucken</button>
+      <button class="btn switch" id="btnPageBreaks">
+        <span>Seitenumbrüche</span>
+        <span id="pageBreakState">Aus</span>
+      </button>
+      <button class="btn" id="btnPDF">🖨️ PDF drucken</button>
       <button class="btn secondary" id="btnSave">💾 Speichern</button>
       <button class="btn secondary" id="btnLoad">📂 Laden</button>
       <button class="btn danger" id="btnReset">🔄 Reset</button>
@@ -230,7 +1104,7 @@
       <header>
         <div>
           <div class="title">CL Validierungsprotokoll</div>
-          <div class="version">Version 3.4.0</div>
+          <div class="version">Version 3.3 – Fixed</div>
         </div>
         <div style="text-align:right;font-size:12px">
           <div>Erstellt: <span id="stamp"></span></div>
@@ -243,7 +1117,7 @@
           <div class="row">
             <div class="title-wrap">
               <button class="collapse-btn">−</button>
-              <h2>Deckblatt &amp; Kopfdaten</h2>
+              <h2>Deckblatt & Kopfdaten</h2>
             </div>
           </div>
         </div>
@@ -251,7 +1125,7 @@
           <div class="grid">
             <div class="col-6">
               <label>Name der Einrichtung</label>
-              <input type="text" id="nameEinrichtung" placeholder="z. B. Klinikum Musterstadt" />
+              <input type="text" id="nameEinrichtung" placeholder="z.B. Klinikum Musterstadt" />
             </div>
             <div class="col-6">
               <label>Standort der Installation</label>
@@ -263,20 +1137,20 @@
             </div>
             <div class="col-6">
               <label>Produkt</label>
-              <input type="text" id="produkt" placeholder="z. B. EuroSDS" />
+              <input type="text" id="produkt" placeholder="z.B. EuroSDS" />
             </div>
             <div class="col-4">
               <label>Programm-Paket</label>
-              <input type="text" id="programmPaket" placeholder="z. B. Komplettpaket" />
+              <input type="text" id="programmPaket" placeholder="z.B. Komplettpaket" />
             </div>
             <div class="col-4">
               <label>Version</label>
-              <input type="text" id="version" placeholder="z. B. 6.4.x" />
+              <input type="text" id="version" placeholder="z.B. 6.4.x" />
             </div>
             <div class="col-4">
               <label>Softwarepflege (SVB II-Pflege-S)</label>
               <select id="softwarepflege">
-                <option value="">Bitte wählen…</option>
+                <option value="">Bitte wählen...</option>
                 <option value="aktiv">Aktiv</option>
                 <option value="inaktiv">Inaktiv</option>
                 <option value="ausstehend">Ausstehend</option>
@@ -284,15 +1158,15 @@
             </div>
             <div class="col-6">
               <label>Art/Anzahl der Arbeitsplätze</label>
-              <input type="text" id="arbeitsplaetze" placeholder="z. B. 8 Clients + 1 Notfallarbeitsplatz" />
+              <input type="text" id="arbeitsplaetze" placeholder="z.B. 8 Clients + 1 Notfallarbeitsplatz" />
             </div>
             <div class="col-6">
               <label>Angebundene Geräte</label>
-              <input type="text" id="angebundeneGeraete" placeholder="z. B. RDG, Steri, Scanner…" />
+              <input type="text" id="angebundeneGeraete" placeholder="z.B. RDG-Steril-Rollengeräte..." />
             </div>
             <div class="col-12">
               <label>Bemerkung zur Installation</label>
-              <textarea id="bemerkungInstallation" placeholder="Weitere Informationen…"></textarea>
+              <textarea id="bemerkungInstallation" placeholder="Weitere Informationen..."></textarea>
             </div>
             <div class="col-4">
               <label>Validierung durchgeführt am</label>
@@ -328,7 +1202,7 @@
           <div class="row">
             <div class="title-wrap">
               <button class="collapse-btn">−</button>
-              <h2>Validierer &amp; Freigabe</h2>
+              <h2>Validierer & Freigabe</h2>
             </div>
           </div>
         </div>
@@ -349,17 +1223,17 @@
             <div class="col-6">
               <label>Datum / Unterschrift Validierer</label>
               <div class="sig-area">
-                <textarea id="unterschriftValidierer" placeholder="Datum und Unterschrift…"></textarea>
-                <div class="sig-controls" style="text-align:right;margin-top:8px">
+                <textarea id="unterschriftValidierer" placeholder="Datum und Unterschrift eingeben..."></textarea>
+                <div class="sig-controls" style="justify-content:flex-end;margin-top:8px">
                   <button class="btn icon" data-clear-text="unterschriftValidierer">🗑️ Löschen</button>
                 </div>
               </div>
             </div>
             <div class="col-6">
-              <label>Freigabe durch Betreiber – Datum / Unterschrift</label>
+              <label>Freigabe durch Betreiber - Datum / Unterschrift</label>
               <div class="sig-area">
-                <textarea id="freigabeBetreiber" placeholder="Datum und Unterschrift…"></textarea>
-                <div class="sig-controls" style="text-align:right;margin-top:8px">
+                <textarea id="freigabeBetreiber" placeholder="Datum und Unterschrift eingeben..."></textarea>
+                <div class="sig-controls" style="justify-content:flex-end;margin-top:8px">
                   <button class="btn icon" data-clear-text="freigabeBetreiber">🗑️ Löschen</button>
                 </div>
               </div>
@@ -374,9 +1248,9 @@
           <div class="row">
             <div class="title-wrap">
               <button class="collapse-btn">−</button>
-              <h2>KV – Kalibrierung &amp; Validierung</h2>
+              <h2>KV – Kalibrierung & Validierung</h2>
             </div>
-            <button class="btn icon" id="btnAddKV">+ Zeile</button>
+            <button class="btn icon" onclick="addKV()">+ Zeile</button>
           </div>
         </div>
         <div class="section-body">
@@ -392,7 +1266,7 @@
               <button class="collapse-btn">−</button>
               <h2>IQ – Installation Qualification</h2>
             </div>
-            <button class="btn icon" id="btnAddIQ">+ Zeile</button>
+            <button class="btn icon" onclick="addIQ()">+ Zeile</button>
           </div>
         </div>
         <div class="section-body">
@@ -408,7 +1282,7 @@
               <button class="collapse-btn">−</button>
               <h2>OQ – Operational Qualification</h2>
             </div>
-            <button class="btn icon" id="btnAddOQ">+ Zeile</button>
+            <button class="btn icon" onclick="addOQ()">+ Zeile</button>
           </div>
         </div>
         <div class="section-body">
@@ -416,37 +1290,9 @@
         </div>
       </div>
 
-      <!-- Dynamische Gruppen -->
+      <!-- Dynamische Gruppen (Verschiebbar) -->
       <div id="groupsContainer"></div>
     </div>
-  </div>
-
-  <!-- ProPrint: fixer Header/Footer + optionales Deckblatt -->
-  <div id="printHeader" class="print-pro only-print">
-    <div class="ph-left">
-      <div class="ph-title">CL Validierungsprotokoll</div>
-      <div class="ph-sub">Standort: <span id="phOrt"></span> • Produkt: <span id="phProdukt"></span></div>
-    </div>
-    <div class="ph-right">
-      <div class="ph-meta">Erstellt: <span id="phDate"></span></div>
-      <div class="ph-meta">Version: 3.4.0</div>
-    </div>
-  </div>
-
-  <div id="printFooter" class="print-pro only-print">
-    <div class="pf-left">NEXUS / IPS – Validierung</div>
-    <div class="pf-right">Seite <span class="pageNumber"></span><span class="pageSep"> / </span><span class="totalPages"></span></div>
-  </div>
-
-  <div id="printCover" class="print-pro only-print" hidden>
-    <h1>Validierungsprotokoll</h1>
-    <ul>
-      <li><strong>Einrichtung:</strong> <span id="pcEinrichtung"></span></li>
-      <li><strong>Standort:</strong> <span id="pcOrt"></span></li>
-      <li><strong>Produkt:</strong> <span id="pcProdukt"></span></li>
-      <li><strong>Version:</strong> <span id="pcVersion"></span></li>
-      <li><strong>Datum:</strong> <span id="pcDate"></span></li>
-    </ul>
   </div>
 
   <!-- Modal für Abschnittstypen -->
@@ -457,484 +1303,931 @@
         <button class="modal-close" id="sectionTypeClose">×</button>
       </div>
       <div class="section-type-grid">
-        <div class="section-type-card" data-type="checklist"><div class="icon">✓</div><div class="name">Checkliste</div></div>
-        <div class="section-type-card" data-type="spacing"><div class="icon">↕</div><div class="name">Abstand</div></div>
-        <div class="section-type-card" data-type="text"><div class="icon">📝</div><div class="name">Text</div></div>
-        <div class="section-type-card" data-type="image"><div class="icon">🖼</div><div class="name">Bilder</div></div>
+        <div class="section-type-card" data-type="checklist">
+          <div class="icon">✓</div>
+          <div class="name">Checkliste</div>
+        </div>
+        <div class="section-type-card" data-type="spacing">
+          <div class="icon">↕</div>
+          <div class="name">Abstand</div>
+        </div>
+        <div class="section-type-card" data-type="text">
+          <div class="icon">📝</div>
+          <div class="name">Text</div>
+        </div>
+        <div class="section-type-card" data-type="image">
+          <div class="icon">🖼</div>
+          <div class="name">Bilder</div>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-  'use strict';
-  const $ = s => document.querySelector(s);
-  const $$ = s => document.querySelectorAll(s);
-  const clone = o => JSON.parse(JSON.stringify(o));
+    'use strict';
+    function $(s){ return document.querySelector(s); }
+    function $$(s){ return document.querySelectorAll(s); }
+    function clone(o){ return JSON.parse(JSON.stringify(o)); }
 
-  /* ---------- State ---------- */
-  const appState = {
-    nameEinrichtung:'', standortInstallation:'', verantwortlichePerson:'', produkt:'',
-    programmPaket:'', version:'', softwarepflege:'', arbeitsplaetze:'', angebundeneGeraete:'',
-    bemerkungInstallation:'', validierungDatum:'', letzteValidierung:'', naechsteValidierung:'',
-    checkValidierung:false, checkRevalidierung:false,
-    validiererName:'', qualifikation:'', produktschulung:'',
-    unterschriftValidierer:'', freigabeBetreiber:'',
-    kv:[], iq:[], oq:[],
-    groups:[]
-  };
-
-  const formFields = [
-    'nameEinrichtung','standortInstallation','verantwortlichePerson','produkt',
-    'programmPaket','version','softwarepflege','arbeitsplaetze','angebundeneGeraete',
-    'bemerkungInstallation','validierungDatum','letzteValidierung','naechsteValidierung',
-    'checkValidierung','checkRevalidierung','validiererName','qualifikation','produktschulung',
-    'unterschriftValidierer','freigabeBetreiber'
-  ];
-
-  /* ---------- Persistence ---------- */
-  function sync(){
-    formFields.forEach(k=>{
-      const el = document.getElementById(k);
-      if(!el) return;
-      appState[k] = (el.type === 'checkbox') ? !!el.checked : (el.value || '');
-    });
-    localStorage.setItem('validierung_v3_4_0', JSON.stringify(appState));
-  }
-
-  function loadState(){
-    try{
-      const raw = localStorage.getItem('validierung_v3_4_0');
-      if(!raw) return false;
-      const data = JSON.parse(raw);
-      Object.assign(appState, data);
-      formFields.forEach(k=>{
-        const el = document.getElementById(k);
-        if(!el) return;
-        if(el.type === 'checkbox') el.checked = !!appState[k];
-        else el.value = appState[k] || '';
-      });
-      return true;
-    }catch(e){ return false; }
-  }
-
-  function exportJSON(){
-    const blob = new Blob([JSON.stringify(appState,null,2)], {type:'application/json'});
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-    a.download = 'validierung_'+Date.now()+'.json'; a.click();
-  }
-  function importJSON(){
-    const i = document.createElement('input'); i.type='file'; i.accept='application/json';
-    i.onchange = ()=>{
-      const f = i.files[0]; if(!f) return;
-      const r = new FileReader();
-      r.onload = e=>{
-        try{
-          const data = JSON.parse(e.target.result);
-          Object.assign(appState, data);
-          renderAll();
-          alert('✓ Daten geladen');
-        }catch(err){ alert('✗ Fehler: '+err.message); }
-      };
-      r.readAsText(f);
+    /* State */
+    var appState = {
+      nameEinrichtung:'', standortInstallation:'', verantwortlichePerson:'', produkt:'',
+      programmPaket:'', version:'', softwarepflege:'', arbeitsplaetze:'', angebundeneGeraete:'',
+      bemerkungInstallation:'', validierungDatum:'', letzteValidierung:'', naechsteValidierung:'',
+      checkValidierung:false, checkRevalidierung:false,
+      validiererName:'', qualifikation:'', produktschulung:'',
+      unterschriftValidierer:'', freigabeBetreiber:'',
+      kv:[], iq:[], oq:[],
+      groups:[]
     };
-    i.click();
-  }
-  function resetAll(){
-    if(!confirm('Alle Daten löschen?')) return;
-    localStorage.removeItem('validierung_v3_4_0');
-    location.reload();
-  }
 
-  /* ---------- KV/IQ/OQ Render ---------- */
-  function renderList(sel, items, onUpdate){
-    const host = $(sel); if(!host) return;
-    host.innerHTML = '';
-    items.forEach((it, idx)=>{
-      const row = document.createElement('div');
-      row.className = 'check';
-      row.innerHTML = `
-        <input class="tiny" type="text" placeholder="Code" value="${it.code||''}">
-        <input class="label-input" type="text" placeholder="Punkt…" value="${it.text||''}">
-        <input class="note" type="text" placeholder="Bemerkung…" value="${it.note||''}">
-        <input type="checkbox" ${it.ok?'checked':''}>
-        <button class="btn icon del" title="Löschen">✕</button>
+    var currentGroupIndex = 0;
+
+    /* Defaults */
+    var defaultKV=[
+      {text:'Konformität mit Spezifikation', ok:false, note:'', code:'KV-001', info:'Prüfung der technischen Spezifikationen'},
+      {text:'Messgenauigkeit überprüft', ok:false, note:'', code:'KV-002', info:'Vergleich mit kalibriertem Referenzgerät'},
+      {text:'Kalibrierzertifikat vorhanden', ok:false, note:'', code:'KV-003', info:'Aktuelles Zertifikat vom akkreditierten Labor'}
+    ];
+    var iqItems=[
+      {text:'Lieferumfang vollständig', ok:false, note:'', code:'IQ-001', info:'Alle Komponenten und Zubehör vorhanden'},
+      {text:'Gerät unbeschädigt', ok:false, note:'', code:'IQ-002', info:'Sichtprüfung auf Transportschäden'},
+      {text:'Installation gemäß Handbuch', ok:false, note:'', code:'IQ-003', info:'Befolgen der Herstellervorgaben'}
+    ];
+    var oqItems=[
+      {text:'Funktionstest erfolgreich', ok:false, note:'', code:'OQ-001', info:'Alle Basisfunktionen getestet'},
+      {text:'Alarmfunktionen getestet', ok:false, note:'', code:'OQ-002', info:'Akustische und optische Alarme'},
+      {text:'Temperaturkonstanz geprüft', ok:false, note:'', code:'OQ-003', info:'24h-Monitoring durchgeführt'}
+    ];
+
+    /* Persistence */
+    var formFields = [
+      'nameEinrichtung','standortInstallation','verantwortlichePerson','produkt',
+      'programmPaket','version','softwarepflege','arbeitsplaetze','angebundeneGeraete',
+      'bemerkungInstallation','validierungDatum','letzteValidierung','naechsteValidierung',
+      'checkValidierung','checkRevalidierung',
+      'validiererName','qualifikation','produktschulung',
+      'unterschriftValidierer','freigabeBetreiber'
+    ];
+
+    function sync(){
+      formFields.forEach(function(k){
+        var el = document.getElementById(k);
+        if(el){
+          if(el.type === 'checkbox') appState[k] = el.checked;
+          else appState[k] = el.value;
+        }
+      });
+      localStorage.setItem('validierung_v3_fixed', JSON.stringify(appState));
+    }
+
+    function loadState(){
+      try{
+        var stored = localStorage.getItem('validierung_v3_fixed');
+        if(!stored) return false;
+        var data = JSON.parse(stored);
+        Object.assign(appState, data);
+        formFields.forEach(function(k){
+          var el = document.getElementById(k);
+          if(el){
+            if(el.type === 'checkbox') el.checked = appState[k] || false;
+            else el.value = appState[k] || '';
+          }
+        });
+        return true;
+      }catch(e){ return false; }
+    }
+
+    function exportJSON(){
+      var blob = new Blob([JSON.stringify(appState, null, 2)], {type:'application/json'});
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'validierung_'+Date.now()+'.json';
+      a.click();
+    }
+
+    function importJSON(){
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'application/json';
+      input.onchange = function(){
+        var file = input.files[0];
+        if(!file) return;
+        var reader = new FileReader();
+        reader.onload = function(e){
+          try{
+            var data = JSON.parse(e.target.result);
+            Object.assign(appState, data);
+            renderAll();
+            alert('✓ Daten erfolgreich geladen');
+          }catch(err){ alert('✗ Fehler beim Laden: '+err.message); }
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    }
+
+    function resetAll(){
+      if(!confirm('Alle Daten löschen?')) return;
+      localStorage.removeItem('validierung_v3_fixed');
+      location.reload();
+    }
+
+    /* Listen (KV/IQ/OQ) mit Code + Move Handle + funktionierendem Delete */
+    function renderList(selector, items, onUpdate){
+      var container = document.querySelector(selector);
+      if(!container) return;
+      container.innerHTML = '';
+      items.forEach(function(item, i){
+        var row = document.createElement('div');
+        row.className = 'check';
+        row.innerHTML = `
+          <div class="move-btns">
+            <div class="move-handle" draggable="true" data-index="${i}">
+              <span></span>
+            </div>
+          </div>
+          <input type="text" class="tiny" value="${item.code||''}" placeholder="Code" />
+          <button class="info-btn" title="${item.info||''}"></button>
+          <input type="text" class="label-input" value="${item.text}" placeholder="Prüfpunkt..." />
+          <input type="text" class="note" value="${item.note||''}" placeholder="Bemerkung..." />
+          <input type="checkbox" ${item.ok?'checked':''} />
+          <div class="manage">
+            <button class="btn icon tiny del">✕</button>
+          </div>
+        `;
+
+        var codeInput = row.querySelector('.tiny');
+        var labelInput = row.querySelector('.label-input');
+        var noteInput = row.querySelector('.note');
+        var checkbox = row.querySelector('input[type="checkbox"]');
+        var delBtn = row.querySelector('.del');
+
+        codeInput.oninput = function(){ item.code = codeInput.value; onUpdate(); };
+        labelInput.oninput = function(){ item.text = labelInput.value; onUpdate(); };
+        noteInput.oninput = function(){ item.note = noteInput.value; onUpdate(); };
+        checkbox.onchange = function(){ item.ok = checkbox.checked; onUpdate(); };
+        
+        // FIXED: Delete Button
+        delBtn.onclick = function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          items.splice(i, 1);
+          renderList(selector, items, onUpdate);
+          onUpdate();
+        };
+
+        // Drag & Drop
+        var handle = row.querySelector('.move-handle');
+        handle.ondragstart = function(e){ 
+          e.dataTransfer.effectAllowed='move'; 
+          e.dataTransfer.setData('text/plain', i); 
+        };
+        row.ondragover = function(e){ 
+          e.preventDefault(); 
+          e.dataTransfer.dropEffect='move'; 
+        };
+        row.ondrop = function(e){
+          e.preventDefault();
+          var from = parseInt(e.dataTransfer.getData('text/plain'));
+          var to = i;
+          if(from !== to){
+            var movedItem = items.splice(from, 1)[0];
+            items.splice(to, 0, movedItem);
+            renderList(selector, items, onUpdate);
+            onUpdate();
+          }
+        };
+
+        container.appendChild(row);
+      });
+    }
+
+    /* Collapse */
+    function initCollapsibles(){
+      $$('.section.collapsible').forEach(function(section){
+        var btn = section.querySelector('.collapse-btn');
+        if(!btn) return;
+        btn.onclick = function(){
+          section.classList.toggle('collapsed');
+          btn.textContent = section.classList.contains('collapsed') ? '+' : '−';
+        };
+      });
+    }
+
+    /* Gruppen rendern mit Drag & Drop */
+    function drawGroups(){
+      var host = document.getElementById('groupsContainer');
+      if(!host) return;
+      host.innerHTML = '';
+
+      if(!appState.groups || appState.groups.length === 0){
+        appState.groups = [{ id: Date.now(), title:'Gruppe 1', enabled:true, collapsed:false, sections:[] }];
+      }
+
+      appState.groups.forEach(function(g, gIdx){
+        var group = document.createElement('div');
+        group.className = 'group';
+        group.setAttribute('draggable', 'true');
+        group.setAttribute('data-group-index', gIdx);
+        if(!g.enabled) group.classList.add('disabled');
+        if(g.collapsed) group.classList.add('collapsed');
+
+        // Drag & Drop für Gruppen
+        group.ondragstart = function(e){
+          e.stopPropagation();
+          group.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', gIdx);
+        };
+        
+        group.ondragend = function(e){
+          group.classList.remove('dragging');
+          $$('.group').forEach(function(g){ g.classList.remove('drag-over'); });
+        };
+        
+        group.ondragover = function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          var dragging = $('.group.dragging');
+          if(dragging && dragging !== group){
+            e.dataTransfer.dropEffect = 'move';
+            group.classList.add('drag-over');
+          }
+        };
+        
+        group.ondragleave = function(e){
+          if(!group.contains(e.relatedTarget)){
+            group.classList.remove('drag-over');
+          }
+        };
+        
+        group.ondrop = function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          group.classList.remove('drag-over');
+          
+          var fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
+          var toIndex = gIdx;
+          
+          if(fromIndex !== toIndex){
+            var movedGroup = appState.groups.splice(fromIndex, 1)[0];
+            appState.groups.splice(toIndex, 0, movedGroup);
+            drawGroups();
+            sync();
+          }
+        };
+
+        var header = document.createElement('div');
+        header.className = 'group-header';
+        
+        var titleSection = document.createElement('div');
+        titleSection.className = 'group-title-section';
+        
+        // Move Handle
+        var moveHandle = document.createElement('div');
+        moveHandle.className = 'group-move-handle';
+        moveHandle.innerHTML = '<span></span>';
+        moveHandle.title = 'Gruppe verschieben';
+        
+        var collapseBtn = document.createElement('div');
+        collapseBtn.className = 'group-collapse-btn';
+        collapseBtn.onclick = function(e){
+          e.stopPropagation();
+          g.collapsed = !g.collapsed;
+          drawGroups();
+          sync();
+        };
+        
+        var titleInput = document.createElement('input');
+        titleInput.type = 'text';
+        titleInput.className = 'group-title-input';
+        titleInput.value = g.title || 'Gruppe ' + (gIdx + 1);
+        titleInput.placeholder = 'Gruppenname...';
+        titleInput.oninput = function(e){
+          e.stopPropagation();
+          g.title = titleInput.value;
+          sync();
+        };
+        titleInput.onclick = function(e){ e.stopPropagation(); };
+        titleInput.ondragstart = function(e){ e.preventDefault(); };
+        
+        titleSection.appendChild(moveHandle);
+        titleSection.appendChild(collapseBtn);
+        titleSection.appendChild(titleInput);
+        
+        var actions = document.createElement('div');
+        actions.className = 'group-actions';
+        
+        var toggleBtn = document.createElement('div');
+        toggleBtn.className = 'group-toggle' + (g.enabled ? ' active' : '');
+        toggleBtn.textContent = g.enabled ? '✓ Aktiviert' : '✗ Deaktiviert';
+        toggleBtn.onclick = function(e){
+          e.stopPropagation();
+          g.enabled = !g.enabled;
+          drawGroups();
+          sync();
+        };
+        
+        var duplicateBtn = document.createElement('div');
+        duplicateBtn.className = 'group-btn duplicate';
+        duplicateBtn.title = 'Gruppe duplizieren';
+        duplicateBtn.onclick = function(e){
+          e.stopPropagation();
+          var newGroup = clone(g);
+          newGroup.id = Date.now() + Math.random();
+          newGroup.title = g.title + ' (Kopie)';
+          appState.groups.splice(gIdx + 1, 0, newGroup);
+          drawGroups();
+          sync();
+        };
+        
+        // FIXED: Delete Button
+        var deleteBtn = document.createElement('div');
+        deleteBtn.className = 'group-btn delete';
+        deleteBtn.title = 'Gruppe löschen';
+        deleteBtn.onclick = function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          if(confirm('Gruppe "' + g.title + '" wirklich löschen?')){
+            appState.groups.splice(gIdx, 1);
+            drawGroups();
+            sync();
+          }
+        };
+        
+        actions.appendChild(toggleBtn);
+        actions.appendChild(duplicateBtn);
+        actions.appendChild(deleteBtn);
+        
+        header.appendChild(titleSection);
+        header.appendChild(actions);
+        
+        var content = document.createElement('div');
+        content.className = 'group-content';
+        
+        if(!g.sections) g.sections = [];
+        
+        g.sections.forEach(function(s, sIdx){
+          var sectionDiv = document.createElement('div');
+          sectionDiv.className = 'section';
+          
+          if(s.type === 'checklist') renderChecklistSection(sectionDiv, s, g.sections, sIdx);
+          else if(s.type === 'spacing') renderSpacingSection(sectionDiv, s, g.sections, sIdx);
+          else if(s.type === 'text') renderTextSection(sectionDiv, s, g.sections, sIdx);
+          else if(s.type === 'image') renderImageSection(sectionDiv, s, g.sections, sIdx);
+          
+          content.appendChild(sectionDiv);
+        });
+        
+        var addSection = document.createElement('div');
+        addSection.className = 'group-add-section';
+        var addBtn = document.createElement('button');
+        addBtn.className = 'btn';
+        addBtn.innerHTML = '➕ Abschnitt hinzufügen';
+        addBtn.onclick = function(){
+          currentGroupIndex = gIdx;
+          addDynamicSection();
+        };
+        addSection.appendChild(addBtn);
+        content.appendChild(addSection);
+        
+        group.appendChild(header);
+        group.appendChild(content);
+        host.appendChild(group);
+      });
+
+      updatePageBreaks();
+      initCollapsibles();
+    }
+
+    /* Checklisten-Abschnitt mit Code + Move Handle + funktionierendem Delete */
+    function renderChecklistSection(host, section, sections, sIdx){
+      var header = document.createElement('div');
+      header.className = 'section-header';
+      header.innerHTML = `
+        <div class="row">
+          <div class="title-wrap">
+            <button class="collapse-btn">−</button>
+            <input type="text" value="${section.title||'Checkliste'}" placeholder="Titel..." 
+                   style="border:1px solid transparent;background:transparent;font-weight:700;color:var(--primary);font-size:18px;padding:4px 6px;border-radius:8px" />
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn icon add-row-btn">+ Zeile</button>
+            <button class="btn icon del-section-btn">✕</button>
+          </div>
+        </div>
       `;
-      const codeI = row.querySelector('.tiny');
-      const labelI = row.querySelector('.label-input');
-      const noteI = row.querySelector('.note');
-      const cb     = row.querySelector('input[type="checkbox"]');
+      
+      var titleInput = header.querySelector('input');
+      titleInput.oninput = function(){ section.title = titleInput.value; sync(); };
+      
+      var addBtn = header.querySelector('.add-row-btn');
+      addBtn.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(!section.rows) section.rows = [];
+        section.rows.push({text:'Neuer Punkt', ok:false, note:'', code:''});
+        renderChecklistSection(host, section, sections, sIdx);
+        sync();
+      };
+      
+      // FIXED: Delete Button
+      var delBtn = header.querySelector('.del-section-btn');
+      delBtn.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(confirm('Abschnitt löschen?')){
+          sections.splice(sIdx, 1);
+          drawGroups();
+          sync();
+        }
+      };
+      
+      var body = document.createElement('div');
+      body.className = 'section-body';
+      var list = document.createElement('div');
+      list.className = 'list';
+      
+      if(!section.rows) section.rows = [];
+      section.rows.forEach(function(row, rIdx){
+        var rowDiv = document.createElement('div');
+        rowDiv.className = 'check';
+        rowDiv.innerHTML = `
+          <div class="move-btns">
+            <div class="move-handle" draggable="true">
+              <span></span>
+            </div>
+          </div>
+          <input type="text" class="tiny" value="${row.code||''}" placeholder="Code" />
+          <input type="text" class="label-input" value="${row.text}" placeholder="Punkt..." />
+          <input type="text" class="note" value="${row.note||''}" placeholder="Bemerkung..." />
+          <input type="checkbox" ${row.ok?'checked':''} />
+          <button class="btn icon tiny del">✕</button>
+        `;
+        
+        var codeInput = rowDiv.querySelector('.tiny');
+        var labelInput = rowDiv.querySelector('.label-input');
+        var noteInput = rowDiv.querySelector('.note');
+        var checkbox = rowDiv.querySelector('input[type="checkbox"]');
+        var delRowBtn = rowDiv.querySelector('.del');
+        
+        codeInput.oninput = function(){ row.code = codeInput.value; sync(); };
+        labelInput.oninput = function(){ row.text = labelInput.value; sync(); };
+        noteInput.oninput = function(){ row.note = noteInput.value; sync(); };
+        checkbox.onchange = function(){ row.ok = checkbox.checked; sync(); };
+        
+        // FIXED: Delete Button
+        delRowBtn.onclick = function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          section.rows.splice(rIdx, 1);
+          renderChecklistSection(host, section, sections, sIdx);
+          sync();
+        };
+        
+        // Drag & Drop
+        var handle = rowDiv.querySelector('.move-handle');
+        handle.ondragstart = function(e){ 
+          e.dataTransfer.effectAllowed='move'; 
+          e.dataTransfer.setData('text/plain', rIdx); 
+        };
+        rowDiv.ondragover = function(e){ 
+          e.preventDefault(); 
+          e.dataTransfer.dropEffect='move'; 
+        };
+        rowDiv.ondrop = function(e){
+          e.preventDefault();
+          var from = parseInt(e.dataTransfer.getData('text/plain'));
+          var to = rIdx;
+          if(from !== to){
+            var movedRow = section.rows.splice(from, 1)[0];
+            section.rows.splice(to, 0, movedRow);
+            renderChecklistSection(host, section, sections, sIdx);
+            sync();
+          }
+        };
+        
+        list.appendChild(rowDiv);
+      });
+      
+      body.appendChild(list);
+      host.innerHTML = '';
+      host.appendChild(header);
+      host.appendChild(body);
+      
+      var collapseBtn = header.querySelector('.collapse-btn');
+      collapseBtn.onclick = function(){
+        host.classList.toggle('collapsed');
+        collapseBtn.textContent = host.classList.contains('collapsed') ? '+' : '−';
+      };
+    }
 
-      codeI.oninput = ()=>{ it.code = codeI.value; onUpdate(); };
-      labelI.oninput= ()=>{ it.text = labelI.value; onUpdate(); };
-      noteI.oninput = ()=>{ it.note = noteI.value; onUpdate(); };
-      cb.onchange   = ()=>{ it.ok   = cb.checked; onUpdate(); };
+    /* Abstand-Abschnitt */
+    function renderSpacingSection(host, section, sections, sIdx){
+      if(!section.heightCm) section.heightCm = 5;
+      
+      var header = document.createElement('div');
+      header.className = 'section-header';
+      header.innerHTML = `
+        <div class="row">
+          <h2>Abstand</h2>
+          <button class="btn icon del">✕</button>
+        </div>
+      `;
+      
+      // FIXED: Delete Button
+      var delBtn = header.querySelector('.del');
+      delBtn.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(confirm('Abschnitt löschen?')){
+          sections.splice(sIdx, 1);
+          drawGroups();
+          sync();
+        }
+      };
+      
+      var body = document.createElement('div');
+      body.className = 'section-body';
+      body.innerHTML = `
+        <div class="spacing-section">
+          <div class="controls">
+            <label style="margin:0">Höhe (cm):</label>
+            <input type="number" value="${section.heightCm}" min="1" max="20" style="width:80px" />
+          </div>
+          <div class="preview" style="height:${section.heightCm * 10}px">↕ ${section.heightCm} cm Abstand</div>
+        </div>
+      `;
+      
+      var heightInput = body.querySelector('input[type="number"]');
+      var preview = body.querySelector('.preview');
+      heightInput.oninput = function(){
+        section.heightCm = parseFloat(heightInput.value) || 5;
+        preview.style.height = (section.heightCm * 10) + 'px';
+        preview.textContent = '↕ ' + section.heightCm + ' cm Abstand';
+        sync();
+      };
+      
+      host.innerHTML = '';
+      host.appendChild(header);
+      host.appendChild(body);
+    }
 
-      row.querySelector('.del').onclick = (e)=>{ e.preventDefault(); items.splice(idx,1); renderList(sel,items,onUpdate); onUpdate(); };
-      host.appendChild(row);
-    });
-  }
+    /* Text-Abschnitt */
+    function renderTextSection(host, section, sections, sIdx){
+      if(!section.content) section.content = '';
+      
+      var header = document.createElement('div');
+      header.className = 'section-header';
+      header.innerHTML = `
+        <div class="row">
+          <input type="text" value="${section.title||'Text'}" placeholder="Titel..." 
+                 style="border:1px solid transparent;background:transparent;font-weight:700;color:var(--primary);font-size:18px;padding:4px 6px;border-radius:8px" />
+          <button class="btn icon del">✕</button>
+        </div>
+      `;
+      
+      var titleInput = header.querySelector('input');
+      titleInput.oninput = function(){ section.title = titleInput.value; sync(); };
+      
+      // FIXED: Delete Button
+      var delBtn = header.querySelector('.del');
+      delBtn.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(confirm('Abschnitt löschen?')){
+          sections.splice(sIdx, 1);
+          drawGroups();
+          sync();
+        }
+      };
+      
+      var body = document.createElement('div');
+      body.className = 'section-body';
+      body.innerHTML = `
+        <div class="text-section">
+          <div class="text-editor-toolbar">
+            <button data-cmd="bold"><strong>B</strong></button>
+            <button data-cmd="italic"><em>I</em></button>
+            <button data-cmd="underline"><u>U</u></button>
+          </div>
+          <div class="text-editor-content" contenteditable="true">${section.content}</div>
+        </div>
+      `;
+      
+      var editor = body.querySelector('.text-editor-content');
+      var toolbar = body.querySelector('.text-editor-toolbar');
+      
+      editor.oninput = function(){
+        section.content = editor.innerHTML;
+        sync();
+      };
+      
+      toolbar.querySelectorAll('button').forEach(function(btn){
+        btn.onclick = function(){
+          document.execCommand(btn.getAttribute('data-cmd'), false, null);
+          editor.focus();
+        };
+      });
+      
+      host.innerHTML = '';
+      host.appendChild(header);
+      host.appendChild(body);
+    }
 
-  /* ---------- Collapsibles ---------- */
-  function initCollapsibles(){
-    $$('.section.collapsible').forEach(sec=>{
-      const btn = sec.querySelector('.collapse-btn');
-      if(!btn) return;
-      btn.onclick = ()=>{
-        sec.classList.toggle('collapsed');
-        btn.textContent = sec.classList.contains('collapsed') ? '+' : '−';
+    /* Bild-Abschnitt */
+    function renderImageSection(host, section, sections, sIdx){
+      if(!section.images) section.images = [];
+      
+      var header = document.createElement('div');
+      header.className = 'section-header';
+      header.innerHTML = `
+        <div class="row">
+          <input type="text" value="${section.title||'Bilder'}" placeholder="Titel..." 
+                 style="border:1px solid transparent;background:transparent;font-weight:700;color:var(--primary);font-size:18px;padding:4px 6px;border-radius:8px" />
+          <button class="btn icon del">✕</button>
+        </div>
+      `;
+      
+      var titleInput = header.querySelector('input');
+      titleInput.oninput = function(){ section.title = titleInput.value; sync(); };
+      
+      // FIXED: Delete Button
+      var delBtn = header.querySelector('.del');
+      delBtn.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(confirm('Abschnitt löschen?')){
+          sections.splice(sIdx, 1);
+          drawGroups();
+          sync();
+        }
+      };
+      
+      var body = document.createElement('div');
+      body.className = 'section-body';
+      body.innerHTML = `
+        <div class="image-section">
+          <div class="image-upload-zone">
+            📸 Klicken oder Bilder hierher ziehen
+            <input type="file" accept="image/*" multiple style="display:none" />
+          </div>
+          <div class="image-preview"></div>
+        </div>
+      `;
+      
+      var zone = body.querySelector('.image-upload-zone');
+      var fileInput = zone.querySelector('input[type="file"]');
+      var preview = body.querySelector('.image-preview');
+      
+      zone.onclick = function(){ fileInput.click(); };
+      
+      zone.ondragover = function(e){
+        e.preventDefault();
+        zone.classList.add('dragover');
+      };
+      zone.ondragleave = function(){ zone.classList.remove('dragover'); };
+      zone.ondrop = function(e){
+        e.preventDefault();
+        zone.classList.remove('dragover');
+        handleFiles(e.dataTransfer.files);
+      };
+      
+      fileInput.onchange = function(){ handleFiles(fileInput.files); };
+      
+      function handleFiles(files){
+        Array.from(files).forEach(function(file){
+          if(!file.type.startsWith('image/')) return;
+          var reader = new FileReader();
+          reader.onload = function(e){
+            section.images.push(e.target.result);
+            renderImageSection(host, section, sections, sIdx);
+            sync();
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+      
+      section.images.forEach(function(src, imgIdx){
+        var item = document.createElement('div');
+        item.className = 'image-preview-item';
+        item.innerHTML = `
+          <img src="${src}" />
+          <button class="delete-btn">✕</button>
+        `;
+        var delImgBtn = item.querySelector('.delete-btn');
+        delImgBtn.onclick = function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          section.images.splice(imgIdx, 1);
+          renderImageSection(host, section, sections, sIdx);
+          sync();
+        };
+        preview.appendChild(item);
+      });
+      
+      host.innerHTML = '';
+      host.appendChild(header);
+      host.appendChild(body);
+    }
+
+    /* Modal */
+    var pendingSectionCallback = null;
+    function showSectionTypeModal(cb){
+      pendingSectionCallback = cb;
+      $('#sectionTypeModal').classList.add('active');
+    }
+    function closeSectionTypeModal(){
+      $('#sectionTypeModal').classList.remove('active');
+      pendingSectionCallback = null;
+    }
+    
+    $('#sectionTypeClose').onclick = closeSectionTypeModal;
+    $('#sectionTypeModal').onclick = function(e){
+      if(e.target === this) closeSectionTypeModal();
+    };
+    
+    $$('.section-type-card').forEach(function(card){
+      card.onclick = function(){
+        var type = card.getAttribute('data-type');
+        if(pendingSectionCallback){
+          var cb = pendingSectionCallback;
+          closeSectionTypeModal();
+          cb(type);
+        }
       };
     });
-  }
 
-  /* ---------- Gruppen + Abschnitte ---------- */
-  function drawGroups(){
-    const host = $('#groupsContainer'); if(!host) return;
-    host.innerHTML='';
-    if(!appState.groups || appState.groups.length===0){
-      appState.groups=[{id:Date.now(),title:'Gruppe 1',enabled:true,collapsed:false,sections:[]}];
-    }
-
-    appState.groups.forEach((g,gi)=>{
-      const group = document.createElement('div');
-      group.className = 'group'+(g.enabled?'':' disabled')+(g.collapsed?' collapsed':'');
-      /* Header */
-      const head = document.createElement('div'); head.className='group-header';
-      const titleWrap = document.createElement('div'); titleWrap.className='group-title-section';
-      const handle = document.createElement('div'); handle.className='group-move-handle'; handle.title='Gruppe verschieben';
-      const collapse = document.createElement('div'); collapse.className='group-collapse-btn'; collapse.title='Ein-/Ausklappen';
-      const title = document.createElement('input'); title.className='group-title-input'; title.value = g.title||('Gruppe '+(gi+1));
-      title.oninput = ()=>{ g.title = title.value; sync(); };
-      collapse.onclick = (e)=>{ e.stopPropagation(); g.collapsed=!g.collapsed; drawGroups(); sync(); };
-      titleWrap.appendChild(handle); titleWrap.appendChild(collapse); titleWrap.appendChild(title);
-
-      const acts = document.createElement('div'); acts.className='group-actions';
-      const toggle = document.createElement('div'); toggle.className='group-toggle'; toggle.textContent = g.enabled?'✓ Aktiviert':'✗ Deaktiviert';
-      toggle.onclick = (e)=>{ e.stopPropagation(); g.enabled=!g.enabled; drawGroups(); sync(); };
-      const dup = document.createElement('div'); dup.className='group-btn duplicate'; dup.title='Gruppe duplizieren';
-      dup.onclick = (e)=>{ e.stopPropagation(); const n=clone(g); n.id=Date.now()+Math.random(); n.title=(g.title||'Gruppe')+' (Kopie)'; appState.groups.splice(gi+1,0,n); drawGroups(); sync(); };
-      const del = document.createElement('div'); del.className='group-btn delete'; del.title='Gruppe löschen';
-      del.onclick = (e)=>{ e.stopPropagation(); if(confirm('Gruppe "'+(g.title||'')+'" löschen?')){ appState.groups.splice(gi,1); drawGroups(); sync(); } };
-      acts.appendChild(toggle); acts.appendChild(dup); acts.appendChild(del);
-
-      head.appendChild(titleWrap); head.appendChild(acts);
-
-      /* Content */
-      const content = document.createElement('div'); content.className='group-content';
-      (g.sections||[]).forEach((s,si)=>{
-        const sec = document.createElement('div'); sec.className='section';
-        if(s.type==='checklist') renderChecklistSection(sec,s,g.sections,si);
-        else if(s.type==='spacing') renderSpacingSection(sec,s,g.sections,si);
-        else if(s.type==='text') renderTextSection(sec,s,g.sections,si);
-        else if(s.type==='image') renderImageSection(sec,s,g.sections,si);
-        content.appendChild(sec);
-      });
-
-      const addWrap = document.createElement('div'); addWrap.className='group-add-section'; 
-      const addBtn = document.createElement('button'); addBtn.className='btn'; addBtn.textContent='➕ Abschnitt hinzufügen';
-      addBtn.onclick = ()=>{ currentGroupIndex=gi; showSectionTypeModal(addSectionOfType); };
-      addWrap.appendChild(addBtn); content.appendChild(addWrap);
-
-      group.appendChild(head); group.appendChild(content);
-      host.appendChild(group);
-    });
-
-    updatePageBreaks();
-  }
-
-  function renderChecklistSection(host, section, sections, sIdx){
-    const h=document.createElement('div'); h.className='section-header';
-    h.innerHTML = `
-      <div class="row">
-        <div class="title-wrap">
-          <button class="collapse-btn">−</button>
-          <input type="text" value="${section.title||'Checkliste'}" placeholder="Titel…" 
-            style="border:1px solid transparent;background:transparent;font-weight:700;color:#8B1538;font-size:18px;padding:4px 6px;border-radius:8px" />
-        </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn icon add-row-btn">+ Zeile</button>
-          <button class="btn icon del-section-btn">✕</button>
-        </div>
-      </div>`;
-    const titleI = h.querySelector('input'); titleI.oninput = ()=>{ section.title = titleI.value; sync(); };
-    h.querySelector('.add-row-btn').onclick = (e)=>{ e.preventDefault(); (section.rows||(section.rows=[])).push({text:'Neuer Punkt',ok:false,note:'',code:''}); renderChecklistSection(host,section,sections,sIdx); sync(); };
-    h.querySelector('.del-section-btn').onclick = (e)=>{ e.preventDefault(); if(confirm('Abschnitt löschen?')){ sections.splice(sIdx,1); drawGroups(); sync(); } };
-
-    const b=document.createElement('div'); b.className='section-body';
-    const list=document.createElement('div'); list.className='list';
-    (section.rows||[]).forEach((r,ri)=>{
-      const row=document.createElement('div'); row.className='check';
-      row.innerHTML = `
-        <input class="tiny" type="text" placeholder="Code" value="${r.code||''}">
-        <input class="label-input" type="text" placeholder="Punkt…" value="${r.text||''}">
-        <input class="note" type="text" placeholder="Bemerkung…" value="${r.note||''}">
-        <input type="checkbox" ${r.ok?'checked':''}>
-        <button class="btn icon del">✕</button>`;
-      const codeI=row.querySelector('.tiny'), labelI=row.querySelector('.label-input'), noteI=row.querySelector('.note'), cb=row.querySelector('input[type=checkbox]');
-      codeI.oninput=()=>{ r.code=codeI.value; sync(); };
-      labelI.oninput=()=>{ r.text=labelI.value; sync(); };
-      noteI.oninput=()=>{ r.note=noteI.value; sync(); };
-      cb.onchange=()=>{ r.ok=cb.checked; sync(); };
-      row.querySelector('.del').onclick=(e)=>{ e.preventDefault(); section.rows.splice(ri,1); renderChecklistSection(host,section,sections,sIdx); sync(); };
-      list.appendChild(row);
-    });
-    b.appendChild(list);
-
-    host.innerHTML=''; host.appendChild(h); host.appendChild(b);
-    const c=h.querySelector('.collapse-btn'); c.onclick=()=>{ host.classList.toggle('collapsed'); c.textContent=host.classList.contains('collapsed')?'+':'−'; };
-  }
-
-  function renderSpacingSection(host, section, sections, sIdx){
-    if(typeof section.heightCm!=='number') section.heightCm=5;
-    const h=document.createElement('div'); h.className='section-header';
-    h.innerHTML = `<div class="row"><h2>Abstand</h2><button class="btn icon del">✕</button></div>`;
-    h.querySelector('.del').onclick=(e)=>{ e.preventDefault(); if(confirm('Abschnitt löschen?')){ sections.splice(sIdx,1); drawGroups(); sync(); } };
-    const b=document.createElement('div'); b.className='section-body';
-    b.innerHTML = `
-      <div class="spacing-section">
-        <div class="controls">
-          <label style="margin:0">Höhe (cm):</label>
-          <input type="number" value="${section.heightCm}" min="1" max="20" style="width:80px">
-        </div>
-        <div class="preview" style="height:${section.heightCm*10}px">↕ ${section.heightCm} cm Abstand</div>
-      </div>`;
-    const hi=b.querySelector('input[type=number]'), pv=b.querySelector('.preview');
-    hi.oninput=()=>{ section.heightCm=parseFloat(hi.value)||5; pv.style.height=(section.heightCm*10)+'px'; pv.textContent='↕ '+section.heightCm+' cm Abstand'; sync(); };
-    host.innerHTML=''; host.appendChild(h); host.appendChild(b);
-  }
-
-  function renderTextSection(host, section, sections, sIdx){
-    const h=document.createElement('div'); h.className='section-header';
-    h.innerHTML = `
-      <div class="row">
-        <div class="title-wrap">
-          <button class="collapse-btn">−</button>
-          <input type="text" value="${section.title||'Text'}" placeholder="Titel…" 
-            style="border:1px solid transparent;background:transparent;font-weight:700;color:#8B1538;font-size:18px;padding:4px 6px;border-radius:8px" />
-        </div>
-        <button class="btn icon del">✕</button>
-      </div>`;
-    const titleI = h.querySelector('input'); titleI.oninput=()=>{ section.title=titleI.value; sync(); };
-    h.querySelector('.del').onclick=(e)=>{ e.preventDefault(); if(confirm('Abschnitt löschen?')){ sections.splice(sIdx,1); drawGroups(); sync(); } };
-    const b=document.createElement('div'); b.className='section-body';
-    b.innerHTML = `
-      <div class="text-section">
-        <div class="text-editor-toolbar">
-          <button data-cmd="bold"><b>B</b></button>
-          <button data-cmd="italic"><i>I</i></button>
-          <button data-cmd="underline"><u>U</u></button>
-        </div>
-        <div class="text-editor-content" contenteditable="true">${section.content||''}</div>
-      </div>`;
-    const ed=b.querySelector('.text-editor-content'); const tb=b.querySelector('.text-editor-toolbar');
-    ed.oninput=()=>{ section.content=ed.innerHTML; sync(); };
-    tb.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{ document.execCommand(btn.dataset.cmd,false,null); ed.focus(); });
-    host.innerHTML=''; host.appendChild(h); host.appendChild(b);
-    const c=h.querySelector('.collapse-btn'); c.onclick=()=>{ host.classList.toggle('collapsed'); c.textContent=host.classList.contains('collapsed')?'+':'−'; };
-  }
-
-  function renderImageSection(host, section, sections, sIdx){
-    if(!Array.isArray(section.images)) section.images=[];
-    const h=document.createElement('div'); h.className='section-header';
-    h.innerHTML = `
-      <div class="row">
-        <div class="title-wrap">
-          <button class="collapse-btn">−</button>
-          <input type="text" value="${section.title||'Bilder'}" placeholder="Titel…" 
-            style="border:1px solid transparent;background:transparent;font-weight:700;color:#8B1538;font-size:18px;padding:4px 6px;border-radius:8px" />
-        </div>
-        <button class="btn icon del">✕</button>
-      </div>`;
-    const titleI = h.querySelector('input'); titleI.oninput=()=>{ section.title=titleI.value; sync(); };
-    h.querySelector('.del').onclick=(e)=>{ e.preventDefault(); if(confirm('Abschnitt löschen?')){ sections.splice(sIdx,1); drawGroups(); sync(); } };
-    const b=document.createElement('div'); b.className='section-body';
-    b.innerHTML = `
-      <div class="image-section">
-        <div class="image-upload-zone">📸 Klicken oder Bilder hierher ziehen
-          <input type="file" accept="image/*" multiple style="display:none">
-        </div>
-        <div class="image-preview"></div>
-      </div>`;
-    const zone=b.querySelector('.image-upload-zone'), input=zone.querySelector('input[type=file]'), prev=b.querySelector('.image-preview');
-    zone.onclick=()=>input.click();
-    zone.ondragover=e=>{ e.preventDefault(); zone.classList.add('dragover'); };
-    zone.ondragleave=()=>zone.classList.remove('dragover');
-    zone.ondrop=e=>{ e.preventDefault(); zone.classList.remove('dragover'); handleFiles(e.dataTransfer.files); };
-    input.onchange=()=>handleFiles(input.files);
-    function handleFiles(files){
-      [...files].forEach(f=>{
-        if(!f.type.startsWith('image/')) return;
-        const r=new FileReader();
-        r.onload=e=>{ section.images.push(e.target.result); renderImageSection(host,section,sections,sIdx); sync(); };
-        r.readAsDataURL(f);
-      });
-    }
-    section.images.forEach((src,idx)=>{
-      const it=document.createElement('div'); it.className='image-preview-item';
-      it.innerHTML=`<img src="${src}"><button class="delete-btn">✕</button>`;
-      it.querySelector('.delete-btn').onclick=(e)=>{ e.preventDefault(); section.images.splice(idx,1); renderImageSection(host,section,sections,sIdx); sync(); };
-      prev.appendChild(it);
-    });
-    host.innerHTML=''; host.appendChild(h); host.appendChild(b);
-    const c=h.querySelector('.collapse-btn'); c.onclick=()=>{ host.classList.toggle('collapsed'); c.textContent=host.classList.contains('collapsed')?'+':'−'; };
-  }
-
-  /* ---------- Modal Section Type ---------- */
-  let pendingSectionCallback = null;
-  function showSectionTypeModal(cb){ pendingSectionCallback = cb; $('#sectionTypeModal').classList.add('active'); }
-  function closeSectionTypeModal(){ $('#sectionTypeModal').classList.remove('active'); pendingSectionCallback=null; }
-  $('#sectionTypeClose').onclick = closeSectionTypeModal;
-  $('#sectionTypeModal').onclick = (e)=>{ if(e.target === e.currentTarget) closeSectionTypeModal(); };
-  $$('.section-type-card').forEach(card=>{
-    card.onclick = ()=>{ if(pendingSectionCallback){ const type = card.getAttribute('data-type'); const cb=pendingSectionCallback; closeSectionTypeModal(); cb(type); } };
-  });
-
-  let currentGroupIndex = 0;
-  function addSectionOfType(type){
-    const g = appState.groups[currentGroupIndex] || appState.groups[0];
-    const section = { type, title:'Neuer Abschnitt', id:Date.now() };
-    if(type==='checklist') section.rows=[];
-    if(type==='spacing') section.heightCm=5;
-    if(type==='text') section.content='';
-    if(type==='image') section.images=[];
-    (g.sections||(g.sections=[])).push(section);
-    drawGroups(); sync();
-  }
-
-  /* ---------- Seitenlinien Overlay ---------- */
-  let pageBreaksOn = false;
-  function updatePageBreaks(){
-    const overlay = $('#pageBreakMarkers'); if(!overlay) return;
-    overlay.innerHTML = '';
-    if(!pageBreaksOn) return;
-
-    // A4 approximiert in px bei 96dpi abzüglich margin + header: ~ 1122px
-    const contentEl = $('#app');
-    const startTop = contentEl.getBoundingClientRect().top + window.scrollY;
-    const pageHeightPx = 1122; 
-    const totalH = Math.max(contentEl.scrollHeight, contentEl.offsetHeight);
-    const count = Math.floor(totalH / pageHeightPx);
-
-    for(let i=1;i<=count;i++){
-      const y = startTop + i*pageHeightPx;
-      const line = document.createElement('div'); line.className='page-break-line'; line.style.top = y+'px';
-      const label = document.createElement('div'); label.className='page-break-label'; label.style.top = y+'px'; label.textContent = 'Seite '+(i+1);
-      overlay.appendChild(line); overlay.appendChild(label);
-    }
-  }
-
-  /* ---------- Init ---------- */
-  function fillPrintMeta(){
-    const ort = $('#standortInstallation')?.value || '';
-    const produkt = $('#produkt')?.value || '';
-    const einr = $('#nameEinrichtung')?.value || '';
-    const ver = $('#version')?.value || '';
-    const now = new Date().toLocaleDateString('de-DE');
-    $('#phOrt').textContent = ort;
-    $('#phProdukt').textContent = produkt;
-    $('#phDate').textContent = now;
-    $('#pcEinrichtung').textContent = einr;
-    $('#pcOrt').textContent = ort;
-    $('#pcProdukt').textContent = produkt;
-    $('#pcVersion').textContent = ver;
-    $('#pcDate').textContent = now;
-  }
-
-  function renderAll(){
-    renderList('#kvList', appState.kv, sync);
-    renderList('#iqList', appState.iq, sync);
-    renderList('#oqList', appState.oq, sync);
-    drawGroups();
-  }
-
-  function initUI(){
-    const btn=$('#hamburgerBtn'), menu=$('#hamburgerMenu');
-    btn.onclick=(e)=>{ e.stopPropagation(); btn.classList.toggle('active'); menu.classList.toggle('active'); };
-    document.addEventListener('click',e=>{ if(!menu.contains(e.target) && !btn.contains(e.target)){ btn.classList.remove('active'); menu.classList.remove('active'); }});
-
-    $('#btnPrintTheme').onclick=()=>{
-      const on=document.body.classList.toggle('preview-print-pro');
-      $('#printThemeState').textContent = on ? 'An' : 'Aus';
-      // Deckblatt im Preview nicht anzeigen
-      $('#printCover').setAttribute('hidden','');
-      $('#coverState').textContent = 'Aus';
-      fillPrintMeta();
-    };
-    $('#btnCoverToggle').onclick=()=>{
-      const cover = $('#printCover');
-      if(cover.hasAttribute('hidden')){ cover.removeAttribute('hidden'); $('#coverState').textContent='An'; }
-      else { cover.setAttribute('hidden',''); $('#coverState').textContent='Aus'; }
-    };
-
-    $('#btnPDF').onclick=()=>{
-      btn.classList.remove('active'); menu.classList.remove('active');
-      if(document.body.classList.contains('preview-print-pro')) fillPrintMeta();
-      setTimeout(()=>window.print(), 50);
-    };
-
-    $('#btnSave').onclick=exportJSON;
-    $('#btnLoad').onclick=importJSON;
-    $('#btnReset').onclick=resetAll;
-
-    $('#btnPageBreaks').onclick=()=>{
-      pageBreaksOn = !pageBreaksOn;
-      $('#pageBreakState').textContent = pageBreaksOn ? 'An' : 'Aus';
-      $('#pageBreakMarkers').classList.toggle('hidden', !pageBreaksOn);
-      requestAnimationFrame(()=>{ updatePageBreaks(); requestAnimationFrame(updatePageBreaks); });
-    };
-
-    $('#btnNewGroup').onclick=()=>{
-      appState.groups.push({id:Date.now()+Math.random(),title:'Neue Gruppe',enabled:true,collapsed:false,sections:[]});
-      currentGroupIndex = appState.groups.length-1;
-      drawGroups(); sync();
-    };
-    $('#btnNewSectionMenu').onclick=(e)=>{ e.preventDefault(); e.stopPropagation(); showSectionTypeModal(addSectionOfType); };
-
-    formFields.forEach(id=>{
-      const el = document.getElementById(id);
-      if(!el) return;
-      (el.type==='checkbox' ? el.onchange : el.oninput) = sync;
-    });
-
-    $$('.sig-controls [data-clear-text]').forEach(b=>{
-      b.addEventListener('click',()=>{
-        const id = b.getAttribute('data-clear-text');
-        const el = document.getElementById(id);
-        if(el) el.value='';
+    function addDynamicSection(){
+      showSectionTypeModal(function(type){
+        var g = appState.groups[currentGroupIndex];
+        if(!g){
+          appState.groups = [{ id: Date.now(), title:'Gruppe 1', enabled:true, collapsed:false, sections:[] }];
+          g = appState.groups[0];
+          currentGroupIndex = 0;
+        }
+        
+        var section = {
+          type: type || 'checklist',
+          title: 'Neuer Abschnitt',
+          id: Date.now()
+        };
+        
+        if(section.type === 'checklist') section.rows = [];
+        if(section.type === 'spacing') section.heightCm = 5;
+        if(section.type === 'text') section.content = '';
+        if(section.type === 'image') section.images = [];
+        
+        if(!g.sections) g.sections = [];
+        g.sections.push(section);
+        
+        drawGroups();
         sync();
       });
-    });
-
-    $('#stamp').textContent = new Date().toLocaleString('de-DE');
-
-    if(window.ResizeObserver){ new ResizeObserver(()=>{ if(pageBreaksOn) updatePageBreaks(); }).observe($('#app')); }
-    window.addEventListener('resize', updatePageBreaks);
-    new MutationObserver(()=>{ if(pageBreaksOn) updatePageBreaks(); }).observe($('#app'),{childList:true,subtree:true});
-  }
-
-  function init(){
-    const ok = loadState();
-    if(!ok){
-      appState.kv = [
-        {text:'Konformität mit Spezifikation', ok:false, note:'', code:'KV-001'},
-        {text:'Messgenauigkeit überprüft', ok:false, note:'', code:'KV-002'},
-        {text:'Kalibrierzertifikat vorhanden', ok:false, note:'', code:'KV-003'}
-      ];
-      appState.iq = [
-        {text:'Lieferumfang vollständig', ok:false, note:'', code:'IQ-001'},
-        {text:'Gerät unbeschädigt', ok:false, note:'', code:'IQ-002'},
-        {text:'Installation gemäß Handbuch', ok:false, note:'', code:'IQ-003'}
-      ];
-      appState.oq = [
-        {text:'Funktionstest erfolgreich', ok:false, note:'', code:'OQ-001'},
-        {text:'Alarmfunktionen getestet', ok:false, note:'', code:'OQ-002'},
-        {text:'Temperaturkonstanz geprüft', ok:false, note:'', code:'OQ-003'}
-      ];
-      appState.groups = [{id:Date.now(), title:'Gruppe 1', enabled:true, collapsed:false, sections:[]}];
     }
-    renderAll(); initUI(); initCollapsibles();
-  }
 
-  document.readyState === 'loading' ? window.addEventListener('DOMContentLoaded', init) : init();
+    /* Seitenumbruch-Markierungen */
+    var pageBreaksOn = false;
+    function updatePageBreaks(){
+      var container = document.getElementById('pageBreakMarkers');
+      if(!container) return;
+      container.innerHTML = '';
+      if(!pageBreaksOn) return;
+
+      var contentEl = document.getElementById('app');
+      var totalH = Math.max(contentEl.scrollHeight, contentEl.offsetHeight);
+      
+      var pageHeightPx = 1032;
+      var count = Math.floor(totalH / pageHeightPx);
+      
+      for(var i = 1; i <= count; i++){
+        var y = i * pageHeightPx;
+        
+        var line = document.createElement('div');
+        line.className = 'page-break-line';
+        line.style.top = y + 'px';
+        
+        var label = document.createElement('div');
+        label.className = 'page-break-label';
+        label.style.top = y + 'px';
+        label.textContent = 'Seite ' + (i + 1);
+        
+        container.appendChild(line);
+        container.appendChild(label);
+      }
+    }
+
+    /* Init */
+    function addKV(){ appState.kv.push({text:'Neue KV-Anforderung', ok:false, note:'', code:'', info:''}); renderAll(); sync(); }
+    function addIQ(){ appState.iq.push({text:'Neue IQ-Prüfung', ok:false, note:'', code:'', info:''}); renderAll(); sync(); }
+    function addOQ(){ appState.oq.push({text:'Neue OQ-Prüfung', ok:false, note:'', code:'', info:''}); renderAll(); sync(); }
+
+    function renderAll(){
+      renderList('#kvList', appState.kv, sync);
+      renderList('#iqList', appState.iq, sync);
+      renderList('#oqList', appState.oq, sync);
+      drawGroups();
+    }
+
+    function initAll(){
+      var btn = $('#hamburgerBtn');
+      var menu = $('#hamburgerMenu');
+      if(btn && menu){
+        btn.onclick = function(e){
+          e.stopPropagation();
+          btn.classList.toggle('active');
+          menu.classList.toggle('active');
+        };
+        document.addEventListener('click', function(e){
+          if(!menu.contains(e.target) && !btn.contains(e.target)){
+            btn.classList.remove('active');
+            menu.classList.remove('active');
+          }
+        });
+      }
+
+      if(!loadState()){
+        appState.kv = clone(defaultKV);
+        appState.iq = clone(iqItems);
+        appState.oq = clone(oqItems);
+        appState.groups = [{ id: Date.now(), title:'Gruppe 1', enabled:true, collapsed:false, sections:[] }];
+      }
+      renderAll();
+      $('#stamp').textContent = (new Date()).toLocaleString('de-DE');
+
+      $('#btnSave').onclick = exportJSON;
+      $('#btnLoad').onclick = importJSON;
+      $('#btnPDF').onclick = function(){
+        btn.classList.remove('active');
+        menu.classList.remove('active');
+        window.print();
+      };
+      $('#btnReset').onclick = resetAll;
+      $('#btnNewSectionMenu').onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        addDynamicSection();
+        setTimeout(function(){
+          btn.classList.remove('active');
+          menu.classList.remove('active');
+        }, 100);
+      };
+      $('#btnNewGroup').onclick = function(){
+        appState.groups.push({
+          id: Date.now() + Math.random(),
+          title: 'Neue Gruppe',
+          enabled: true,
+          collapsed: false,
+          sections: []
+        });
+        currentGroupIndex = appState.groups.length - 1;
+        drawGroups();
+        sync();
+      };
+      
+      $('#btnPageBreaks').onclick = function(){
+        pageBreaksOn = !pageBreaksOn;
+        var overlay = $('#pageBreakMarkers');
+        overlay.classList.toggle('hidden', !pageBreaksOn);
+        $('#pageBreakState').textContent = pageBreaksOn ? 'An' : 'Aus';
+        requestAnimationFrame(function(){
+          updatePageBreaks();
+          requestAnimationFrame(updatePageBreaks);
+        });
+      };
+
+      $$('[data-clear-text]').forEach(function(b){
+        b.addEventListener('click', function(){
+          var id = b.getAttribute('data-clear-text');
+          var el = document.getElementById(id);
+          if(el) el.value = '';
+          sync();
+        });
+      });
+
+      formFields.forEach(function(id){
+        var el = document.getElementById(id);
+        if(el){
+          if(el.type === 'checkbox') el.onchange = sync;
+          else el.oninput = sync;
+        }
+      });
+
+      if(window.ResizeObserver){
+        new ResizeObserver(updatePageBreaks).observe($('#app'));
+      }
+      window.addEventListener('resize', updatePageBreaks);
+      new MutationObserver(function(){
+        if(pageBreaksOn) updatePageBreaks();
+      }).observe($('#app'), {childList:true, subtree:true});
+    }
+
+    if(document.readyState === 'loading'){
+      window.addEventListener('DOMContentLoaded', initAll);
+    } else {
+      initAll();
+    }
   </script>
 </body>
 </html>
