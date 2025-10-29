@@ -3,55 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – v3.3 Fixed + ProPrint</title>
+  <title>CL Validierungsprotokoll – v3.4.0</title>
   <style>
     :root{
       --primary:#8B1538; --bg:#F8F9FB; --text:#1E2434; --card:#ffffff; --muted:#e5e7eb;
       --ok:#11a36a; --warn:#d97706; --err:#c81e1e; --guide:#94a3b8;
       /* ProPrint Theme */
-      --print-margin: 12mm;          /* einheitlich im Druck (UI & Pro) */
-      --print-fg: #111827;
-      --print-muted: #4b5563;
-      --print-border: #d1d5db;
-      --print-accent: #8B1538;
-      --print-bg: #ffffff;
+      --print-margin: 12mm;
+      --print-fg:#111827; --print-muted:#4b5563; --print-border:#d1d5db; --print-accent:#8B1538; --print-bg:#ffffff;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
-    
+
     .container{max-width:1100px;margin:0 auto;padding:16px;padding-top:80px;position:relative}
     .sheet{background:var(--card);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.08);overflow:visible;position:relative}
-    
+
     /* Seitenumbruch-Markierungen */
-    #pageBreakMarkers{
-      position:absolute;
-      left:0;
-      width:100%;
-      pointer-events:none;
-      z-index:100;
-    }
+    #pageBreakMarkers{position:absolute;left:0;top:0;width:100%;pointer-events:none;z-index:100}
     #pageBreakMarkers.hidden{display:none}
     #pageBreakMarkers .page-break-line{
-      position:absolute;
-      left:50%;
-      transform:translateX(-50%);
-      width:calc(100% - 32px);
-      max-width:1100px;
-      border-top:2px dashed var(--primary);
-      opacity:0.4;
+      position:absolute;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:1100px;border-top:2px dashed var(--primary);opacity:.4
     }
     #pageBreakMarkers .page-break-label{
-      position:absolute;
-      right:40px;
-      transform:translateY(-50%);
-      background:var(--primary);
-      color:#fff;
-      padding:4px 12px;
-      border-radius:20px;
-      font-size:11px;
-      font-weight:700;
-      box-shadow:0 2px 8px rgba(139,21,56,0.3);
+      position:absolute;right:40px;transform:translateY(-50%);background:var(--primary);color:#fff;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;box-shadow:0 2px 8px rgba(139,21,56,.3)
     }
 
     header{background:var(--primary);color:#fff;padding:16px 20px;display:flex;gap:16px;align-items:center;justify-content:space-between}
@@ -66,7 +41,7 @@
     .hamburger-btn.active span:nth-child(1){transform:rotate(45deg) translate(5px, 5px)}
     .hamburger-btn.active span:nth-child(2){opacity:0}
     .hamburger-btn.active span:nth-child(3){transform:rotate(-45deg) translate(7px, -7px)}
-    .hamburger-menu{position:fixed;top:80px;right:16px;background:#fff;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.2);padding:12px;display:none;flex-direction:column;gap:8px;min-width:280px;z-index:4999}
+    .hamburger-menu{position:fixed;top:80px;right:16px;background:#fff;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.2);padding:12px;display:none;flex-direction:column;gap:8px;min-width:300px;z-index:4999}
     .hamburger-menu.active{display:flex}
     .btn{appearance:none;border:0;border-radius:12px;padding:10px 14px;font-weight:700;background:#fff;color:var(--primary);cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.06);display:flex;align-items:center;gap:8px}
     .btn:hover{transform:translateY(-1px);box-shadow:0 5px 15px rgba(0,0,0,.1)}
@@ -79,10 +54,7 @@
     .section{padding:18px 20px;border-top:1px solid var(--muted)}
     .section.collapsible .section-body{transition:max-height .25s ease}
     .section.collapsed .section-body{display:none}
-    .section .collapse-btn{
-      background:#fff;border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;font-size:14px;
-      width:30px;height:30px;display:grid;place-items:center;margin-right:8px;color:#1f2937
-    }
+    .section .collapse-btn{background:#fff;border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;font-size:14px;width:30px;height:30px;display:grid;place-items:center;margin-right:8px;color:#1f2937}
     .section .collapse-btn:hover{background:#f1f5f9}
     .section h2{margin:0;font-size:18px;color:var(--primary)}
     .section-header{background:#f8f9fb;padding:12px 16px;margin:-18px -20px 16px -20px;border-bottom:2px solid var(--primary)}
@@ -97,18 +69,15 @@
     input[type="text"]:focus,input[type="date"]:focus,input[type="number"]:focus,textarea:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(139,21,56,.1)}
     textarea{min-height:80px;resize:vertical}
 
-    /* Check-Zeilen */
+    /* Listen */
     .list{display:flex;flex-direction:column;gap:8px}
     .check{display:flex;gap:10px;align-items:center;padding:8px 10px;border:1px solid #e5e7eb;border-radius:10px;min-height:40px}
-    .check .move-btns{margin-right:4px}
     .check .tiny{width:60px;height:28px;padding:4px 6px;font-size:12px;text-align:center}
-    .check .info-btn{width:26px;height:26px;display:grid;place-items:center;border:1px solid #cbd5e1;border-radius:50%;cursor:pointer;background:#fff;font-weight:700;color:#334155;line-height:1}
-    .check .info-btn:before{content:'i'}
     .check .label-input{flex:1;min-width:140px;padding:6px 8px;border:1px solid #d1d5db;border-radius:8px;background:#fff;outline:none}
     .check .note{min-width:200px;max-width:260px;font-size:12px;padding:6px 8px;height:28px}
     .check input[type="checkbox"]{width:18px;height:18px;margin-left:auto}
 
-    /* Abstand/Text/Bild */
+    /* Abschnittstypen */
     .spacing-section{background:#f8f9fb;border:2px dashed #cbd5e1;border-radius:8px;padding:12px;margin:8px 0}
     .spacing-section .controls{display:flex;gap:10px;align-items:center;margin-bottom:10px}
     .spacing-section .preview{background:#fff;border:1px solid #e5e7eb;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:13px}
@@ -127,12 +96,12 @@
     .image-preview-item .delete-btn{position:absolute;top:4px;right:4px;background:#ef4444;color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;line-height:1}
 
     /* Gruppen */
-    .group{border:2px solid #e5e7eb;border-radius:12px;margin:20px 0;overflow:visible;background:#fff;transition:all .3s;position:relative}
-    .group.disabled{opacity:.5;background:#f9fafb}
+    .group{border:2px solid #e5e7eb;border-radius:12px;margin:20px 0;background:#fff;transition:all .3s}
+    .group.disabled{opacity:.55;background:#f9fafb}
     .group.collapsed .group-content{display:none}
     .group-header{display:flex;align-items:center;gap:10px;justify-content:space-between;background:linear-gradient(135deg,#8B1538 0%,#a91d47 100%);color:#fff;border-radius:10px 10px 0 0;padding:14px 16px}
     .group-title-section{display:flex;align-items:center;gap:12px;flex:1}
-    .group-move-handle{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:6px;width:36px;height:36px;cursor:grab;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+    .group-move-handle{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:6px;width:36px;height:36px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:grab}
     .group-move-handle::before,.group-move-handle::after{content:'';width:20px;height:2px;background:#fff;border-radius:1px}
     .group-collapse-btn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:6px;width:32px;height:32px;display:grid;place-items:center;cursor:pointer;color:#fff;font-size:18px;font-weight:700}
     .group.collapsed .group-collapse-btn::before{content:'▼'}
@@ -144,95 +113,86 @@
     .group-btn.duplicate::before{content:'⧉'}
     .group-btn.delete::before{content:'✕'}
 
+    /* Modal */
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center}
+    .modal.active{display:flex}
+    .modal-content{background:#fff;border-radius:16px;padding:24px;max-width:600px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+    .modal-title{font-size:22px;font-weight:700;color:var(--primary)}
+    .modal-close{background:transparent;border:none;font-size:28px;cursor:pointer;color:#64748b;line-height:1}
+    .section-type-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .section-type-card{padding:16px;border:2px solid #e5e7eb;border-radius:12px;cursor:pointer;text-align:center;transition:all .2s}
+    .section-type-card:hover{border-color:var(--primary);background:#fef2f2;transform:translateY(-2px)}
+    .section-type-card .icon{font-size:32px;margin-bottom:8px}
+    .section-type-card .name{font-weight:700;color:var(--text)}
+
     /* Nur im Druck sichtbar */
     .only-print{display:none}
 
     /* ---------- Druck: UI-1:1 (Standard) ---------- */
-    @media print {
-      @page { size:A4; margin: var(--print-margin); }
-      body { background:#fff !important; padding:0; margin:0 }
-      .container { max-width:100%; padding:0; padding-top:0 }
-      .sheet { box-shadow:none; border-radius:0; background:#fff }
-      /* Controls ausblenden */
-      .hamburger-container,.hamburger-menu,#pageBreakMarkers,.group-btn,.group-toggle,.group-collapse-btn,.group-move-handle,.image-preview-item .delete-btn,.text-editor-toolbar button,.btn,.check .note + .manage,.check .del,.section-header .btn.icon,.sig-controls button,.collapse-btn { display:none !important }
-      .group.disabled { display:none !important }
-      .group.collapsed .group-content,.section.collapsed .section-body { display:block !important }
-      /* UI-Stil */
-      header { background:#8B1538; color:#fff; padding:12px 16px; border-bottom:2px solid #8B1538 }
-      .group-header { background:linear-gradient(135deg,#8B1538 0%,#a91d47 100%); color:#fff; padding:10px 12px }
-      .group { page-break-inside:avoid }
-      .section { padding:14px 16px; border-top:1px solid var(--print-border); page-break-inside:avoid }
-      .section-header { background:#f8f9fb; padding:10px 12px; margin:-14px -16px 12px -16px; border-bottom:2px solid #8B1538 }
+    @media print{
+      @page{size:A4;margin:var(--print-margin)}
+      body{background:#fff !important;padding:0;margin:0}
+      .container{max-width:100%;padding:0}
+      .sheet{box-shadow:none;border-radius:0;background:#fff}
+      .hamburger-container,.hamburger-menu,#pageBreakMarkers,.group-btn,.group-toggle,.group-collapse-btn,.group-move-handle,.image-preview-item .delete-btn,.text-editor-toolbar button,.btn,.check .del,.section-header .btn.icon,.sig-controls button,.collapse-btn{display:none !important}
+      .group.disabled{display:none !important}
+      .group.collapsed .group-content,.section.collapsed .section-body{display:block !important}
+      header{background:#8B1538;color:#fff;padding:12px 16px;border-bottom:2px solid #8B1538}
+      .group-header{background:linear-gradient(135deg,#8B1538 0%,#a91d47 100%);color:#fff;padding:10px 12px}
+      .group,.section{page-break-inside:avoid}
+      .section{padding:14px 16px;border-top:1px solid var(--print-border)}
+      .section-header{background:#f8f9fb;padding:10px 12px;margin:-14px -16px 12px -16px;border-bottom:2px solid #8B1538}
       input,textarea,select{border:1px solid var(--print-border)!important;background:#fff!important;color:#111!important}
       .check{border:1px solid var(--print-border);border-radius:8px}
-      /* Seitenzähler (Standard-Theme zeigt keinen Header/Footer) */
     }
 
-    /* ---------- Druck: ProPrint aktiv (bei body.preview-print-pro) ---------- */
-    @media print {
-      body.preview-print-pro .only-print{ display:block !important }
-      body.preview-print-pro header{ background:#fff !important; color:#000 !important; border-bottom:2px solid var(--print-border) !important }
-      body.preview-print-pro .group-header{ background:#f5f6f8 !important; color:#111 !important }
+    /* ---------- Druck: ProPrint aktiv ---------- */
+    @media print{
+      body.preview-print-pro .only-print{display:block !important}
+      body.preview-print-pro header{background:#fff !important;color:#000 !important;border-bottom:1px solid var(--print-border)!important}
+      body.preview-print-pro .group-header{background:#f5f6f8 !important;color:#111 !important}
       body.preview-print-pro #printHeader.print-pro,
       body.preview-print-pro #printFooter.print-pro{
-        position: fixed; left:0; right:0; color:var(--print-fg); font-size:11px;
-        -webkit-print-color-adjust: exact; print-color-adjust: exact; background:#fff;
+        position:fixed;left:0;right:0;color:var(--print-fg);font-size:11px;-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#fff
       }
       body.preview-print-pro #printHeader.print-pro{
-        top:0; height:28mm; padding:6mm 0; border-bottom:1px solid var(--print-border);
-        display:flex; align-items:flex-end; justify-content:space-between;
+        top:0;height:28mm;padding:6mm 0;border-bottom:1px solid var(--print-border);display:flex;align-items:flex-end;justify-content:space-between
       }
-      body.preview-print-pro #printHeader .ph-left{ margin-left: calc(var(--print-margin)) }
-      body.preview-print-pro #printHeader .ph-right{ margin-right: calc(var(--print-margin)); text-align:right }
-      body.preview-print-pro #printHeader .ph-title{ font-weight:800; font-size:15px }
-      body.preview-print-pro #printHeader .ph-sub{ color:var(--print-muted); margin-top:4px }
-
+      body.preview-print-pro #printHeader .ph-left{margin-left:var(--print-margin)}
+      body.preview-print-pro #printHeader .ph-right{margin-right:var(--print-margin);text-align:right}
+      body.preview-print-pro #printHeader .ph-title{font-weight:800;font-size:15px}
+      body.preview-print-pro #printHeader .ph-sub{color:var(--print-muted);margin-top:4px}
       body.preview-print-pro #printFooter.print-pro{
-        bottom:0; height:12mm; padding:0; border-top:1px solid var(--print-border);
-        display:flex; align-items:center; justify-content:space-between;
+        bottom:0;height:12mm;border-top:1px solid var(--print-border);display:flex;align-items:center;justify-content:space-between
       }
-      body.preview-print-pro #printFooter .pf-left{ margin-left: calc(var(--print-margin)); color:var(--print-muted) }
-      body.preview-print-pro #printFooter .pf-right{ margin-right: calc(var(--print-margin)) }
-      body.preview-print-pro .pageNumber:after{ content: counter(page) }
-      body.preview-print-pro .totalPages:after{ content: counter(pages) }
-      @supports not (content: counter(pages)) {
-        body.preview-print-pro #printFooter .pageSep,
-        body.preview-print-pro #printFooter .totalPages{ display:none }
-      }
-      /* Inhalt zwischen Header/Footer */
-      body.preview-print-pro { margin-top: 30mm; margin-bottom: 16mm }
+      body.preview-print-pro #printFooter .pf-left{margin-left:var(--print-margin);color:var(--print-muted)}
+      body.preview-print-pro #printFooter .pf-right{margin-right:var(--print-margin)}
+      body.preview-print-pro .pageNumber:after{content:counter(page)}
+      body.preview-print-pro .totalPages:after{content:counter(pages)}
+      @supports not (content:counter(pages)){ body.preview-print-pro #printFooter .pageSep, body.preview-print-pro #printFooter .totalPages{display:none} }
+      body.preview-print-pro{margin-top:30mm;margin-bottom:16mm}
       /* Deckblatt NUR wenn nicht hidden */
-      body.preview-print-pro #printCover.print-pro[hidden]{ display:none !important }
+      body.preview-print-pro #printCover.print-pro[hidden]{display:none !important}
       body.preview-print-pro #printCover.print-pro:not([hidden]){
-        break-after: page;
-        border:2px solid var(--print-border); border-radius:8px;
-        padding:16mm 14mm; background:#fff; display:block !important;
+        break-after:page;border:2px solid var(--print-border);border-radius:8px;padding:16mm 14mm;background:#fff;display:block !important
       }
-      /* keine UI-Controls im Druck */
       body.preview-print-pro .hamburger-container,
       body.preview-print-pro .hamburger-menu,
       body.preview-print-pro #pageBreakMarkers,
-      body.preview-print-pro .group-btn,
-      body.preview-print-pro .group-toggle,
-      body.preview-print-pro .group-collapse-btn,
-      body.preview-print-pro .group-move-handle,
-      body.preview-print-pro .image-preview-item .delete-btn,
-      body.preview-print-pro .text-editor-toolbar button,
       body.preview-print-pro .btn,
-      body.preview-print-pro .check .note + .manage,
       body.preview-print-pro .check .del,
       body.preview-print-pro .section-header .btn.icon,
       body.preview-print-pro .sig-controls button,
-      body.preview-print-pro .collapse-btn { display:none !important }
-      body.preview-print-pro .group{ page-break-inside:avoid }
-      body.preview-print-pro .section{ page-break-inside:avoid }
+      body.preview-print-pro .collapse-btn{display:none !important}
+      body.preview-print-pro .group,.section{page-break-inside:avoid}
     }
 
-    /* Preview von Header/Footer am Bildschirm – ohne Deckblatt */
+    /* ProPrint Vorschau am Bildschirm – nur Header/Footer, kein Deckblatt */
     body.preview-print-pro #printHeader.print-pro,
-    body.preview-print-pro #printFooter.print-pro{ display:block; position:sticky }
-    body.preview-print-pro #printCover.print-pro{ display:none } /* nur im Druck, außer hidden entfernt */
-    body.preview-print-pro{ background:#fff }
+    body.preview-print-pro #printFooter.print-pro{display:block;position:sticky}
+    body.preview-print-pro #printCover.print-pro{display:none}
+    body.preview-print-pro{background:#fff}
 
     @media (max-width:768px){
       .col-3,.col-4,.col-6,.col-8{grid-column:span 12}
@@ -251,16 +211,13 @@
     <div class="hamburger-menu" id="hamburgerMenu">
       <button class="btn" id="btnNewGroup">➕ Neue Gruppe</button>
       <button class="btn" id="btnNewSectionMenu">📝 Neuer Abschnitt</button>
-      <button class="btn switch" id="btnPageBreaks">
-        <span>Seitenumbrüche</span><span id="pageBreakState">Aus</span>
-      </button>
-      <button class="btn" id="btnPrintTheme">🖨️ Druckvorlage (Pro) – <span id="printThemeState">Aus</span></button>
+      <button class="btn switch" id="btnPageBreaks"><span>Seitenumbrüche</span><span id="pageBreakState">Aus</span></button>
+      <button class="btn switch" id="btnPrintTheme"><span>Druckvorlage (Pro)</span><span id="printThemeState">Aus</span></button>
+      <button class="btn switch" id="btnCoverToggle"><span>Deckblatt (Pro)</span><span id="coverState">Aus</span></button>
       <button class="btn" id="btnPDF">📄 PDF drucken</button>
       <button class="btn secondary" id="btnSave">💾 Speichern</button>
       <button class="btn secondary" id="btnLoad">📂 Laden</button>
-      <button class="btn d
-
-ranger" id="btnReset">🔄 Reset</button>
+      <button class="btn danger" id="btnReset">🔄 Reset</button>
     </div>
   </div>
 
@@ -273,7 +230,7 @@ ranger" id="btnReset">🔄 Reset</button>
       <header>
         <div>
           <div class="title">CL Validierungsprotokoll</div>
-          <div class="version">Version 3.3 – ProPrint</div>
+          <div class="version">Version 3.4.0</div>
         </div>
         <div style="text-align:right;font-size:12px">
           <div>Erstellt: <span id="stamp"></span></div>
@@ -472,7 +429,7 @@ ranger" id="btnReset">🔄 Reset</button>
     </div>
     <div class="ph-right">
       <div class="ph-meta">Erstellt: <span id="phDate"></span></div>
-      <div class="ph-meta">Version: 3.3</div>
+      <div class="ph-meta">Version: 3.4.0</div>
     </div>
   </div>
 
@@ -492,20 +449,38 @@ ranger" id="btnReset">🔄 Reset</button>
     </ul>
   </div>
 
+  <!-- Modal für Abschnittstypen -->
+  <div class="modal" id="sectionTypeModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Abschnittstyp wählen</div>
+        <button class="modal-close" id="sectionTypeClose">×</button>
+      </div>
+      <div class="section-type-grid">
+        <div class="section-type-card" data-type="checklist"><div class="icon">✓</div><div class="name">Checkliste</div></div>
+        <div class="section-type-card" data-type="spacing"><div class="icon">↕</div><div class="name">Abstand</div></div>
+        <div class="section-type-card" data-type="text"><div class="icon">📝</div><div class="name">Text</div></div>
+        <div class="section-type-card" data-type="image"><div class="icon">🖼</div><div class="name">Bilder</div></div>
+      </div>
+    </div>
+  </div>
+
   <script>
   'use strict';
   const $ = s => document.querySelector(s);
   const $$ = s => document.querySelectorAll(s);
   const clone = o => JSON.parse(JSON.stringify(o));
 
+  /* ---------- State ---------- */
   const appState = {
-    nameEinrichment:'', standortInstallation:'', verantwortlichePerson:'', produkt:'',
+    nameEinrichtung:'', standortInstallation:'', verantwortlichePerson:'', produkt:'',
     programmPaket:'', version:'', softwarepflege:'', arbeitsplaetze:'', angebundeneGeraete:'',
     bemerkungInstallation:'', validierungDatum:'', letzteValidierung:'', naechsteValidierung:'',
     checkValidierung:false, checkRevalidierung:false,
     validiererName:'', qualifikation:'', produktschulung:'',
     unterschriftValidierer:'', freigabeBetreiber:'',
-    kv:[], iq:[], oq:[], groups:[]
+    kv:[], iq:[], oq:[],
+    groups:[]
   };
 
   const formFields = [
@@ -516,18 +491,19 @@ ranger" id="btnReset">🔄 Reset</button>
     'unterschriftValidierer','freigabeBetreiber'
   ];
 
+  /* ---------- Persistence ---------- */
   function sync(){
     formFields.forEach(k=>{
       const el = document.getElementById(k);
       if(!el) return;
-      appState[k] = el.type === 'checkbox' ? !!el.checked : (el.value||'');
+      appState[k] = (el.type === 'checkbox') ? !!el.checked : (el.value || '');
     });
-    localStorage.setItem('validierung_v3_fixed', JSON.stringify(appState));
+    localStorage.setItem('validierung_v3_4_0', JSON.stringify(appState));
   }
 
   function loadState(){
     try{
-      const raw = localStorage.getItem('validierung_v3_fixed');
+      const raw = localStorage.getItem('validierung_v3_4_0');
       if(!raw) return false;
       const data = JSON.parse(raw);
       Object.assign(appState, data);
@@ -546,7 +522,6 @@ ranger" id="btnReset">🔄 Reset</button>
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
     a.download = 'validierung_'+Date.now()+'.json'; a.click();
   }
-
   function importJSON(){
     const i = document.createElement('input'); i.type='file'; i.accept='application/json';
     i.onchange = ()=>{
@@ -564,13 +539,13 @@ ranger" id="btnReset">🔄 Reset</button>
     };
     i.click();
   }
-
   function resetAll(){
     if(!confirm('Alle Daten löschen?')) return;
-    localStorage.removeItem('validierung_v3_fixed');
+    localStorage.removeItem('validierung_v3_4_0');
     location.reload();
   }
 
+  /* ---------- KV/IQ/OQ Render ---------- */
   function renderList(sel, items, onUpdate){
     const host = $(sel); if(!host) return;
     host.innerHTML = '';
@@ -578,29 +553,28 @@ ranger" id="btnReset">🔄 Reset</button>
       const row = document.createElement('div');
       row.className = 'check';
       row.innerHTML = `
-        <div class="move-btns"><div class="group-move-handle" draggable="true"></div></div>
         <input class="tiny" type="text" placeholder="Code" value="${it.code||''}">
-        <button class="info-btn" title="${it.info||''}"></button>
         <input class="label-input" type="text" placeholder="Punkt…" value="${it.text||''}">
         <input class="note" type="text" placeholder="Bemerkung…" value="${it.note||''}">
         <input type="checkbox" ${it.ok?'checked':''}>
         <button class="btn icon del" title="Löschen">✕</button>
       `;
-      const [codeI, labelI, noteI, cb] = [
-        row.querySelector('.tiny'),
-        row.querySelector('.label-input'),
-        row.querySelector('.note'),
-        row.querySelector('input[type="checkbox"]')
-      ];
+      const codeI = row.querySelector('.tiny');
+      const labelI = row.querySelector('.label-input');
+      const noteI = row.querySelector('.note');
+      const cb     = row.querySelector('input[type="checkbox"]');
+
       codeI.oninput = ()=>{ it.code = codeI.value; onUpdate(); };
-      labelI.oninput = ()=>{ it.text = labelI.value; onUpdate(); };
+      labelI.oninput= ()=>{ it.text = labelI.value; onUpdate(); };
       noteI.oninput = ()=>{ it.note = noteI.value; onUpdate(); };
-      cb.onchange = ()=>{ it.ok = cb.checked; onUpdate(); };
+      cb.onchange   = ()=>{ it.ok   = cb.checked; onUpdate(); };
+
       row.querySelector('.del').onclick = (e)=>{ e.preventDefault(); items.splice(idx,1); renderList(sel,items,onUpdate); onUpdate(); };
       host.appendChild(row);
     });
   }
 
+  /* ---------- Collapsibles ---------- */
   function initCollapsibles(){
     $$('.section.collapsible').forEach(sec=>{
       const btn = sec.querySelector('.collapse-btn');
@@ -612,111 +586,110 @@ ranger" id="btnReset">🔄 Reset</button>
     });
   }
 
+  /* ---------- Gruppen + Abschnitte ---------- */
   function drawGroups(){
     const host = $('#groupsContainer'); if(!host) return;
     host.innerHTML='';
     if(!appState.groups || appState.groups.length===0){
       appState.groups=[{id:Date.now(),title:'Gruppe 1',enabled:true,collapsed:false,sections:[]}];
     }
+
     appState.groups.forEach((g,gi)=>{
-      const wrap = document.createElement('div');
-      wrap.className = 'group'+(g.enabled?'':' disabled')+(g.collapsed?' collapsed':'');
+      const group = document.createElement('div');
+      group.className = 'group'+(g.enabled?'':' disabled')+(g.collapsed?' collapsed':'');
+      /* Header */
       const head = document.createElement('div'); head.className='group-header';
-      const title = document.createElement('div'); title.className='group-title-section';
+      const titleWrap = document.createElement('div'); titleWrap.className='group-title-section';
+      const handle = document.createElement('div'); handle.className='group-move-handle'; handle.title='Gruppe verschieben';
+      const collapse = document.createElement('div'); collapse.className='group-collapse-btn'; collapse.title='Ein-/Ausklappen';
+      const title = document.createElement('input'); title.className='group-title-input'; title.value = g.title||('Gruppe '+(gi+1));
+      title.oninput = ()=>{ g.title = title.value; sync(); };
+      collapse.onclick = (e)=>{ e.stopPropagation(); g.collapsed=!g.collapsed; drawGroups(); sync(); };
+      titleWrap.appendChild(handle); titleWrap.appendChild(collapse); titleWrap.appendChild(title);
 
-      const handle=document.createElement('div'); handle.className='group-move-handle'; handle.setAttribute('draggable','true');
-      handle.ondragstart=(e)=>{ e.dataTransport?.setData && e.dataTransfer.setData('text/plain',gi); wrap.classList.add('dragging'); };
-      handle.ondragend=()=>{ wrap.classList.remove('dragging'); };
+      const acts = document.createElement('div'); acts.className='group-actions';
+      const toggle = document.createElement('div'); toggle.className='group-toggle'; toggle.textContent = g.enabled?'✓ Aktiviert':'✗ Deaktiviert';
+      toggle.onclick = (e)=>{ e.stopPropagation(); g.enabled=!g.enabled; drawGroups(); sync(); };
+      const dup = document.createElement('div'); dup.className='group-btn duplicate'; dup.title='Gruppe duplizieren';
+      dup.onclick = (e)=>{ e.stopPropagation(); const n=clone(g); n.id=Date.now()+Math.random(); n.title=(g.title||'Gruppe')+' (Kopie)'; appState.groups.splice(gi+1,0,n); drawGroups(); sync(); };
+      const del = document.createElement('div'); del.className='group-btn delete'; del.title='Gruppe löschen';
+      del.onclick = (e)=>{ e.stopPropagation(); if(confirm('Gruppe "'+(g.title||'')+'" löschen?')){ appState.groups.splice(gi,1); drawGroups(); sync(); } };
+      acts.appendChild(toggle); acts.appendChild(dup); acts.appendChild(del);
 
-      const collapse=document.createElement('div'); collapse.className='group-collapse-btn';
-      collapse.onclick=(e)=>{ e.stopPropagation(); g.collapsed=!g.collapsed; drawGroups(); sync(); };
+      head.appendChild(titleWrap); head.appendChild(acts);
 
-      const ti=document.createElement('input'); ti.className='group-title-input'; ti.value=g.title||('Gruppe '+(gi+1));
-      ti.oninput=()=>{ g.title=ti.value; sync(); };
-
-      title.appendChild(handle); title.appendChild(collapse); title.appendChild(ti);
-
-      const acts=document.createElement('div'); acts.className='group-actions';
-      const tog=document.createElement('div'); tog.className='group-toggle'+(g.logging?' active':''); tog.textContent=g.enabled?'✓ Aktiviert':'✗ Deaktiviert';
-      tog.onclick=(e)=>{ e.stopPropagation(); g.enabled=!g.enabled; drawGroups(); sync(); };
-      const dup=document.createElement('div'); dup.className='group-btn duplicate'; dup.title='Duplizieren';
-      dup.onclick=(e)=>{ e.stopPropagation(); const n=clone(g); n.id=Date.now()+Math.random(); n.title=(g.title||'Gruppe')+' (Kopie)'; appState.groups.splice(gi+1,0,n); drawGroups(); sync(); };
-      const del=document.createElement('div'); del.className='group-btn delete'; del.title='Löschen';
-      del.onclick=(e)=>{ e.stopPropagation(); if(confirm('Gruppe "'+(g.title||'')+'" löschen?')){ appState.groups.splice(gi,1); drawGroups(); sync(); } };
-
-      acts.appendChild(tog); acts.appendChild(dup); acts.appendChild(del);
-      head.appendChild(title); head.appendChild(acts);
-
-      const body=document.createElement('div'); body.className='group-content';
+      /* Content */
+      const content = document.createElement('div'); content.className='group-content';
       (g.sections||[]).forEach((s,si)=>{
-        const sec=document.createElement('div'); sec.className='section';
-        if(s.type==='checklist'){ renderChecklistSection(sec,s,g.sections,si); }
-        else if(s.type==='spacing'){ renderSpacingSection(sec,s,g.sections,si); }
-        else if(s.type==='text'){ renderTextSection(sec,s,g.sections,si); }
-        else if(s.type==='image'){ renderImageSection(sec,s,g.sections,si); }
-        body.appendChild(sec);
+        const sec = document.createElement('div'); sec.className='section';
+        if(s.type==='checklist') renderChecklistSection(sec,s,g.sections,si);
+        else if(s.type==='spacing') renderSpacingSection(sec,s,g.sections,si);
+        else if(s.type==='text') renderTextSection(sec,s,g.sections,si);
+        else if(s.type==='image') renderImageSection(sec,s,g.sections,si);
+        content.appendChild(sec);
       });
 
-      const addWrap=document.createElement('div'); addWrap.className='group-add section';
-      const addBtn=document.createElement('button'); addBtn.className='btn'; addBtn.textContent='➕ Abschnitt hinzufügen';
-      addBtn.onclick=()=>{ currentGroupIndex=gi; addDynamicSection(); };
-      addWrap.appendChild(addBtn); body.appendChild(addWrap);
+      const addWrap = document.createElement('div'); addWrap.className='group-add-section'; 
+      const addBtn = document.createElement('button'); addBtn.className='btn'; addBtn.textContent='➕ Abschnitt hinzufügen';
+      addBtn.onclick = ()=>{ currentGroupIndex=gi; showSectionTypeModal(addSectionOfType); };
+      addWrap.appendChild(addBtn); content.appendChild(addWrap);
 
-      wrap.appendChild(head); wrap.appendChild(body); host.appendChild(wrap);
+      group.appendChild(head); group.appendChild(content);
+      host.appendChild(group);
     });
 
-    updatePageBreaks(); initCollapsibles();
+    updatePageBreaks();
   }
 
-  function renderChecklistSection(host, section, sections, si){
+  function renderChecklistSection(host, section, sections, sIdx){
     const h=document.createElement('div'); h.className='section-header';
-    h.innerHTML=`
+    h.innerHTML = `
       <div class="row">
         <div class="title-wrap">
           <button class="collapse-btn">−</button>
-          <input type="text" value="${section.title||'Checkliste'}" placeholder="Titel…" style="border:1px solid transparent;background:transparent;font-weight:700;color:#8B1538;font-size:18px;padding:4px 6px;border-radius:8px">
+          <input type="text" value="${section.title||'Checkliste'}" placeholder="Titel…" 
+            style="border:1px solid transparent;background:transparent;font-weight:700;color:#8B1538;font-size:18px;padding:4px 6px;border-radius:8px" />
         </div>
         <div style="display:flex;gap:8px">
           <button class="btn icon add-row-btn">+ Zeile</button>
           <button class="btn icon del-section-btn">✕</button>
         </div>
       </div>`;
-    const title=h.querySelector('input'); title.oninput=()=>{ section.title=title.value; sync(); };
-    h.querySelector('.add-row-btn').onclick=(e)=>{ e.preventDefault(); (section.rows||(section.rows=[])).push({text:'Neuer Punkt',ok:false,note:'',code:''}); renderChecklistSection(h.parentNode,section,sections,si); sync(); };
-    h.querySelector('.del-section-btn').onclick=(e)=>{ e.preventDefault(); if(confirm('Abschnitt löschen?')){ sections.splice(si,1); drawGroups(); sync(); } };
+    const titleI = h.querySelector('input'); titleI.oninput = ()=>{ section.title = titleI.value; sync(); };
+    h.querySelector('.add-row-btn').onclick = (e)=>{ e.preventDefault(); (section.rows||(section.rows=[])).push({text:'Neuer Punkt',ok:false,note:'',code:''}); renderChecklistSection(host,section,sections,sIdx); sync(); };
+    h.querySelector('.del-section-btn').onclick = (e)=>{ e.preventDefault(); if(confirm('Abschnitt löschen?')){ sections.splice(sIdx,1); drawGroups(); sync(); } };
 
     const b=document.createElement('div'); b.className='section-body';
     const list=document.createElement('div'); list.className='list';
     (section.rows||[]).forEach((r,ri)=>{
       const row=document.createElement('div'); row.className='check';
-      row.innerHTML=`
-        <div class="move-btns"><div class="group-move-handle" draggable="true"></div></div>
+      row.innerHTML = `
         <input class="tiny" type="text" placeholder="Code" value="${r.code||''}">
         <input class="label-input" type="text" placeholder="Punkt…" value="${r.text||''}">
         <input class="note" type="text" placeholder="Bemerkung…" value="${r.note||''}">
         <input type="checkbox" ${r.ok?'checked':''}>
         <button class="btn icon del">✕</button>`;
-      const [ci,li,ni,cb]=[...row.querySelectorAll('.tiny,.label-input,.note,input[type=checkbox]')];
-      ci.oninput=()=>{ r.code=ci.value; sync(); };
-      li.oninput=()=>{ r.text=li.value; sync(); };
-      ni.oninput=()=>{ r.note=ni.value; sync(); };
+      const codeI=row.querySelector('.tiny'), labelI=row.querySelector('.label-input'), noteI=row.querySelector('.note'), cb=row.querySelector('input[type=checkbox]');
+      codeI.oninput=()=>{ r.code=codeI.value; sync(); };
+      labelI.oninput=()=>{ r.text=labelI.value; sync(); };
+      noteI.oninput=()=>{ r.note=noteI.value; sync(); };
       cb.onchange=()=>{ r.ok=cb.checked; sync(); };
-      row.querySelector('.del').onclick=(e)=>{ e.preventDefault(); section.rows.splice(ri,1); renderChecklistSection(h.parentNode,section,sections,si); sync(); };
+      row.querySelector('.del').onclick=(e)=>{ e.preventDefault(); section.rows.splice(ri,1); renderChecklistSection(host,section,sections,sIdx); sync(); };
       list.appendChild(row);
     });
     b.appendChild(list);
 
     host.innerHTML=''; host.appendChild(h); host.appendChild(b);
-    const cbtn=h.querySelector('.collapse-btn'); cbtn.onclick=()=>{ host.classList.toggle('collapsed'); cbtn.textContent=host.classList.contains('collapsed')?'+':'−'; };
+    const c=h.querySelector('.collapse-btn'); c.onclick=()=>{ host.classList.toggle('collapsed'); c.textContent=host.classList.contains('collapsed')?'+':'−'; };
   }
 
-  function renderSpacingSection(host, section, sections, si){
+  function renderSpacingSection(host, section, sections, sIdx){
     if(typeof section.heightCm!=='number') section.heightCm=5;
     const h=document.createElement('div'); h.className='section-header';
-    h.innerHTML=`<div class="row"><h2>Abstand</h2><button class="btn icon del">✕</button></div>`;
-    h.querySelector('.del').onclick=(e)=>{ e.preventDefault(); if(confirm('Abschnitt löschen?')){ sections.splice(si,1); drawGroups(); sync(); } };
+    h.innerHTML = `<div class="row"><h2>Abstand</h2><button class="btn icon del">✕</button></div>`;
+    h.querySelector('.del').onclick=(e)=>{ e.preventDefault(); if(confirm('Abschnitt löschen?')){ sections.splice(sIdx,1); drawGroups(); sync(); } };
     const b=document.createElement('div'); b.className='section-body';
-    b.innerHTML=`
+    b.innerHTML = `
       <div class="spacing-section">
         <div class="controls">
           <label style="margin:0">Höhe (cm):</label>
@@ -729,28 +702,58 @@ ranger" id="btnReset">🔄 Reset</button>
     host.innerHTML=''; host.appendChild(h); host.appendChild(b);
   }
 
-  function renderTextSection(host, section, sections, si){
+  function renderTextSection(host, section, sections, sIdx){
     const h=document.createElement('div'); h.className='section-header';
-    h.innerHTML=`<div class="row"><div class="title-wrap"><button class="collapse-btn">−</button><input type="text" value="${section.title||'Text'}" placeholder="Titel…" style="border:1px solid transparent;background:transparent;font-weight:700;color:#8B1538;font-size:18px;padding:4px 6px;border-radius:8px"></div><button class="btn icon del">✕</button></div>`;
-    const ti=h.querySelector('input'); ti.oninput=()=>{ section.title=ti.value; sync(); };
-    h.querySelector('.del').onclick=(e)=>{ e.preventDefault(); if(confirm('Abschnitt löschen?')){ sections.splice(si,1); drawGroups(); sync(); } };
+    h.innerHTML = `
+      <div class="row">
+        <div class="title-wrap">
+          <button class="collapse-btn">−</button>
+          <input type="text" value="${section.title||'Text'}" placeholder="Titel…" 
+            style="border:1px solid transparent;background:transparent;font-weight:700;color:#8B1538;font-size:18px;padding:4px 6px;border-radius:8px" />
+        </div>
+        <button class="btn icon del">✕</button>
+      </div>`;
+    const titleI = h.querySelector('input'); titleI.oninput=()=>{ section.title=titleI.value; sync(); };
+    h.querySelector('.del').onclick=(e)=>{ e.preventDefault(); if(confirm('Abschnitt löschen?')){ sections.splice(sIdx,1); drawGroups(); sync(); } };
     const b=document.createElement('div'); b.className='section-body';
-    b.innerHTML=`<div class="text-section"><div class="text-editor-toolbar"><button data-cmd="bold"><b>B</b></button><button data-cmd="italic"><i>I</i></button><button data-cmd="underline"><u>U</u></button></div><div class="text-editor-content" contenteditable="true">${section.content||''}</div></div>`;
+    b.innerHTML = `
+      <div class="text-section">
+        <div class="text-editor-toolbar">
+          <button data-cmd="bold"><b>B</b></button>
+          <button data-cmd="italic"><i>I</i></button>
+          <button data-cmd="underline"><u>U</u></button>
+        </div>
+        <div class="text-editor-content" contenteditable="true">${section.content||''}</div>
+      </div>`;
     const ed=b.querySelector('.text-editor-content'); const tb=b.querySelector('.text-editor-toolbar');
     ed.oninput=()=>{ section.content=ed.innerHTML; sync(); };
     tb.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{ document.execCommand(btn.dataset.cmd,false,null); ed.focus(); });
     host.innerHTML=''; host.appendChild(h); host.appendChild(b);
-    const cbtn=h.querySelector('.collapse-btn'); cbtn.onclick=()=>{ host.classList.toggle('collapsed'); cbtn.textContent=host.classList.contains('collapsed')?'+':'−'; };
+    const c=h.querySelector('.collapse-btn'); c.onclick=()=>{ host.classList.toggle('collapsed'); c.textContent=host.classList.contains('collapsed')?'+':'−'; };
   }
 
-  function renderImageSection(host, section, sections, si){
+  function renderImageSection(host, section, sections, sIdx){
     if(!Array.isArray(section.images)) section.images=[];
     const h=document.createElement('div'); h.className='section-header';
-    h.innerHTML=`<div class="row"><div class="title-wrap"><button class="collapse-btn">−</button><input type="text" value="${section.title||'Bilder'}" placeholder="Titel…" style="border:1px solid transparent;background:transparent;font-weight:700;color:#8B1538;font-size:18px;padding:4px 6px;border-radius:8px"></div><button class="btn icon del">✕</button></div>`;
-    h.querySelector('.del').onclick=(e)=>{ e.preventDefault(); if(confirm('Abschnitt löschen?')){ sections.splice(si,1); drawGroups(); sync(); } };
-    const ti=h.querySelector('input'); ti.oninput=()=>{ section.title=ti.value; sync(); };
+    h.innerHTML = `
+      <div class="row">
+        <div class="title-wrap">
+          <button class="collapse-btn">−</button>
+          <input type="text" value="${section.title||'Bilder'}" placeholder="Titel…" 
+            style="border:1px solid transparent;background:transparent;font-weight:700;color:#8B1538;font-size:18px;padding:4px 6px;border-radius:8px" />
+        </div>
+        <button class="btn icon del">✕</button>
+      </div>`;
+    const titleI = h.querySelector('input'); titleI.oninput=()=>{ section.title=titleI.value; sync(); };
+    h.querySelector('.del').onclick=(e)=>{ e.preventDefault(); if(confirm('Abschnitt löschen?')){ sections.splice(sIdx,1); drawGroups(); sync(); } };
     const b=document.createElement('div'); b.className='section-body';
-    b.innerHTML=`<div class="image-section"><div class="image-upload-zone">📸 Klicken oder Bilder hierher ziehen <input type="file" accept="image/*" multiple style="display:none"></div><div class="image-preview"></div></div>`;
+    b.innerHTML = `
+      <div class="image-section">
+        <div class="image-upload-zone">📸 Klicken oder Bilder hierher ziehen
+          <input type="file" accept="image/*" multiple style="display:none">
+        </div>
+        <div class="image-preview"></div>
+      </div>`;
     const zone=b.querySelector('.image-upload-zone'), input=zone.querySelector('input[type=file]'), prev=b.querySelector('.image-preview');
     zone.onclick=()=>input.click();
     zone.ondragover=e=>{ e.preventDefault(); zone.classList.add('dragover'); };
@@ -761,46 +764,67 @@ ranger" id="btnReset">🔄 Reset</button>
       [...files].forEach(f=>{
         if(!f.type.startsWith('image/')) return;
         const r=new FileReader();
-        r.onload=e=>{ section.images.push(e.target.result); renderImageSection(host,section,sections,si); sync(); };
+        r.onload=e=>{ section.images.push(e.target.result); renderImageSection(host,section,sections,sIdx); sync(); };
         r.readAsDataURL(f);
       });
     }
     section.images.forEach((src,idx)=>{
       const it=document.createElement('div'); it.className='image-preview-item';
       it.innerHTML=`<img src="${src}"><button class="delete-btn">✕</button>`;
-      it.querySelector('.delete-btn').onclick=(e)=>{ e.preventDefault(); section.images.splice(idx,1); renderImageSection(host,section,sections,si); sync(); };
+      it.querySelector('.delete-btn').onclick=(e)=>{ e.preventDefault(); section.images.splice(idx,1); renderImageSection(host,section,sections,sIdx); sync(); };
       prev.appendChild(it);
     });
     host.innerHTML=''; host.appendChild(h); host.appendChild(b);
-    const cbtn=h.querySelector('.collapse-btn'); cbtn.onclick=()=>{ host.classList.toggle('collapsed'); cbtn.textContent=host.classList.contains('collapsed')?'+':'−'; };
+    const c=h.querySelector('.collapse-btn'); c.onclick=()=>{ host.classList.toggle('collapsed'); c.textContent=host.classList.contains('collapsed')?'+':'−'; };
   }
 
-  let currentGroupIndex=0;
-  function addDynamicSection(){
-    // einfacher: direkt Checkliste anlegen (dein Modal kann hier ergänzt werden)
-    if(!appState.groups.length) appState.groups=[{id:Date.now(),title:'Gruppe 1',enabled:true,collapsed:false,sections:[]}];
-    const g=appState.groups[currentGroupIndex]||appState.groups[0];
-    g.sections.push({type:'checklist',title:'Neuer Abschnitt',rows:[]});
+  /* ---------- Modal Section Type ---------- */
+  let pendingSectionCallback = null;
+  function showSectionTypeModal(cb){ pendingSectionCallback = cb; $('#sectionTypeModal').classList.add('active'); }
+  function closeSectionTypeModal(){ $('#sectionTypeModal').classList.remove('active'); pendingSectionCallback=null; }
+  $('#sectionTypeClose').onclick = closeSectionTypeModal;
+  $('#sectionTypeModal').onclick = (e)=>{ if(e.target === e.currentTarget) closeSectionTypeModal(); };
+  $$('.section-type-card').forEach(card=>{
+    card.onclick = ()=>{ if(pendingSectionCallback){ const type = card.getAttribute('data-type'); const cb=pendingSectionCallback; closeSectionTypeModal(); cb(type); } };
+  });
+
+  let currentGroupIndex = 0;
+  function addSectionOfType(type){
+    const g = appState.groups[currentGroupIndex] || appState.groups[0];
+    const section = { type, title:'Neuer Abschnitt', id:Date.now() };
+    if(type==='checklist') section.rows=[];
+    if(type==='spacing') section.heightCm=5;
+    if(type==='text') section.content='';
+    if(type==='image') section.images=[];
+    (g.sections||(g.sections=[])).push(section);
     drawGroups(); sync();
   }
 
+  /* ---------- Seitenlinien Overlay ---------- */
+  let pageBreaksOn = false;
   function updatePageBreaks(){
-    const overlay=$('#pageBreakMarkers'); if(!overlay) return;
-    overlay.innerHTML=''; if(!window._pageBreaksOn) return;
-    const content=$('#app');
-    const totalH=Math.max(content.scrollHeight, content.offsetHeight);
-    const pageH=1032; // grob für A4@100% im Browser
-    const n=Math.floor(totalH/pageH);
-    for(let i=1;i<=n;i++){
-      const y=i*pageH;
-      const line=document.createElement('div'); line.className='page-break-line'; line.style.top=y+'px';
-      const label=document.createElement('div'); label.className='page-break-label'; label.style.top=y+'px'; label.textContent='Seite '+(i+1);
+    const overlay = $('#pageBreakMarkers'); if(!overlay) return;
+    overlay.innerHTML = '';
+    if(!pageBreaksOn) return;
+
+    // A4 approximiert in px bei 96dpi abzüglich margin + header: ~ 1122px
+    const contentEl = $('#app');
+    const startTop = contentEl.getBoundingClientRect().top + window.scrollY;
+    const pageHeightPx = 1122; 
+    const totalH = Math.max(contentEl.scrollHeight, contentEl.offsetHeight);
+    const count = Math.floor(totalH / pageHeightPx);
+
+    for(let i=1;i<=count;i++){
+      const y = startTop + i*pageHeightPx;
+      const line = document.createElement('div'); line.className='page-break-line'; line.style.top = y+'px';
+      const label = document.createElement('div'); label.className='page-break-label'; label.style.top = y+'px'; label.textContent = 'Seite '+(i+1);
       overlay.appendChild(line); overlay.appendChild(label);
     }
   }
 
+  /* ---------- Init ---------- */
   function fillPrintMeta(){
-    const ort = $('#standartInstallation')?.value || $('#standortInstallation')?.value || '';
+    const ort = $('#standortInstallation')?.value || '';
     const produkt = $('#produkt')?.value || '';
     const einr = $('#nameEinrichtung')?.value || '';
     const ver = $('#version')?.value || '';
@@ -815,6 +839,13 @@ ranger" id="btnReset">🔄 Reset</button>
     $('#pcDate').textContent = now;
   }
 
+  function renderAll(){
+    renderList('#kvList', appState.kv, sync);
+    renderList('#iqList', appState.iq, sync);
+    renderList('#oqList', appState.oq, sync);
+    drawGroups();
+  }
+
   function initUI(){
     const btn=$('#hamburgerBtn'), menu=$('#hamburgerMenu');
     btn.onclick=(e)=>{ e.stopPropagation(); btn.classList.toggle('active'); menu.classList.toggle('active'); };
@@ -823,13 +854,18 @@ ranger" id="btnReset">🔄 Reset</button>
     $('#btnPrintTheme').onclick=()=>{
       const on=document.body.classList.toggle('preview-print-pro');
       $('#printThemeState').textContent = on ? 'An' : 'Aus';
-      // Deckblatt im Preview NICHT zeigen
+      // Deckblatt im Preview nicht anzeigen
       $('#printCover').setAttribute('hidden','');
+      $('#coverState').textContent = 'Aus';
       fillPrintMeta();
+    };
+    $('#btnCoverToggle').onclick=()=>{
+      const cover = $('#printCover');
+      if(cover.hasAttribute('hidden')){ cover.removeAttribute('hidden'); $('#coverState').textContent='An'; }
+      else { cover.setAttribute('hidden',''); $('#coverState').textContent='Aus'; }
     };
 
     $('#btnPDF').onclick=()=>{
-      // Menü zu, Metadaten füllen, dann drucken
       btn.classList.remove('active'); menu.classList.remove('active');
       if(document.body.classList.contains('preview-print-pro')) fillPrintMeta();
       setTimeout(()=>window.print(), 50);
@@ -838,51 +874,67 @@ ranger" id="btnReset">🔄 Reset</button>
     $('#btnSave').onclick=exportJSON;
     $('#btnLoad').onclick=importJSON;
     $('#btnReset').onclick=resetAll;
+
     $('#btnPageBreaks').onclick=()=>{
-      window._pageBreaksOn = !window._pageBreaksOn;
-      $('#pageBreakState').textContent = window._pageBreaksOn ? 'An' : 'Aus';
-      $('#pageBreakMarkers').classList.toggle('hidden', !window._pageBre
-
-aksOn);
-      requestAnimationFrame(()=>{ updatePageBreaks(); requestAnimFrame2(); });
+      pageBreaksOn = !pageBreaksOn;
+      $('#pageBreakState').textContent = pageBreaksOn ? 'An' : 'Aus';
+      $('#pageBreakMarkers').classList.toggle('hidden', !pageBreaksOn);
+      requestAnimationFrame(()=>{ updatePageBreaks(); requestAnimationFrame(updatePageBreaks); });
     };
-    function requestAnimFrame2(){ requestAnimationFrame(updatePageBreaks); }
 
-    $('#btnAddKV').onclick=()=>{ (appState.kv||(appState.kv=[])).push({text:'Neue KV-Prüfung',ok:false,note:'',code:'',info:''}); renderAll(); sync(); };
-    $('#btnAddIQ').onclick=()=>{ (appState.iq||(appState.iq=[])).push({text:'Neue IQ-Prüfung',ok:false,note:'',code:'',info:''}); renderAll(); sync(); };
-    $('#btnAddOQ').onclick=()=>{ (appState.oq||(appState.oq=[])).push({text:'Neue OQ-Prüfung',ok:false,note:'',code:'',info:''}); renderAll(); sync(); };
+    $('#btnNewGroup').onclick=()=>{
+      appState.groups.push({id:Date.now()+Math.random(),title:'Neue Gruppe',enabled:true,collapsed:false,sections:[]});
+      currentGroupIndex = appState.groups.length-1;
+      drawGroups(); sync();
+    };
+    $('#btnNewSectionMenu').onclick=(e)=>{ e.preventDefault(); e.stopPropagation(); showSectionTypeModal(addSectionOfType); };
 
-    formFields.forEach(id=>{ const el=$('#'+id); if(!el) return; (el.type==='checkbox'? el.onchange : el.oninput)=()=>{ sync(); }; });
+    formFields.forEach(id=>{
+      const el = document.getElementById(id);
+      if(!el) return;
+      (el.type==='checkbox' ? el.onchange : el.oninput) = sync;
+    });
+
+    $$('.sig-controls [data-clear-text]').forEach(b=>{
+      b.addEventListener('click',()=>{
+        const id = b.getAttribute('data-clear-text');
+        const el = document.getElementById(id);
+        if(el) el.value='';
+        sync();
+      });
+    });
 
     $('#stamp').textContent = new Date().toLocaleString('de-DE');
-  }
 
-  function renderAll(){
-    renderList('#kvList', appState.kv, sync);
-    renderList('#iqList', appState.iq, sync);
-    renderList('#oqList', appState.oq, sync);
-    drawGroups();
+    if(window.ResizeObserver){ new ResizeObserver(()=>{ if(pageBreaksOn) updatePageBreaks(); }).observe($('#app')); }
+    window.addEventListener('resize', updatePageBreaks);
+    new MutationObserver(()=>{ if(pageBreaksOn) updatePageBreaks(); }).observe($('#app'),{childList:true,subtree:true});
   }
 
   function init(){
-    if(!load()->false){ // fallback if typo; ensure state init
-      appState.kv=[{text:'Konformität mit Spezifikation',ok:false,note:'',code:'KV-001',info:'Prüfung der technischen Spezifikationen'}];
-      appState.iq=[{text:'Lieferumfang vollständig',ok:false,note:'',code:'IQ-001',info:'Alle Komponenten vorhanden'}];
-      appState.oq=[{text:'Funktionstest erfolgreich',ok:false,note:'',code:'OQ-001',info:'Basisfunktionen getestet'}];
-      appState.groups=[{id:Date.now(),title:'Gruppe 1',enabled:true,collapsed:false,sections:[]}];
+    const ok = loadState();
+    if(!ok){
+      appState.kv = [
+        {text:'Konformität mit Spezifikation', ok:false, note:'', code:'KV-001'},
+        {text:'Messgenauigkeit überprüft', ok:false, note:'', code:'KV-002'},
+        {text:'Kalibrierzertifikat vorhanden', ok:false, note:'', code:'KV-003'}
+      ];
+      appState.iq = [
+        {text:'Lieferumfang vollständig', ok:false, note:'', code:'IQ-001'},
+        {text:'Gerät unbeschädigt', ok:false, note:'', code:'IQ-002'},
+        {text:'Installation gemäß Handbuch', ok:false, note:'', code:'IQ-003'}
+      ];
+      appState.oq = [
+        {text:'Funktionstest erfolgreich', ok:false, note:'', code:'OQ-001'},
+        {text:'Alarmfunktionen getestet', ok:false, note:'', code:'OQ-002'},
+        {text:'Temperaturkonstanz geprüft', ok:false, note:'', code:'OQ-003'}
+      ];
+      appState.groups = [{id:Date.now(), title:'Gruppe 1', enabled:true, collapsed:false, sections:[]}];
     }
     renderAll(); initUI(); initCollapsibles();
-
-    if(window.ResizeObserver){ new ResizeObserver(update).observe($('#app')); }
-    window.addEventListener('resize', update);
-    new MutationObserver(()=>{ if(window._pageBreaksOn) updatePageBreaks(); }).observe($('#app'),{childList:true,subtree:true});
-    function update(){ if(window._pageBreaksOn) updatePageBreaks(); }
   }
 
-  // fix minor typo in loadState call
-  function load_compat(){ return loadState(); }
-
-  document.readyState==='loading' ? window.addEventListener('DOMContentLoaded', init) : init();
+  document.readyState === 'loading' ? window.addEventListener('DOMContentLoaded', init) : init();
   </script>
 </body>
 </html>
