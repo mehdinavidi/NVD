@@ -99,6 +99,11 @@
       font-family:inherit;
       line-height:1.4;
     }
+    textarea.tiny::-webkit-resizer,
+    textarea.label-input::-webkit-resizer,
+    textarea.note::-webkit-resizer {
+      display:none;
+    }
 
     /* Check-Zeilen mit Code + Move Handle */
     .list{display:flex;flex-direction:column;gap:8px}
@@ -382,6 +387,15 @@
         align-items: flex-start !important;
       }
       
+      /* Textareas in Tabellen ohne extra Border */
+      .check textarea {
+        border: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+        padding: 2mm !important;
+        background: transparent !important;
+      }
+      
       /* Code-Spalte (8%) - mehrzeilig */
       .check .tiny {
         grid-area: code !important;
@@ -396,6 +410,9 @@
         word-wrap: break-word !important;
         white-space: normal !important;
         line-height: 1.3 !important;
+        resize: none !important;
+        overflow: visible !important;
+        border-right: 0.5pt solid #e5e7eb !important;
       }
       
       /* Prüfpunkt-Spalte (62%) - mehrzeilig */
@@ -408,6 +425,9 @@
         white-space: normal !important;
         word-wrap: break-word !important;
         min-height: 10mm !important;
+        resize: none !important;
+        overflow: visible !important;
+        border-right: 0.5pt solid #e5e7eb !important;
       }
       
       /* Bemerkung-Spalte (20%) - mehrzeilig */
@@ -422,6 +442,25 @@
         word-wrap: break-word !important;
         padding-top: 3mm !important;
         line-height: 1.4 !important;
+        resize: none !important;
+        overflow: visible !important;
+        border-right: 0.5pt solid #e5e7eb !important;
+      }
+      
+      /* Platzhalter im Print ausblenden */
+      .check .tiny::placeholder,
+      .check .label-input::placeholder,
+      .check .note::placeholder {
+        color: transparent !important;
+        opacity: 0 !important;
+      }
+      
+      /* Leere Felder minimal sichtbar machen */
+      .check .tiny:empty::before,
+      .check .label-input:empty::before,
+      .check .note:empty::before {
+        content: '' !important;
+        color: transparent !important;
       }
       
       /* OK-Spalte (10%) */
@@ -468,6 +507,24 @@
         padding: 2mm !important;
         font-size: 10pt !important;
         border-radius: 1mm !important;
+      }
+      
+      /* Textarea spezifische Optimierungen */
+      textarea {
+        resize: none !important;
+        overflow: visible !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+      }
+      
+      /* Entferne alle Browser-Standard Textarea-Styles */
+      textarea::-webkit-resizer {
+        display: none !important;
+      }
+      
+      textarea::-webkit-scrollbar {
+        display: none !important;
       }
       
       label {
