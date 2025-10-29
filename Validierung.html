@@ -248,58 +248,148 @@
         orphans: 3;
         widows: 3;
         margin: 8mm 0 !important;
-        border: 1.5pt solid #e5e7eb !important;
+        border: none !important;
+        background: transparent !important;
       }
       
+      /* Gruppentitel ohne weißen Rahmen */
+      .group-header {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 0 3mm 0 !important;
+        margin: 0 !important;
+      }
+      
+      /* Verstecke Move-Handle, Collapse-Button und Actions */
+      .group-move-handle,
+      .group-collapse-btn,
+      .group-actions,
+      .group-toggle,
+      .group-btn {
+        display: none !important;
+      }
+      
+      /* Group title section transparent */
+      .group-title-section {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: block !important;
+      }
+      
+      /* Style group-title-input wie normaler Titel */
+      .group-title-input {
+        border: none !important;
+        background: transparent !important;
+        padding: 2mm 0 !important;
+        margin: 0 0 3mm 0 !important;
+        color: var(--primary) !important;
+        font-weight: 700 !important;
+        font-size: 16pt !important;
+        box-shadow: none !important;
+        outline: none !important;
+        width: 100% !important;
+        display: block !important;
+        border-bottom: 2pt solid var(--primary) !important;
+        padding-bottom: 2mm !important;
+      }
+      
+      .group-header h3,
+      .group-title {
+        color: var(--primary) !important;
+        font-size: 16pt !important;
+        font-weight: 700 !important;
+        margin: 0 0 3mm 0 !important;
+        padding: 0 0 2mm 0 !important;
+        background: transparent !important;
+        border: none !important;
+        border-bottom: 2pt solid var(--primary) !important;
+      }
+      
+      /* Section ohne weißen Rahmen */
       .section {
         page-break-inside: avoid;
         break-inside: avoid;
-        padding: 4mm 5mm !important;
+        padding: 3mm 0 !important;
+        border: none !important;
+        background: transparent !important;
+        margin: 4mm 0 !important;
       }
       
       .section-header {
         page-break-after: avoid;
         break-after: avoid;
-        margin: -4mm -5mm 2mm -5mm !important;
-        padding: 3mm 5mm 2mm 5mm !important;
-        background: #f8f9fb !important;
-        position: relative !important;
+        margin: 0 0 3mm 0 !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border: none !important;
       }
       
-      /* Spaltenüberschriften-Zeile für Listen */
-      .section:has(.list) .list::before {
-        content: '' !important;
-        display: grid !important;
-        grid-template-columns: 5% 65% 20% 10% !important;
-        width: calc(100% + 0.5pt) !important;
-        margin: 0 0 0 -0.25pt !important;
-        background: linear-gradient(to bottom, #e8eaf0, #f0f1f3) !important;
-        border: 1pt solid #8B1538 !important;
-        border-bottom: 1.5pt solid #8B1538 !important;
+      .section-header h2 {
+        color: var(--primary) !important;
+        font-size: 13pt !important;
         font-weight: 700 !important;
-        font-size: 9pt !important;
-        color: #1E2434 !important;
-        padding: 2.5mm 0 !important;
-        page-break-after: avoid !important;
-        box-shadow: 0 1pt 2pt rgba(0,0,0,0.05) !important;
+        margin: 0 0 2mm 0 !important;
+        padding: 2mm 0 !important;
+        background: transparent !important;
+        border: none !important;
+        border-bottom: 1.5pt solid var(--primary) !important;
       }
       
-      /* Spaltenüberschriften als Grid-Items simulieren */
-      .section:has(.list) .list {
-        position: relative !important;
+      /* Verstecke Controls und Buttons in Headers */
+      .section-header .row > div:last-child,
+      .group-header .controls,
+      .section-header button,
+      .group-header button,
+      .section-header .collapse-btn,
+      .group-header .collapse-btn {
+        display: none !important;
       }
       
-      .section:has(.list) .list::after {
-        content: 'Code' !important;
-        position: absolute !important;
-        top: 0 !important;
-        left: 2.5% !important;
-        transform: translateX(-50%) translateY(2.5mm) !important;
+      /* Row Container transparent machen */
+      .section-header .row,
+      .section-header .title-wrap {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: block !important;
+      }
+      
+      /* Title-wrap sollte nur das Input zeigen */
+      .section-header .title-wrap {
+        display: block !important;
+        width: 100% !important;
+      }
+      
+      /* Style Title-Inputs wie normalen Text */
+      .section-header input,
+      .group-header input {
+        border: none !important;
+        background: transparent !important;
+        padding: 2mm 0 !important;
+        margin: 0 !important;
+        color: var(--primary) !important;
         font-weight: 700 !important;
-        font-size: 9pt !important;
-        color: #1E2434 !important;
-        text-align: center !important;
-        pointer-events: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+        width: 100% !important;
+        display: block !important;
+      }
+      
+      .section-header input {
+        font-size: 13pt !important;
+        border-bottom: 1.5pt solid var(--primary) !important;
+        padding-bottom: 2mm !important;
+        margin-bottom: 3mm !important;
+      }
+      
+      .group-header input {
+        font-size: 16pt !important;
+        border-bottom: 2pt solid var(--primary) !important;
+        padding-bottom: 2mm !important;
+        margin-bottom: 3mm !important;
       }
       
       h2, h3 {
