@@ -92,23 +92,29 @@
     label{display:block;font-size:12px;margin-bottom:6px;color:#334155;font-weight:600}
     input[type="text"],input[type="date"],input[type="number"],textarea,select{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:10px;background:#fff;outline:none;font-family:inherit}
     input[type="text"]:focus,input[type="date"]:focus,input[type="number"]:focus,textarea:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(139,21,56,.1)}
-    textarea{min-height:80px;resize:vertical}
+    textarea{min-height:80px;resize:vertical;line-height:1.5}
+    textarea.tiny,textarea.label-input,textarea.note{
+      resize:none;
+      overflow:hidden;
+      font-family:inherit;
+      line-height:1.4;
+    }
 
     /* Check-Zeilen mit Code + Move Handle */
     .list{display:flex;flex-direction:column;gap:8px}
-    .check{display:flex;gap:10px;align-items:center;padding:8px 10px;border:1px solid #e5e7eb;border-radius:10px;min-height:40px}
-    .check .move-btns{margin-right:4px}
-    .check .tiny{width:60px;height:28px;padding:4px 6px;font-size:12px;text-align:center}
-    .check .info-btn{width:26px;height:26px;display:grid;place-items:center;border:1px solid #cbd5e1;border-radius:50%;cursor:pointer;background:#fff;font-weight:700;color:#334155;line-height:1}
+    .check{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid #e5e7eb;border-radius:10px;min-height:40px}
+    .check .move-btns{margin-right:4px;margin-top:4px}
+    .check .tiny{width:80px;min-height:28px;padding:4px 6px;font-size:12px;text-align:center;word-wrap:break-word;white-space:normal;display:flex;align-items:center;justify-content:center}
+    .check .info-btn{width:26px;height:26px;display:grid;place-items:center;border:1px solid #cbd5e1;border-radius:50%;cursor:pointer;background:#fff;font-weight:700;color:#334155;line-height:1;flex-shrink:0;margin-top:2px}
     .check .info-btn:before{content:'i'}
     .check .label-input{
-      flex:1; min-width:140px; padding:6px 8px; border:1px solid #d1d5db; border-radius:8px; background:#fff; font:inherit; outline:none;
+      flex:1; min-width:140px; min-height:28px; padding:6px 8px; border:1px solid #d1d5db; border-radius:8px; background:#fff; font:inherit; outline:none; resize:vertical; overflow-y:auto; white-space:pre-wrap; word-wrap:break-word;
     }
     .check .label-input:focus{border-color:var(--primary); box-shadow:0 0 0 3px rgba(139,21,56,.10)}
-    .check .note{min-width:200px;max-width:260px;font-size:12px;padding:6px 8px;height:28px}
-    .check .manage{display:flex;gap:6px}
+    .check .note{min-width:200px;max-width:260px;font-size:12px;padding:6px 8px;min-height:28px;resize:vertical;word-wrap:break-word;white-space:pre-wrap}
+    .check .manage{display:flex;gap:6px;margin-top:4px}
     .check .del{margin-left:4px}
-    .check input[type="checkbox"]{width:18px;height:18px;margin-left:auto}
+    .check input[type="checkbox"]{width:18px;height:18px;margin-left:auto;margin-top:6px;flex-shrink:0}
 
     /* Inline Checkbox */
     .checkbox-inline{display:flex;align-items:center;gap:8px}
@@ -304,12 +310,13 @@
         gap: 0 !important;
         border: 1pt solid #8B1538 !important;
         page-break-inside: auto;
+        overflow: hidden !important;
       }
       
       /* Table Header Row (wird via JavaScript eingefügt) */
       .table-header-row {
         display: grid !important;
-        grid-template-columns: 5% 65% 20% 10% !important;
+        grid-template-columns: 8% 62% 20% 10% !important;
         background: #e8eaf0 !important;
         border-bottom: 1.5pt solid #8B1538 !important;
         font-weight: 700 !important;
@@ -343,7 +350,7 @@
       /* Check-Items als Grid-Zeilen */
       .check {
         display: grid !important;
-        grid-template-columns: 5% 65% 20% 10% !important;
+        grid-template-columns: 8% 62% 20% 10% !important;
         grid-template-areas: "code label note checkbox" !important;
         page-break-inside: avoid;
         break-inside: avoid;
@@ -370,13 +377,12 @@
         padding: 2mm !important;
         background: white !important;
         margin: 0 !important;
-        height: auto !important;
-        min-height: 8mm !important;
+        min-height: 10mm !important;
         display: flex !important;
-        align-items: center !important;
+        align-items: flex-start !important;
       }
       
-      /* Code-Spalte (5%) */
+      /* Code-Spalte (8%) - mehrzeilig */
       .check .tiny {
         grid-area: code !important;
         font-size: 9pt !important;
@@ -386,18 +392,25 @@
         justify-content: center !important;
         width: 100% !important;
         max-width: none !important;
+        padding-top: 3mm !important;
+        word-wrap: break-word !important;
+        white-space: normal !important;
+        line-height: 1.3 !important;
       }
       
-      /* Prüfpunkt-Spalte (65%) */
+      /* Prüfpunkt-Spalte (62%) - mehrzeilig */
       .check .label-input {
         grid-area: label !important;
         font-size: 10pt !important;
-        padding-left: 3mm !important;
-        line-height: 1.4 !important;
+        padding: 2.5mm 3mm !important;
+        line-height: 1.5 !important;
         width: 100% !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        min-height: 10mm !important;
       }
       
-      /* Bemerkung-Spalte (20%) */
+      /* Bemerkung-Spalte (20%) - mehrzeilig */
       .check .note {
         grid-area: note !important;
         font-size: 9pt !important;
@@ -405,6 +418,10 @@
         font-style: italic !important;
         width: 100% !important;
         max-width: none !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        padding-top: 3mm !important;
+        line-height: 1.4 !important;
       }
       
       /* OK-Spalte (10%) */
@@ -416,6 +433,7 @@
         border: 1pt solid #666 !important;
         border-radius: 2px !important;
         justify-self: center !important;
+        align-self: center !important;
       }
       
       /* Alternating row colors */
@@ -510,10 +528,12 @@
         height: auto;
       }
       
-      /* Spacing Sections */
+      /* Spacing Sections - unsichtbar aber mit Abstand */
       .spacing-section {
         border: none !important;
         background: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
       }
       
       .spacing-section .controls {
@@ -523,6 +543,19 @@
       .spacing-section .preview {
         border: none !important;
         background: transparent !important;
+        color: transparent !important;
+        font-size: 0 !important;
+      }
+      
+      /* Section mit Spacing - Titel und Border ausblenden */
+      .section:has(.spacing-section) .section-header {
+        display: none !important;
+      }
+      
+      .section:has(.spacing-section) {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
       }
       
       /* Signatur-Bereich */
@@ -1575,16 +1608,24 @@
       items.forEach(function(item, i){
         var row = document.createElement('div');
         row.className = 'check';
+        
+        // Escape HTML für textarea
+        var escapeHtml = function(text) {
+          var div = document.createElement('div');
+          div.textContent = text || '';
+          return div.innerHTML;
+        };
+        
         row.innerHTML = `
           <div class="move-btns">
             <div class="move-handle" draggable="true" data-index="${i}">
               <span></span>
             </div>
           </div>
-          <input type="text" class="tiny" value="${item.code||''}" placeholder="Code" />
-          <button class="info-btn" title="${item.info||''}"></button>
-          <input type="text" class="label-input" value="${item.text}" placeholder="Prüfpunkt..." />
-          <input type="text" class="note" value="${item.note||''}" placeholder="Bemerkung..." />
+          <textarea class="tiny" placeholder="Code" rows="1">${escapeHtml(item.code)}</textarea>
+          <button class="info-btn" title="${escapeHtml(item.info)}"></button>
+          <textarea class="label-input" placeholder="Prüfpunkt..." rows="1">${escapeHtml(item.text)}</textarea>
+          <textarea class="note" placeholder="Bemerkung..." rows="1">${escapeHtml(item.note)}</textarea>
           <input type="checkbox" ${item.ok?'checked':''} />
           <div class="manage">
             <button class="btn icon tiny del">✕</button>
@@ -1596,11 +1637,36 @@
         var noteInput = row.querySelector('.note');
         var checkbox = row.querySelector('input[type="checkbox"]');
         var delBtn = row.querySelector('.del');
+        
+        // Auto-resize textareas
+        var autoResize = function(textarea) {
+          textarea.style.height = 'auto';
+          textarea.style.height = textarea.scrollHeight + 'px';
+        };
 
-        codeInput.oninput = function(){ item.code = codeInput.value; onUpdate(); };
-        labelInput.oninput = function(){ item.text = labelInput.value; onUpdate(); };
-        noteInput.oninput = function(){ item.note = noteInput.value; onUpdate(); };
+        codeInput.oninput = function(){ 
+          item.code = codeInput.value; 
+          autoResize(codeInput);
+          onUpdate(); 
+        };
+        labelInput.oninput = function(){ 
+          item.text = labelInput.value; 
+          autoResize(labelInput);
+          onUpdate(); 
+        };
+        noteInput.oninput = function(){ 
+          item.note = noteInput.value; 
+          autoResize(noteInput);
+          onUpdate(); 
+        };
         checkbox.onchange = function(){ item.ok = checkbox.checked; onUpdate(); };
+        
+        // Initial resize
+        setTimeout(function(){
+          autoResize(codeInput);
+          autoResize(labelInput);
+          autoResize(noteInput);
+        }, 0);
         
         // FIXED: Delete Button
         delBtn.onclick = function(e){
@@ -1887,15 +1953,23 @@
       section.rows.forEach(function(row, rIdx){
         var rowDiv = document.createElement('div');
         rowDiv.className = 'check';
+        
+        // Escape HTML für textarea
+        var escapeHtml = function(text) {
+          var div = document.createElement('div');
+          div.textContent = text || '';
+          return div.innerHTML;
+        };
+        
         rowDiv.innerHTML = `
           <div class="move-btns">
             <div class="move-handle" draggable="true">
               <span></span>
             </div>
           </div>
-          <input type="text" class="tiny" value="${row.code||''}" placeholder="Code" />
-          <input type="text" class="label-input" value="${row.text}" placeholder="Punkt..." />
-          <input type="text" class="note" value="${row.note||''}" placeholder="Bemerkung..." />
+          <textarea class="tiny" placeholder="Code" rows="1">${escapeHtml(row.code)}</textarea>
+          <textarea class="label-input" placeholder="Punkt..." rows="1">${escapeHtml(row.text)}</textarea>
+          <textarea class="note" placeholder="Bemerkung..." rows="1">${escapeHtml(row.note)}</textarea>
           <input type="checkbox" ${row.ok?'checked':''} />
           <button class="btn icon tiny del">✕</button>
         `;
@@ -1906,10 +1980,35 @@
         var checkbox = rowDiv.querySelector('input[type="checkbox"]');
         var delRowBtn = rowDiv.querySelector('.del');
         
-        codeInput.oninput = function(){ row.code = codeInput.value; sync(); };
-        labelInput.oninput = function(){ row.text = labelInput.value; sync(); };
-        noteInput.oninput = function(){ row.note = noteInput.value; sync(); };
+        // Auto-resize textareas
+        var autoResize = function(textarea) {
+          textarea.style.height = 'auto';
+          textarea.style.height = textarea.scrollHeight + 'px';
+        };
+        
+        codeInput.oninput = function(){ 
+          row.code = codeInput.value; 
+          autoResize(codeInput);
+          sync(); 
+        };
+        labelInput.oninput = function(){ 
+          row.text = labelInput.value; 
+          autoResize(labelInput);
+          sync(); 
+        };
+        noteInput.oninput = function(){ 
+          row.note = noteInput.value; 
+          autoResize(noteInput);
+          sync(); 
+        };
         checkbox.onchange = function(){ row.ok = checkbox.checked; sync(); };
+        
+        // Initial resize
+        setTimeout(function(){
+          autoResize(codeInput);
+          autoResize(labelInput);
+          autoResize(noteInput);
+        }, 0);
         
         // FIXED: Delete Button
         delRowBtn.onclick = function(e){
@@ -2362,8 +2461,8 @@
           if(!list.querySelector('.table-header-row')){
             var header = document.createElement('div');
             header.className = 'table-header-row';
-            header.style.cssText = 'display:grid !important;grid-template-columns:5% 65% 20% 10% !important;background:#e8eaf0;border:1pt solid #8B1538;border-bottom:1.5pt solid #8B1538;font-weight:700;font-size:9pt;color:#1E2434;padding:2.5mm 0;page-break-after:avoid;margin:0;';
-            header.innerHTML = '<div style="padding:2mm;text-align:center;border-right:0.5pt solid #cbd5e1">Code</div><div style="padding:2mm 2mm 2mm 3mm;border-right:0.5pt solid #cbd5e1">Prüfpunkt</div><div style="padding:2mm;border-right:0.5pt solid #cbd5e1">Bemerkung</div><div style="padding:2mm;text-align:center">OK</div>';
+            header.style.cssText = 'display:grid !important;grid-template-columns:8% 62% 20% 10% !important;background:#e8eaf0;border-bottom:1.5pt solid #8B1538;font-weight:700;font-size:9pt;color:#1E2434;padding:2.5mm 0;page-break-after:avoid;margin:0;';
+            header.innerHTML = '<div style="padding:2mm;text-align:center;border-right:0.5pt solid #cbd5e1;display:flex;align-items:center;justify-content:center;">Code</div><div style="padding:2mm 2mm 2mm 3mm;border-right:0.5pt solid #cbd5e1;display:flex;align-items:center;">Prüfpunkt</div><div style="padding:2mm;border-right:0.5pt solid #cbd5e1;display:flex;align-items:center;">Bemerkung</div><div style="padding:2mm;text-align:center;display:flex;align-items:center;justify-content:center;">OK</div>';
             list.insertBefore(header, list.firstChild);
           }
         });
