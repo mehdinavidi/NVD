@@ -2,20 +2,33 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; URL=Apps-Hub.html">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Weiterleitung...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Weiterleitung …</title>
+  <meta http-equiv="refresh" content="0; url=./Apps-Hub.html">
   <script>
-    // Fallback: Falls Meta-Redirect blockiert ist
-    setTimeout(() => {
-      window.location.href = "Apps-Hub.html";
-    }, 100);
+    // Fallback & pfadsicher (respektiert /<repo>/ Unterpfade)
+    (function () {
+      var base = location.pathname.endsWith('/') 
+        ? location.pathname 
+        : location.pathname.replace(/[^/]+$/, '');
+      // 👉 Ziel anpassen, falls dein Dateiname anders lautet
+      var target = 'Apps-Hub.html'; 
+      location.replace(base + target);
+    })();
   </script>
+  <noscript>
+    <meta http-equiv="refresh" content="0; url=Apps-Hub.html">
+  </noscript>
+  <style>
+    body{font-family:system-ui,-apple-system,Arial,sans-serif;background:#F8F9FB;color:#1E2434;
+         display:flex;align-items:center;justify-content:center;height:100vh;margin:0}
+    a{color:#8B1538}
+  </style>
 </head>
-<body style="font-family: Arial, sans-serif; background:#f8f9fb; color:#1E2434; display:flex; align-items:center; justify-content:center; height:100vh; text-align:center;">
+<body>
   <div>
-    <h2>Weiterleitung...</h2>
-    <p>Falls Sie nicht automatisch weitergeleitet werden, <a href="Apps-Hub.html">klicken Sie hier</a>.</p>
+    <h2>Weiterleitung …</h2>
+    <p>Falls nichts passiert, <a href="./Apps-Hub.html">hier klicken</a>.</p>
   </div>
 </body>
 </html>
