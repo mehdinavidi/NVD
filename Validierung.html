@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – v4.1 Enhanced</title>
+  <title>CL Validierungsprotokoll – v4.2 Professional</title>
   <style>
     :root{
       --primary:#8B1538; --bg:#F8F9FB; --text:#1E2434; --card:#ffffff; --muted:#e9edf3;
@@ -74,6 +74,58 @@ header .version{opacity:.9;font-size:12px}
 .btn.icon{padding:6px 8px;border-radius:8px}
 .btn.switch{justify-content:space-between}
 
+
+/* Kompaktere Kopfdaten */
+.doc-header {
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.doc-header h2 {
+  font-size: 1.3rem;
+  margin-bottom: 0.8rem;
+}
+
+.info-grid {
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.info-field {
+  margin-bottom: 0;
+}
+
+.info-field label {
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.info-field input,
+.info-field textarea {
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+}
+
+
+/* Optimiertes Grid für Kopfdaten */
+@media screen {
+  .grid {
+    gap: 0.8rem;
+  }
+  
+  .col-4 {
+    grid-column: span 4;
+  }
+  
+  .col-6 {
+    grid-column: span 6;
+  }
+  
+  .col-12 {
+    grid-column: span 12;
+  }
+}
+
 /* Sections */
 .section{padding:18px 20px;border-top:1px solid var(--muted)}
 .section.collapsible .section-body{transition:max-height .25s ease}
@@ -103,13 +155,46 @@ textarea{min-height:80px;resize:vertical}
 .check .tiny{width:60px;height:28px;padding:4px 6px;font-size:12px;text-align:center}
 .check .info-btn{width:26px;height:26px;display:grid;place-items:center;border:1px solid #cbd5e1;border-radius:50%;cursor:pointer;background:#fff;font-weight:700;color:#334155;line-height:1}
 .check .info-btn:before{content:'i'}
-.check .label-input{
-  flex:1; min-width:140px; padding:6px 8px; border:1px solid #d1d5db; border-radius:8px; background:#fff; font:inherit; outline:none;
+/* Mehrzeilige Check-Felder */
+.check .label-input {
+  flex: 1;
+  min-width: 140px;
+  padding: 6px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+  outline: none;
+  resize: vertical;
+  min-height: 32px;
+  line-height: 1.4;
 }
 .check .label-input:focus{border-color:var(--primary); box-shadow:0 0 0 3px rgba(139,21,56,.10)}
-.check .note{min-width:200px;max-width:260px;font-size:12px;padding:6px 8px;height:28px}
+.check .note{
+  min-width:200px;
+  max-width:260px;
+  font-size:12px;
+  padding:6px 8px;
+  min-height:28px;
+  resize:vertical;
+  line-height:1.4;
+  border:1px solid #d1d5db;
+  border-radius:8px;
+  font-family:inherit;
+}
 .check .manage{display:flex;gap:6px}
 .check .del{margin-left:4px}
+
+.check textarea {
+  font-family: inherit;
+  outline: none;
+}
+
+.check textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(139,21,56,0.10);
+}
+
 .check input[type="checkbox"]{width:18px;height:18px;margin-left:auto}
 
 /* Inline Checkbox */
@@ -361,6 +446,16 @@ textarea{min-height:80px;resize:vertical}
 
 /* PROFESSIONELLE PRINT-STYLES FÜR PDF */
 @media print {
+    /* Textareas im Druck */
+    textarea.label-input,
+    textarea.note {
+      min-height: auto !important;
+      overflow: hidden;
+      resize: none;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
   @page {
     size: A4 portrait;
     margin: 25mm 20mm 30mm 20mm;
@@ -749,7 +844,18 @@ textarea{min-height:80px;resize:vertical}
     background: #f8fafc;
   }
 
-  .check input[type="checkbox"] {
+  
+.check textarea {
+  font-family: inherit;
+  outline: none;
+}
+
+.check textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(139,21,56,0.10);
+}
+
+.check input[type="checkbox"] {
     width: 14px;
     height: 14px;
     margin-left: auto;
@@ -944,6 +1050,146 @@ textarea{min-height:80px;resize:vertical}
 .image-preview-item .edit-btn{position:absolute;top:4px;left:4px;background:#3b82f6;color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:12px;line-height:1;display:flex;align-items:center;justify-content:center}
 .image-preview-item .edit-btn:hover{background:#2563eb}
 
+/* PRINT: Kompakte Kopfdaten */
+@media print {
+header {
+padding: 8pt 12pt;
+margin-bottom: 4mm;
+}
+
+```
+header .title {
+  font-size: 16pt;
+  margin-bottom: 2pt;
+}
+
+.doc-header {
+  padding: 8pt 12pt;
+  margin-bottom: 4mm;
+}
+
+.doc-header h2 {
+  font-size: 13pt;
+  margin-bottom: 6pt;
+}
+
+.grid {
+  gap: 6pt;
+}
+
+.info-field {
+  margin-bottom: 4pt;
+}
+
+.info-field label {
+  font-size: 7.5pt;
+  margin-bottom: 1pt;
+  font-weight: 600;
+}
+
+.info-field input,
+.info-field textarea {
+  font-size: 9pt;
+  padding: 2pt 4pt;
+  border: 0.5pt solid #cbd5e1;
+}
+
+/* Kompaktere Gruppen */
+.group {
+  margin: 6pt 0;
+  page-break-inside: avoid;
+}
+
+.group-header {
+  padding: 6pt 10pt;
+  min-height: auto;
+}
+
+.group-title-input {
+  font-size: 12pt;
+  padding: 4pt 8pt;
+}
+
+/* Kompaktere Abschnitte */
+.section {
+  padding: 8pt 10pt;
+  margin: 4pt 0;
+}
+
+.section-header {
+  padding: 6pt 10pt;
+  margin: -8pt -10pt 8pt -10pt;
+}
+
+.section-header input {
+  font-size: 11pt;
+}
+
+/* Kompaktere Checklisten */
+.check {
+  padding: 4pt 6pt;
+  min-height: auto;
+  gap: 6pt;
+}
+
+.check .tiny {
+  width: 50px;
+  font-size: 8pt;
+  padding: 2pt 4pt;
+}
+
+.check .label-input {
+  font-size: 8.5pt;
+  padding: 3pt 6pt;
+  line-height: 1.3;
+}
+
+.check .note {
+  font-size: 8pt;
+  padding: 3pt 6pt;
+}
+```
+
+.check textarea {
+font-family: inherit;
+outline: none;
+}
+
+.check textarea:focus {
+border-color: var(–primary);
+box-shadow: 0 0 0 3px rgba(139,21,56,0.10);
+}
+
+.check input[type=“checkbox”] {
+width: 14px;
+height: 14px;
+}
+
+```
+/* Bessere Abstände */
+.spacing-section {
+  margin: 2pt 0;
+}
+
+.text-section {
+  padding: 8pt;
+  margin: 4pt 0;
+}
+
+.text-editor-content {
+  font-size: 9pt;
+  line-height: 1.4;
+  padding: 6pt;
+}
+
+.image-section {
+  padding: 8pt;
+  margin: 4pt 0;
+}
+```
+
+}
+
   </style>
 </head>
 <body>
@@ -953,6 +1199,9 @@ textarea{min-height:80px;resize:vertical}
       <span></span><span></span><span></span>
     </button>
     <div class="hamburger-menu" id="hamburgerMenu">
+        <button class="btn" onclick="window.location.href='index.html'" style="background:#10b981;color:#fff">
+          <span>🏠 Home</span>
+        </button>
       <button class="btn" id="btnNewGroup">➕ Neue Gruppe</button>
       <button class="btn" id="btnNewSectionMenu">📝 Neuer Abschnitt</button>
       <button class="btn switch" id="btnPageBreaks">
@@ -1641,8 +1890,18 @@ textarea{min-height:80px;resize:vertical}
         var delRowBtn = rowDiv.querySelector('.del');
 
         codeInput.oninput = function(){ row.code = codeInput.value; sync(); };
-        labelInput.oninput = function(){ row.text = labelInput.value; sync(); };
-        noteInput.oninput = function(){ row.note = noteInput.value; sync(); };
+        labelInput.oninput = function(){ 
+          row.text = labelInput.value; 
+          this.style.height = 'auto';
+          this.style.height = this.scrollHeight + 'px';
+          sync(); 
+        };
+        noteInput.oninput = function(){ 
+          row.note = noteInput.value;
+          this.style.height = 'auto';
+          this.style.height = this.scrollHeight + 'px';
+          sync(); 
+        };
         checkbox.onchange = function(){ row.ok = checkbox.checked; sync(); };
 
         // FIXED: Delete Button
@@ -2108,6 +2367,21 @@ textarea{min-height:80px;resize:vertical}
       window.addEventListener('DOMContentLoaded', initAll);
     } else {
       initAll();
+    }
+
+    
+    // Auto-resize textareas in checklists
+    function setupTextareaAutoResize(container) {
+      var textareas = container.querySelectorAll('textarea.label-input, textarea.note');
+      textareas.forEach(function(ta) {
+        ta.style.height = 'auto';
+        ta.style.height = (ta.scrollHeight) + 'px';
+        
+        ta.addEventListener('input', function() {
+          this.style.height = 'auto';
+          this.style.height = (this.scrollHeight) + 'px';
+        });
+      });
     }
 
     // ===== v4.1 ENHANCEMENTS =====
