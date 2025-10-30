@@ -2647,6 +2647,17 @@
       pdf.setFontSize(9);
       y += 6;
       
+      // Abzüge Sub-Header (wie Verpflegungsmehraufwand)
+      pdf.setFontSize(8);
+      pdf.setFillColor(248, 248, 248);
+      pdf.rect(col1, y, colEnd - col1, 6, 'FD');
+      pdf.setFont(undefined, 'bold');
+      pdf.text('Anzahl Inland', col1 + 30, y + 4);
+      pdf.text('Anzahl Ausland', col1 + 90, y + 4);
+      pdf.text('Brutto', colEnd - 15, y + 4);
+      pdf.setFont(undefined, 'normal');
+      y += 6;
+      
       // Abzüge Details
       const frueh_inland = parseNumber(document.getElementById('fruehstueck_inland').value);
       const frueh_ausland = parseNumber(document.getElementById('fruehstueck_ausland').value);
@@ -2655,29 +2666,33 @@
       const mittag_ausland = parseNumber(document.getElementById('mittag_ausland').value);
       const mittag_ausland_rate = parseNumber(document.getElementById('mittag_ausland_rate').value);
       
+      // Frühstück
+      pdf.setFontSize(9);
+      const frueh_sum = (frueh_inland * 5.60) + (frueh_ausland * frueh_ausland_rate);
       pdf.setFillColor(252, 252, 252);
-      pdf.rect(col1, y, colEnd - col1, 13, 'FD');
-      pdf.text('Frühstück Inland (Anzahl):', col1 + 3, y + 4);
-      pdf.text(`${frueh_inland} × 5,60 €`, col1 + 55, y + 4);
-      pdf.text('Frühstück Ausland (Anzahl):', col1 + 3, y + 9);
-      pdf.text(`${frueh_ausland}`, col1 + 55, y + 9);
-      pdf.text('Pauschale:', col1 + 70, y + 9);
-      pdf.text(`${frueh_ausland_rate.toFixed(0)} €`, col1 + 87, y + 9);
-      y += 13;
+      pdf.rect(col1, y, colEnd - col1, 6, 'FD');
+      pdf.text('Frühstück', col1 + 3, y + 4);
+      pdf.text(`${frueh_inland} × 5,60 €`, col1 + 30, y + 4);
+      pdf.text(`${frueh_ausland} × ${frueh_ausland_rate.toFixed(2)} €`, col1 + 90, y + 4);
+      pdf.setFont(undefined, 'bold');
+      pdf.text(formatEuro(frueh_sum), colEnd - 5, y + 4, { align: 'right' });
+      pdf.setFont(undefined, 'normal');
+      y += 6;
       
+      // Mittag/Abend
+      const mittag_sum = (mittag_inland * 11.20) + (mittag_ausland * mittag_ausland_rate);
       pdf.setFillColor(252, 252, 252);
-      pdf.rect(col1, y, colEnd - col1, 13, 'FD');
-      pdf.text('Mittag/Abend Inland (Anzahl):', col1 + 3, y + 4);
-      pdf.text(`${mittag_inland} × 11,20 €`, col1 + 55, y + 4);
-      pdf.text('Mittag/Abend Ausland (Anzahl):', col1 + 3, y + 9);
-      pdf.text(`${mittag_ausland}`, col1 + 55, y + 9);
-      pdf.text('Pauschale:', col1 + 70, y + 9);
-      pdf.text(`${mittag_ausland_rate.toFixed(0)} €`, col1 + 87, y + 9);
-      y += 13;
+      pdf.rect(col1, y, colEnd - col1, 6, 'FD');
+      pdf.text('Mittag/Abend', col1 + 3, y + 4);
+      pdf.text(`${mittag_inland} × 11,20 €`, col1 + 30, y + 4);
+      pdf.text(`${mittag_ausland} × ${mittag_ausland_rate.toFixed(2)} €`, col1 + 90, y + 4);
+      pdf.setFont(undefined, 'bold');
+      pdf.text(formatEuro(mittag_sum), colEnd - 5, y + 4, { align: 'right' });
+      pdf.setFont(undefined, 'normal');
+      y += 6;
       
       // Abzüge gesamt
-      const abzuege = (frueh_inland * 5.60) + (frueh_ausland * frueh_ausland_rate) + 
-                      (mittag_inland * 11.20) + (mittag_ausland * mittag_ausland_rate);
+      const abzuege = frueh_sum + mittag_sum;
       pdf.setFillColor(245, 245, 245);
       pdf.rect(col1, y, colEnd - col1, 6, 'FD');
       pdf.setFont(undefined, 'bold');
