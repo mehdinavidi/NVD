@@ -3,33 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Weiterleitung …</title>
-
-  <!-- Sofort-Redirect -->
-  <meta http-equiv="refresh" content="0; url=./Apps-Hub.html">
-
-  <!-- Robuster Fallback (respektiert /NVD/ Unterpfad) -->
-  <script>
-    (function () {
-      var target = "Apps-Hub.html"; // exakt schreiben!
-      var base = location.pathname.endsWith("/")
-        ? location.pathname
-        : location.pathname.replace(/[^/]+$/, "/");
-      location.replace(base + target);
-    })();
-  </script>
-
-  <noscript><meta http-equiv="refresh" content="0; url=Apps-Hub.html"></noscript>
+  <title>NVD – Startseite</title>
   <style>
-    body{font-family:system-ui,-apple-system,Arial,sans-serif;background:#F8F9FB;color:#1E2434;
-         display:flex;align-items:center;justify-content:center;height:100vh;margin:0}
-    a{color:#8B1538}
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+      background: #F8F9FB;
+      color: #1E2434;
+      margin: 0;
+      padding: 40px;
+      text-align: center;
+    }
+    h1 {
+      color: #8B1538;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 1.1rem;
+      color: #444;
+    }
+    .links {
+      margin-top: 40px;
+    }
+    a {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      background: #8B1538;
+      color: white;
+      transition: 0.2s;
+    }
+    a:hover {
+      background: #a81a42;
+    }
   </style>
 </head>
 <body>
-  <div>
-    <h2>Weiterleitung …</h2>
-    <p>Falls nichts passiert, <a href="./Apps-Hub.html">hier klicken</a>.</p>
+  <h1>Willkommen bei NVD</h1>
+  <p>Dies ist die Startseite deines Projekts.</p>
+
+  <div class="links">
+    <a href="Apps-Hub.html">Apps-Hub</a>
+    <a href="Reisekosten.html">Reisekosten</a>
+    <a href="Tätigkeitsbericht.html">Tätigkeitsbericht</a>
+    <a href="Validierung.html">Validierung</a>
   </div>
+
+  <p style="margin-top:60px;font-size:0.9rem;color:#777;">
+    © 2025 NVD – GitHub Pages Demo
+  </p>
 </body>
 </html>
