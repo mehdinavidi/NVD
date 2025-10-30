@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – v4.0 Professional</title>
+  <title>CL Validierungsprotokoll – v4.1 Enhanced</title>
   <style>
     :root{
       --primary:#8B1538; --bg:#F8F9FB; --text:#1E2434; --card:#ffffff; --muted:#e9edf3;
@@ -1012,6 +1012,29 @@ textarea{min-height:80px;resize:vertical}
   }
 ```
 
+/* Enhanced Text Editor v4.1 */
+.text-editor-toolbar select{padding:4px 8px;border:1px solid #d1d5db;border-radius:6px;background:#fff;cursor:pointer;font-size:13px;margin-right:4px}
+.text-editor-toolbar input[type=“color”]{width:40px;height:28px;border:1px solid #d1d5db;border-radius:6px;cursor:pointer;padding:2px}
+.text-editor-toolbar .divider{width:1px;background:#d1d5db;margin:0 6px;align-self:stretch}
+
+/* Image Edit Modal v4.1 */
+.image-edit-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+.image-edit-modal.active{display:flex}
+.image-edit-container{background:#fff;border-radius:16px;padding:24px;max-width:95%;max-height:95%;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.image-edit-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:3px solid #e5e7eb}
+.image-edit-header h3{margin:0;color:var(–primary);font-size:22px;font-weight:700}
+.image-edit-close{background:#ef4444;color:#fff;border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:20px;font-weight:bold;transition:all 0.2s}
+.image-edit-close:hover{background:#dc2626;transform:scale(1.1)}
+.image-edit-canvas-container{text-align:center;margin:20px 0;background:#f8f9fb;padding:16px;border-radius:8px}
+.image-edit-canvas{max-width:100%;max-height:60vh;border:3px solid #e5e7eb;border-radius:8px;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,0.1)}
+.image-edit-controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px;padding-top:20px;border-top:2px solid #e5e7eb}
+.image-edit-controls button{padding:12px 20px;border:none;border-radius:10px;background:var(–primary);color:#fff;cursor:pointer;font-weight:700;display:flex;align-items:center;gap:8px;font-size:14px;transition:all 0.2s;box-shadow:0 2px 8px rgba(139,21,56,0.2)}
+.image-edit-controls button:hover{background:#a91d47;transform:translateY(-2px);box-shadow:0 4px 12px rgba(139,21,56,0.3)}
+.image-edit-controls button.secondary{background:#6b7280;box-shadow:0 2px 8px rgba(107,114,128,0.2)}
+.image-edit-controls button.secondary:hover{background:#4b5563}
+.image-preview-item .edit-btn{position:absolute;top:4px;left:4px;background:#3b82f6;color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:12px;line-height:1;display:flex;align-items:center;justify-content:center}
+.image-preview-item .edit-btn:hover{background:#2563eb}
+
   </style>
 </head>
 <body>
@@ -1860,6 +1883,9 @@ textarea{min-height:80px;resize:vertical}
         </div>
       `;
       
+      // v4.1: Add enhanced editor features
+      setTimeout(function() { createEnhancedTextEditor(body, section); }, 10);
+      
       var editor = body.querySelector('.text-editor-content');
       var toolbar = body.querySelector('.text-editor-toolbar');
       
@@ -1958,8 +1984,18 @@ textarea{min-height:80px;resize:vertical}
         item.className = 'image-preview-item';
         item.innerHTML = `
           <img src="${src}" />
+          <button class="edit-btn">✏️</button>
           <button class="delete-btn">✕</button>
         `;
+        
+        // v4.1: Add edit button functionality
+        var editImgBtn = item.querySelector('.edit-btn');
+        editImgBtn.onclick = function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          openImageEditor(section, imgIdx);
+        };
+        
         var delImgBtn = item.querySelector('.delete-btn');
         delImgBtn.onclick = function(e){
           e.preventDefault();
@@ -2172,7 +2208,235 @@ textarea{min-height:80px;resize:vertical}
     } else {
       initAll();
     }
-  </script>
+  
+
+    // ===== v4.1 ENHANCEMENTS =====
+    // Enhanced Text Editor Functions (v4.1)
+function createEnhancedTextEditor(container, section) {
+  const toolbar = container.querySelector('.text-editor-toolbar');
+  
+  // Add font size dropdown
+  const fontSizeSelect = document.createElement('select');
+  fontSizeSelect.innerHTML = `
+    <option value="1">Klein</option>
+    <option value="3" selected>Normal</option>
+    <option value="5">Groß</option>
+    <option value="7">Sehr Groß</option>
+  `;
+  fontSizeSelect.onchange = function() {
+    document.execCommand('fontSize', false, fontSizeSelect.value);
+  };
+  
+  // Add text color picker
+  const colorInput = document.createElement('input');
+  colorInput.type = 'color';
+  colorInput.value = '#000000';
+  colorInput.title = 'Textfarbe';
+  colorInput.onchange = function() {
+    document.execCommand('foreColor', false, colorInput.value);
+  };
+  
+  // Add alignment buttons
+  const alignLeft = document.createElement('button');
+  alignLeft.innerHTML = '⬅️';
+  alignLeft.title = 'Linksbündig';
+  alignLeft.onclick = function() { document.execCommand('justifyLeft'); };
+  
+  const alignCenter = document.createElement('button');
+  alignCenter.innerHTML = '↔️';
+  alignCenter.title = 'Zentriert';
+  alignCenter.onclick = function() { document.execCommand('justifyCenter'); };
+  
+  const alignRight = document.createElement('button');
+  alignRight.innerHTML = '➡️';
+  alignRight.title = 'Rechtsbündig';
+  alignRight.onclick = function() { document.execCommand('justifyRight'); };
+  
+  // Add list buttons
+  const bulletList = document.createElement('button');
+  bulletList.innerHTML = '• Liste';
+  bulletList.onclick = function() { document.execCommand('insertUnorderedList'); };
+  
+  const numberList = document.createElement('button');
+  numberList.innerHTML = '1. Liste';
+  numberList.onclick = function() { document.execCommand('insertOrderedList'); };
+  
+  // Add dividers for visual separation
+  const divider1 = document.createElement('span');
+  divider1.className = 'divider';
+  const divider2 = document.createElement('span');
+  divider2.className = 'divider';
+  const divider3 = document.createElement('span');
+  divider3.className = 'divider';
+  
+  // Insert new elements after existing buttons
+  const existingButtons = toolbar.querySelectorAll('button');
+  if (existingButtons.length >= 3) {
+    existingButtons[2].after(divider1, fontSizeSelect, colorInput, divider2, alignLeft, alignCenter, alignRight, divider3, bulletList, numberList);
+  }
+}
+
+// Image Editing Functions (v4.1)
+let imageEditModal = null;
+let currentEditingImage = null;
+let currentEditingSection = null;
+let currentEditingIndex = null;
+let editCanvas = null;
+let editCtx = null;
+let originalImage = null;
+
+function initImageEditModal() {
+  if (imageEditModal) return;
+  
+  imageEditModal = document.createElement('div');
+  imageEditModal.className = 'image-edit-modal';
+  imageEditModal.innerHTML = `
+    <div class="image-edit-container">
+      <div class="image-edit-header">
+        <h3>🖼️ Bild bearbeiten</h3>
+        <button class="image-edit-close">✕</button>
+      </div>
+      <div class="image-edit-canvas-container">
+        <canvas class="image-edit-canvas"></canvas>
+      </div>
+      <div class="image-edit-controls">
+        <button onclick="rotateImage(-90)">↺ Links drehen</button>
+        <button onclick="rotateImage(90)">↻ Rechts drehen</button>
+        <button onclick="flipImage('horizontal')">↔ Horizontal spiegeln</button>
+        <button onclick="flipImage('vertical')">↕ Vertical spiegeln</button>
+        <button class="secondary" onclick="resetImage()">🔄 Zurücksetzen</button>
+        <button onclick="saveEditedImage()">💾 Speichern</button>
+        <button class="secondary" onclick="closeImageEditor()">✕ Abbrechen</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(imageEditModal);
+  editCanvas = imageEditModal.querySelector('.image-edit-canvas');
+  editCtx = editCanvas.getContext('2d');
+  
+  imageEditModal.querySelector('.image-edit-close').onclick = closeImageEditor;
+  imageEditModal.onclick = function(e) {
+    if (e.target === imageEditModal) closeImageEditor();
+  };
+}
+
+window.rotateImage = function(degrees) {
+  if (!currentEditingImage) return;
+  
+  const img = new Image();
+  img.onload = function() {
+    const radians = degrees * Math.PI / 180;
+    const cos = Math.abs(Math.cos(radians));
+    const sin = Math.abs(Math.sin(radians));
+    
+    const newWidth = img.height * sin + img.width * cos;
+    const newHeight = img.height * cos + img.width * sin;
+    
+    editCanvas.width = newWidth;
+    editCanvas.height = newHeight;
+    
+    editCtx.translate(newWidth / 2, newHeight / 2);
+    editCtx.rotate(radians);
+    editCtx.drawImage(img, -img.width / 2, -img.height / 2);
+    editCtx.setTransform(1, 0, 0, 1, 0, 0);
+    
+    currentEditingImage = editCanvas.toDataURL('image/png');
+  };
+  img.src = currentEditingImage;
+};
+
+window.flipImage = function(direction) {
+  if (!currentEditingImage) return;
+  
+  const img = new Image();
+  img.onload = function() {
+    editCanvas.width = img.width;
+    editCanvas.height = img.height;
+    
+    editCtx.save();
+    if (direction === 'horizontal') {
+      editCtx.scale(-1, 1);
+      editCtx.drawImage(img, -img.width, 0);
+    } else {
+      editCtx.scale(1, -1);
+      editCtx.drawImage(img, 0, -img.height);
+    }
+    editCtx.restore();
+    
+    currentEditingImage = editCanvas.toDataURL('image/png');
+  };
+  img.src = currentEditingImage;
+};
+
+window.resetImage = function() {
+  if (!originalImage) return;
+  currentEditingImage = originalImage;
+  const img = new Image();
+  img.onload = function() {
+    editCanvas.width = img.width;
+    editCanvas.height = img.height;
+    editCtx.drawImage(img, 0, 0);
+  };
+  img.src = originalImage;
+};
+
+window.saveEditedImage = function() {
+  if (!currentEditingSection || currentEditingIndex === null) return;
+  currentEditingSection.images[currentEditingIndex] = currentEditingImage;
+  closeImageEditor();
+  drawGroups();
+  sync();
+};
+
+window.closeImageEditor = function() {
+  if (imageEditModal) {
+    imageEditModal.classList.remove('active');
+  }
+  currentEditingImage = null;
+  currentEditingSection = null;
+  currentEditingIndex = null;
+  originalImage = null;
+};
+
+window.openImageEditor = function(section, imgIndex) {
+  initImageEditModal();
+  
+  currentEditingSection = section;
+  currentEditingIndex = imgIndex;
+  originalImage = section.images[imgIndex];
+  currentEditingImage = originalImage;
+  
+  const img = new Image();
+  img.onload = function() {
+    // Resize for editing (max 1200px)
+    let width = img.width;
+    let height = img.height;
+    const maxSize = 1200;
+    
+    if (width > maxSize || height > maxSize) {
+      if (width > height) {
+        height = (height / width) * maxSize;
+        width = maxSize;
+      } else {
+        width = (width / height) * maxSize;
+        height = maxSize;
+      }
+    }
+    
+    editCanvas.width = width;
+    editCanvas.height = height;
+    editCtx.drawImage(img, 0, 0, width, height);
+    currentEditingImage = editCanvas.toDataURL('image/png');
+  };
+  img.src = originalImage;
+  
+  imageEditModal.classList.add('active');
+};
+
+
+
+</script>
 
 </body>
 </html>
