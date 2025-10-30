@@ -68,7 +68,7 @@ header .version{opacity:.9;font-size:12px}
 
 .btn{appearance:none;border:0;border-radius:12px;padding:10px 14px;font-weight:700;background:#ffffff;color:var(--primary);cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.06);display:flex;align-items:center;gap:8px}
 .btn:hover{transform:translateY(-1px);box-shadow:0 5px 15px rgba(0,0,0,.1)}
-.btn.outline{background:transparent;border:2px solid #fff;color:#fff}
+.btn
 .btn.danger{background:var(--err);color:#fff}
 .btn.secondary{background:#1e293b;color:#fff}
 .btn.icon{padding:6px 8px;border-radius:8px}
@@ -89,7 +89,7 @@ header .version{opacity:.9;font-size:12px}
 .section-header .title-wrap{display:flex;align-items:center;gap:8px}
 
 .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
-.col-3{grid-column:span 3} .col-4{grid-column:span 4} .col-6{grid-column:span 6} .col-8{grid-column:span 8} .col-12{grid-column:span 12}
+ .col-4{grid-column:span 4} .col-6{grid-column:span 6}  .col-12{grid-column:span 12}
 
 label{display:block;font-size:12px;margin-bottom:6px;color:#334155;font-weight:600}
 input[type="text"],input[type="date"],input[type="number"],textarea,select{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:10px;background:#fff;outline:none;font-family:inherit}
@@ -364,7 +364,7 @@ textarea{min-height:80px;resize:vertical}
   @page {
     size: A4 portrait;
     margin: 25mm 20mm 30mm 20mm;
-    
+
     @top-left {
       content: "Validierungsprotokoll";
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
@@ -372,21 +372,21 @@ textarea{min-height:80px;resize:vertical}
       color: #64748b;
       font-weight: 600;
     }
-    
+
     @top-right {
       content: "Erstellt: 29.10.2025";
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       font-size: 8pt;
       color: #64748b;
     }
-    
+
     @bottom-left {
       content: "© CL Validierung • Vertraulich";
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       font-size: 8pt;
       color: #94a3b8;
     }
-    
+
     @bottom-center {
       content: "Seite " counter(page) " von " counter(pages);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
@@ -394,7 +394,7 @@ textarea{min-height:80px;resize:vertical}
       color: #64748b;
       font-weight: 600;
     }
-    
+
     @bottom-right {
       content: "DOK-ID: VAL-2025-001";
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
@@ -403,13 +403,13 @@ textarea{min-height:80px;resize:vertical}
       font-style: italic;
     }
   }
-  
+
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;
   }
-  
+
   body {
     background: #ffffff !important;
     padding: 0;
@@ -417,20 +417,20 @@ textarea{min-height:80px;resize:vertical}
     font-size: 10pt;
     line-height: 1.4;
   }
-  
+
   .container {
     max-width: 100%;
     padding: 0;
     margin: 0;
   }
-  
+
   .sheet {
     box-shadow: none;
     border-radius: 0;
     background: #ffffff;
     page-break-after: auto;
   }
-  
+
   /* Verstecke UI-Elemente */
   .hamburger-container,
   .hamburger-menu,
@@ -452,19 +452,18 @@ textarea{min-height:80px;resize:vertical}
   .info-btn {
     display: none !important;
   }
-  
+
   /* Deaktivierte Gruppen ausblenden */
   .group.disabled {
     display: none !important;
   }
-  
+
   /* Immer ausgeklappt */
   .group.collapsed .group-content,
   .section.collapsed .section-body {
     display: block !important;
   }
-  
-  
+
   /* PROFESSIONELLER HEADER */
   header {
     background: linear-gradient(135deg, #8B1538 0%, #6d1129 100%);
@@ -476,26 +475,11 @@ textarea{min-height:80px;resize:vertical}
     position: relative;
     box-shadow: 0 4px 12px rgba(139, 21, 56, 0.15);
   }
-  
-  header .logo-area {
-    width: 60px;
-    height: 60px;
-    background: rgba(255, 255, 255, 0.15);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    float: left;
-    margin-right: 16px;
-    font-size: 24pt;
-    font-weight: 700;
-  }
-  
-  header .header-content {
-    overflow: hidden;
-  }
-  
+
+  header
+
+  header
+
   header .title {
     font-size: 20pt;
     font-weight: 700;
@@ -503,14 +487,9 @@ textarea{min-height:80px;resize:vertical}
     letter-spacing: -0.3px;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  
-  header .subtitle {
-    font-size: 10pt;
-    opacity: 0.9;
-    font-weight: 400;
-    margin-bottom: 6px;
-  }
-  
+
+  header
+
   header .version {
     font-size: 8.5pt;
     opacity: 0.85;
@@ -521,83 +500,30 @@ textarea{min-height:80px;resize:vertical}
     font-weight: 600;
     letter-spacing: 0.3px;
   }
-  
-  header .doc-meta {
-    position: absolute;
-    top: 18px;
-    right: 24px;
-    text-align: right;
-    font-size: 8.5pt;
-    opacity: 0.9;
-    line-height: 1.6;
-  }
-  
+
+  header
+
   header .doc-meta strong {
     font-weight: 700;
     font-size: 9pt;
   }
-  
-  
+
   /* PROFESSIONELLE DOKUMENTEN-INFO-BOX */
-  .doc-info-box {
-    border: 2pt solid #8B1538;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
-    padding: 16px 20px;
-    margin: 10mm 0;
-    page-break-inside: avoid;
-    box-shadow: 0 2px 8px rgba(139, 21, 56, 0.1);
-  }
-  
-  .doc-info-box .doc-info-header {
-    font-size: 11pt;
-    font-weight: 700;
-    color: #8B1538;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 1.5pt solid #f1f5f9;
-    letter-spacing: 0.3px;
-  }
-  
-  .doc-info-box .doc-info-grid {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 8px 16px;
-    font-size: 9.5pt;
-    line-height: 1.6;
-  }
-  
-  .doc-info-box .doc-info-label {
-    font-weight: 700;
-    color: #475569;
-  }
-  
-  .doc-info-box .doc-info-value {
-    color: #1e293b;
-    font-family: 'Courier New', Courier, monospace;
-  }
-  
-  .doc-info-box .doc-status {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 8.5pt;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-  }
-  
-  .doc-info-box .doc-status.validated {
-    background: #d1fae5;
-    color: #065f46;
-    border: 1pt solid #10b981;
-  }
-  
-  .doc-info-box .doc-status.draft {
-    background: #fef3c7;
-    color: #92400e;
-    border: 1pt solid #f59e0b;
-  }
-  
+
+  .doc-info-box
+
+  .doc-info-box
+
+  .doc-info-box
+
+  .doc-info-box
+
+  .doc-info-box
+
+  .doc-info-box .doc-status
+
+  .doc-info-box .doc-status
+
   /* PROFESSIONELLE UNTERSCHRIFTEN-FELDER */
   .sig-area {
     border: 1.5pt solid #cbd5e1;
@@ -609,7 +535,7 @@ textarea{min-height:80px;resize:vertical}
     position: relative;
     margin-top: 12px;
   }
-  
+
   .sig-area::before {
     content: '';
     position: absolute;
@@ -618,27 +544,11 @@ textarea{min-height:80px;resize:vertical}
     right: 12px;
     border-bottom: 1.5pt solid #64748b;
   }
-  
-  .sig-area .sig-label {
-    position: absolute;
-    bottom: 8px;
-    left: 12px;
-    font-size: 7.5pt;
-    color: #64748b;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  
-  .sig-area .sig-date {
-    position: absolute;
-    bottom: 8px;
-    right: 12px;
-    font-size: 7.5pt;
-    color: #64748b;
-    font-style: italic;
-  }
-  
+
+  .sig-area
+
+  .sig-area
+
   .sig-area textarea {
     border: none;
     background: transparent;
@@ -647,7 +557,7 @@ textarea{min-height:80px;resize:vertical}
     padding: 4px;
     margin-bottom: 25px;
   }
-  
+
   /* PROFESSIONELLE TABELLEN */
   table {
     width: 100%;
@@ -656,28 +566,28 @@ textarea{min-height:80px;resize:vertical}
     margin: 6mm 0;
     font-size: 9pt;
   }
-  
+
   thead {
     display: table-header-group;
     background: #f1f5f9;
   }
-  
+
   thead tr {
     page-break-after: avoid;
   }
-  
+
   tbody tr {
     page-break-inside: avoid;
     page-break-after: auto;
   }
-  
+
   th, td {
     border: 1pt solid #cbd5e1;
     padding: 6px 10px;
     text-align: left;
     vertical-align: top;
   }
-  
+
   th {
     font-weight: 700;
     color: #1e293b;
@@ -685,16 +595,15 @@ textarea{min-height:80px;resize:vertical}
     font-size: 9.5pt;
     letter-spacing: 0.3px;
   }
-  
+
   tbody tr:nth-child(even) {
     background: #f9fafb;
   }
-  
+
   tbody tr:nth-child(odd) {
     background: #ffffff;
   }
-  
-  
+
   /* PROFESSIONELLE GRUPPEN */
   .group {
     border: 1.5pt solid #cbd5e1;
@@ -704,15 +613,15 @@ textarea{min-height:80px;resize:vertical}
     page-break-inside: avoid;
     overflow: hidden;
   }
-  
+
   .group:first-of-type {
     margin-top: 0;
   }
-  
+
   .group:last-of-type {
     margin-bottom: 0;
   }
-  
+
   .group-header {
     background: #f8fafc;
     border-bottom: 2pt solid #8B1538;
@@ -721,7 +630,7 @@ textarea{min-height:80px;resize:vertical}
     border-radius: 0;
     page-break-after: avoid;
   }
-  
+
   .group-title-input {
     background: transparent;
     color: #8B1538;
@@ -731,11 +640,11 @@ textarea{min-height:80px;resize:vertical}
     font-weight: 700;
     letter-spacing: -0.2px;
   }
-  
+
   .group-content {
     padding: 0;
   }
-  
+
   /* PROFESSIONELLE SECTIONS */
   .section {
     padding: 8px 14px;
@@ -743,16 +652,16 @@ textarea{min-height:80px;resize:vertical}
     page-break-inside: avoid;
     margin-bottom: 0;
   }
-  
+
   .section + .section {
     border-top: 1pt solid #f1f5f9;
     padding-top: 8px;
   }
-  
+
   .section:first-child {
     border-top: none;
   }
-  
+
   .section-header {
     background: #f1f5f9;
     padding: 8px 12px;
@@ -760,14 +669,14 @@ textarea{min-height:80px;resize:vertical}
     border-bottom: 1.5pt solid #cbd5e1;
     page-break-after: avoid;
   }
-  
+
   .section-header h2 {
     color: #1e293b;
     font-size: 11pt;
     font-weight: 700;
     margin: 0;
   }
-  
+
   /* PROFESSIONELLE LABELS */
   label {
     font-size: 9pt;
@@ -775,7 +684,7 @@ textarea{min-height:80px;resize:vertical}
     font-weight: 600;
     margin-bottom: 4px;
   }
-  
+
   /* PROFESSIONELLE INPUTS */
   input[type="text"],
   input[type="date"],
@@ -789,16 +698,16 @@ textarea{min-height:80px;resize:vertical}
     font-size: 10pt;
     line-height: 1.4;
   }
-  
+
   .grid {
     gap: 6px;
   }
-  
+
   /* PROFESSIONELLE CHECKLISTEN */
   .list {
     gap: 3px;
   }
-  
+
   .check {
     border: 1pt solid #e2e8f0;
     border-radius: 4px;
@@ -810,7 +719,7 @@ textarea{min-height:80px;resize:vertical}
     background: #ffffff;
     min-height: 24px;
   }
-  
+
   .check .tiny {
     width: 50px;
     border: 1pt solid #cbd5e1;
@@ -821,7 +730,7 @@ textarea{min-height:80px;resize:vertical}
     background: #f8fafc;
     font-weight: 600;
   }
-  
+
   .check .label-input {
     border: none;
     padding: 4px 6px;
@@ -829,7 +738,7 @@ textarea{min-height:80px;resize:vertical}
     flex: 1;
     background: transparent;
   }
-  
+
   .check .note {
     border: 1pt solid #e2e8f0;
     border-radius: 4px;
@@ -839,30 +748,30 @@ textarea{min-height:80px;resize:vertical}
     max-width: 180px;
     background: #f8fafc;
   }
-  
+
   .check input[type="checkbox"] {
     width: 14px;
     height: 14px;
     margin-left: auto;
     border: 1.5pt solid #64748b;
   }
-  
+
   /* PROFESSIONELLE CHECKBOX-INLINE */
   .checkbox-inline {
     page-break-inside: avoid;
   }
-  
+
   .checkbox-inline input[type="checkbox"] {
     width: 14px;
     height: 14px;
     border: 1.5pt solid #64748b;
   }
-  
+
   .checkbox-inline label {
     font-size: 10pt;
     color: #334155;
   }
-  
+
   /* PROFESSIONELLE ABSTAND-SECTION */
   .spacing-section {
     background: #f8fafc;
@@ -871,11 +780,11 @@ textarea{min-height:80px;resize:vertical}
     padding: 8px;
     page-break-inside: avoid;
   }
-  
+
   .spacing-section .controls {
     display: none;
   }
-  
+
   .spacing-section .preview {
     background: transparent;
     border: none;
@@ -883,7 +792,7 @@ textarea{min-height:80px;resize:vertical}
     font-size: 9pt;
     font-style: italic;
   }
-  
+
   /* PROFESSIONELLE TEXT-SECTION */
   .text-section {
     background: #ffffff;
@@ -892,11 +801,11 @@ textarea{min-height:80px;resize:vertical}
     padding: 8px;
     page-break-inside: avoid;
   }
-  
+
   .text-editor-toolbar {
     display: none;
   }
-  
+
   .text-editor-content {
     padding: 8px 0;
     border: none;
@@ -904,7 +813,7 @@ textarea{min-height:80px;resize:vertical}
     font-size: 10pt;
     line-height: 1.6;
   }
-  
+
   /* PROFESSIONELLE BILD-SECTION */
   .image-section {
     background: #ffffff;
@@ -913,49 +822,49 @@ textarea{min-height:80px;resize:vertical}
     padding: 8px;
     page-break-inside: avoid;
   }
-  
+
   .image-upload-zone {
     display: none;
   }
-  
+
   .image-preview {
     gap: 6px;
   }
-  
+
   .image-preview-item {
     border: 1pt solid #e2e8f0;
     border-radius: 4px;
     page-break-inside: avoid;
   }
-  
+
   /* PROFESSIONELLE SIGNATUR-BEREICHE */
-  
+
   .sig-controls {
     display: none;
   }
-  
+
   /* SEITENUMBRUCH-KONTROLLE */
   .section-header,
   .group-header {
     page-break-after: avoid;
   }
-  
+
   .section,
   .group,
   .check {
     page-break-inside: avoid;
   }
-  
+
   h2 {
     page-break-after: avoid;
   }
-  
+
   /* BESSERE LESBARKEIT */
   p, li, div {
     orphans: 3;
     widows: 3;
   }
-  
+
   /* FUSSZEILE MIT SEITENZAHL */
   @page {
     @bottom-right {
@@ -963,7 +872,7 @@ textarea{min-height:80px;resize:vertical}
       font-size: 9pt;
       color: #64748b;
     }
-    
+
     @bottom-left {
       content: "CL Validierungsprotokoll";
       font-size: 9pt;
@@ -973,23 +882,23 @@ textarea{min-height:80px;resize:vertical}
 }
 
 @media (max-width: 768px) {
-  .col-3, .col-4, .col-6, .col-8 { grid-column: span 12; }
+  .col-3, .col-4, .col-6,
   .check { flex-wrap: wrap; }
   .check .note { min-width: 100%; max-width: 100%; }
   .group-actions { flex-wrap: wrap; }
 }
-  
+
   /* ORPHANS & WIDOWS PREVENTION */
   * {
     orphans: 3;
     widows: 3;
   }
-  
+
   .check, .checkbox-inline {
     orphans: 2;
     widows: 2;
   }
-  
+
   /* STATUS-BADGES FÜR CHECKBOXEN */
   input[type="checkbox"]:checked + label::before {
     content: '✓ ';
@@ -997,7 +906,7 @@ textarea{min-height:80px;resize:vertical}
     font-weight: 700;
     margin-right: 4px;
   }
-  
+
   /* PROFESSIONELLE CODE/ID FELDER */
   .tiny,
   .check .tiny,
@@ -1005,7 +914,7 @@ textarea{min-height:80px;resize:vertical}
     font-family: 'Courier New', Courier, monospace;
     letter-spacing: 0.3px;
   }
-  
+
   /* VERBESSERTE LESBARKEIT */
   p, li, .check .label-input {
     line-height: 1.5;
@@ -1038,7 +947,7 @@ textarea{min-height:80px;resize:vertical}
   </style>
 </head>
 <body>
-  <!-- Hamburger-Menü -->
+
   <div class="hamburger-container">
     <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menü">
       <span></span><span></span><span></span>
@@ -1057,25 +966,24 @@ textarea{min-height:80px;resize:vertical}
     </div>
   </div>
 
-  <!-- Seitenumbruch-Markierungen -->
-
   <div id="pageBreakMarkers" class="hidden"></div>
 
   <div class="container">
     <div class="sheet" id="app">
-      <!-- Header -->
-      <header>
-        <div>
-          <div class="title">CL Validierungsprotokoll</div>
-          <div class="version">Version 3.3 – Fixed</div>
-        </div>
-        <div style="text-align:right;font-size:12px">
-          <div>Erstellt: <span id="stamp"></span></div>
-        </div>
-      </header>
 
 ```
-  <!-- Deckblatt & Kopfdaten -->
+  <header>
+    <div>
+      <div class="title">CL Validierungsprotokoll</div>
+      <div class="version">Version 3.3 – Fixed</div>
+    </div>
+    <div style="text-align:right;font-size:12px">
+      <div>Erstellt: <span id="stamp"></span></div>
+    </div>
+  </header>
+```
+
+```
   <div class="section collapsible">
     <div class="section-header">
       <div class="row">
@@ -1160,7 +1068,6 @@ textarea{min-height:80px;resize:vertical}
     </div>
   </div>
 
-  <!-- Validierer & Freigabe -->
   <div class="section collapsible">
     <div class="section-header">
       <div class="row">
@@ -1206,7 +1113,6 @@ textarea{min-height:80px;resize:vertical}
     </div>
   </div>
 
-  <!-- KV -->
   <div class="section collapsible">
     <div class="section-header">
       <div class="row">
@@ -1222,7 +1128,6 @@ textarea{min-height:80px;resize:vertical}
     </div>
   </div>
 
-  <!-- IQ -->
   <div class="section collapsible">
     <div class="section-header">
       <div class="row">
@@ -1238,7 +1143,6 @@ textarea{min-height:80px;resize:vertical}
     </div>
   </div>
 
-  <!-- OQ -->
   <div class="section collapsible">
     <div class="section-header">
       <div class="row">
@@ -1254,14 +1158,11 @@ textarea{min-height:80px;resize:vertical}
     </div>
   </div>
 
-  <!-- Dynamische Gruppen (Verschiebbar) -->
   <div id="groupsContainer"></div>
 </div>
 ```
 
   </div>
-
-  <!-- Modal für Abschnittstypen -->
 
   <div class="modal" id="sectionTypeModal">
     <div class="modal-content">
@@ -1434,7 +1335,7 @@ textarea{min-height:80px;resize:vertical}
         labelInput.oninput = function(){ item.text = labelInput.value; onUpdate(); };
         noteInput.oninput = function(){ item.note = noteInput.value; onUpdate(); };
         checkbox.onchange = function(){ item.ok = checkbox.checked; onUpdate(); };
-        
+
         // FIXED: Delete Button
         delBtn.onclick = function(e){
           e.preventDefault();
@@ -1446,13 +1347,13 @@ textarea{min-height:80px;resize:vertical}
 
         // Drag & Drop
         var handle = row.querySelector('.move-handle');
-        handle.ondragstart = function(e){ 
-          e.dataTransfer.effectAllowed='move'; 
-          e.dataTransfer.setData('text/plain', i); 
+        handle.ondragstart = function(e){
+          e.dataTransfer.effectAllowed='move';
+          e.dataTransfer.setData('text/plain', i);
         };
-        row.ondragover = function(e){ 
-          e.preventDefault(); 
-          e.dataTransfer.dropEffect='move'; 
+        row.ondragover = function(e){
+          e.preventDefault();
+          e.dataTransfer.dropEffect='move';
         };
         row.ondrop = function(e){
           e.preventDefault();
@@ -1507,12 +1408,12 @@ textarea{min-height:80px;resize:vertical}
           e.dataTransfer.effectAllowed = 'move';
           e.dataTransfer.setData('text/plain', gIdx);
         };
-        
+
         group.ondragend = function(e){
           group.classList.remove('dragging');
           $$('.group').forEach(function(g){ g.classList.remove('drag-over'); });
         };
-        
+
         group.ondragover = function(e){
           e.preventDefault();
           e.stopPropagation();
@@ -1522,21 +1423,21 @@ textarea{min-height:80px;resize:vertical}
             group.classList.add('drag-over');
           }
         };
-        
+
         group.ondragleave = function(e){
           if(!group.contains(e.relatedTarget)){
             group.classList.remove('drag-over');
           }
         };
-        
+
         group.ondrop = function(e){
           e.preventDefault();
           e.stopPropagation();
           group.classList.remove('drag-over');
-          
+
           var fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
           var toIndex = gIdx;
-          
+
           if(fromIndex !== toIndex){
             var movedGroup = appState.groups.splice(fromIndex, 1)[0];
             appState.groups.splice(toIndex, 0, movedGroup);
@@ -1547,16 +1448,16 @@ textarea{min-height:80px;resize:vertical}
 
         var header = document.createElement('div');
         header.className = 'group-header';
-        
+
         var titleSection = document.createElement('div');
         titleSection.className = 'group-title-section';
-        
+
         // Move Handle
         var moveHandle = document.createElement('div');
         moveHandle.className = 'group-move-handle';
         moveHandle.innerHTML = '<span></span>';
         moveHandle.title = 'Gruppe verschieben';
-        
+
         var collapseBtn = document.createElement('div');
         collapseBtn.className = 'group-collapse-btn';
         collapseBtn.onclick = function(e){
@@ -1565,7 +1466,7 @@ textarea{min-height:80px;resize:vertical}
           drawGroups();
           sync();
         };
-        
+
         var titleInput = document.createElement('input');
         titleInput.type = 'text';
         titleInput.className = 'group-title-input';
@@ -1578,14 +1479,14 @@ textarea{min-height:80px;resize:vertical}
         };
         titleInput.onclick = function(e){ e.stopPropagation(); };
         titleInput.ondragstart = function(e){ e.preventDefault(); };
-        
+
         titleSection.appendChild(moveHandle);
         titleSection.appendChild(collapseBtn);
         titleSection.appendChild(titleInput);
-        
+
         var actions = document.createElement('div');
         actions.className = 'group-actions';
-        
+
         var toggleBtn = document.createElement('div');
         toggleBtn.className = 'group-toggle' + (g.enabled ? ' active' : '');
         toggleBtn.textContent = g.enabled ? '✓ Aktiviert' : '✗ Deaktiviert';
@@ -1595,7 +1496,7 @@ textarea{min-height:80px;resize:vertical}
           drawGroups();
           sync();
         };
-        
+
         var duplicateBtn = document.createElement('div');
         duplicateBtn.className = 'group-btn duplicate';
         duplicateBtn.title = 'Gruppe duplizieren';
@@ -1608,7 +1509,7 @@ textarea{min-height:80px;resize:vertical}
           drawGroups();
           sync();
         };
-        
+
         // FIXED: Delete Button
         var deleteBtn = document.createElement('div');
         deleteBtn.className = 'group-btn delete';
@@ -1622,31 +1523,31 @@ textarea{min-height:80px;resize:vertical}
             sync();
           }
         };
-        
+
         actions.appendChild(toggleBtn);
         actions.appendChild(duplicateBtn);
         actions.appendChild(deleteBtn);
-        
+
         header.appendChild(titleSection);
         header.appendChild(actions);
-        
+
         var content = document.createElement('div');
         content.className = 'group-content';
-        
+
         if(!g.sections) g.sections = [];
-        
+
         g.sections.forEach(function(s, sIdx){
           var sectionDiv = document.createElement('div');
           sectionDiv.className = 'section';
-          
+
           if(s.type === 'checklist') renderChecklistSection(sectionDiv, s, g.sections, sIdx);
           else if(s.type === 'spacing') renderSpacingSection(sectionDiv, s, g.sections, sIdx);
           else if(s.type === 'text') renderTextSection(sectionDiv, s, g.sections, sIdx);
           else if(s.type === 'image') renderImageSection(sectionDiv, s, g.sections, sIdx);
-          
+
           content.appendChild(sectionDiv);
         });
-        
+
         var addSection = document.createElement('div');
         addSection.className = 'group-add-section';
         var addBtn = document.createElement('button');
@@ -1658,7 +1559,7 @@ textarea{min-height:80px;resize:vertical}
         };
         addSection.appendChild(addBtn);
         content.appendChild(addSection);
-        
+
         group.appendChild(header);
         group.appendChild(content);
         host.appendChild(group);
@@ -1676,7 +1577,7 @@ textarea{min-height:80px;resize:vertical}
         <div class="row">
           <div class="title-wrap">
             <button class="collapse-btn">−</button>
-            <input type="text" value="${section.title||'Checkliste'}" placeholder="Titel..." 
+            <input type="text" value="${section.title||'Checkliste'}" placeholder="Titel..."
                    style="border:1px solid transparent;background:transparent;font-weight:700;color:var(--primary);font-size:18px;padding:4px 6px;border-radius:8px" />
           </div>
           <div style="display:flex;gap:8px">
@@ -1685,10 +1586,10 @@ textarea{min-height:80px;resize:vertical}
           </div>
         </div>
       `;
-      
+
       var titleInput = header.querySelector('input');
       titleInput.oninput = function(){ section.title = titleInput.value; sync(); };
-      
+
       var addBtn = header.querySelector('.add-row-btn');
       addBtn.onclick = function(e){
         e.preventDefault();
@@ -1698,7 +1599,7 @@ textarea{min-height:80px;resize:vertical}
         renderChecklistSection(host, section, sections, sIdx);
         sync();
       };
-      
+
       // FIXED: Delete Button
       var delBtn = header.querySelector('.del-section-btn');
       delBtn.onclick = function(e){
@@ -1710,12 +1611,12 @@ textarea{min-height:80px;resize:vertical}
           sync();
         }
       };
-      
+
       var body = document.createElement('div');
       body.className = 'section-body';
       var list = document.createElement('div');
       list.className = 'list';
-      
+
       if(!section.rows) section.rows = [];
       section.rows.forEach(function(row, rIdx){
         var rowDiv = document.createElement('div');
@@ -1732,18 +1633,18 @@ textarea{min-height:80px;resize:vertical}
           <input type="checkbox" ${row.ok?'checked':''} />
           <button class="btn icon tiny del">✕</button>
         `;
-        
+
         var codeInput = rowDiv.querySelector('.tiny');
         var labelInput = rowDiv.querySelector('.label-input');
         var noteInput = rowDiv.querySelector('.note');
         var checkbox = rowDiv.querySelector('input[type="checkbox"]');
         var delRowBtn = rowDiv.querySelector('.del');
-        
+
         codeInput.oninput = function(){ row.code = codeInput.value; sync(); };
         labelInput.oninput = function(){ row.text = labelInput.value; sync(); };
         noteInput.oninput = function(){ row.note = noteInput.value; sync(); };
         checkbox.onchange = function(){ row.ok = checkbox.checked; sync(); };
-        
+
         // FIXED: Delete Button
         delRowBtn.onclick = function(e){
           e.preventDefault();
@@ -1752,16 +1653,16 @@ textarea{min-height:80px;resize:vertical}
           renderChecklistSection(host, section, sections, sIdx);
           sync();
         };
-        
+
         // Drag & Drop
         var handle = rowDiv.querySelector('.move-handle');
-        handle.ondragstart = function(e){ 
-          e.dataTransfer.effectAllowed='move'; 
-          e.dataTransfer.setData('text/plain', rIdx); 
+        handle.ondragstart = function(e){
+          e.dataTransfer.effectAllowed='move';
+          e.dataTransfer.setData('text/plain', rIdx);
         };
-        rowDiv.ondragover = function(e){ 
-          e.preventDefault(); 
-          e.dataTransfer.dropEffect='move'; 
+        rowDiv.ondragover = function(e){
+          e.preventDefault();
+          e.dataTransfer.dropEffect='move';
         };
         rowDiv.ondrop = function(e){
           e.preventDefault();
@@ -1774,15 +1675,15 @@ textarea{min-height:80px;resize:vertical}
             sync();
           }
         };
-        
+
         list.appendChild(rowDiv);
       });
-      
+
       body.appendChild(list);
       host.innerHTML = '';
       host.appendChild(header);
       host.appendChild(body);
-      
+
       var collapseBtn = header.querySelector('.collapse-btn');
       collapseBtn.onclick = function(){
         host.classList.toggle('collapsed');
@@ -1793,7 +1694,7 @@ textarea{min-height:80px;resize:vertical}
     /* Abstand-Abschnitt */
     function renderSpacingSection(host, section, sections, sIdx){
       if(!section.heightCm) section.heightCm = 5;
-      
+
       var header = document.createElement('div');
       header.className = 'section-header';
       header.innerHTML = `
@@ -1802,7 +1703,7 @@ textarea{min-height:80px;resize:vertical}
           <button class="btn icon del">✕</button>
         </div>
       `;
-      
+
       // FIXED: Delete Button
       var delBtn = header.querySelector('.del');
       delBtn.onclick = function(e){
@@ -1814,7 +1715,7 @@ textarea{min-height:80px;resize:vertical}
           sync();
         }
       };
-      
+
       var body = document.createElement('div');
       body.className = 'section-body';
       body.innerHTML = `
@@ -1826,7 +1727,7 @@ textarea{min-height:80px;resize:vertical}
           <div class="preview" style="height:${section.heightCm * 10}px">↕ ${section.heightCm} cm Abstand</div>
         </div>
       `;
-      
+
       var heightInput = body.querySelector('input[type="number"]');
       var preview = body.querySelector('.preview');
       heightInput.oninput = function(){
@@ -1835,7 +1736,7 @@ textarea{min-height:80px;resize:vertical}
         preview.textContent = '↕ ' + section.heightCm + ' cm Abstand';
         sync();
       };
-      
+
       host.innerHTML = '';
       host.appendChild(header);
       host.appendChild(body);
@@ -1844,20 +1745,20 @@ textarea{min-height:80px;resize:vertical}
     /* Text-Abschnitt */
     function renderTextSection(host, section, sections, sIdx){
       if(!section.content) section.content = '';
-      
+
       var header = document.createElement('div');
       header.className = 'section-header';
       header.innerHTML = `
         <div class="row">
-          <input type="text" value="${section.title||'Text'}" placeholder="Titel..." 
+          <input type="text" value="${section.title||'Text'}" placeholder="Titel..."
                  style="border:1px solid transparent;background:transparent;font-weight:700;color:var(--primary);font-size:18px;padding:4px 6px;border-radius:8px" />
           <button class="btn icon del">✕</button>
         </div>
       `;
-      
+
       var titleInput = header.querySelector('input');
       titleInput.oninput = function(){ section.title = titleInput.value; sync(); };
-      
+
       // FIXED: Delete Button
       var delBtn = header.querySelector('.del');
       delBtn.onclick = function(e){
@@ -1869,7 +1770,7 @@ textarea{min-height:80px;resize:vertical}
           sync();
         }
       };
-      
+
       var body = document.createElement('div');
       body.className = 'section-body';
       body.innerHTML = `
@@ -1882,25 +1783,25 @@ textarea{min-height:80px;resize:vertical}
           <div class="text-editor-content" contenteditable="true">${section.content}</div>
         </div>
       `;
-      
+
       // v4.1: Add enhanced editor features
       setTimeout(function() { createEnhancedTextEditor(body, section); }, 10);
-      
+
       var editor = body.querySelector('.text-editor-content');
       var toolbar = body.querySelector('.text-editor-toolbar');
-      
+
       editor.oninput = function(){
         section.content = editor.innerHTML;
         sync();
       };
-      
+
       toolbar.querySelectorAll('button').forEach(function(btn){
         btn.onclick = function(){
           document.execCommand(btn.getAttribute('data-cmd'), false, null);
           editor.focus();
         };
       });
-      
+
       host.innerHTML = '';
       host.appendChild(header);
       host.appendChild(body);
@@ -1909,20 +1810,20 @@ textarea{min-height:80px;resize:vertical}
     /* Bild-Abschnitt */
     function renderImageSection(host, section, sections, sIdx){
       if(!section.images) section.images = [];
-      
+
       var header = document.createElement('div');
       header.className = 'section-header';
       header.innerHTML = `
         <div class="row">
-          <input type="text" value="${section.title||'Bilder'}" placeholder="Titel..." 
+          <input type="text" value="${section.title||'Bilder'}" placeholder="Titel..."
                  style="border:1px solid transparent;background:transparent;font-weight:700;color:var(--primary);font-size:18px;padding:4px 6px;border-radius:8px" />
           <button class="btn icon del">✕</button>
         </div>
       `;
-      
+
       var titleInput = header.querySelector('input');
       titleInput.oninput = function(){ section.title = titleInput.value; sync(); };
-      
+
       // FIXED: Delete Button
       var delBtn = header.querySelector('.del');
       delBtn.onclick = function(e){
@@ -1934,7 +1835,7 @@ textarea{min-height:80px;resize:vertical}
           sync();
         }
       };
-      
+
       var body = document.createElement('div');
       body.className = 'section-body';
       body.innerHTML = `
@@ -1946,13 +1847,13 @@ textarea{min-height:80px;resize:vertical}
           <div class="image-preview"></div>
         </div>
       `;
-      
+
       var zone = body.querySelector('.image-upload-zone');
       var fileInput = zone.querySelector('input[type="file"]');
       var preview = body.querySelector('.image-preview');
-      
+
       zone.onclick = function(){ fileInput.click(); };
-      
+
       zone.ondragover = function(e){
         e.preventDefault();
         zone.classList.add('dragover');
@@ -1963,9 +1864,9 @@ textarea{min-height:80px;resize:vertical}
         zone.classList.remove('dragover');
         handleFiles(e.dataTransfer.files);
       };
-      
+
       fileInput.onchange = function(){ handleFiles(fileInput.files); };
-      
+
       function handleFiles(files){
         Array.from(files).forEach(function(file){
           if(!file.type.startsWith('image/')) return;
@@ -1978,7 +1879,7 @@ textarea{min-height:80px;resize:vertical}
           reader.readAsDataURL(file);
         });
       }
-      
+
       section.images.forEach(function(src, imgIdx){
         var item = document.createElement('div');
         item.className = 'image-preview-item';
@@ -1987,7 +1888,7 @@ textarea{min-height:80px;resize:vertical}
           <button class="edit-btn">✏️</button>
           <button class="delete-btn">✕</button>
         `;
-        
+
         // v4.1: Add edit button functionality
         var editImgBtn = item.querySelector('.edit-btn');
         editImgBtn.onclick = function(e){
@@ -1995,7 +1896,7 @@ textarea{min-height:80px;resize:vertical}
           e.stopPropagation();
           openImageEditor(section, imgIdx);
         };
-        
+
         var delImgBtn = item.querySelector('.delete-btn');
         delImgBtn.onclick = function(e){
           e.preventDefault();
@@ -2006,7 +1907,7 @@ textarea{min-height:80px;resize:vertical}
         };
         preview.appendChild(item);
       });
-      
+
       host.innerHTML = '';
       host.appendChild(header);
       host.appendChild(body);
@@ -2022,12 +1923,12 @@ textarea{min-height:80px;resize:vertical}
       $('#sectionTypeModal').classList.remove('active');
       pendingSectionCallback = null;
     }
-    
+
     $('#sectionTypeClose').onclick = closeSectionTypeModal;
     $('#sectionTypeModal').onclick = function(e){
       if(e.target === this) closeSectionTypeModal();
     };
-    
+
     $$('.section-type-card').forEach(function(card){
       card.onclick = function(){
         var type = card.getAttribute('data-type');
@@ -2047,21 +1948,21 @@ textarea{min-height:80px;resize:vertical}
           g = appState.groups[0];
           currentGroupIndex = 0;
         }
-        
+
         var section = {
           type: type || 'checklist',
           title: 'Neuer Abschnitt',
           id: Date.now()
         };
-        
+
         if(section.type === 'checklist') section.rows = [];
         if(section.type === 'spacing') section.heightCm = 5;
         if(section.type === 'text') section.content = '';
         if(section.type === 'image') section.images = [];
-        
+
         if(!g.sections) g.sections = [];
         g.sections.push(section);
-        
+
         drawGroups();
         sync();
       });
@@ -2077,22 +1978,22 @@ textarea{min-height:80px;resize:vertical}
 
       var contentEl = document.getElementById('app');
       var totalH = Math.max(contentEl.scrollHeight, contentEl.offsetHeight);
-      
+
       var pageHeightPx = 1032;
       var count = Math.floor(totalH / pageHeightPx);
-      
+
       for(var i = 1; i <= count; i++){
         var y = i * pageHeightPx;
-        
+
         var line = document.createElement('div');
         line.className = 'page-break-line';
         line.style.top = y + 'px';
-        
+
         var label = document.createElement('div');
         label.className = 'page-break-label';
         label.style.top = y + 'px';
         label.textContent = 'Seite ' + (i + 1);
-        
+
         container.appendChild(line);
         container.appendChild(label);
       }
@@ -2165,7 +2066,7 @@ textarea{min-height:80px;resize:vertical}
         drawGroups();
         sync();
       };
-      
+
       $('#btnPageBreaks').onclick = function(){
         pageBreaksOn = !pageBreaksOn;
         var overlay = $('#pageBreakMarkers');
@@ -2208,13 +2109,12 @@ textarea{min-height:80px;resize:vertical}
     } else {
       initAll();
     }
-  
 
     // ===== v4.1 ENHANCEMENTS =====
     // Enhanced Text Editor Functions (v4.1)
 function createEnhancedTextEditor(container, section) {
   const toolbar = container.querySelector('.text-editor-toolbar');
-  
+
   // Add font size dropdown
   const fontSizeSelect = document.createElement('select');
   fontSizeSelect.innerHTML = `
@@ -2226,7 +2126,7 @@ function createEnhancedTextEditor(container, section) {
   fontSizeSelect.onchange = function() {
     document.execCommand('fontSize', false, fontSizeSelect.value);
   };
-  
+
   // Add text color picker
   const colorInput = document.createElement('input');
   colorInput.type = 'color';
@@ -2235,32 +2135,32 @@ function createEnhancedTextEditor(container, section) {
   colorInput.onchange = function() {
     document.execCommand('foreColor', false, colorInput.value);
   };
-  
+
   // Add alignment buttons
   const alignLeft = document.createElement('button');
   alignLeft.innerHTML = '⬅️';
   alignLeft.title = 'Linksbündig';
   alignLeft.onclick = function() { document.execCommand('justifyLeft'); };
-  
+
   const alignCenter = document.createElement('button');
   alignCenter.innerHTML = '↔️';
   alignCenter.title = 'Zentriert';
   alignCenter.onclick = function() { document.execCommand('justifyCenter'); };
-  
+
   const alignRight = document.createElement('button');
   alignRight.innerHTML = '➡️';
   alignRight.title = 'Rechtsbündig';
   alignRight.onclick = function() { document.execCommand('justifyRight'); };
-  
+
   // Add list buttons
   const bulletList = document.createElement('button');
   bulletList.innerHTML = '• Liste';
   bulletList.onclick = function() { document.execCommand('insertUnorderedList'); };
-  
+
   const numberList = document.createElement('button');
   numberList.innerHTML = '1. Liste';
   numberList.onclick = function() { document.execCommand('insertOrderedList'); };
-  
+
   // Add dividers for visual separation
   const divider1 = document.createElement('span');
   divider1.className = 'divider';
@@ -2268,7 +2168,7 @@ function createEnhancedTextEditor(container, section) {
   divider2.className = 'divider';
   const divider3 = document.createElement('span');
   divider3.className = 'divider';
-  
+
   // Insert new elements after existing buttons
   const existingButtons = toolbar.querySelectorAll('button');
   if (existingButtons.length >= 3) {
@@ -2287,7 +2187,7 @@ let originalImage = null;
 
 function initImageEditModal() {
   if (imageEditModal) return;
-  
+
   imageEditModal = document.createElement('div');
   imageEditModal.className = 'image-edit-modal';
   imageEditModal.innerHTML = `
@@ -2310,11 +2210,11 @@ function initImageEditModal() {
       </div>
     </div>
   `;
-  
+
   document.body.appendChild(imageEditModal);
   editCanvas = imageEditModal.querySelector('.image-edit-canvas');
   editCtx = editCanvas.getContext('2d');
-  
+
   imageEditModal.querySelector('.image-edit-close').onclick = closeImageEditor;
   imageEditModal.onclick = function(e) {
     if (e.target === imageEditModal) closeImageEditor();
@@ -2323,24 +2223,24 @@ function initImageEditModal() {
 
 window.rotateImage = function(degrees) {
   if (!currentEditingImage) return;
-  
+
   const img = new Image();
   img.onload = function() {
     const radians = degrees * Math.PI / 180;
     const cos = Math.abs(Math.cos(radians));
     const sin = Math.abs(Math.sin(radians));
-    
+
     const newWidth = img.height * sin + img.width * cos;
     const newHeight = img.height * cos + img.width * sin;
-    
+
     editCanvas.width = newWidth;
     editCanvas.height = newHeight;
-    
+
     editCtx.translate(newWidth / 2, newHeight / 2);
     editCtx.rotate(radians);
     editCtx.drawImage(img, -img.width / 2, -img.height / 2);
     editCtx.setTransform(1, 0, 0, 1, 0, 0);
-    
+
     currentEditingImage = editCanvas.toDataURL('image/png');
   };
   img.src = currentEditingImage;
@@ -2348,12 +2248,12 @@ window.rotateImage = function(degrees) {
 
 window.flipImage = function(direction) {
   if (!currentEditingImage) return;
-  
+
   const img = new Image();
   img.onload = function() {
     editCanvas.width = img.width;
     editCanvas.height = img.height;
-    
+
     editCtx.save();
     if (direction === 'horizontal') {
       editCtx.scale(-1, 1);
@@ -2363,7 +2263,7 @@ window.flipImage = function(direction) {
       editCtx.drawImage(img, 0, -img.height);
     }
     editCtx.restore();
-    
+
     currentEditingImage = editCanvas.toDataURL('image/png');
   };
   img.src = currentEditingImage;
@@ -2401,19 +2301,19 @@ window.closeImageEditor = function() {
 
 window.openImageEditor = function(section, imgIndex) {
   initImageEditModal();
-  
+
   currentEditingSection = section;
   currentEditingIndex = imgIndex;
   originalImage = section.images[imgIndex];
   currentEditingImage = originalImage;
-  
+
   const img = new Image();
   img.onload = function() {
     // Resize for editing (max 1200px)
     let width = img.width;
     let height = img.height;
     const maxSize = 1200;
-    
+
     if (width > maxSize || height > maxSize) {
       if (width > height) {
         height = (height / width) * maxSize;
@@ -2423,18 +2323,16 @@ window.openImageEditor = function(section, imgIndex) {
         height = maxSize;
       }
     }
-    
+
     editCanvas.width = width;
     editCanvas.height = height;
     editCtx.drawImage(img, 0, 0, width, height);
     currentEditingImage = editCanvas.toDataURL('image/png');
   };
   img.src = originalImage;
-  
+
   imageEditModal.classList.add('active');
 };
-
-
 
 </script>
 
