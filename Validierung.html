@@ -444,6 +444,77 @@ textarea{min-height:80px;resize:vertical}
 .section-type-card .icon{font-size:32px;margin-bottom:8px}
 .section-type-card .name{font-weight:700;color:var(--text)}
 
+
+/* Text-Editor Toolbar Enhanced */
+.text-editor-toolbar {
+  display: flex !important;
+  gap: 6px !important;
+  padding: 12px !important;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+  border: 2px solid #e5e7eb !important;
+  border-radius: 10px 10px 0 0 !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+}
+
+.text-editor-toolbar button {
+  padding: 8px 12px !important;
+  border: 2px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  background: #ffffff !important;
+  cursor: pointer !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+  min-width: 38px !important;
+  height: 38px !important;
+}
+
+.text-editor-toolbar button:hover {
+  background: #8B1538 !important;
+  border-color: #8B1538 !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(139, 21, 56, 0.3) !important;
+}
+
+.text-editor-toolbar select {
+  padding: 8px 12px !important;
+  border: 2px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  background: #ffffff !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  height: 38px !important;
+}
+
+.text-editor-toolbar select:hover {
+  border-color: #8B1538 !important;
+}
+
+.text-editor-toolbar input[type="color"] {
+  width: 38px !important;
+  height: 38px !important;
+  border: 2px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  padding: 4px !important;
+}
+
+.text-editor-toolbar input[type="color"]:hover {
+  border-color: #8B1538 !important;
+  transform: scale(1.05) !important;
+}
+
+.text-editor-toolbar .divider {
+  width: 2px !important;
+  height: 26px !important;
+  background: #cbd5e1 !important;
+  margin: 0 4px !important;
+}
+
+
 /* ═══════════════════════════════════════════════════════════════
    PROFESSIONELLES PDF-LAYOUT v4.2 Professional Edition
    Optimiert für A4 Hochformat - Elegante, druckfertige Darstellung
@@ -3046,66 +3117,159 @@ height: 14px;
     // ===== v4.1 ENHANCEMENTS =====
     // Enhanced Text Editor Functions (v4.1)
 function createEnhancedTextEditor(container, section) {
-  const toolbar = container.querySelector('.text-editor-toolbar');
+  var toolbar = container.querySelector('.text-editor-toolbar');
+  var editor = container.querySelector('.text-editor-content');
 
-  // Add font size dropdown
-  const fontSizeSelect = document.createElement('select');
-  fontSizeSelect.innerHTML = `
-    <option value="1">Klein</option>
-    <option value="3" selected>Normal</option>
-    <option value="5">Groß</option>
-    <option value="7">Sehr Groß</option>
-  `;
-  fontSizeSelect.onchange = function() {
-    document.execCommand('fontSize', false, fontSizeSelect.value);
+  // Font Family Dropdown
+  var fontSelect = document.createElement('select');
+  fontSelect.title = 'Schriftart';
+  fontSelect.innerHTML = '<option value="Arial">Arial</option><option value="Times New Roman">Times</option><option value="Georgia">Georgia</option><option value="Verdana">Verdana</option>';
+  fontSelect.onchange = function() {
+    document.execCommand('fontName', false, fontSelect.value);
+    editor.focus();
   };
 
-  // Add text color picker
-  const colorInput = document.createElement('input');
+  // Font Size Dropdown
+  var fontSizeSelect = document.createElement('select');
+  fontSizeSelect.title = 'Schriftgroesse';
+  fontSizeSelect.innerHTML = '<option value="1">Klein</option><option value="3" selected>Normal</option><option value="5">Gross</option><option value="7">Sehr Gross</option>';
+  fontSizeSelect.onchange = function() {
+    document.execCommand('fontSize', false, fontSizeSelect.value);
+    editor.focus();
+  };
+
+  // Text Color Picker
+  var colorInput = document.createElement('input');
   colorInput.type = 'color';
   colorInput.value = '#000000';
   colorInput.title = 'Textfarbe';
+  colorInput.style.width = '36px';
+  colorInput.style.height = '28px';
   colorInput.onchange = function() {
     document.execCommand('foreColor', false, colorInput.value);
+    editor.focus();
   };
 
-  // Add alignment buttons
-  const alignLeft = document.createElement('button');
-  alignLeft.innerHTML = '⬅️';
-  alignLeft.title = 'Linksbündig';
-  alignLeft.onclick = function() { document.execCommand('justifyLeft'); };
+  // Background Color
+  var bgColorInput = document.createElement('input');
+  bgColorInput.type = 'color';
+  bgColorInput.value = '#FFFF00';
+  bgColorInput.title = 'Marker';
+  bgColorInput.style.width = '36px';
+  bgColorInput.style.height = '28px';
+  bgColorInput.onchange = function() {
+    document.execCommand('hiliteColor', false, bgColorInput.value);
+    editor.focus();
+  };
 
-  const alignCenter = document.createElement('button');
-  alignCenter.innerHTML = '↔️';
-  alignCenter.title = 'Zentriert';
-  alignCenter.onclick = function() { document.execCommand('justifyCenter'); };
+  function createBtn(html, title, cmd) {
+    var btn = document.createElement('button');
+    btn.innerHTML = html;
+    btn.title = title;
+    btn.onclick = function() {
+      document.execCommand(cmd, false, null);
+      editor.focus();
+    };
+    return btn;
+  }
 
-  const alignRight = document.createElement('button');
-  alignRight.innerHTML = '➡️';
-  alignRight.title = 'Rechtsbündig';
-  alignRight.onclick = function() { document.execCommand('justifyRight'); };
+  function createDivider() {
+    var div = document.createElement('span');
+    div.className = 'divider';
+    return div;
+  }
 
-  // Add list buttons
-  const bulletList = document.createElement('button');
-  bulletList.innerHTML = '• Liste';
-  bulletList.onclick = function() { document.execCommand('insertUnorderedList'); };
+  // List Buttons
+  var bulletList = createBtn('&#9776;', 'Aufzaehlung', 'insertUnorderedList');
+  var numberList = createBtn('&#8801;', 'Nummerierung', 'insertOrderedList');
 
-  const numberList = document.createElement('button');
-  numberList.innerHTML = '1. Liste';
-  numberList.onclick = function() { document.execCommand('insertOrderedList'); };
+  // Indent
+  var indent = createBtn('&#8594;', 'Einruecken', 'indent');
+  var outdent = createBtn('&#8592;', 'Ausruecken', 'outdent');
 
-  // Add dividers for visual separation
-  const divider1 = document.createElement('span');
-  divider1.className = 'divider';
-  const divider2 = document.createElement('span');
-  divider2.className = 'divider';
-  const divider3 = document.createElement('span');
-  divider3.className = 'divider';
+  // Alignment
+  var alignLeft = createBtn('&#11013;', 'Links', 'justifyLeft');
+  var alignCenter = createBtn('&#8652;', 'Mitte', 'justifyCenter');
+  var alignRight = createBtn('&#10145;', 'Rechts', 'justifyRight');
+  var alignJustify = createBtn('&#8803;', 'Block', 'justifyFull');
 
-  // Insert new elements after existing buttons
-  const existingButtons = toolbar.querySelectorAll('button');
+  // Link Button
+  var linkBtn = document.createElement('button');
+  linkBtn.innerHTML = '&#128279;';
+  linkBtn.title = 'Link';
+  linkBtn.onclick = function() {
+    var url = prompt('URL eingeben:', 'https://');
+    if(url) {
+      document.execCommand('createLink', false, url);
+      editor.focus();
+    }
+  };
+
+  // Image Button
+  var imageBtn = document.createElement('button');
+  imageBtn.innerHTML = '&#128247;';
+  imageBtn.title = 'Bild';
+  imageBtn.onclick = function() {
+    var url = prompt('Bild-URL eingeben:', 'https://');
+    if(url) {
+      document.execCommand('insertImage', false, url);
+      editor.focus();
+    }
+  };
+
+  // Emoji Button
+  var emojiBtn = document.createElement('button');
+  emojiBtn.innerHTML = '&#128512;';
+  emojiBtn.title = 'Emoji';
+  emojiBtn.onclick = function() {
+    var emoji = prompt('Emoji (1-12):\n1:Smile 2:Daumen 3:Herz 4:Check 5:Warnung 6:Notiz 7:Papier 8:Idee 9:Tool 10:Stern 11:Ja 12:Nein', '1');
+    var emojis = ['😊', '👍', '❤️', '✅', '⚠️', '📝', '📄', '💡', '🔧', '⭐', '✓', '✗'];
+    var idx = parseInt(emoji) - 1;
+    if(idx >= 0 && idx < emojis.length) {
+      document.execCommand('insertText', false, emojis[idx]);
+      editor.focus();
+    }
+  };
+
+  // Undo/Redo
+  var undoBtn = createBtn('&#8634;', 'Rueckgaengig', 'undo');
+  var redoBtn = createBtn('&#8635;', 'Wiederholen', 'redo');
+
+  // Clear Formatting
+  var clearBtn = createBtn('&#10005;', 'Format loeschen', 'removeFormat');
+
+  // Insert all elements
+  var existingButtons = toolbar.querySelectorAll('button');
   if (existingButtons.length >= 3) {
-    existingButtons[2].after(divider1, fontSizeSelect, colorInput, divider2, alignLeft, alignCenter, alignRight, divider3, bulletList, numberList);
+    existingButtons[2].after(
+      createDivider(),
+      fontSelect,
+      fontSizeSelect,
+      createDivider(),
+      colorInput,
+      bgColorInput,
+      createDivider(),
+      bulletList,
+      numberList,
+      createDivider(),
+      outdent,
+      indent,
+      createDivider(),
+      alignLeft,
+      alignCenter,
+      alignRight,
+      alignJustify,
+      createDivider(),
+      linkBtn,
+      imageBtn,
+      createDivider(),
+      emojiBtn,
+      createDivider(),
+      undoBtn,
+      redoBtn,
+      createDivider(),
+      clearBtn
+    );
   }
 }
 
