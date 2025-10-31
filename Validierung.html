@@ -352,7 +352,7 @@ textarea{min-height:80px;resize:vertical}
 .group-title-input{
   border:none;
   background:rgba(255,255,255,0.15);
-  color:#fff;
+  color:#1e293b !important;
   font-weight:700;
   font-size:17px;
   padding:8px 12px;
@@ -803,7 +803,24 @@ textarea{min-height:80px;resize:vertical}
     margin-top: 0;
   }
 
-  .group-header {
+  
+.group-title-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #1e293b !important!important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  padding: 4px 8px;
+  outline: none;
+}
+
+.group-header .group-title-input {
+  color: #1e293b !important!important;
+}
+
+
+.group-header {
     background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
     border-bottom: 3pt solid #8B1538;
     color: #1e293b;
@@ -811,6 +828,22 @@ textarea{min-height:80px;resize:vertical}
     page-break-after: avoid;
     position: relative;
   }
+
+
+.group-header {
+  color: #1e293b !important;
+}
+
+.group-header input {
+  color: #1e293b !important;
+}
+
+.group-title-input {
+  color: #1e293b !important;
+  font-weight: 700 !important;
+  font-size: 18px !important;
+}
+
 
   .group-header::before {
     content: '▶';
@@ -825,7 +858,7 @@ textarea{min-height:80px;resize:vertical}
 
   .group-title-input {
     background: transparent;
-    color: #8B1538;
+    color: #1e293b !important;
     border: none;
     padding: 0 0 0 24px;
     font-size: 13.5pt;
@@ -908,7 +941,71 @@ textarea{min-height:80px;resize:vertical}
     gap: 4px;
   }
 
-  .check {
+  
+.check .tiny {
+  width: 45px !important;
+  max-width: 45px !important;
+  min-width: 45px !important;
+  padding: 8px 6px !important;
+  text-align: center !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  border: 2px solid #cbd5e1 !important;
+  border-radius: 6px !important;
+}
+
+
+
+/*
+/* Größerer Löschen-Button */
+.check .del {
+  min-width: 36px !important;
+  height: 36px !important;
+  padding: 8px 10px !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.section-header .del,
+.btn.del {
+  min-width: 36px !important;
+  height: 36px !important;
+  padding: 8px 10px !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+
+ Mehrzeilige Felder für Checklisten */
+.check .label-input {
+  min-height: 32px !important;
+  max-height: 200px !important;
+  resize: vertical !important;
+  overflow-y: auto !important;
+  line-height: 1.4 !important;
+  font-family: inherit !important;
+}
+
+.check .note {
+  min-height: 32px !important;
+  max-height: 200px !important;
+  resize: vertical !important;
+  overflow-y: auto !important;
+  line-height: 1.4 !important;
+  font-family: inherit !important;
+}
+
+.check textarea {
+  font-family: inherit !important;
+  font-size: inherit !important;
+}
+
+
+.check {
     border: 1pt solid #e2e8f0;
     border-left: 3pt solid #cbd5e1;
     border-radius: 5px;
@@ -2605,9 +2702,9 @@ height: 14px;
               <span></span>
             </div>
           </div>
-          <input type="text" class="tiny" value="${row.code||''}" placeholder="Code" />
-          <input type="text" class="label-input" value="${row.text}" placeholder="Punkt..." />
-          <input type="text" class="note" value="${row.note||''}" placeholder="Bemerkung..." />
+          <input type="text" class="tiny" value="${row.code||''}" placeholder="Code" maxlength="2" />
+          <textarea class="label-input" placeholder="Punkt..." rows="1">${row.text}</textarea>
+          <textarea class="note" placeholder="Bemerkung..." rows="1">${row.note||''}</textarea>
           <input type="checkbox" ${row.ok?'checked':''} />
           <button class="btn icon tiny del">✕</button>
         `;
@@ -3193,44 +3290,6 @@ function createEnhancedTextEditor(container, section) {
   var alignRight = createBtn('&#10145;', 'Rechts', 'justifyRight');
   var alignJustify = createBtn('&#8803;', 'Block', 'justifyFull');
 
-  // Link Button
-  var linkBtn = document.createElement('button');
-  linkBtn.innerHTML = '&#128279;';
-  linkBtn.title = 'Link';
-  linkBtn.onclick = function() {
-    var url = prompt('URL eingeben:', 'https://');
-    if(url) {
-      document.execCommand('createLink', false, url);
-      editor.focus();
-    }
-  };
-
-  // Image Button
-  var imageBtn = document.createElement('button');
-  imageBtn.innerHTML = '&#128247;';
-  imageBtn.title = 'Bild';
-  imageBtn.onclick = function() {
-    var url = prompt('Bild-URL eingeben:', 'https://');
-    if(url) {
-      document.execCommand('insertImage', false, url);
-      editor.focus();
-    }
-  };
-
-  // Emoji Button
-  var emojiBtn = document.createElement('button');
-  emojiBtn.innerHTML = '&#128512;';
-  emojiBtn.title = 'Emoji';
-  emojiBtn.onclick = function() {
-    var emoji = prompt('Emoji (1-12):\n1:Smile 2:Daumen 3:Herz 4:Check 5:Warnung 6:Notiz 7:Papier 8:Idee 9:Tool 10:Stern 11:Ja 12:Nein', '1');
-    var emojis = ['😊', '👍', '❤️', '✅', '⚠️', '📝', '📄', '💡', '🔧', '⭐', '✓', '✗'];
-    var idx = parseInt(emoji) - 1;
-    if(idx >= 0 && idx < emojis.length) {
-      document.execCommand('insertText', false, emojis[idx]);
-      editor.focus();
-    }
-  };
-
   // Undo/Redo
   var undoBtn = createBtn('&#8634;', 'Rueckgaengig', 'undo');
   var redoBtn = createBtn('&#8635;', 'Wiederholen', 'redo');
@@ -3238,7 +3297,7 @@ function createEnhancedTextEditor(container, section) {
   // Clear Formatting
   var clearBtn = createBtn('&#10005;', 'Format loeschen', 'removeFormat');
 
-  // Insert all elements
+  // Insert all elements (OHNE Link, Bild, Emoji)
   var existingButtons = toolbar.querySelectorAll('button');
   if (existingButtons.length >= 3) {
     existingButtons[2].after(
@@ -3259,11 +3318,6 @@ function createEnhancedTextEditor(container, section) {
       alignCenter,
       alignRight,
       alignJustify,
-      createDivider(),
-      linkBtn,
-      imageBtn,
-      createDivider(),
-      emojiBtn,
       createDivider(),
       undoBtn,
       redoBtn,
