@@ -522,32 +522,14 @@ textarea{min-height:80px;resize:vertical}
 
 
 /* ═══════════════════════════════════════════════════════════════
-   PROFESSIONELLES PDF-LAYOUT - Premium Edition
-   Optimiert für perfekten Druck mit allen Formatierungen
-   ═══════════════════════════════════════════════════════════════ */
-
-
-/* ═══════════════════════════════════════════════════════════════
-   OPTIMIERTES PDF-LAYOUT - v6.1
-   Code-Feld kleiner, Mehrzeilige Felder funktionieren
+   OPTIMIERTES PDF-LAYOUT v6.2 FINAL
    ═══════════════════════════════════════════════════════════════ */
 
 @media print {
-  /* Grundeinstellungen */
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;
-  }
-  
-  /* CRITICAL: Textareas müssen mehrzeilig sein */
-  textarea {
-    height: auto !important;
-    min-height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
-    white-space: pre-wrap !important;
-    word-wrap: break-word !important;
   }
 
   body {
@@ -573,28 +555,12 @@ textarea{min-height:80px;resize:vertical}
   }
 
   /* UI-Elemente verstecken */
-  .hamburger-container,
-  .hamburger-menu,
-  #pageBreakMarkers,
-  .group-btn,
-  .group-toggle,
-  .group-collapse-btn,
-  .group-move-handle,
-  .move-handle,
-  .move-btns,
-  .group-add-section,
-  .check .manage,
-  .check .del,
-  .section-header .btn,
-  .sig-controls button,
-  .collapse-btn,
-  .image-preview-item .delete-btn,
-  .image-preview-item .edit-btn,
-  .text-editor-toolbar,
-  .info-btn,
-  .del,
-  .add-row-btn,
-  .del-section-btn,
+  .hamburger-container, .hamburger-menu, #pageBreakMarkers, .group-btn,
+  .group-toggle, .group-collapse-btn, .group-move-handle, .move-handle,
+  .move-btns, .group-add-section, .check .manage, .check .del,
+  .section-header .btn, .sig-controls button, .collapse-btn,
+  .image-preview-item .delete-btn, .image-preview-item .edit-btn,
+  .text-editor-toolbar, .info-btn, .del, .add-row-btn, .del-section-btn,
   button {
     display: none !important;
   }
@@ -614,40 +580,27 @@ textarea{min-height:80px;resize:vertical}
     margin: 20mm 15mm 25mm 15mm;
 
     @top-left {
-      content: "� VALIDIERUNGSPROTOKOLL";
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      content: "🔒 VALIDIERUNGSPROTOKOLL";
       font-size: 8pt;
       color: #8B1538;
       font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-
-    @top-right {
-      content: "�";
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      font-size: 8pt;
-      color: #64748b;
-      font-weight: 600;
-    }
-
-    @bottom-left {
-      content: "© Validierung • Vertraulich";
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      font-size: 7pt;
-      color: #94a3b8;
     }
 
     @bottom-center {
       content: "Seite " counter(page) " von " counter(pages);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       font-size: 9pt;
       color: #1e293b;
       font-weight: 600;
     }
 
+    @bottom-left {
+      content: "© Validierung • Vertraulich";
+      font-size: 7pt;
+      color: #94a3b8;
+    }
+
     @bottom-right {
       content: "DOK-ID: VAL-2025-001";
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       font-size: 7pt;
       color: #64748b;
     }
@@ -661,27 +614,22 @@ textarea{min-height:80px;resize:vertical}
     margin: -20mm -15mm 8mm -15mm !important;
     page-break-after: avoid;
     border-bottom: 4px solid #6d1129 !important;
-    box-shadow: 0 4px 12px rgba(139, 21, 56, 0.2) !important;
   }
 
   header .title {
     font-size: 24pt !important;
     font-weight: 700 !important;
     margin: 0 0 8px 0 !important;
-    letter-spacing: -0.5px !important;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
     color: #ffffff !important;
   }
 
   header .version {
     font-size: 9pt !important;
-    opacity: 0.95 !important;
     background: rgba(255, 255, 255, 0.2) !important;
     padding: 4px 12px !important;
     border-radius: 12px !important;
     display: inline-block !important;
     font-weight: 600 !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
     color: #ffffff !important;
   }
 
@@ -692,7 +640,6 @@ textarea{min-height:80px;resize:vertical}
     border-radius: 8px !important;
     padding: 16px 20px !important;
     margin-bottom: 15px !important;
-    box-shadow: 0 3px 8px rgba(59, 130, 246, 0.1) !important;
     page-break-inside: avoid;
   }
 
@@ -703,7 +650,6 @@ textarea{min-height:80px;resize:vertical}
     margin: 0 0 10px 0 !important;
     padding-bottom: 8px !important;
     border-bottom: 2pt solid #3b82f6 !important;
-    letter-spacing: 0.2px !important;
   }
 
   .info-grid {
@@ -717,7 +663,6 @@ textarea{min-height:80px;resize:vertical}
     color: #1e40af !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
     margin-bottom: 3px !important;
     display: block !important;
   }
@@ -732,9 +677,6 @@ textarea{min-height:80px;resize:vertical}
     font-weight: 500 !important;
     color: #1e293b !important;
     width: 100%;
-    height: auto !important;
-    min-height: auto !important;
-    overflow: visible !important;
   }
 
   .info-field input:not(:placeholder-shown),
@@ -752,7 +694,6 @@ textarea{min-height:80px;resize:vertical}
     background: #ffffff !important;
     page-break-inside: avoid;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
   }
 
   .group:first-of-type {
@@ -761,11 +702,9 @@ textarea{min-height:80px;resize:vertical}
 
   .group-header {
     background: linear-gradient(135deg, #8B1538 0%, #a91d47 50%, #8B1538 100%) !important;
-    border-bottom: none !important;
     color: #ffffff !important;
     padding: 12px 18px !important;
     page-break-after: avoid;
-    box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.1) !important;
   }
 
   .group-title-input {
@@ -775,8 +714,6 @@ textarea{min-height:80px;resize:vertical}
     padding: 0 !important;
     font-size: 13pt !important;
     font-weight: 700 !important;
-    letter-spacing: 0.2px !important;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
   }
 
   .group-content {
@@ -786,9 +723,7 @@ textarea{min-height:80px;resize:vertical}
   /* Sections */
   .section {
     padding: 8px 14px !important;
-    border-top: none !important;
     page-break-inside: avoid;
-    margin-bottom: 0 !important;
   }
 
   .section + .section {
@@ -803,7 +738,6 @@ textarea{min-height:80px;resize:vertical}
     border-bottom: 2pt solid #64748b !important;
     border-left: 4pt solid #8B1538 !important;
     page-break-after: avoid;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
   }
 
   .section-header h2,
@@ -812,7 +746,6 @@ textarea{min-height:80px;resize:vertical}
     font-size: 11pt !important;
     font-weight: 700 !important;
     margin: 0 !important;
-    letter-spacing: 0.2px !important;
   }
 
   /* Labels & Inputs */
@@ -836,9 +769,6 @@ textarea{min-height:80px;resize:vertical}
     font-size: 10pt !important;
     line-height: 1.4 !important;
     color: #1e293b !important;
-    height: auto !important;
-    min-height: auto !important;
-    overflow: visible !important;
   }
 
   /* Checklisten */
@@ -857,35 +787,32 @@ textarea{min-height:80px;resize:vertical}
     page-break-inside: avoid;
     background: #ffffff !important;
     min-height: 28px !important;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
   }
 
   .check:nth-child(even) {
     background: #f9fafb !important;
   }
 
-  /* CODE-FELD: NUR 2 ZEICHEN PLATZ! */
+  /* CODE-FELD: KLEIN & 2 ZEICHEN */
   .check .tiny,
   .check input.tiny {
-    width: 35px !important;
-    max-width: 35px !important;
-    min-width: 35px !important;
+    width: 32px !important;
+    max-width: 32px !important;
+    min-width: 32px !important;
     border: 1.5pt solid #8B1538 !important;
     border-radius: 4px !important;
-    padding: 4px 4px !important;
+    padding: 4px 3px !important;
     text-align: center !important;
     font-size: 9pt !important;
     background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
     font-weight: 700 !important;
     color: #8B1538 !important;
-    letter-spacing: 0px !important;
     flex-shrink: 0 !important;
     height: auto !important;
-    min-height: 24px !important;
-    overflow: visible !important;
+    line-height: 1.2 !important;
   }
 
-  /* PUNKT-FELD: MEHRZEILIG! */
+  /* PUNKT-FELD: MEHRZEILIG */
   .check .label-input,
   .check textarea.label-input {
     border: none !important;
@@ -896,15 +823,16 @@ textarea{min-height:80px;resize:vertical}
     color: #1e293b !important;
     font-weight: 500 !important;
     height: auto !important;
-    min-height: auto !important;
+    min-height: 20px !important;
     max-height: none !important;
     overflow: visible !important;
     white-space: pre-wrap !important;
     word-wrap: break-word !important;
     line-height: 1.4 !important;
+    resize: none !important;
   }
 
-  /* BEMERKUNG-FELD: MEHRZEILIG! */
+  /* BEMERKUNG-FELD: MEHRZEILIG */
   .check .note,
   .check textarea.note {
     border: 1.5pt solid #fbbf24 !important;
@@ -912,25 +840,24 @@ textarea{min-height:80px;resize:vertical}
     padding: 4px 8px !important;
     font-size: 9pt !important;
     min-width: 100px !important;
-    max-width: 150px !important;
+    max-width: 140px !important;
     background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
     color: #78350f !important;
     font-style: italic !important;
     font-weight: 500 !important;
     flex-shrink: 0 !important;
     height: auto !important;
-    min-height: auto !important;
+    min-height: 20px !important;
     max-height: none !important;
     overflow: visible !important;
     white-space: pre-wrap !important;
     word-wrap: break-word !important;
     line-height: 1.4 !important;
+    resize: none !important;
   }
 
   .check textarea {
     font-family: inherit !important;
-    outline: none !important;
-    resize: none !important;
   }
 
   .check input[type="checkbox"] {
@@ -940,23 +867,6 @@ textarea{min-height:80px;resize:vertical}
     border: 2pt solid #475569 !important;
     border-radius: 3px !important;
     flex-shrink: 0 !important;
-  }
-
-  /* Checkbox-Inline */
-  .checkbox-inline {
-    page-break-inside: avoid;
-  }
-
-  .checkbox-inline input[type="checkbox"] {
-    width: 14px !important;
-    height: 14px !important;
-    border: 1.5pt solid #64748b !important;
-    border-radius: 3px !important;
-  }
-
-  .checkbox-inline label {
-    font-size: 10pt !important;
-    color: #334155 !important;
   }
 
   /* Spacing Section - UNSICHTBAR */
@@ -992,62 +902,6 @@ textarea{min-height:80px;resize:vertical}
     color: #1e293b !important;
   }
 
-  .text-editor-content p {
-    margin: 6px 0 !important;
-  }
-
-  .text-editor-content ul,
-  .text-editor-content ol {
-    margin: 6px 0 !important;
-    padding-left: 18px !important;
-  }
-
-  .text-editor-content table {
-    border-collapse: collapse !important;
-    width: 100% !important;
-    margin: 8px 0 !important;
-  }
-
-  .text-editor-content table td,
-  .text-editor-content table th {
-    padding: 6px 8px !important;
-    border: 1pt solid #cbd5e1 !important;
-  }
-
-  /* Image Section */
-  .image-section {
-    background: #ffffff !important;
-    border: 1pt solid #e2e8f0 !important;
-    border-radius: 5px !important;
-    padding: 8px !important;
-    page-break-inside: avoid;
-    margin: 6px 0 !important;
-  }
-
-  .image-upload-zone {
-    display: none !important;
-  }
-
-  .image-preview {
-    gap: 6px !important;
-    display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
-  }
-
-  .image-preview-item {
-    border: 1.5pt solid #e2e8f0 !important;
-    border-radius: 5px !important;
-    page-break-inside: avoid;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
-  }
-
-  .image-preview-item img {
-    width: 100% !important;
-    height: auto !important;
-    display: block !important;
-  }
-
   /* Unterschriften */
   .sig-area {
     border: 2pt solid #94a3b8 !important;
@@ -1058,7 +912,6 @@ textarea{min-height:80px;resize:vertical}
     page-break-inside: avoid;
     position: relative;
     margin-top: 12px !important;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05) !important;
   }
 
   .sig-area::before {
@@ -1081,95 +934,15 @@ textarea{min-height:80px;resize:vertical}
     font-weight: 600 !important;
   }
 
-  .sig-area textarea {
-    border: none !important;
-    background: transparent !important;
-    font-size: 10pt !important;
-    min-height: 40px !important;
-    padding: 3px !important;
-    margin-bottom: 30px !important;
-    font-weight: 500 !important;
-    color: #1e293b !important;
-    height: auto !important;
-    overflow: visible !important;
-  }
-
-  /* Tabellen */
-  table {
-    width: 100% !important;
-    border-collapse: collapse !important;
-    page-break-inside: auto;
-    margin: 6mm 0 !important;
-    font-size: 9.5pt !important;
-  }
-
-  thead {
-    display: table-header-group !important;
-    background: #f1f5f9 !important;
-  }
-
-  thead tr {
-    page-break-after: avoid !important;
-  }
-
-  tbody tr {
-    page-break-inside: avoid !important;
-    page-break-after: auto !important;
-  }
-
-  th, td {
-    border: 1pt solid #cbd5e1 !important;
-    padding: 6px 10px !important;
-    text-align: left !important;
-    vertical-align: top !important;
-  }
-
-  th {
-    font-weight: 700 !important;
-    color: #1e293b !important;
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
-    font-size: 10pt !important;
-    letter-spacing: 0.2px !important;
-    border-bottom: 2pt solid #8B1538 !important;
-  }
-
-  tbody tr:nth-child(even) {
-    background: #f9fafb !important;
-  }
-
-  tbody tr:nth-child(odd) {
-    background: #ffffff !important;
-  }
-
   /* Seitenumbruch-Kontrolle */
-  .section-header,
-  .group-header,
-  h1, h2, h3 {
+  .section-header, .group-header, h1, h2, h3 {
     page-break-after: avoid !important;
   }
 
-  .section,
-  .group,
-  .check,
-  .sig-area,
-  .image-section,
-  .text-section {
+  .section, .group, .check, .sig-area {
     page-break-inside: avoid !important;
-  }
-
-  /* Typografie */
-  p, li, div, .check {
-    orphans: 3 !important;
-    widows: 3 !important;
-  }
-
-  body {
-    text-rendering: optimizeLegibility !important;
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
   }
 }
-
 
 
   </style>
@@ -1182,18 +955,18 @@ textarea{min-height:80px;resize:vertical}
     </button>
     <div class="hamburger-menu" id="hamburgerMenu">
         <button class="btn" onclick="window.location.href='index.html'" style="background:#10b981;color:#fff">
-          <span>� Home</span>
+          <span>🏠 Home</span>
         </button>
       <button class="btn" id="btnNewGroup">➕ Neue Gruppe</button>
-      <button class="btn" id="btnNewSectionMenu">� Neuer Abschnitt</button>
+      <button class="btn" id="btnNewSectionMenu">📝 Neuer Abschnitt</button>
       <button class="btn switch" id="btnPageBreaks">
         <span>Seitenumbrüche</span>
         <span id="pageBreakState">Aus</span>
       </button>
-      <button class="btn" id="btnPDF">�️ PDF drucken</button>
-      <button class="btn secondary" id="btnSave">� Speichern</button>
-      <button class="btn secondary" id="btnLoad">� Laden</button>
-      <button class="btn danger" id="btnReset">� Reset</button>
+      <button class="btn" id="btnPDF">🖨️ PDF drucken</button>
+      <button class="btn secondary" id="btnSave">💾 Speichern</button>
+      <button class="btn secondary" id="btnLoad">📂 Laden</button>
+      <button class="btn danger" id="btnReset">🔄 Reset</button>
     </div>
   </div>
 
@@ -1327,7 +1100,7 @@ textarea{min-height:80px;resize:vertical}
           <div class="sig-area">
             <textarea id="unterschriftValidierer" placeholder="Datum und Unterschrift eingeben..."></textarea>
             <div class="sig-controls" style="justify-content:flex-end;margin-top:8px">
-              <button class="btn icon" data-clear-text="unterschriftValidierer">�️ Löschen</button>
+              <button class="btn icon" data-clear-text="unterschriftValidierer">🗑️ Löschen</button>
             </div>
           </div>
         </div>
@@ -1336,7 +1109,7 @@ textarea{min-height:80px;resize:vertical}
           <div class="sig-area">
             <textarea id="freigabeBetreiber" placeholder="Datum und Unterschrift eingeben..."></textarea>
             <div class="sig-controls" style="justify-content:flex-end;margin-top:8px">
-              <button class="btn icon" data-clear-text="freigabeBetreiber">�️ Löschen</button>
+              <button class="btn icon" data-clear-text="freigabeBetreiber">🗑️ Löschen</button>
             </div>
           </div>
         </div>
@@ -1366,11 +1139,11 @@ textarea{min-height:80px;resize:vertical}
           <div class="name">Abstand</div>
         </div>
         <div class="section-type-card" data-type="text">
-          <div class="icon">�</div>
+          <div class="icon">📝</div>
           <div class="name">Text</div>
         </div>
         <div class="section-type-card" data-type="image">
-          <div class="icon">�</div>
+          <div class="icon">🖼</div>
           <div class="name">Bilder</div>
         </div>
       </div>
@@ -2069,7 +1842,7 @@ textarea{min-height:80px;resize:vertical}
       body.innerHTML = `
         <div class="image-section">
           <div class="image-upload-zone">
-            <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">� Bilder hochladen</div><div style="font-size: 14px; color: #94a3b8;">Klicken oder Dateien hierher ziehen</div>
+            <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">📸 Bilder hochladen</div><div style="font-size: 14px; color: #94a3b8;">Klicken oder Dateien hierher ziehen</div>
             <input type="file" accept="image/*" multiple style="display:none" />
           </div>
           <div class="image-preview"></div>
@@ -2487,7 +2260,7 @@ function initImageEditModal() {
   imageEditModal.innerHTML = `
     <div class="image-edit-container">
       <div class="image-edit-header">
-        <h3>�️ Bild bearbeiten</h3>
+        <h3>🖼️ Bild bearbeiten</h3>
         <button class="image-edit-close">✕</button>
       </div>
       <div class="image-edit-canvas-container">
@@ -2498,8 +2271,8 @@ function initImageEditModal() {
         <button onclick="rotateImage(90)">↻ Rechts drehen</button>
         <button onclick="flipImage('horizontal')">↔ Horizontal spiegeln</button>
         <button onclick="flipImage('vertical')">↕ Vertical spiegeln</button>
-        <button class="secondary" onclick="resetImage()">� Zurücksetzen</button>
-        <button onclick="saveEditedImage()">� Speichern</button>
+        <button class="secondary" onclick="resetImage()">🔄 Zurücksetzen</button>
+        <button onclick="saveEditedImage()">💾 Speichern</button>
         <button class="secondary" onclick="closeImageEditor()">✕ Abbrechen</button>
       </div>
     </div>
