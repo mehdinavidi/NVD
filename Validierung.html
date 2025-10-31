@@ -526,12 +526,28 @@ textarea{min-height:80px;resize:vertical}
    Optimiert für perfekten Druck mit allen Formatierungen
    ═══════════════════════════════════════════════════════════════ */
 
+
+/* ═══════════════════════════════════════════════════════════════
+   OPTIMIERTES PDF-LAYOUT - v6.1
+   Code-Feld kleiner, Mehrzeilige Felder funktionieren
+   ═══════════════════════════════════════════════════════════════ */
+
 @media print {
   /* Grundeinstellungen */
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;
+  }
+  
+  /* CRITICAL: Textareas müssen mehrzeilig sein */
+  textarea {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
   }
 
   body {
@@ -598,7 +614,7 @@ textarea{min-height:80px;resize:vertical}
     margin: 20mm 15mm 25mm 15mm;
 
     @top-left {
-      content: "🔒 VALIDIERUNGSPROTOKOLL";
+      content: "� VALIDIERUNGSPROTOKOLL";
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       font-size: 8pt;
       color: #8B1538;
@@ -607,7 +623,7 @@ textarea{min-height:80px;resize:vertical}
     }
 
     @top-right {
-      content: "📅 " attr(data-date);
+      content: "�";
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       font-size: 8pt;
       color: #64748b;
@@ -716,6 +732,9 @@ textarea{min-height:80px;resize:vertical}
     font-weight: 500 !important;
     color: #1e293b !important;
     width: 100%;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
   }
 
   .info-field input:not(:placeholder-shown),
@@ -817,6 +836,9 @@ textarea{min-height:80px;resize:vertical}
     font-size: 10pt !important;
     line-height: 1.4 !important;
     color: #1e293b !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
   }
 
   /* Checklisten */
@@ -842,20 +864,28 @@ textarea{min-height:80px;resize:vertical}
     background: #f9fafb !important;
   }
 
-  .check .tiny {
-    width: 45px !important;
+  /* CODE-FELD: NUR 2 ZEICHEN PLATZ! */
+  .check .tiny,
+  .check input.tiny {
+    width: 35px !important;
+    max-width: 35px !important;
+    min-width: 35px !important;
     border: 1.5pt solid #8B1538 !important;
     border-radius: 4px !important;
-    padding: 4px 6px !important;
+    padding: 4px 4px !important;
     text-align: center !important;
     font-size: 9pt !important;
     background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
     font-weight: 700 !important;
     color: #8B1538 !important;
-    letter-spacing: 0.3px !important;
+    letter-spacing: 0px !important;
     flex-shrink: 0 !important;
+    height: auto !important;
+    min-height: 24px !important;
+    overflow: visible !important;
   }
 
+  /* PUNKT-FELD: MEHRZEILIG! */
   .check .label-input,
   .check textarea.label-input {
     border: none !important;
@@ -865,34 +895,42 @@ textarea{min-height:80px;resize:vertical}
     background: transparent !important;
     color: #1e293b !important;
     font-weight: 500 !important;
-    min-height: auto !important;
     height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
     overflow: visible !important;
-    resize: none !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    line-height: 1.4 !important;
   }
 
+  /* BEMERKUNG-FELD: MEHRZEILIG! */
   .check .note,
   .check textarea.note {
     border: 1.5pt solid #fbbf24 !important;
     border-radius: 4px !important;
     padding: 4px 8px !important;
     font-size: 9pt !important;
-    min-width: 120px !important;
-    max-width: 180px !important;
+    min-width: 100px !important;
+    max-width: 150px !important;
     background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
     color: #78350f !important;
     font-style: italic !important;
     font-weight: 500 !important;
     flex-shrink: 0 !important;
-    min-height: auto !important;
     height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
     overflow: visible !important;
-    resize: none !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    line-height: 1.4 !important;
   }
 
   .check textarea {
     font-family: inherit !important;
     outline: none !important;
+    resize: none !important;
   }
 
   .check input[type="checkbox"] {
@@ -1052,6 +1090,8 @@ textarea{min-height:80px;resize:vertical}
     margin-bottom: 30px !important;
     font-weight: 500 !important;
     color: #1e293b !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 
   /* Tabellen */
@@ -1131,6 +1171,7 @@ textarea{min-height:80px;resize:vertical}
 }
 
 
+
   </style>
 </head>
 <body>
@@ -1141,18 +1182,18 @@ textarea{min-height:80px;resize:vertical}
     </button>
     <div class="hamburger-menu" id="hamburgerMenu">
         <button class="btn" onclick="window.location.href='index.html'" style="background:#10b981;color:#fff">
-          <span>🏠 Home</span>
+          <span>� Home</span>
         </button>
       <button class="btn" id="btnNewGroup">➕ Neue Gruppe</button>
-      <button class="btn" id="btnNewSectionMenu">📝 Neuer Abschnitt</button>
+      <button class="btn" id="btnNewSectionMenu">� Neuer Abschnitt</button>
       <button class="btn switch" id="btnPageBreaks">
         <span>Seitenumbrüche</span>
         <span id="pageBreakState">Aus</span>
       </button>
-      <button class="btn" id="btnPDF">🖨️ PDF drucken</button>
-      <button class="btn secondary" id="btnSave">💾 Speichern</button>
-      <button class="btn secondary" id="btnLoad">📂 Laden</button>
-      <button class="btn danger" id="btnReset">🔄 Reset</button>
+      <button class="btn" id="btnPDF">�️ PDF drucken</button>
+      <button class="btn secondary" id="btnSave">� Speichern</button>
+      <button class="btn secondary" id="btnLoad">� Laden</button>
+      <button class="btn danger" id="btnReset">� Reset</button>
     </div>
   </div>
 
@@ -1286,7 +1327,7 @@ textarea{min-height:80px;resize:vertical}
           <div class="sig-area">
             <textarea id="unterschriftValidierer" placeholder="Datum und Unterschrift eingeben..."></textarea>
             <div class="sig-controls" style="justify-content:flex-end;margin-top:8px">
-              <button class="btn icon" data-clear-text="unterschriftValidierer">🗑️ Löschen</button>
+              <button class="btn icon" data-clear-text="unterschriftValidierer">�️ Löschen</button>
             </div>
           </div>
         </div>
@@ -1295,7 +1336,7 @@ textarea{min-height:80px;resize:vertical}
           <div class="sig-area">
             <textarea id="freigabeBetreiber" placeholder="Datum und Unterschrift eingeben..."></textarea>
             <div class="sig-controls" style="justify-content:flex-end;margin-top:8px">
-              <button class="btn icon" data-clear-text="freigabeBetreiber">🗑️ Löschen</button>
+              <button class="btn icon" data-clear-text="freigabeBetreiber">�️ Löschen</button>
             </div>
           </div>
         </div>
@@ -1325,11 +1366,11 @@ textarea{min-height:80px;resize:vertical}
           <div class="name">Abstand</div>
         </div>
         <div class="section-type-card" data-type="text">
-          <div class="icon">📝</div>
+          <div class="icon">�</div>
           <div class="name">Text</div>
         </div>
         <div class="section-type-card" data-type="image">
-          <div class="icon">🖼</div>
+          <div class="icon">�</div>
           <div class="name">Bilder</div>
         </div>
       </div>
@@ -2028,7 +2069,7 @@ textarea{min-height:80px;resize:vertical}
       body.innerHTML = `
         <div class="image-section">
           <div class="image-upload-zone">
-            <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">📸 Bilder hochladen</div><div style="font-size: 14px; color: #94a3b8;">Klicken oder Dateien hierher ziehen</div>
+            <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">� Bilder hochladen</div><div style="font-size: 14px; color: #94a3b8;">Klicken oder Dateien hierher ziehen</div>
             <input type="file" accept="image/*" multiple style="display:none" />
           </div>
           <div class="image-preview"></div>
@@ -2446,7 +2487,7 @@ function initImageEditModal() {
   imageEditModal.innerHTML = `
     <div class="image-edit-container">
       <div class="image-edit-header">
-        <h3>🖼️ Bild bearbeiten</h3>
+        <h3>�️ Bild bearbeiten</h3>
         <button class="image-edit-close">✕</button>
       </div>
       <div class="image-edit-canvas-container">
@@ -2457,8 +2498,8 @@ function initImageEditModal() {
         <button onclick="rotateImage(90)">↻ Rechts drehen</button>
         <button onclick="flipImage('horizontal')">↔ Horizontal spiegeln</button>
         <button onclick="flipImage('vertical')">↕ Vertical spiegeln</button>
-        <button class="secondary" onclick="resetImage()">🔄 Zurücksetzen</button>
-        <button onclick="saveEditedImage()">💾 Speichern</button>
+        <button class="secondary" onclick="resetImage()">� Zurücksetzen</button>
+        <button onclick="saveEditedImage()">� Speichern</button>
         <button class="secondary" onclick="closeImageEditor()">✕ Abbrechen</button>
       </div>
     </div>
