@@ -33,7 +33,7 @@
     html,body{width:100%;height:100%;overflow-x:hidden}
     body{
       font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;
-      background:#1E2434;
+      background:#ffffff;
       padding:20px;
       transition:background 0.4s ease;
       min-height:100vh;
@@ -61,10 +61,8 @@
     }
     @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
     h1{
-      font-size:28px;color:#2d3748;margin-bottom:8px;font-weight:800;
-      text-align:center;background:linear-gradient(135deg,#1E2434 0%,#8B1538 100%);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-      background-clip:text;padding-bottom:10px;letter-spacing:-0.5px;
+      font-size:28px;color:#1E2434;margin-bottom:8px;font-weight:800;
+      text-align:center;padding-bottom:10px;letter-spacing:-0.5px;
     }
     .revision{
       text-align:center;font-size:12px;color:#718096;margin-bottom:25px;
@@ -200,6 +198,9 @@
     body.dark-theme .info-modal-content h2{color:#fff;border-bottom-color:#8B1538}
     body.dark-theme .info-modal-content h3{color:#cbd5e0}
     body.dark-theme .info-modal-content code{background:#2a3240;color:#81e6d9}
+    body.dark-theme .info-modal-content ul{color:#e2e8f0}
+    body.dark-theme .info-modal-content li{color:#e2e8f0}
+    body.dark-theme .info-modal-content p{color:#e2e8f0}
     body.dark-theme .approval-box{background:#2a3240;border-color:#3a4150}
     body.dark-theme .section .cost-box[style*="e8eaf0"]{background:#2a3240 !important;border-color:#3a4150}
 
@@ -418,10 +419,11 @@
     .btn-save{background:#8B1538}
     .btn-pdf{background:#8B1538}
     .btn-print{background:#8B1538}
+    .btn-mail{background:#8B1538}
     .btn-sig{background:#8B1538}
     .btn-json{background:#8B1538}
     .btn-import{background:#8B1538}
-    .btn-save:hover, .btn-pdf:hover, .btn-print:hover, .btn-sig:hover, .btn-json:hover, .btn-import:hover{background:#6B1028}
+    .btn-save:hover, .btn-pdf:hover, .btn-mail:hover, .btn-print:hover, .btn-sig:hover, .btn-json:hover, .btn-import:hover{background:#6B1028}
 
     /* ====== Modal/Signatur ====== */
     .modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);z-index:9999;touch-action:none;backdrop-filter:blur(5px)}
@@ -434,8 +436,10 @@
     @keyframes modalFadeIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
     .modal-title{font-size:22px;font-weight:800;margin-bottom:20px;color:#2d3748;letter-spacing:-0.3px}
     .close{
-      float:right;font-size:32px;font-weight:700;cursor:pointer;color:#a0aec0;
+      position:absolute;top:20px;right:25px;
+      font-size:32px;font-weight:700;cursor:pointer;color:#a0aec0;
       transition:all 0.3s ease;line-height:1;
+      z-index:1;
     }
     .close:hover{color:#4a5568;transform:rotate(90deg)}
     .canvas-box{
@@ -464,7 +468,7 @@
     .btn-ok:hover{background:#6B1028}
     .sig-preview{
       border:2px dashed #e2e8f0;padding:20px;min-height:100px;
-      display:flex;align-items:center;justify-content:center;
+      display:flex;align-items:center;justify-content:flex-start;
       background:#f7fafc;border-radius:12px;margin-top:12px;
       transition:all 0.3s ease;
     }
@@ -531,13 +535,13 @@
     .info-modal-content{
       background:#fff;margin:20px auto;padding:40px;max-width:800px;
       border-radius:20px;box-shadow:0 25px 70px rgba(0,0,0,0.3);
-      animation:modalFadeIn 0.3s ease;
+      animation:modalFadeIn 0.3s ease;position:relative;
     }
     .info-modal-content h2{
-      background:linear-gradient(135deg,#1E2434 0%,#8B1538 100%);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-      background-clip:text;border-bottom:3px solid #1E2434;
+      color:#1E2434;
+      border-bottom:3px solid #1E2434;
       padding:0 0 15px 0;margin-bottom:25px;font-size:26px;
+      font-weight:800;text-align:center;
     }
     .info-modal-content h3{
       color:#2d3748;font-size:18px;margin:25px 0 12px 0;
@@ -566,7 +570,7 @@
       border-radius:10px;
       cursor:pointer;
       flex-direction:column;
-      justify-content:center;
+      justify-content:flex-start;
       align-items:center;
       gap:5px;
       padding:10px;
@@ -669,7 +673,7 @@
         max-width:none;
         flex-shrink:0;
         -webkit-tap-highlight-color:transparent;
-        justify-content:center;
+        justify-content:flex-start;
         gap:10px;
         border-radius:10px;
       }
@@ -689,7 +693,7 @@
         padding:12px 16px;
         gap:10px;
         border-radius:10px;
-        justify-content:center;
+        justify-content:flex-start;
       }
       /* Divider on mobile - horizontal */
       .action-buttons .btn-divider{
@@ -762,22 +766,25 @@
 
   <div class="action-buttons" id="mobileMenu">
     <button class="btn btn-home" onclick="window.location.href='Apps-Hub.html'" title="Zurück zum Apps-Hub">
-      <span class="btn-icon">🏠</span><span class="btn-text"> Home</span>
+      <span class="btn-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></span><span class="btn-text"> Apps Hub</span>
     </button>
     <button class="btn btn-save" onclick="saveReport()" title="Speichern">
-      <span class="btn-icon">💾</span><span class="btn-text"> Speichern</span>
+      <span class="btn-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></span><span class="btn-text"> Speichern</span>
     </button>
     <button class="btn btn-pdf" onclick="exportPDF()" title="PDF erstellen">
-      <span class="btn-icon">📄</span><span class="btn-text"> PDF erstellen</span>
+      <span class="btn-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></span><span class="btn-text"> Export Datei (ZIP)</span>
+    </button>
+    <button class="btn btn-mail" onclick="sendByEmail()" title="Per Mail senden">
+      <span class="btn-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></span><span class="btn-text"> Per Mail senden</span>
     </button>
     <button class="btn btn-print" onclick="printPDF()" title="PDF drucken">
-      <span class="btn-icon">🖨️</span><span class="btn-text"> PDF drucken</span>
+      <span class="btn-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg></span><span class="btn-text"> Drucken</span>
     </button>
     <button class="btn btn-json" onclick="exportJSON()" title="Exportieren">
-      <span class="btn-icon">📦</span><span class="btn-text"> Exportieren</span>
+      <span class="btn-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></span><span class="btn-text"> Export</span>
     </button>
     <button class="btn btn-import" onclick="document.getElementById('jsonFile').click()" title="Importieren">
-      <span class="btn-icon">📥</span><span class="btn-text"> Importieren</span>
+      <span class="btn-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg></span><span class="btn-text"> Import</span>
     </button>
     <input type="file" id="jsonFile" accept=".json" style="display:none" onchange="importJSON(this.files[0])">
 
@@ -786,12 +793,12 @@
 
 <!-- Theme Toggle -->
 <button class="btn btn-save" onclick="toggleTheme()" title="Dark Mode">
-  <span class="btn-icon">🌓</span><span class="btn-text"> Dark Mode</span>
+  <span class="btn-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span><span class="btn-text"> Hell/Dunkel</span>
 </button>
 
 <!-- Info Toggle -->
 <button class="btn btn-save" onclick="openInfo()" title="Info & Hilfe">
-  <span class="btn-icon">ℹ️</span><span class="btn-text"> Info & Hilfe</span>
+  <span class="btn-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span><span class="btn-text"> Info & Hilfe</span>
 </button>
 
   </div>
@@ -804,31 +811,31 @@
 <div class="section">
   <div class="header-grid">
     <div class="full-width">
-      <label class="label" for="name">Name:</label>
-      <input type="text" id="name" placeholder="Name des Reisenden">
+      <label class="label" for="name">Name: *</label>
+      <input type="text" id="name" placeholder="Name des Reisenden" required>
     </div>
 
     <div class="header-row">
       <div>
-        <label class="label" for="beginn">Beginn:</label>
-        <input type="datetime-local" id="beginn">
+        <label class="label" for="beginn">Beginn: *</label>
+        <input type="datetime-local" id="beginn" required>
         <div class="hint">Format: dd.mm.yyyy HH:MM</div>
       </div>
       <div>
-        <label class="label" for="ende">Ende:</label>
-        <input type="datetime-local" id="ende">
+        <label class="label" for="ende">Ende: *</label>
+        <input type="datetime-local" id="ende" required>
         <div class="hint">Format: dd.mm.yyyy HH:MM</div>
       </div>
     </div>
 
     <div class="full-width">
-      <label class="label" for="anlass">Anlass:</label>
-      <input type="text" id="anlass" placeholder="Grund der Reise">
+      <label class="label" for="anlass">Anlass: *</label>
+      <input type="text" id="anlass" placeholder="Grund der Reise" required>
     </div>
 
     <div class="full-width">
-      <label class="label" for="reiseziel">Reiseziel(e):</label>
-      <input type="text" id="reiseziel" placeholder="Zielort(e) der Reise">
+      <label class="label" for="reiseziel">Reiseziel(e): *</label>
+      <input type="text" id="reiseziel" placeholder="Zielort(e) der Reise" required>
     </div>
   </div>
 </div>
@@ -851,6 +858,14 @@
   <!-- Firmen-KFZ Section -->
   <div class="cost-box" id="firmen_kfz_section" style="display:none;background:linear-gradient(135deg,#e6f7ff 0%,#cceeff 100%)">
     <label class="label">Firmenauto (Firmen-KFZ)</label>
+    
+    <!-- Kennzeichen Feld -->
+    <div style="margin-bottom:15px">
+      <label class="label" for="firmen_kennzeichen">Kennzeichen:</label>
+      <input type="text" id="firmen_kennzeichen" placeholder="z.B. DD-AB 1234" style="text-transform:uppercase">
+      <div class="hint">Bitte geben Sie das Kennzeichen des Pool-Fahrzeugs an</div>
+    </div>
+    
     <div style="padding:15px;background:#fff;border-radius:8px;border-left:4px solid #0ea5e9">
       <div style="font-size:16px;margin-bottom:10px">ℹ️ <strong>Keine direkten Fahrtkosten</strong></div>
       <div style="color:#475569;line-height:1.6">
@@ -1066,15 +1081,15 @@
     <div class="cost-box" style="background:linear-gradient(135deg,#e8eaf0 0%,#dfe2e8 100%)">
       <div class="cost-row-split">
         <div>
-          <label class="label" for="datum">Datum:</label>
-          <input type="date" id="datum">
+          <label class="label" for="datum">Datum: *</label>
+          <input type="date" id="datum" required>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <button class="btn btn-sig" onclick="openSigModal()" style="font-size:16px;padding:14px 24px;background:#8B1538">
             ✍️ Unterschrift zeichnen
           </button>
           <button class="btn btn-sig" onclick="document.getElementById('sigFileInput').click()" style="font-size:16px;padding:14px 24px;background:#8B1538">
-            📁 Bild hochladen
+            📁 Unterschrift hochladen
           </button>
           <input type="file" id="sigFileInput" accept="image/png,image/jpeg,image/jpg" style="display:none" onchange="handleSignatureUpload(event)">
         </div>
@@ -1082,9 +1097,9 @@
     </div>
     
     <div class="cost-box">
-      <label class="label">Unterschrift Vorschau:</label>
+      <label class="label">Unterschrift Vorschau: *</label>
       <div class="sig-preview" id="sigPrev">
-        <span class="placeholder">Noch keine Unterschrift - Klicken Sie auf "Unterschrift zeichnen" oder "Bild hochladen"</span>
+        <span class="placeholder">Noch keine Unterschrift - Klicken Sie auf "Unterschrift zeichnen" oder "Unterschrift hochladen"</span>
       </div>
       <button class="btn" onclick="clearSignature()" id="clearSigBtn" style="display:none;background:#6B7280;margin-top:10px">
         🗑️ Unterschrift löschen
@@ -1149,7 +1164,7 @@
     <!-- Beleg Vorschau -->
     <div>
       <label style="font-weight:600;display:block;margin-bottom:8px">📄 Beleg Vorschau:</label>
-      <div id="ocrAmountPreview" style="border:2px solid #e2e8f0;border-radius:8px;overflow:hidden;background:#f9fafb;max-height:400px;display:flex;align-items:center;justify-content:center">
+      <div id="ocrAmountPreview" style="border:2px solid #e2e8f0;border-radius:8px;overflow:hidden;background:#f9fafb;max-height:400px;display:flex;align-items:center;justify-content:flex-start">
         <img id="ocrAmountImage" style="max-width:100%;max-height:400px;object-fit:contain" alt="Beleg">
       </div>
     </div>
@@ -1192,93 +1207,101 @@
     <div class="info-modal-content">
       <span class="close" onclick="closeInfo()">&times;</span>
       <h2>Reisekostenabrechnung Nexus/IPS</h2>
-      <p><strong>Version:</strong> 2.0.1 (angepasst an Rev. 02-20/01)</p>
+      <p><strong>Version:</strong> 2.0.1 – Rev. 02-20/01</p>
 
-  <h3>🎉 Neue Features in v2.0.1</h3>
+  <h3>📌 Zweck dieser WebApp</h3>
+  <p>Diese Webanwendung ermöglicht die <strong>digitale Erfassung und Abrechnung von Reisekosten</strong> für Mitarbeiter von Nexus/IPS. Sie ersetzt das manuelle Ausfüllen der Papier-Vorlage und bietet zusätzliche Funktionen wie automatische Berechnungen, OCR-Beleg-Erkennung und PDF-Export.</p>
+  
+  <p><strong>Alle Daten bleiben lokal auf Ihrem Gerät</strong> – es werden keine Informationen an externe Server übertragen. Die App funktioniert vollständig im Browser und auch offline.</p>
+
+  <h3>📝 So nutzen Sie die App</h3>
+  <p><strong>Schritt-für-Schritt Ablauf:</strong></p>
   <ul>
-    <li><strong>🔗 Verknüpfte Belege:</strong> Zeilen und hochgeladene Belege sind miteinander verbunden</li>
-    <li><strong>🗑️ Automatisches Löschen:</strong> Beim Löschen einer Zeile wird der zugehörige Beleg automatisch mitgelöscht und umgekehrt</li>
-    <li><strong>📎 Visuelle Markierung:</strong> Zeilen mit Belegen haben einen grünen Rand und ein Büroklammer-Symbol</li>
-    <li><strong>💡 Tooltip-Hinweise:</strong> Beim Hover über den Löschen-Button sehen Sie, ob auch ein Beleg betroffen ist</li>
+    <li><strong>1. Kopfdaten eingeben:</strong> Name, Reisezeitraum (Datum + Uhrzeit), Anlass und Reiseziel</li>
+    <li><strong>2. Fahrzeugtyp wählen:</strong> Firmenauto, Privat-KFZ oder Mietwagen auswählen</li>
+    <li><strong>3. Kosten erfassen:</strong> Fahrtkosten, Verpflegung, Übernachtung und Nebenkosten eingeben</li>
+    <li><strong>4. Belege hochladen:</strong> Quittungen, Tickets und Rechnungen per OCR scannen</li>
+    <li><strong>5. Unterschrift hinzufügen:</strong> Digital zeichnen oder Unterschrift hochladen</li>
+    <li><strong>6. Speichern oder exportieren:</strong> Abrechnung sichern oder als PDF/ZIP herunterladen</li>
   </ul>
 
-  <h3>📋 Alle Funktionen</h3>
+  <h3>🔘 Button-Funktionen im Detail</h3>
+  
+  <p><strong>Apps Hub</strong> (Haus-Symbol)</p>
   <ul>
-    <li><strong>Vollständige Erfassung:</strong> Alle Felder gemäß Original-Vorlage</li>
-    <li><strong>Automatische Berechnungen:</strong> Alle Summen werden automatisch berechnet</li>
-    <li><strong>🚗 Fahrzeugtyp-Auswahl:</strong> Firmenauto (keine Kosten), Privat-KFZ (0,30 €/km) oder Mietwagen</li>
-    <li><strong>📄 OCR-Beleg-Erkennung:</strong> Automatische Texterkennung aus Bildern und PDFs</li>
-    <li><strong>📦 ZIP-Export:</strong> Erstellt eine ZIP-Datei mit PDF und allen hochgeladenen Belegen</li>
-    <li><strong>🖱️ Drag & Drop:</strong> Belege einfach per Drag & Drop hochladen</li>
-    <li><strong>➕ Multiple Items:</strong> Beliebig viele Einträge für Übernachtung, Nebenkosten und öffentliche Verkehrsmittel</li>
-    <li><strong>💾 Speichern & Laden:</strong> Abrechnungen lokal speichern und wiederverwenden</li>
-    <li><strong>📤 JSON Export/Import:</strong> Daten sichern und übertragen</li>
-    <li><strong>🌓 Dark Mode:</strong> Augenschonende Darstellung</li>
-    <li><strong>📱 Mobile optimiert:</strong> Funktioniert perfekt auf allen Geräten</li>
+    <li>Kehrt zurück zur Startseite (Apps-Hub)</li>
+    <li>⚠️ Nicht gespeicherte Änderungen gehen verloren – vorher speichern!</li>
   </ul>
 
-  <h3>💡 Bedienung</h3>
+  <p><strong>Speichern</strong> (Disketten-Symbol)</p>
   <ul>
-    <li><strong>Kopfdaten:</strong> Name, Reisezeitraum (mit Uhrzeit), Anlass und Reiseziel eingeben</li>
-    <li><strong>Fahrtkosten:</strong> 
-      <ul style="margin-left:20px;margin-top:5px">
-        <li>Firmenauto: Keine direkten Kosten (Tankbelege etc. unter Nebenkosten)</li>
-        <li>Privat-KFZ: Kilometer × Pauschale (Standard: 0,30 €/km)</li>
-        <li>Mietwagen: Vorauszahlung (wird nicht zur Gesamtsumme addiert)</li>
-        <li>Öffentliche Verkehrsmittel: Beliebig viele Tickets hinzufügen</li>
-      </ul>
-    </li>
-    <li><strong>Verpflegung:</strong> Inland (14/28 €) und Ausland mit individuellen Pauschalen</li>
-    <li><strong>Übernachtung:</strong> 
-      <ul style="margin-left:20px;margin-top:5px">
-        <li>Tatsächliche Kosten (beliebig viele Hotelrechnungen)</li>
-        <li>Abzüge für enthaltene Mahlzeiten</li>
-        <li>Automatische Berechnung des Endergebnisses</li>
-      </ul>
-    </li>
-    <li><strong>Nebenkosten:</strong> Parken, Telekommunikation, Porto, Tankbelege (Firmenauto), etc.</li>
-    <li><strong>Unterschrift:</strong> Digital zeichnen oder Bild hochladen (PNG/JPG)</li>
-    <li><strong>Freigabe:</strong> Felder für Prüfung, Auszahlung und Buchung</li>
+    <li>Speichert die aktuelle Abrechnung <strong>lokal im Browser</strong> (LocalStorage)</li>
+    <li>Alle eingegebenen Daten, hochgeladene Belege und die Unterschrift werden gesichert</li>
+    <li>Gespeicherte Abrechnungen erscheinen unten in der Liste "Gespeicherte Abrechnungen"</li>
+    <li>Sie können mehrere Abrechnungen speichern und später wieder laden</li>
+    <li>Die Daten bleiben auch nach dem Schließen des Browsers erhalten</li>
+  </ul>
+
+  <p><strong>Export Datei (ZIP)</strong> (Dokument-Symbol)</p>
+  <ul>
+    <li>Erstellt eine <strong>ZIP-Datei</strong> zum Download</li>
+    <li>Enthält: PDF-Dokument der Abrechnung + alle hochgeladenen Belege</li>
+    <li>Die Belege werden in Unterordnern organisiert (Übernachtung, Nebenkosten, etc.)</li>
+    <li>Ideal zum <strong>Archivieren oder Weiterleiten</strong> an die Buchhaltung</li>
+    <li>Das PDF ist im Original-Layout der Nexus/IPS Vorlage formatiert</li>
+  </ul>
+
+  <p><strong>Drucken</strong> (Drucker-Symbol)</p>
+  <ul>
+    <li>Öffnet das <strong>Druckmenü</strong> Ihres Browsers</li>
+    <li>Erstellt ein PDF im Original-Layout der Vorlage</li>
+    <li>Sie können das PDF direkt ausdrucken oder als Datei speichern</li>
+    <li>⚠️ Hinweis: Belege werden NICHT mit gedruckt – nur die Abrechnung selbst</li>
+  </ul>
+
+  <p><strong>Export</strong> (Download-Symbol)</p>
+  <ul>
+    <li>Exportiert alle Daten als <strong>JSON-Datei</strong></li>
+    <li>Alle Eingaben, Belege (als Base64) und die Unterschrift werden gesichert</li>
+    <li>Nützlich zum <strong>Backup</strong> oder zum Übertragen auf ein anderes Gerät</li>
+    <li>Die JSON-Datei kann später wieder importiert werden</li>
+  </ul>
+
+  <p><strong>Import</strong> (Upload-Symbol)</p>
+  <ul>
+    <li>Lädt eine zuvor exportierte <strong>JSON-Datei</strong></li>
+    <li>Alle Daten werden wiederhergestellt (inkl. Belege und Unterschrift)</li>
+    <li>⚠️ Überschreibt die aktuellen Eingaben – vorher speichern!</li>
+    <li>Nach dem Import sind alle Daten wie beim Export verfügbar</li>
+  </ul>
+
+  <p><strong>Hell/Dunkel</strong> (Sonnen-Symbol)</p>
+  <ul>
+    <li>Wechselt zwischen hellem und dunklem Design</li>
+    <li>Schont die Augen bei Arbeit im Dunkeln</li>
+    <li>Ihre Auswahl wird automatisch gespeichert</li>
   </ul>
 
   <h3>📷 OCR-Beleg-Upload</h3>
-  <p><strong>So funktioniert es:</strong></p>
+  <p><strong>Automatische Beleg-Erkennung:</strong></p>
   <ul>
-    <li>Klicken Sie auf die Upload-Box oder ziehen Sie Dateien per Drag & Drop hinein</li>
-    <li>Unterstützte Formate: JPG, PNG, PDF</li>
-    <li>Die OCR-Engine erkennt automatisch Beträge im Dokument</li>
+    <li>Klicken Sie auf die Upload-Box oder ziehen Sie Dateien hinein (Drag & Drop)</li>
+    <li>Unterstützte Formate: <strong>JPG, PNG, PDF</strong></li>
+    <li>Die OCR-Engine <strong>erkennt automatisch Beträge</strong> im Dokument</li>
     <li>Sie können aus gefundenen Beträgen auswählen oder manuell eingeben</li>
-    <li>Jeder Beleg wird automatisch mit der erstellten Zeile verknüpft</li>
-    <li>🔗 Beim Löschen der Zeile wird automatisch der Beleg mitgelöscht</li>
-    <li>🔗 Beim Löschen des Belegs wird automatisch die Zeile mitgelöscht</li>
-    <li>Zeilen mit Belegen sind mit einem grünen Rand und 📎 markiert</li>
+    <li>Jeder Beleg wird automatisch mit der erstellten Zeile <strong>verknüpft</strong></li>
+    <li>Zeilen mit Belegen haben einen <strong>grünen Rand</strong> und ein 📎-Symbol</li>
+    <li>🔗 Beim Löschen der Zeile wird der Beleg automatisch mitgelöscht (und umgekehrt)</li>
   </ul>
 
-  <h3>💾 Speichern & Laden</h3>
-  <p>Klicken Sie auf "Abrechnung speichern" um die Daten lokal im Browser zu speichern. Gespeicherte Abrechnungen können jederzeit wieder geladen werden. Alle hochgeladenen Belege werden mit gespeichert.</p>
-
-  <h3>📦 PDF/ZIP Export</h3>
-  <p><strong>Zwei Export-Optionen:</strong></p>
+  <h3>💡 Wichtige Hinweise</h3>
   <ul>
-    <li><strong>Ohne Belege:</strong> Nur PDF-Datei wird heruntergeladen</li>
-    <li><strong>Mit Belegen:</strong> ZIP-Datei mit PDF und allen hochgeladenen Belegen in Unterordnern</li>
-  </ul>
-  <p>Das PDF wird im Original-Layout der Nexus/IPS Vorlage erstellt.</p>
-
-  <h3>📤 JSON Export/Import</h3>
-  <p>Exportieren Sie Ihre Abrechnung als JSON-Datei um sie zu sichern oder auf einem anderen Gerät zu importieren. Alle Daten und Belege werden exportiert.</p>
-
-  <h3>🌓 Dark Mode</h3>
-  <p>Klicken Sie auf das Mond-Symbol 🌙 oben rechts um zwischen hellem und dunklem Design zu wechseln. Ihre Auswahl wird automatisch gespeichert.</p>
-
-  <h3>💡 Tipps</h3>
-  <ul>
-    <li>Speichern Sie regelmäßig während der Eingabe</li>
-    <li>Nutzen Sie OCR für schnellere Beleg-Erfassung</li>
-    <li>Prüfen Sie erkannte Beträge immer manuell</li>
-    <li>Der grüne Rand zeigt verknüpfte Belege an</li>
-    <li>Alle Summen werden automatisch berechnet</li>
-    <li>Die App funktioniert auch offline (nach dem ersten Laden)</li>
+    <li><strong>Speichern Sie regelmäßig</strong> während der Eingabe (Button "Speichern")</li>
+    <li><strong>Unterschied Export vs. Export Datei:</strong> Export = JSON-Datei (Daten-Backup), Export Datei = ZIP mit PDF + Belegen (für Buchhaltung)</li>
+    <li><strong>Alle Summen</strong> werden automatisch berechnet – keine manuelle Rechnung nötig</li>
+    <li><strong>Prüfen Sie OCR-Ergebnisse:</strong> Die automatische Beleg-Erkennung ist gut, aber nicht perfekt</li>
+    <li><strong>Offline-Nutzung:</strong> Die App funktioniert auch ohne Internet (nach dem ersten Laden)</li>
+    <li><strong>Daten bleiben lokal:</strong> Keine Cloud, keine Server – alles auf Ihrem Gerät</li>
   </ul>
 
   <button class="btn btn-pdf" onclick="closeInfo()">Schließen</button>
@@ -2181,7 +2204,7 @@
     function clearSignature() {
       if (confirm('Möchten Sie die Unterschrift wirklich löschen?')) {
         sigData = null;
-        document.getElementById('sigPrev').innerHTML = '<span class="placeholder">Noch keine Unterschrift - Klicken Sie auf "Unterschrift zeichnen" oder "Bild hochladen"</span>';
+        document.getElementById('sigPrev').innerHTML = '<span class="placeholder">Noch keine Unterschrift - Klicken Sie auf "Unterschrift zeichnen" oder "Unterschrift hochladen"</span>';
         document.getElementById('clearSigBtn').style.display = 'none';
         markUnsaved();
         toast('Unterschrift gelöscht', 'info');
@@ -2256,6 +2279,16 @@
     // ====== PDF Export ======
     async function exportPDF() {
       toast('📦 Erstelle ZIP mit PDF und Belegen...', 'info');
+      // Validate required fields
+      const name = document.getElementById('name').value.trim();
+      if (!name) {
+        toast('Bitte Name eingeben!', 'error');
+        return;
+      }
+      if (!sigData) {
+        toast('Bitte Unterschrift hinzufügen (zeichnen oder hochladen)!', 'error');
+        return;
+      }
       
       try {
         // Generate PDF
@@ -2353,6 +2386,16 @@
 
     async function printPDF() {
       const pdf = await generatePDF();
+      // Validate required fields
+      const name = document.getElementById('name').value.trim();
+      if (!name) {
+        toast('Bitte Name eingeben!', 'error');
+        return;
+      }
+      if (!sigData) {
+        toast('Bitte Unterschrift hinzufügen (zeichnen oder hochladen)!', 'error');
+        return;
+      }
       const pdfBlob = pdf.output('blob');
       const pdfUrl = URL.createObjectURL(pdfBlob);
       
@@ -2366,6 +2409,155 @@
       } else {
         toast('Popup wurde blockiert. Bitte Popup-Blocker deaktivieren.', 'error');
       }
+    }
+
+    // ====== Per Mail senden ======
+    async function sendByEmail() {
+      toast('📧 Bereite E-Mail vor...', 'info');
+      
+      // Validate required fields
+      const name = document.getElementById('name').value.trim();
+      if (!name) {
+        toast('Bitte Name eingeben!', 'error');
+        return;
+      }
+      if (!sigData) {
+        toast('Bitte Unterschrift hinzufügen (zeichnen oder hochladen)!', 'error');
+        return;
+      }
+      
+      try {
+        // Generate PDF
+        const pdf = await generatePDF();
+        const pdfBlob = pdf.output('blob');
+        const fileName = `Reisekostenabrechnung_${getName()}_${new Date().toISOString().slice(0, 10)}`;
+        
+        // ALWAYS create ZIP with PDF and all uploaded files
+        const zip = new JSZip();
+        
+        // Add PDF to ZIP
+        zip.file(`${fileName}.pdf`, pdfBlob);
+        
+        // Add uploaded files if any
+        let fileCounter = 1;
+        
+        // Add Übernachtung files
+        for (const file of ocrFiles.uebernachtung) {
+          if (file.dataUrl) {
+            const blob = await dataURLtoBlob(file.dataUrl);
+            zip.file(`Belege/Uebernachtung_${fileCounter}_${sanitizeFileName(file.name)}`, blob);
+            fileCounter++;
+          }
+        }
+        
+        // Add Nebenkosten files
+        fileCounter = 1;
+        for (const file of ocrFiles.nebenkosten) {
+          if (file.dataUrl) {
+            const blob = await dataURLtoBlob(file.dataUrl);
+            zip.file(`Belege/Nebenkosten_${fileCounter}_${sanitizeFileName(file.name)}`, blob);
+            fileCounter++;
+          }
+        }
+        
+        // Add Öffentliche Verkehrsmittel files
+        fileCounter = 1;
+        for (const file of ocrFiles.oeffentlich) {
+          if (file.dataUrl) {
+            const blob = await dataURLtoBlob(file.dataUrl);
+            zip.file(`Belege/Oeffentlich_${fileCounter}_${sanitizeFileName(file.name)}`, blob);
+            fileCounter++;
+          }
+        }
+        
+        // Generate ZIP
+        const fileToShare = await zip.generateAsync({
+          type: 'blob',
+          compression: 'DEFLATE',
+          compressionOptions: { level: 6 }
+        });
+        const shareFileName = `${fileName}.zip`;
+        
+        // Prepare email details
+        const recipient = 'rechnung-ips@nexus-ag.de';
+        const subject = shareFileName;
+        const body = `Sehr geehrte Damen und Herren,
+
+anbei erhalten Sie meine Reisekostenabrechnung.
+
+Name: ${document.getElementById('name').value.trim()}
+Reisezeitraum: ${formatDateTime(document.getElementById('beginn').value)} - ${formatDateTime(document.getElementById('ende').value)}
+Anlass: ${document.getElementById('anlass').value.trim()}
+Reiseziel: ${document.getElementById('reiseziel').value.trim()}
+Gesamtsumme: ${document.getElementById('gesamtsumme').textContent}
+
+Mit freundlichen Grüßen
+${document.getElementById('name').value.trim()}`;
+
+        
+        // Try Web Share API first (allows direct file attachment + app selection)
+        // This works on mobile devices and some modern browsers
+        try {
+          if (navigator.share) {
+            const file = new File([fileToShare], shareFileName, { 
+              type: 'application/zip'
+            });
+            
+            const shareData = {
+              title: subject,
+              text: body,
+              files: [file]
+            };
+            
+            // Check if sharing files is supported
+            if (navigator.canShare && navigator.canShare(shareData)) {
+              await navigator.share(shareData);
+              toast('✅ E-Mail versendet', 'success');
+              return;
+            }
+          }
+        } catch (error) {
+          // Web Share API blocked or failed - continue to fallback
+          console.log('Web Share API nicht verfügbar oder blockiert, verwende Fallback');
+        }
+        
+        // Fallback: Download file and open mailto
+        // This works in all browsers but user must attach file manually
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(fileToShare);
+        link.download = shareFileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Small delay to ensure download starts
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Open mailto link
+        const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body + '\n\nHinweis: Die ZIP-Datei wurde heruntergeladen. Bitte fügen Sie diese als Anhang zur E-Mail hinzu.')}`;
+        window.location.href = mailtoLink;
+        
+        toast('⚠️ ZIP heruntergeladen - Bitte manuell als Anhang hinzufügen (Tracking Prevention aktiv)', 'info');
+        
+        // Clean up
+        setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+      } catch (error) {
+        console.error('Email Error:', error);
+        toast('❌ Fehler beim Vorbereiten der E-Mail', 'error');
+      }
+    }
+    
+    // Helper function to format datetime
+    function formatDateTime(dateTimeStr) {
+      if (!dateTimeStr) return '';
+      const date = new Date(dateTimeStr);
+      return date.toLocaleString('de-DE', {
+        day: '2-digit',
+        month: '2-digit', 
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
     }
 
     function getName() {
@@ -2496,11 +2688,17 @@
       
       // Firmenauto - Info only (no costs)
       if (kfzType === 'firmenauto') {
+        const firmenKennzeichen = document.getElementById('firmen_kennzeichen').value.trim();
         pdf.setFillColor(230, 247, 255);
         pdf.rect(col1, y, colEnd - col1, 10, 'FD');
         pdf.setFont(undefined, 'bold');
         pdf.text('Firmenauto:', col1 + 3, y + 4);
         pdf.setFont(undefined, 'normal');
+        if (firmenKennzeichen) {
+          pdf.setTextColor(100, 100, 100);
+          pdf.text(`Kennzeichen: ${firmenKennzeichen}`, col1 + 30, y + 4);
+          pdf.setTextColor(40, 40, 40);
+        }
         pdf.setFontSize(7);
         pdf.setTextColor(14, 165, 233);
         pdf.text('Keine direkten Fahrtkosten - Kosten siehe Nebenkosten', col1 + 5, y + 8);
@@ -2852,6 +3050,11 @@
         return;
       }
 
+      if (!sigData) {
+        toast('Bitte Unterschrift hinzufügen (zeichnen oder hochladen)!', 'error');
+        return;
+      }
+
       const report = {
         id: Date.now(),
         name: name,
@@ -2912,6 +3115,11 @@
         return;
       }
 
+      if (!sigData) {
+        toast('Bitte Unterschrift hinzufügen (zeichnen oder hochladen)!', 'error');
+        return;
+      }
+
       try {
         const data = captureCurrentAsObject();
         const json = JSON.stringify(data, null, 2);
@@ -2959,6 +3167,7 @@
         anlass: document.getElementById('anlass').value.trim(),
         reiseziel: document.getElementById('reiseziel').value.trim(),
         kfz_type: document.getElementById('kfz_type').value,
+        firmen_kennzeichen: document.getElementById('firmen_kennzeichen').value.trim(),
         privat_km: document.getElementById('privat_km').value,
         privat_rate: document.getElementById('privat_rate').value,
         mietwagen: document.getElementById('mietwagen').value,
@@ -2993,6 +3202,7 @@
       document.getElementById('anlass').value = data.anlass || '';
       document.getElementById('reiseziel').value = data.reiseziel || '';
       document.getElementById('kfz_type').value = data.kfz_type || '';
+      document.getElementById('firmen_kennzeichen').value = data.firmen_kennzeichen || '';
       document.getElementById('privat_km').value = data.privat_km || '';
       document.getElementById('privat_rate').value = data.privat_rate || '0.30';
       document.getElementById('mietwagen').value = data.mietwagen || '';
@@ -3063,7 +3273,7 @@
       sigData = data.sigData || null;
       document.getElementById('sigPrev').innerHTML = sigData ? 
         `<img src="${sigData}" alt="Unterschrift">` : 
-        '<span class="placeholder">Noch keine Unterschrift - Klicken Sie auf "Unterschrift zeichnen" oder "Bild hochladen"</span>';
+        '<span class="placeholder">Noch keine Unterschrift - Klicken Sie auf "Unterschrift zeichnen" oder "Unterschrift hochladen"</span>';
       document.getElementById('clearSigBtn').style.display = sigData ? 'block' : 'none';
 
       calcFahrtkosten();
@@ -3125,16 +3335,16 @@
     });
 
     window.addEventListener('beforeunload', e => {
-      if (hasUnsavedChanges) {
-        e.preventDefault();
-        e.returnValue = '';
-        return '';
-      }
+      // Immer warnen beim Verlassen der Seite
+      const message = 'Haben Sie das Formular gesichert? Wenn nicht, gehen die Daten verloren. Bitte darauf achten.';
+      e.preventDefault();
+      e.returnValue = message;
+      return message;
     });
 
     // Input-Listener für unsaved changes
     const inputs = ['name', 'beginn', 'ende', 'anlass', 'reiseziel', 'datum', 
-                    'kfz_type', 'privat_km', 'privat_rate', 'mietwagen',
+                    'kfz_type', 'firmen_kennzeichen', 'privat_km', 'privat_rate', 'mietwagen',
                     'geprueft', 'ausgezahlt', 'gebucht'];
     inputs.forEach(id => {
       const elem = document.getElementById(id);
