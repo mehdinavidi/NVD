@@ -2,2187 +2,1365 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <!-- Optimierter Viewport für iOS (verhindert Auto-Zoom/Umbruch) -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>Tätigkeitsbericht-V25.10.23</title>
-
-  <style>/* ====== Design System von Reisekosten-App ====== */
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;height:100%;overflow-x:hidden}
-html{-webkit-text-size-adjust:100%}
-
-body{
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;
-  background:#1E2434;
-  padding:20px;
-  transition:background 0.4s ease;
-  min-height:100vh;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  -webkit-print-color-adjust:exact;
-  print-color-adjust:exact;
-}
-
-@supports (padding: max(0px)) {
-  body {
-    padding-left: max(20px, env(safe-area-inset-left));
-    padding-right: max(20px, env(safe-area-inset-right));
-    padding-top: max(20px, env(safe-area-inset-top));
-    padding-bottom: max(20px, env(safe-area-inset-bottom));
-  }
-}
-
-.container{
-  max-width:1000px;
-  margin:0 auto;
-  background:#fff;
-  padding:35px;
-  border-radius:20px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.15);
-  transition:all 0.3s ease;
-  animation:fadeIn 0.5s ease-in;
-  position:relative;
-}
-
-@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
-h1{
-  font-size:28px;
-  color:#2d3748;
-  margin-bottom:8px;
-  font-weight:800;
-  text-align:center;
-  background:linear-gradient(135deg,#1E2434 0%,#8B1538 100%);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
-  padding-bottom:10px;
-  letter-spacing:-0.5px;
-}
-
-.revision{
-  text-align:center;
-  font-size:12px;
-  color:#718096;
-  margin-bottom:25px;
-  font-weight:500;
-  letter-spacing:0.5px;
-}
-
-h2{
-  font-size:18px;
-  color:#fff;
-  margin:25px 0 15px 0;
-  font-weight:700;
-  padding:15px 20px;
-  background:#1E2434;
-  border-radius:12px;
-  box-shadow:0 4px 15px rgba(30,36,52,0.3);
-  transition:transform 0.2s ease;
-  letter-spacing:0.3px;
-}
-
-h2:hover{transform:translateX(5px)}
-
-.label{
-  font-weight:600;
-  color:#4a5568;
-  font-size:13px;
-  margin-bottom:6px;
-  display:block;
-  letter-spacing:0.3px;
-}
-
-input,select,textarea{
-  width:100%;
-  padding:14px 16px;
-  border:2px solid #e2e8f0;
-  border-radius:10px;
-  font-size:14px;
-  margin-bottom:12px;
-  transition:all 0.3s ease;
-  background:#f7fafc;
-  font-family:inherit;
-  -webkit-appearance:none;
-  -moz-appearance:none;
-  appearance:none;
-}
-
-input:hover,select:hover,textarea:hover{
-  border-color:#cbd5e0;
-  background:#fff;
-}
-
-input:focus,select:focus,textarea:focus{
-  outline:none;
-  border-color:#8B1538;
-  background:#fff;
-  box-shadow:0 0 0 3px rgba(139,21,56,0.1);
-  transform:translateY(-1px);
-}
-
-select{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238B1538' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;
-  background-position:right 16px center;
-  padding-right:40px;
-}
-
-textarea{
-  min-height:90px;
-  resize:vertical;
-  font-family:inherit;
-}
-
-.section{
-  margin-bottom:25px;
-  padding-bottom:25px;
-  border-bottom:2px solid #e2e8f0;
-}
-
-.section:last-child{
-  border-bottom:none;
-}
-
-/* ====== Kopfbereich (4 Karten) ====== */
-.section:first-of-type{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  grid-template-rows:auto auto;
-  gap:15px;
-  padding:0;
-  border:none;
-  margin-bottom:28px;
-}
-
-.section:first-of-type>div{
-  display:flex;
-  flex-direction:column;
-  background:linear-gradient(135deg,#f7fafc 0%,#edf2f7 100%);
-  border:2px solid #e2e8f0;
-  border-radius:15px;
-  overflow:hidden;
-  box-shadow:0 2px 8px rgba(0,0,0,0.04);
-  transition:all 0.3s ease;
-}
-
-.section:first-of-type>div:hover{
-  box-shadow:0 8px 25px rgba(0,0,0,0.08);
-  transform:translateY(-2px);
-  border-color:#cbd5e0;
-}
-
-.section:first-of-type .label{
-  background:#1E2434;
-  color:#fff;
-  padding:12px 16px;
-  margin:0;
-  border-radius:0;
-  font-size:13px;
-  text-align:center;
-  font-weight:700;
-  letter-spacing:0.5px;
-  text-transform:uppercase;
-}
-
-.section:first-of-type input{
-  margin:0;
-  border-radius:0;
-  border:none;
-  border-top:2px solid #e2e8f0;
-  font-size:14px;
-  padding:14px 16px;
-  height:48px;
-  line-height:20px;
-  text-align:center;
-  background:#fff;
-}
-
-/* ====== Tabelle ====== */
-.table-wrap{
-  overflow-x:auto;
-  -webkit-overflow-scrolling:touch;
-  margin:16px 0;
-  border-radius:15px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.04);
-}
-
-table{
-  width:100%;
-  border-collapse:separate;
-  border-spacing:0;
-  min-width:700px;
-  background:#fff;
-}
-
-th{
-  background:#1E2434;
-  color:#fff;
-  padding:14px 10px;
-  font-size:12px;
-  text-align:center;
-  font-weight:700;
-  letter-spacing:0.5px;
-  text-transform:uppercase;
-  border:none;
-}
-
-th:first-child{border-top-left-radius:15px}
-th:last-child{border-top-right-radius:15px}
-
-td{
-  border:1px solid #e2e8f0;
-  border-top:none;
-  padding:10px 8px;
-  text-align:center;
-  font-size:13px;
-  vertical-align:middle;
-  background:#fff;
-  transition:all 0.2s ease;
-}
-
-tr:hover td{
-  background:#f7fafc;
-}
-
-tr:last-child td:first-child{border-bottom-left-radius:15px}
-tr:last-child td:last-child{border-bottom-right-radius:15px}
-
-td input,td select{
-  margin:0;
-  padding:8px 12px;
-  font-size:13px;
-  border-radius:8px;
-}
-
-.hours{
-  font-weight:700;
-  color:#8B1538;
-  font-size:15px;
-}
-
-.overnight-note{
-  font-size:11px;
-  color:#f59e0b;
-  margin-top:3px;
-  font-style:italic;
-}
-
-/* ====== Buttons (Reisekosten Style) ====== */
-.btn{
-  display:block;
-  width:100%;
-  padding:16px;
-  margin:12px 0;
-  border:none;
-  border-radius:12px;
-  font-size:16px;
-  font-weight:700;
-  color:#fff;
-  cursor:pointer;
-  text-align:center;
-  transition:all 0.3s ease;
-  box-shadow:0 4px 15px rgba(0,0,0,0.15);
-  letter-spacing:0.3px;
-  position:relative;
-  overflow:hidden;
-  background:#8B1538;
-}
-
-.btn::before{
-  content:'';
-  position:absolute;
-  top:50%;
-  left:50%;
-  width:0;
-  height:0;
-  border-radius:50%;
-  background:rgba(255,255,255,0.2);
-  transform:translate(-50%,-50%);
-  transition:width 0.6s,height 0.6s;
-}
-
-.btn:hover::before{width:300px;height:300px}
-
-.btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 25px rgba(0,0,0,0.2);
-  background:#6B1028;
-}
-
-.btn:active{
-  transform:translateY(0);
-  box-shadow:0 4px 15px rgba(0,0,0,0.15);
-}
-
-.btn-save{background:#8B1538}
-.btn-pdf{background:#8B1538}
-.btn-print{background:#8B1538}
-.btn-add{background:#8B1538;margin:16px 0}
-.btn-sig{background:#8B1538}
-.btn-json{background:#8B1538}
-.btn-import{background:#8B1538}
-
-.btn-save:hover,.btn-pdf:hover,.btn-print:hover,.btn-add:hover,.btn-sig:hover,.btn-json:hover,.btn-import:hover{
-  background:#6B1028;
-}
-
-/* ====== Inline Buttons (Pills) ====== */
-.btn-row{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:10px 16px;
-  margin:4px;
-  border-radius:9999px;
-  font-size:13px;
-  font-weight:600;
-  cursor:pointer;
-  background:#fff;
-  border:2px solid #8B1538;
-  color:#8B1538;
-  transition:all 0.3s ease;
-  user-select:none;
-  box-shadow:0 2px 8px rgba(139,21,56,0.2);
-}
-
-.btn-row:hover{
-  background:#8B1538;
-  color:#fff;
-  box-shadow:0 4px 12px rgba(139,21,56,0.3);
-  transform:translateY(-2px);
-}
-
-.btn-row:active{transform:translateY(0)}
-
-.btn-row.danger{border-color:#ef4444;color:#ef4444}
-.btn-row.danger:hover{background:#ef4444;color:#fff}
-
-/* ====== Signature Preview ====== */
-.sig-preview{
-  border:2px dashed #e2e8f0;
-  padding:20px;
-  min-height:100px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#f7fafc;
-  border-radius:12px;
-  margin-top:12px;
-  transition:all 0.3s ease;
-}
-
-.sig-preview:hover{
-  border-color:#cbd5e0;
-  background:#fff;
-}
-
-.sig-preview img{
-  max-width:100%;
-  max-height:80px;
-  border:2px solid #e2e8f0;
-  background:#fff;
-  padding:10px;
-  border-radius:10px;
-  box-shadow:0 4px 15px rgba(0,0,0,0.08);
-}
-
-.placeholder{
-  color:#a0aec0;
-  font-style:italic;
-  font-weight:500;
-}
-
-/* ====== Modal System ====== */
-.modal{
-  display:none;
-  position:fixed;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
-  background:rgba(0,0,0,0.75);
-  z-index:9999;
-  touch-action:none;
-  backdrop-filter:blur(5px);
-}
-
-.modal-content{
-  background:#fff;
-  margin:5% auto;
-  padding:30px;
-  width:95%;
-  max-width:800px;
-  border-radius:20px;
-  max-height:85vh;
-  overflow-y:auto;
-  box-shadow:0 25px 70px rgba(0,0,0,0.3);
-  animation:modalFadeIn 0.3s ease;
-}
-
-@keyframes modalFadeIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
-
-.modal-title{
-  font-size:22px;
-  font-weight:800;
-  margin-bottom:20px;
-  color:#2d3748;
-  letter-spacing:-0.3px;
-}
-
-.close{
-  float:right;
-  font-size:32px;
-  font-weight:700;
-  cursor:pointer;
-  color:#a0aec0;
-  transition:all 0.3s ease;
-  line-height:1;
-}
-
-.close:hover{
-  color:#4a5568;
-  transform:rotate(90deg);
-}
-
-.canvas-box{
-  border:3px solid #1E2434;
-  background:#fff;
-  width:100%;
-  height:300px;
-  border-radius:15px;
-  margin:15px 0;
-  position:relative;
-  touch-action:none;
-  overflow:hidden;
-  box-shadow:0 8px 25px rgba(30,36,52,0.2);
-}
-
-#sigCanvas{
-  width:100%;
-  height:100%;
-  touch-action:none;
-  cursor:crosshair;
-}
-
-.canvas-hint{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  color:#cbd5e0;
-  font-size:18px;
-  pointer-events:none;
-  font-weight:600;
-  letter-spacing:0.5px;
-}
-
-.canvas-hint.hide{display:none}
-
-.modal-btns{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:12px;
-  margin-top:20px;
-}
-
-.modal-btn{
-  padding:14px;
-  border:none;
-  border-radius:10px;
-  font-size:15px;
-  font-weight:700;
-  color:#fff;
-  cursor:pointer;
-  transition:all 0.3s ease;
-  box-shadow:0 4px 15px rgba(0,0,0,0.15);
-}
-
-.modal-btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 25px rgba(0,0,0,0.2);
-}
-
-.btn-clear{background:#6B7280}
-.btn-cancel{background:#6B7280}
-.btn-ok{background:#8B1538}
-
-.btn-clear:hover,.btn-cancel:hover{background:#4B5563}
-.btn-ok:hover{background:#6B1028}
-
-/* ====== Statistics ====== */
-.stats{
-  background:#1E2434;
-  color:#fff;
-  padding:22px;
-  border-radius:15px;
-  margin:18px 0;
-  display:none;
-  box-shadow:0 10px 35px rgba(30,36,52,0.4);
-  transition:all 0.3s ease;
-}
-
-.stats:hover{
-  transform:scale(1.02);
-  box-shadow:0 15px 45px rgba(30,36,52,0.5);
-}
-
-.stats-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-  gap:14px;
-  margin-top:14px;
-}
-
-.stat-item{
-  background:rgba(255,255,255,0.15);
-  backdrop-filter:blur(10px);
-  padding:14px;
-  border-radius:10px;
-  text-align:center;
-  transition:all 0.3s ease;
-  border:1px solid rgba(255,255,255,0.2);
-}
-
-.stat-item:hover{
-  background:rgba(255,255,255,0.25);
-  transform:translateY(-2px);
-}
-
-.stat-label{
-  font-size:11px;
-  opacity:0.9;
-  letter-spacing:0.5px;
-  text-transform:uppercase;
-}
-
-.stat-value{
-  font-size:22px;
-  font-weight:700;
-  margin-top:6px;
-}
-
-/* ====== Saved Reports ====== */
-.reports{
-  margin-top:35px;
-  padding-top:25px;
-  border-top:3px solid transparent;
-  border-image:linear-gradient(90deg,#1E2434 0%,#8B1538 100%) 1;
-}
-
-.reports h2{
-  font-size:20px;
-  margin-bottom:20px;
-  color:#fff;
-  background:#1E2434;
-}
-
-.report-item{
-  background:linear-gradient(135deg,#f7fafc 0%,#edf2f7 100%);
-  padding:20px;
-  margin-bottom:15px;
-  border-left:5px solid #1E2434;
-  border-radius:12px;
-  transition:all 0.3s ease;
-  box-shadow:0 2px 8px rgba(0,0,0,0.04);
-}
-
-.report-item:hover{
-  box-shadow:0 8px 25px rgba(0,0,0,0.08);
-  transform:translateY(-2px);
-  border-left-color:#8B1538;
-}
-
-.report-actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:14px;
-}
-
-.report-btn{
-  padding:11px 14px;
-  border:none;
-  border-radius:10px;
-  font-size:13px;
-  font-weight:600;
-  color:#fff;
-  cursor:pointer;
-  transition:all 0.3s ease;
-  box-shadow:0 2px 8px rgba(0,0,0,0.15);
-}
-
-.report-btn:hover{
-  box-shadow:0 4px 12px rgba(0,0,0,0.2);
-  transform:translateY(-2px);
-}
-
-.report-load{background:#1E2434}
-.report-delete{background:#ef4444}
-
-.report-load:hover{background:#2d3748}
-.report-delete:hover{background:#dc2626}
-
-/* ====== Toast Notifications ====== */
-.toast{
-  position:fixed;
-  bottom:22px;
-  right:22px;
-  left:22px;
-  max-width:420px;
-  margin:0 auto;
-  background:#2d3748;
-  color:#fff;
-  padding:16px 22px;
-  border-radius:12px;
-  z-index:10000;
-  display:none;
-  animation:slideIn 0.3s ease;
-  box-shadow:0 10px 35px rgba(0,0,0,0.3);
-  font-weight:500;
-}
-
-@keyframes slideIn{
-  from{transform:translateY(80px);opacity:0}
-  to{transform:translateY(0);opacity:1}
-}
-
-.toast.success{background:#10b981}
-.toast.error{background:#ef4444}
-.toast.info{background:#3b82f6}
-
-/* ====== Logo Preview ====== */
-.logo-preview{
-  height:110px;
-  background:#f7fafc;
-  border:2px dashed #e2e8f0;
-  border-radius:12px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:10px;
-  overflow:hidden;
-  transition:all 0.3s ease;
-}
-
-.logo-preview:hover{
-  border-color:#cbd5e0;
-  background:#fff;
-}
-
-.logo-preview img{
-  max-width:100%;
-  max-height:100%;
-  object-fit:contain;
-  display:block;
-  background:transparent;
-  border:0;
-  padding:0;
-  border-radius:0;
-}
-
-/* ====== Info Modal ====== */
-.info-modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.75);
-  backdrop-filter:blur(5px);
-  z-index:9999;
-  overflow-y:auto;
-  padding:22px;
-}
-
-.info-modal[hidden]{display:none!important}
-
-.info-modal-content{
-  background:#fff;
-  margin:22px auto;
-  padding:36px;
-  max-width:880px;
-  border-radius:20px;
-  box-shadow:0 25px 70px rgba(0,0,0,0.3);
-  position:relative;
-}
-
-.info-modal-content h2{
-  font-size:26px;
-  color:#2d3748;
-  margin-bottom:22px;
-  padding-bottom:14px;
-  border-bottom:3px solid #1E2434;
-  font-weight:700;
-}
-
-.info-modal-content h3{
-  font-size:19px;
-  color:#1E2434;
-  margin-top:26px;
-  margin-bottom:11px;
-  font-weight:600;
-}
-
-.info-modal-content ul{margin-left:22px;line-height:1.8}
-.info-modal-content li{margin-bottom:9px}
-
-.info-modal-content code{
-  background:#f7fafc;
-  padding:3px 7px;
-  border-radius:5px;
-  font-family:'Monaco','Courier New',monospace;
-  font-size:12px;
-  color:#8B1538;
-  border:1px solid #e2e8f0;
-}
-
-.info-modal-content .tech-section{margin-bottom:28px}
-
-.info-modal-content .features{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:18px;
-  margin-top:18px;
-}
-
-.info-modal-content .feature-item{
-  background:linear-gradient(135deg,#f7fafc 0%,#edf2f7 100%);
-  padding:18px;
-  border-radius:10px;
-  border-left:4px solid #1E2434;
-  transition:all 0.3s ease;
-}
-
-.info-modal-content .feature-item:hover{
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
-  transform:translateX(3px);
-  border-left-color:#8B1538;
-}
-
-.info-close{
-  position:absolute;
-  top:14px;
-  right:14px;
-  width:42px;
-  height:42px;
-  background:#1E2434;
-  color:#fff;
-  border:none;
-  border-radius:50%;
-  font-size:23px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:all 0.3s ease;
-  box-shadow:0 4px 15px rgba(30,36,52,0.3);
-}
-
-.info-close:hover{
-  background:#8B1538;
-  transform:rotate(90deg);
-}
-
-/* ====== Dark Theme ====== */
-.dark-theme{background:#1E2434}
-.dark-theme .container{background:#252d3d;color:#e2e8f0;box-shadow:0 20px 60px rgba(0,0,0,0.4)}
-.dark-theme h1{color:#fff;-webkit-text-fill-color:#fff}
-.dark-theme h2{background:#8B1538;box-shadow:0 4px 15px rgba(139,21,56,0.3)}
-.dark-theme .revision{color:#a0aec0}
-
-.dark-theme input,.dark-theme select,.dark-theme textarea{
-  background:#2a3240;
-  color:#e2e8f0;
-  border-color:#3a4150;
-}
-
-.dark-theme input:hover,.dark-theme select:hover,.dark-theme textarea:hover{
-  border-color:#4a5568;
-  background:#323b4d;
-}
-
-.dark-theme input:focus,.dark-theme select:focus,.dark-theme textarea:focus{
-  border-color:#8B1538;
-  background:#323b4d;
-}
-
-.dark-theme input::placeholder,.dark-theme textarea::placeholder{color:#718096}
-.dark-theme .section{border-bottom-color:#3a4150}
-.dark-theme .label{color:#cbd5e0}
-.dark-theme td{background:#2a3240;border-color:#3a4150}
-.dark-theme tr:hover td{background:#323b4d}
-.dark-theme .sig-preview{background:#2a3240;border-color:#3a4150}
-.dark-theme .placeholder{color:#718096}
-.dark-theme .report-item{background:#2a3240;border-left-color:#8B1538;color:#e2e8f0}
-.dark-theme .modal-content{background:#252d3d;color:#e2e8f0}
-.dark-theme .canvas-box{border-color:#8B1538;background:#fff}
-.dark-theme .close{color:#cbd5e0}
-.dark-theme .info-modal-content{background:#252d3d;color:#e2e8f0}
-.dark-theme .info-modal-content h2{color:#fff;border-bottom-color:#8B1538}
-.dark-theme .info-modal-content h3{color:#cbd5e0}
-.dark-theme .info-modal-content code{background:#2a3240;color:#81e6d9}
-.dark-theme .logo-preview{background:#2a3240;border-color:#3a4150}
-.dark-theme .section:first-of-type>div{background:#2a3240;border-color:#3a4150}
-
-/* ====== Mobile Responsive ====== */
-@media(max-width:768px){
-  body{padding:10px}
-  .container{padding:20px;border-radius:15px}
-  h1{font-size:22px}
-  .section:first-of-type{grid-template-columns:1fr 1fr}
-  table{font-size:11px;min-width:650px}
-  th,td{padding:9px 5px}
-  td input,td select{padding:6px 9px;font-size:12px}
-  .canvas-box{height:280px}
-  .modal-content{width:98%;padding:20px;margin:3% auto}
-  .modal-btns{grid-template-columns:1fr 1fr 1fr}
-  .info-modal{padding:12px}
-  .info-modal-content{padding:22px;margin:12px auto}
-  .info-modal-content h2{font-size:21px}
-  .info-modal-content h3{font-size:17px}
-  .info-modal-content .features{grid-template-columns:1fr}
-}
-
-/* iOS: Prevent auto-zoom */
-.ios input,.ios select,.ios textarea{font-size:16px}
-
-/* ====== Print Styles ====== */
-@media print{
-  body{background:white;padding:0}
-  .container{box-shadow:none;border-radius:0;padding:0}
-  .no-print{display:none!important}
-  .section{page-break-inside:avoid}
-  table{page-break-inside:auto;box-shadow:none}
-  tr{page-break-inside:avoid;page-break-after:auto}
-  thead{display:table-header-group}
-  tfoot{display:table-footer-group}
-}
-
-
-/* ====== Burger Menu Toggle ====== */
-.burger-toggle{
-  display:flex;
-  position:fixed;
-  top:15px;
-  right:15px;
-  z-index:1002;
-  width:45px;
-  height:45px;
-  background:linear-gradient(135deg,#1E2434 0%,#8B1538 100%);
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  gap:5px;
-  padding:10px;
-  box-shadow:0 4px 15px rgba(139,21,56,0.4);
-  transition:all 0.3s ease;
-  -webkit-tap-highlight-color:transparent;
-}
-.burger-toggle span{
-  width:25px;
-  height:3px;
-  background:#fff;
-  border-radius:2px;
-  transition:all 0.3s ease;
-}
-.burger-toggle.active span:nth-child(1){
-  transform:rotate(45deg) translate(7px, 7px);
-}
-.burger-toggle.active span:nth-child(2){
-  opacity:0;
-}
-.burger-toggle.active span:nth-child(3){
-  transform:rotate(-45deg) translate(7px, -7px);
-}
-.burger-toggle:active{
-  transform:scale(0.95);
-}
-
-/* ====== Action Buttons Container ====== */
-.action-buttons{
-  position:fixed;
-  top:70px;
-  right:15px;
-  max-width:240px;
-  width:240px;
-  padding:12px;
-  gap:8px;
-  z-index:1001;
-  border-radius:12px;
-  flex-direction:column;
-  display:none;
-  box-shadow:0 10px 40px rgba(0,0,0,0.3);
-  animation:slideInMenu 0.3s ease;
-  background:rgba(255,255,255,0.98);
-  backdrop-filter:blur(10px);
-  border:2px solid #8B1538;
-}
-.action-buttons.active{
-  display:flex;
-}
-@keyframes slideInMenu{
-  from{opacity:0;transform:translateY(-10px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-.action-buttons .btn{
-  margin:0;
-  width:100%;
-  white-space:nowrap;
-  font-size:14px;
-  padding:12px 16px;
-  height:50px;
-  border-radius:10px;
-  font-weight:600;
-  box-shadow:0 2px 8px rgba(139,21,56,0.2);
-  transition:all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  position:relative;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
-  gap:10px;
-}
-.action-buttons .btn-icon{
-  font-size:20px;
-}
-.action-buttons .btn-text{
-  font-size:14px;
-}
-.action-buttons .btn::before{
-  content:'';
-  position:absolute;
-  top:50%;
-  left:50%;
-  width:0;
-  height:0;
-  border-radius:50%;
-  background:rgba(255,255,255,0.3);
-  transition:width 0.4s, height 0.4s, top 0.4s, left 0.4s;
-}
-.action-buttons .btn:hover::before{
-  width:300px;
-  height:300px;
-  top:-150px;
-  left:-150px;
-}
-.action-buttons .btn:hover{
-  transform:translateX(-3px);
-  box-shadow:0 6px 20px rgba(139,21,56,0.35);
-}
-.action-buttons .btn:active{
-  transform:translateX(-1px) scale(0.98);
-}
-
-/* Home Button - Red Color */
-.action-buttons .btn-home{
-  background:#8B1538 !important;
-  color:#fff !important;
-}
-.action-buttons .btn-home:hover{
-  background:#6B1028 !important;
-}
-
-.btn-divider{
-  height:1px;
-  background:rgba(139,21,56,0.2);
-  margin:8px 0;
-  flex-shrink:0;
-}
-
-body.dark-theme .action-buttons{
-  background:rgba(37,45,61,0.98);
-  border-color:rgba(139,21,56,0.3);
-  box-shadow:0 15px 40px rgba(0,0,0,0.6), 0 5px 15px rgba(0,0,0,0.4);
-}
-body.dark-theme .action-buttons .btn{
-  box-shadow:0 2px 8px rgba(0,0,0,0.4);
-}
-body.dark-theme .action-buttons .btn:hover{
-  box-shadow:0 6px 20px rgba(139,21,56,0.5);
-}
-body.dark-theme .action-buttons .btn-home{
-  background:#8B1538 !important;
-  color:#fff !important;
-}
-body.dark-theme .action-buttons .btn-home:hover{
-  background:#6B1028 !important;
-}
-
-/* Verstecke die großen Action-Buttons (nur Burger-Menü verwenden) */
-.section.no-print:has(.btn-save),
-.section.no-print:has(.btn-pdf),
-.section.no-print:has(.btn-print) {
-  display: none !important;
-}
-
-</style>
-
+  <title>Tätigkeitsbericht Pro</title>
+
+  <style>
+    /* ==================== DESIGN SYSTEM (Dunkelblau/Rot) ==================== */
+    :root {
+      /* --- DARK MODE (Standard) --- */
+      --bg-app: #1E2434;
+      --bg-panel: #252d3d;
+      --bg-input: #2a3240;
+      --bg-hover: #323b4d;
+      --border-color: #3a4150;
+      --text-main: #e2e8f0;
+      --text-muted: #a0aec0;
+      
+      --accent-primary: #8B1538;
+      --accent-hover: #6B1028;
+      --accent-glow: rgba(139, 21, 56, 0.4);
+      --danger: #ef4444;
+      
+      --gradient-header: linear-gradient(135deg, #1E2434 0%, #8B1538 100%);
+      --shadow-panel: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    /* --- LIGHT MODE OVERRIDES --- */
+    body.light-theme {
+      --bg-app: #f0f2f5;
+      --bg-panel: #ffffff;
+      --bg-input: #f7fafc;
+      --bg-hover: #edf2f7;
+      --border-color: #e2e8f0;
+      --text-main: #2d3748;
+      --text-muted: #718096;
+      
+      --accent-primary: #8B1538;
+      --accent-hover: #6B1028;
+      --accent-glow: rgba(139, 21, 56, 0.2);
+      
+      --gradient-header: linear-gradient(135deg, #1E2434 0%, #8B1538 100%);
+      --shadow-panel: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    /* ==================== GLOBAL STYLES ==================== */
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--bg-app);
+      color: var(--text-main);
+      padding: 20px;
+      min-height: 100vh;
+      line-height: 1.5;
+      transition: background-color 0.3s, color 0.3s;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Container Panel */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: var(--bg-panel);
+      padding: 35px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-panel);
+      animation: fadeIn 0.4s ease-out;
+    }
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+    /* Typography */
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 25px;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      text-align: center;
+    }
+    
+    /* Light mode h1 with gradient */
+    body.light-theme h1 {
+      background: var(--gradient-header);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h2 {
+      font-size: 18px;
+      color: #fff;
+      background: var(--accent-primary);
+      padding: 15px 20px;
+      border-radius: 12px;
+      margin: 25px 0 15px 0;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+
+    /* Form Elements */
+    .label {
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--bg-input);
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      margin-bottom: 12px;
+    }
+
+    input:hover, select:hover, textarea:hover {
+      border-color: var(--bg-hover);
+      background: var(--bg-panel);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+      background: var(--bg-panel);
+      transform: translateY(-1px);
+    }
+    
+    textarea { min-height: 90px; resize: vertical; }
+
+    /* Light Mode Input Styles */
+    body.light-theme input,
+    body.light-theme select,
+    body.light-theme textarea {
+      background: #f7fafc;
+      border-color: #e2e8f0;
+      color: #2d3748;
+    }
+
+    body.light-theme input:hover,
+    body.light-theme select:hover,
+    body.light-theme textarea:hover {
+      background: #fff;
+      border-color: #cbd5e0;
+    }
+
+    body.light-theme input:focus,
+    body.light-theme select:focus,
+    body.light-theme textarea:focus {
+      background: #fff;
+      border-color: #8B1538;
+    }
+
+    /* Header Grid Layout */
+    .header-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 25px;
+      margin-bottom: 28px;
+    }
+
+    .header-grid > div {
+      background: var(--bg-input);
+      border: 2px solid var(--border-color);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: all 0.3s ease;
+    }
+
+    .header-grid > div:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+      border-color: var(--accent-primary);
+    }
+
+    .header-grid .label {
+      background: var(--accent-primary);
+      color: #fff;
+      padding: 12px 16px;
+      margin: 0;
+      border-radius: 0;
+      font-size: 13px;
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .header-grid input {
+      margin: 0;
+      border-radius: 0;
+      border: none;
+      border-top: 2px solid var(--border-color);
+      font-size: 14px;
+      padding: 14px 16px;
+      text-align: center;
+      background: var(--bg-panel);
+    }
+
+    /* Buttons Standard */
+    .btn {
+      background: var(--accent-primary);
+      color: #fff;
+      border: none;
+      padding: 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+      width: 100%;
+      margin: 12px 0;
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.3px;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      transform: translate(-50%,-50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+    
+    .btn:active { 
+      transform: translateY(0);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+
+    /* Secondary Button Style */
+    .btn-secondary {
+      background: var(--bg-input);
+      color: var(--text-main);
+      border: 2px solid var(--border-color);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .btn-secondary:hover {
+      background: var(--bg-hover);
+      border-color: var(--text-muted);
+    }
+
+    /* Danger Button */
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+      box-shadow: none;
+      border: 2px solid var(--danger);
+    }
+    .btn-danger:hover {
+      background: var(--danger);
+      color: white;
+    }
+
+    /* Table Icons / Row Buttons */
+    .btn-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      margin: 4px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--bg-panel);
+      border: 2px solid var(--accent-primary);
+      color: var(--accent-primary);
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+    .btn-row:hover { 
+      background: var(--accent-primary); 
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+    .btn-row:active { transform: translateY(0); }
+    .btn-row.danger { border-color: var(--danger); color: var(--danger); }
+    .btn-row.danger:hover { background: var(--danger); color: #fff; }
+
+    /* SVG Icons Styling */
+    .icon {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Table Styling */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 16px 0;
+      border-radius: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 700px;
+      background: var(--bg-panel);
+    }
+    
+    th {
+      background: var(--accent-primary);
+      color: #fff;
+      padding: 14px 10px;
+      font-size: 12px;
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border: none;
+    }
+
+    th:first-child { border-top-left-radius: 15px; }
+    th:last-child { border-top-right-radius: 15px; }
+    
+    td {
+      border: 1px solid var(--border-color);
+      border-top: none;
+      padding: 10px 8px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-main);
+      vertical-align: middle;
+      background: var(--bg-panel);
+      transition: all 0.2s ease;
+    }
+    
+    tr:hover td { background: var(--bg-hover); }
+    tr:last-child td:first-child { border-bottom-left-radius: 15px; }
+    tr:last-child td:last-child { border-bottom-right-radius: 15px; }
+
+    td input, td select {
+      margin: 0;
+      padding: 8px 12px;
+      font-size: 13px;
+      border-radius: 8px;
+    }
+
+    tfoot td {
+      background: var(--bg-input);
+      font-weight: bold;
+      border-color: var(--border-color);
+    }
+
+    .hours { 
+      font-weight: 700; 
+      color: var(--text-main); 
+      font-family: monospace; 
+      font-size: 15px; 
+    }
+
+    /* Stats Area */
+    .stats {
+      background: var(--accent-primary);
+      color: #fff;
+      border-radius: 15px;
+      padding: 22px;
+      margin: 18px 0;
+      display: none;
+      box-shadow: 0 10px 35px var(--accent-glow);
+      transition: all 0.3s ease;
+    }
+    .stats:hover {
+      transform: scale(1.02);
+      box-shadow: 0 15px 45px var(--accent-glow);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .stat-item {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      padding: 14px;
+      border-radius: 10px;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .stat-item:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-2px);
+    }
+    .stat-label { 
+      font-size: 11px; 
+      opacity: 0.9;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .stat-value { 
+      font-size: 22px; 
+      font-weight: 700; 
+      margin-top: 6px;
+    }
+
+    /* Upload & Signature Previews */
+    .sig-preview, .logo-preview {
+      border: 2px dashed var(--border-color);
+      background: var(--bg-app);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100px;
+      margin-top: 12px;
+      transition: all 0.3s;
+    }
+    .sig-preview:hover, .logo-preview:hover { 
+      border-color: var(--accent-primary);
+      background: var(--bg-input);
+    }
+    
+    /* White background for signature in dark mode */
+    .sig-preview {
+      background: #fff;
+    }
+    
+    .sig-preview img, .logo-preview img { 
+      max-height: 80px; 
+      max-width: 100%; 
+      object-fit: contain; 
+    }
+    .placeholder { 
+      color: var(--text-muted); 
+      font-style: italic; 
+      font-weight: 500;
+    }
+    
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      z-index: 2000;
+      backdrop-filter: blur(5px);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 30px;
+      width: 95%;
+      max-width: 800px;
+      border-radius: 20px;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5);
+      animation: modalFadeIn 0.3s ease;
+    }
+    @keyframes modalFadeIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+
+    .modal-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: var(--text-main);
+      letter-spacing: -0.3px;
+    }
+    .close {
+      float: right;
+      font-size: 32px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.3s ease;
+      line-height: 1;
+    }
+    .close:hover {
+      color: var(--text-main);
+      transform: rotate(90deg);
+    }
+    .modal-btns { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr 1fr; 
+      gap: 12px; 
+      margin-top: 20px; 
+    }
+    .canvas-box {
+      background: #fff;
+      border-radius: 15px;
+      height: 300px;
+      position: relative;
+      cursor: crosshair;
+      margin: 15px 0;
+      border: 3px solid var(--accent-primary);
+      box-shadow: 0 8px 25px var(--accent-glow);
+      overflow: hidden;
+    }
+    #sigCanvas {
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+      cursor: crosshair;
+    }
+    .canvas-hint {
+      position: absolute; 
+      top: 50%; 
+      left: 50%; 
+      transform: translate(-50%, -50%);
+      color: #cbd5e0; 
+      font-size: 18px;
+      pointer-events: none;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .canvas-hint.hide { display: none; }
+
+    /* Burger Menu & Action Buttons */
+    .burger-toggle {
+      position: fixed; 
+      top: 15px; 
+      right: 15px; 
+      z-index: 1002;
+      width: 45px; 
+      height: 45px;
+      background: var(--gradient-header);
+      border: none;
+      border-radius: 10px; 
+      cursor: pointer;
+      display: flex; 
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center; 
+      gap: 5px;
+      box-shadow: 0 4px 15px var(--accent-glow);
+      transition: all 0.3s ease;
+    }
+    .burger-toggle span { 
+      width: 25px; 
+      height: 3px; 
+      background: #fff; 
+      border-radius: 2px; 
+      transition: all 0.3s; 
+    }
+    .burger-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(7px, 7px); }
+    .burger-toggle.active span:nth-child(2) { opacity: 0; }
+    .burger-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+    .burger-toggle:active { transform: scale(0.95); }
+
+    .action-buttons {
+      position: fixed; 
+      top: 70px; 
+      right: 15px; 
+      width: 240px;
+      background: var(--bg-panel);
+      border: 2px solid var(--accent-primary);
+      border-radius: 12px; 
+      padding: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      display: none; 
+      z-index: 1001;
+      flex-direction: column;
+      gap: 8px;
+      backdrop-filter: blur(10px);
+    }
+    .action-buttons.active { 
+      display: flex; 
+      animation: slideIn 0.3s ease-out; 
+    }
+    @keyframes slideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+
+    .action-buttons .btn {
+      margin: 0;
+      width: 100%;
+      font-size: 14px;
+      padding: 12px 16px;
+      height: 50px;
+      border-radius: 10px;
+      font-weight: 600;
+      box-shadow: 0 2px 8px var(--accent-glow);
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    /* Saved Reports List */
+    .report-item {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-left: 5px solid var(--accent-primary);
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .report-item:hover { 
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      border-left-color: var(--accent-hover);
+    }
+    .report-info strong { 
+      color: var(--text-main); 
+      display: block; 
+    }
+    .report-info small { 
+      color: var(--text-muted); 
+    }
+    
+    /* Toast Notification */
+    .toast {
+      position: fixed; 
+      bottom: 25px; 
+      left: 50%; 
+      transform: translateX(-50%);
+      background: var(--bg-panel); 
+      color: var(--text-main);
+      padding: 16px 24px; 
+      border-radius: 12px; 
+      font-size: 14px; 
+      font-weight: 600;
+      display: none; 
+      z-index: 3000;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.3);
+      border: 2px solid var(--accent-primary);
+      animation: floatUp 0.3s ease-out;
+    }
+    @keyframes floatUp{from{opacity:0;transform:translate(-50%, 20px)}to{opacity:1;transform:translate(-50%, 0)}}
+    .toast.success { border-color: #10b981; background: #10b981; color: #fff; }
+    .toast.error { border-color: var(--danger); background: var(--danger); color: #fff; }
+
+    /* Media Query Mobile */
+    @media(max-width:768px){
+      .container { padding: 20px; margin: 0; border-radius: 15px; }
+      .header-grid { grid-template-columns: 1fr 1fr; }
+      .modal-btns { grid-template-columns: 1fr; }
+      .btn-row { padding: 8px 14px; }
+      table { font-size: 11px; min-width: 650px; }
+      th, td { padding: 9px 5px; }
+      td input, td select { padding: 6px 9px; font-size: 12px; }
+      .canvas-box { height: 280px; }
+      .modal-content { width: 98%; padding: 20px; margin: 3% auto; }
+    }
+
+    /* ==================== PRINT STYLES (PDF) ==================== */
+    @media screen { #printPages { display: none; } }
+    @media print {
+      @page { size: A4; margin: 15mm; }
+      body { background: white !important; color: black !important; font-family: Arial, sans-serif; padding: 0; }
+      .container, .burger-toggle, .action-buttons, .modal, .toast, .btn { display: none !important; }
+      
+      /* Remove all shadows in print */
+      * { box-shadow: none !important; text-shadow: none !important; }
+      
+      #printPages { display: block !important; width: 100%; }
+      .print-page { page-break-after: always; position: relative; height: 264mm; }
+      .print-page:last-child { page-break-after: auto; }
+      
+      .print-header { 
+        border-bottom: 2px solid #1E2434; 
+        margin-bottom: 10mm; 
+        padding-bottom: 5mm; 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: flex-start; 
+      }
+      .print-logo { 
+        max-height: 25mm; 
+        max-width: 50mm; 
+        object-fit: contain;
+        display: block;
+      }
+      .print-meta { flex: 1; }
+      .meta-row { 
+        display: flex; 
+        margin-bottom: 3mm; 
+        font-size: 11pt; 
+        border-bottom: 1px dotted #ccc; 
+        padding-bottom: 2px; 
+      }
+      .meta-label { font-weight: bold; width: 35mm; color: #1E2434; }
+      
+      .print-table { 
+        width: 100%; 
+        border-collapse: collapse; 
+        font-size: 10pt; 
+        margin-bottom: 5mm; 
+      }
+      .print-table th { 
+        background: #1E2434 !important; 
+        color: #fff !important;
+        border: 1px solid #000; 
+        padding: 3mm; 
+        font-weight: bold; 
+      }
+      .print-table td { 
+        border: 1px solid #000; 
+        padding: 3mm; 
+      }
+      
+      .print-footer { 
+        position: absolute; 
+        bottom: 0; 
+        width: 100%; 
+        font-size: 10pt; 
+      }
+      .sig-box { 
+        border-top: 1px solid #000; 
+        width: 60mm; 
+        padding-top: 2mm; 
+        margin-top: 10mm; 
+      }
+      .sig-img { 
+        max-height: 15mm; 
+        display: block; 
+        margin-bottom: 5px; 
+      }
+      .page-num { 
+        text-align: right; 
+        margin-top: 5mm; 
+        font-size: 9pt; 
+        color: #666; 
+      }
+      
+      .print-notes {
+        border: 2px solid #8B1538;
+        padding: 5mm;
+        min-height: 20mm;
+        margin-top: 5mm;
+        background: #fff3f3 !important;
+        border-radius: 5px;
+      }
+      .print-notes strong {
+        color: #8B1538;
+        display: block;
+        margin-bottom: 3mm;
+      }
+    }
+  </style>
 </head>
 <body>
-  <!-- Burger Menu Toggle -->
-  <button class="burger-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
-    <span></span>
-    <span></span>
-    <span></span>
+
+  <button class="burger-toggle" onclick="toggleMobileMenu()" aria-label="Menü">
+    <span></span><span></span><span></span>
   </button>
 
-  <!-- Action Buttons (Burger Menu) -->
   <div class="action-buttons" id="mobileMenu">
-    <button class="btn btn-home" onclick="window.location.href='index.html'" title="Zurück zur Startseite">
-      <span class="btn-icon">⌂</span><span class="btn-text"> Home</span>
+    <button class="btn" onclick="location.reload()">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> 
+      Neuer Bericht
     </button>
-    <button class="btn btn-save" onclick="saveToDB(); toggleMobileMenu();" title="Speichern">
-      <span class="btn-icon">✓</span><span class="btn-text"> Speichern</span>
+    <button class="btn" onclick="saveReport()">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> 
+      Speichern
     </button>
-    <button class="btn btn-pdf" onclick="exportPDF(); toggleMobileMenu();" title="PDF erstellen">
-      <span class="btn-icon">⬇</span><span class="btn-text"> PDF Export</span>
+    <button class="btn" onclick="startPrint()">
+      <svg class="icon" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> 
+      Drucken / PDF
     </button>
-    <button class="btn btn-print" onclick="window.print(); toggleMobileMenu();" title="Drucken">
-      <span class="btn-icon">⎙</span><span class="btn-text"> Drucken</span>
+    <button class="btn btn-secondary" onclick="toggleTheme()">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg> 
+      Hell/Dunkel
     </button>
-    <button class="btn btn-json" onclick="exportJSON(); toggleMobileMenu();" title="Exportieren">
-      <span class="btn-icon">↓</span><span class="btn-text"> JSON Export</span>
+    <button class="btn btn-secondary" onclick="exportJSON()">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> 
+      Export JSON
     </button>
-    <button class="btn btn-import" onclick="document.getElementById('jsonImport').click(); toggleMobileMenu();" title="Importieren">
-      <span class="btn-icon">↑</span><span class="btn-text"> JSON Import</span>
-    </button>
-    
-    <!-- Divider -->
-    <div class="btn-divider"></div>
-    
-    <!-- Theme Toggle -->
-    <button class="btn btn-save" id="themeBtnMenu" title="Dark Mode">
-      <span class="btn-icon">☾</span><span class="btn-text"> Dark Mode</span>
-    </button>
-    
-    <!-- Info Toggle -->
-    <button class="btn btn-save" id="infoBtnMenu" title="Info">
-      <span class="btn-icon">ⓘ</span><span class="btn-text"> Info</span>
-    </button>
+    <label class="btn btn-secondary" style="margin-bottom:0">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg> 
+      Import JSON
+      <input type="file" accept="application/json" style="display:none" onchange="importJSON(this.files[0])">
+    </label>
   </div>
-
-
-
-  <!-- Neue UI Buttons - Jetzt im Burger-Menü -->
-  <button class="theme-toggle" id="themeBtn" title="Hell/Dunkel" style="display:none">🌓</button>
-  <button class="info-toggle" id="infoBtn" title="App Info" style="display:none">ℹ️</button>
-
-  <!-- Info Modal -->
-  <div id="infoModal" class="info-modal" role="dialog" aria-modal="true" aria-labelledby="infoTitle" hidden>
-    <div class="info-modal-content">
-      <button class="info-close" id="infoCloseBtn" aria-label="Schließen">✕</button>
-      
-      <h2 id="infoTitle">⚙️ Technologie-Informationen</h2>
-      
-      <p style="margin-bottom:20px;color:#666">Diese App wurde mit <strong>reinen Web-Technologien</strong> entwickelt – keine Frameworks, keine externen Abhängigkeiten!</p>
-
-      <div class="tech-section">
-        <h3>1. HTML5</h3>
-        <ul>
-          <li>Struktur der Webseite</li>
-          <li>Semantische Elemente (<code>&lt;input type="date"&gt;</code>, <code>&lt;canvas&gt;</code>, <code>&lt;textarea&gt;</code>)</li>
-          <li>Meta-Tags für Mobile-Optimierung</li>
-        </ul>
-      </div>
-
-      <div class="tech-section">
-        <h3>2. CSS3</h3>
-        <ul>
-          <li>Komplettes Styling (kein CSS-Framework verwendet!)</li>
-          <li>Grid Layout für responsive Layouts</li>
-          <li>Flexbox für Ausrichtung</li>
-          <li>Media Queries für Mobile/Desktop/Print</li>
-          <li>CSS Transitions für Animationen</li>
-          <li>Dark Mode mit CSS-Variablen</li>
-        </ul>
-      </div>
-
-      <div class="tech-section">
-        <h3>3. Vanilla JavaScript (ES6+)</h3>
-        <ul>
-          <li>Keine Frameworks wie React, Vue oder Angular</li>
-          <li>Moderne JavaScript-Features:
-            <ul style="margin-top:8px">
-              <li>Arrow Functions (<code>=&gt;</code>)</li>
-              <li>Template Literals (<code>``</code>)</li>
-              <li>Async/Await</li>
-              <li>Array-Methoden (<code>.map()</code>, <code>.filter()</code>, <code>.forEach()</code>)</li>
-              <li>Destructuring</li>
-            </ul>
-          </li>
-          <li>Canvas API für die Unterschrift</li>
-          <li>LocalStorage API für Datenspeicherung</li>
-          <li>File API für JSON Import</li>
-        </ul>
-      </div>
-
-      <div class="tech-section">
-        <h3>4. Browser APIs</h3>
-        <ul>
-          <li><strong>Canvas API</strong> – Unterschriften zeichnen</li>
-          <li><strong>LocalStorage</strong> – Daten speichern</li>
-          <li><strong>File API</strong> – Dateien importieren</li>
-          <li><strong>Blob API</strong> – JSON exportieren</li>
-          <li><strong>Print API</strong> – PDF erstellen (<code>window.print()</code>)</li>
-        </ul>
-      </div>
-
-      <div class="tech-section">
-        <h3>✨ Besonderheiten</h3>
-        <div class="features">
-          <div class="feature-item">
-            ✅ <strong>Keine externen Abhängigkeiten</strong><br>
-            <small>Kein npm, keine Bibliotheken</small>
-          </div>
-          <div class="feature-item">
-            ✅ <strong>Keine Build-Tools</strong><br>
-            <small>Kein Webpack, Vite oder Bundler nötig</small>
-          </div>
-          <div class="feature-item">
-            ✅ <strong>Single File Application</strong><br>
-            <small>Alles in einer HTML-Datei</small>
-          </div>
-          <div class="feature-item">
-            ✅ <strong>Offline-fähig</strong><br>
-            <small>Funktioniert ohne Internet</small>
-          </div>
-          <div class="feature-item">
-            ✅ <strong>Keine Installation</strong><br>
-            <small>Einfach im Browser öffnen</small>
-          </div>
-          <div class="feature-item">
-            ✅ <strong>Datenschutz</strong><br>
-            <small>Alle Daten bleiben lokal</small>
-          </div>
-        </div>
-      </div>
-
-      <div class="tech-section">
-        <h3>✅ Vorteile dieser Herangehensweise</h3>
-        <ul>
-          <li><strong>Einfache Wartung</strong> – Nur eine Datei</li>
-          <li><strong>Schnell</strong> – Keine großen Frameworks laden</li>
-          <li><strong>Portabel</strong> – Überall verwendbar (USB-Stick, E-Mail, etc.)</li>
-          <li><strong>Kompatibel</strong> – Läuft in jedem modernen Browser</li>
-          <li><strong>Privat</strong> – Alle Daten bleiben lokal im Browser</li>
-        </ul>
-      </div>
-
-      <p style="margin-top:25px;padding-top:20px;border-top:2px solid #eee;color:#666;text-align:center">
-        <strong>Tätigkeitsbericht-V25.10.23</strong> | Entwickelt mit ❤️ und purem Code
-      </p>
-    </div>
-  </div>
-
 
   <div class="container">
-    <h1>◉ Tätigkeitsbericht</h1>
-	
-	<!-- Firmenlogo (Nexus ips) – optional -->
-<div class="section" id="logoSection">
-  
+    <h1>Tätigkeitsbericht Pro</h1>
 
-  <!-- Upload-Button (verschwindet nach Upload) -->
-  <label class="btn btn-import" id="logoUploadBtn">
-    ⊕ Logo auswählen
-    <input type="file" id="logoFile"
-           accept="image/png,image/jpeg,image/svg+xml"
-           style="display:none"
-           onchange="importLogoFile(this.files[0])">
-  </label>
-
-  <!-- Vorschau -->
-  <div id="logoPrev" class="logo-preview" style="margin-top:4px;"></div>
-
-  <!-- Nach Upload sichtbar -->
-  <div id="logoActions" style="display:none;margin-top:1px;">
-  <button type="button" class="btn btn-import" onclick="changeLogo()">✨ Logo ändern</button>
-  <button type="button" class="btn btn-import" style="background:#E74C3C;" onclick="clearLogo()">⊖ Logo entfernen</button>
-</div>
-
-</div>
-
-    <!-- Kopfbereich -->
-    <div class="section" id="headerSection">
-      <div>
-        <label class="label">Kunde:</label>
-        <input type="text" id="kunde" placeholder="Kundenname">
+    <div class="section">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <label class="btn" style="width:auto; margin-bottom:0;">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          Logo wählen <input type="file" accept="image/*" style="display:none" onchange="importLogoFile(this.files[0])">
+        </label>
+        <button class="btn btn-danger" style="width:auto; margin-bottom:0;" onclick="clearLogo()">Löschen</button>
       </div>
-      <div>
-        <label class="label">Projekt / Tätigkeit:</label>
-        <input type="text" id="projekt" placeholder="Projektnummer">
-      </div>
-      <div>
-        <label class="label">Datum:</label>
-        <input type="date" id="datum">
-      </div>
-      <div>
-        <label class="label">Mitarbeiter:</label>
-        <input type="text" id="mitarbeiter" placeholder="Ihr Name">
-      </div>
+      <div id="logoPrev" class="logo-preview"><span class="placeholder">Kein Logo ausgewählt</span></div>
     </div>
 
-    <!-- Statistik -->
+    <div class="header-grid">
+      <div><label class="label">Kunde</label><input type="text" id="kunde" placeholder="Firmenname"></div>
+      <div><label class="label">Projekt</label><input type="text" id="projekt" placeholder="Tätigkeit / Projekt"></div>
+      <div><label class="label">Datum</label><input type="date" id="datum"></div>
+      <div><label class="label">Mitarbeiter</label><input type="text" id="mitarbeiter" placeholder="Ihr Name"></div>
+    </div>
+
     <div id="stats" class="stats">
-      <div style="font-weight:600;margin-bottom:5px">◉ Statistik</div>
+      <div style="font-weight:600;margin-bottom:10px;">Projekt Übersicht</div>
       <div id="statsGrid" class="stats-grid"></div>
     </div>
 
-    <!-- Tabelle (Bearbeitung) -->
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th style="width:30px">#</th>
-            <th style="width:90px">Datum</th>
-            <th style="width:120px">Aufgabe</th>
-            <th style="width:130px">Von - Bis</th>
-            <th style="width:70px">Std</th>
-            <th style="width:100px">Aktion</th>
+            <th style="width:40px">#</th>
+            <th style="width:110px">Datum</th>
+            <th>Aufgabe / Tätigkeit</th>
+            <th style="width:140px">Von - Bis</th>
+            <th style="width:70px">Std.</th>
+            <th style="width:90px">Aktion</th>
           </tr>
         </thead>
-        <tbody id="tbody">
-          <tr>
-            <td>1</td>
-            <td><input type="date" class="date-in"></td>
-            <td>
-              <select class="task-sel">
-                <option value="">-</option>
-                <option>Anfahrt</option>
-                <option>Installation</option>
-                <option>Schulung</option>
-                <option>Inbetriebnahme</option>
-                <option>Fehlerbehebung</option>
-                <option>Support</option>
-                <option>Test</option>
-                <option>Wartung</option>
-                <option>Dokumentation</option>
-              </select>
-            </td>
-            <td>
-              <input type="time" class="time-start" style="width:45%;display:inline-block"> -
-              <input type="time" class="time-end" style="width:45%;display:inline-block">
-            </td>
-            <td class="hours">00:00</td>
-            <td>
-              <button class="btn-row" onclick="dupRow(this)">⊕</button>
-              <button class="btn-row danger" onclick="delRow(this)">⊗</button>
-            </td>
-          </tr>
-        </tbody>
+        <tbody id="tbody"></tbody>
         <tfoot>
           <tr>
-            <td colspan="4" style="text-align:right;font-weight:700">Summe:</td>
-            <td id="total" >00:00</td>
+            <td colspan="4" style="text-align:right;font-weight:bold;padding-right:15px">Gesamt:</td>
+            <td id="total" class="hours">00:00</td>
             <td></td>
           </tr>
         </tfoot>
       </table>
     </div>
+    
+    <button class="btn" onclick="addRow()">
+      <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      Zeile hinzufügen
+    </button>
 
-    <!-- Print-only Seiten -->
-    <div id="printPages" class="print-only"></div>
-
-    <button class="btn btn-add" onclick="addRow()">⊕ Zeile hinzufügen</button>
-
-    <!-- Bemerkungen -->
-    <div class="section">
-      <label class="label">◉ Bemerkungen:</label>
-      <textarea id="notes" placeholder="Beschreibung der Tätigkeiten..."></textarea>
+    <div style="margin-top:25px">
+      <label class="label">Bemerkungen</label>
+      <textarea id="notes" placeholder="Zusätzliche Informationen, Materialverbrauch, etc..."></textarea>
     </div>
 
-    <!-- Signatur / Name -->
-    <div class="section">
-      <label class="label">◉ Name (Unterzeichnung):</label>
-      <label for="sigName"></label><input type="text" id="sigName" placeholder="Vollständiger Name">
-
-      <label class="label">✍️ Unterschrift:</label>
-      <button class="btn btn-sig" onclick="openSig()">Jetzt unterschreiben</button>
-		
-		<label class="label">⊕ Unterschrift als Bild hochladen (PNG/JPG):</label>
-			<label class="btn btn-import">⊕ Datei auswählen
-			<input type="file" id="sigFile" accept="image/png,image/jpeg" style="display:none" onchange="importSigFile(this.files[0])">
-		</label>
-		
-		<small style="color:#666;display:block;margin:6px 0 0 2px">Tipp: Helle, gut lesbare Signatur verwenden.</small>
-
-      <div id="sigPrev" class="sig-preview">
-        <span class="placeholder">Noch keine Unterschrift</span>
+    <div style="margin-top:25px; border-top:2px solid var(--border-color); padding-top:20px;">
+      <label class="label" for="sigName">Name des Unterzeichners</label>
+      <input type="text" id="sigName" placeholder="Name eingeben">
+      
+      <div style="margin-top:10px; display:flex; gap:10px;">
+        <button class="btn btn-secondary" style="flex:1" onclick="openSigModal()">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path></svg>
+          Zeichnen
+        </button>
+        <label class="btn btn-secondary" style="flex:1; margin-bottom:0">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          Hochladen <input type="file" accept="image/*" style="display:none" onchange="importSigFile(this.files[0])">
+        </label>
       </div>
+      <div id="sigPrev" class="sig-preview"><span class="placeholder">Keine Unterschrift</span></div>
     </div>
 
-    <!-- Aktionen - Jetzt im Burger-Menü -->
-    <div style="display:none">
-      <button class="btn btn-save" onclick="saveReport()">💾 Speichern</button>
-      <button class="btn btn-pdf" onclick="exportPDF()">📄 PDF Export</button>
-      <button class="btn btn-print" onclick="window.print()">🖨️ Drucken</button>
-      <button class="btn btn-json" onclick="exportJSON()">📦 JSON Export</button>
-      <label class="btn btn-import" style="display:block;cursor:pointer">
-        📥 JSON Import
-        <input id="jsonFile" type="file" accept="application/json" style="display:none" onchange="importJSON(this.files[0])">
-      </label>
-    </div>
-
-    <!-- Gespeicherte Berichte -->
-    <div id="reports" class="reports">
-      <h2>◉ Gespeicherte Berichte</h2>
+    <div style="margin-top:40px; border-top:2px solid var(--border-color); padding-top:20px;">
+      <h2>Gespeicherte Berichte</h2>
       <div id="reportsList"></div>
     </div>
   </div>
 
-  <!-- Modal: Signatur -->
-  <div id="modal" class="modal" aria-hidden="true">
+  <div id="printPages"></div>
+
+  <div id="modal" class="modal">
     <div class="modal-content">
-      <span class="close" onclick="closeSig()">&times;</span>
-      <div class="modal-title">✍️ Unterschrift erstellen</div>
-      <p style="color:#666;font-size:14px;margin-bottom:10px">Zeichnen Sie Ihre Unterschrift:</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <h3 class="modal-title" style="margin:0">Unterschrift erfassen</h3>
+        <span class="close" onclick="closeSigModal()">&times;</span>
+      </div>
       <div class="canvas-box">
-        <div id="hint" class="canvas-hint">Hier unterschreiben...</div>
+        <div id="canvasHint" class="canvas-hint">Hier unterschreiben</div>
         <canvas id="sigCanvas"></canvas>
       </div>
       <div class="modal-btns">
-        <button class="modal-btn btn-clear" onclick="clearSig()">⊗ Löschen</button>
-        <button class="modal-btn btn-cancel" onclick="closeSig()">❌ Abbrechen</button>
-        <button class="modal-btn btn-ok" onclick="saveSig()">✅ OK</button>
+        <button class="btn btn-danger" onclick="clearCanvas()">Löschen</button>
+        <button class="btn btn-secondary" onclick="closeSigModal()">Abbrechen</button>
+        <button class="btn" onclick="saveSignature()">Übernehmen</button>
       </div>
     </div>
   </div>
 
-  <!-- Toast -->
   <div id="toast" class="toast"></div>
 
   <script>
-    let rowNum=1, reports=[], sigData=null, logoData=null, canvas, ctx, drawing=false, hasUnsavedChanges=false, canvasInitialized=false;
+    /* ==================== JAVASCRIPT LOGIC ==================== */
+    let rowCount = 0;
+    let reports = [];
+    let logoData = null;
+    let sigData = null;
+    let canvas, ctx, isDrawing = false;
 
-    // Helpers
-    document.getElementById('datum').valueAsDate=new Date();
-    function toMin(t){if(!t)return 0;const[h,m]=t.split(':').map(Number);return(h||0)*60+(m||0)}
-    function toHM(m){const h=Math.floor(m/60);const mn=Math.abs(m%60);return String(h).padStart(2,'0')+':'+String(mn).padStart(2,'0')}
-    function markUnsaved(){hasUnsavedChanges=true}
-    function markSaved(){hasUnsavedChanges=false}
-    function toast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type;t.style.display='block';setTimeout(()=>t.style.display='none',3000)}
+    // Icons (SVGs) für JS-generierte Zeilen
+    const iconCopy = `<svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+    const iconTrash = `<svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
 
-    // Zeitberechnung + Nachtschicht (dataset.minutes)
-    function calcRow(row){
-      const s=row.querySelector('.time-start').value;
-      const e=row.querySelector('.time-end').value;
-      const cell=row.querySelector('.hours');
-      if(!s||!e){cell.textContent='00:00';cell.style.color='';cell.dataset.minutes='0';return}
-      const sm=toMin(s),em=toMin(e);
-      let diff=em-sm;
-
-      if(diff<0){
-        diff=1440+diff;
-        cell.textContent=toHM(diff);
-        cell.dataset.minutes=String(diff);
-        cell.style.color='#FF9800';
-        let note=row.querySelector('.overnight-note');
-        if(!note){
-          note=document.createElement('div');
-          note.className='overnight-note';
-          note.textContent='(über Mitternacht)';
-          cell.appendChild(note);
-        }
-      }else if(diff===0){
-        cell.textContent='⚠️';cell.style.color='#E74C3C';cell.dataset.minutes='0';
-      }else{
-        cell.style.color='';cell.textContent=toHM(diff);
-        cell.dataset.minutes=String(diff);
-        const note=row.querySelector('.overnight-note'); if(note)note.remove();
+    // INIT
+    window.onload = function() {
+      document.getElementById('datum').valueAsDate = new Date();
+      loadReportsFromStorage();
+      if(document.querySelectorAll('#tbody tr').length === 0) addRow();
+      
+      // Theme Check
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
       }
-      calcTotal();
-      markUnsaved();
+    };
+
+    function toggleTheme() {
+      document.body.classList.toggle('light-theme');
+      const isLight = document.body.classList.contains('light-theme');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      toggleMobileMenu();
     }
 
-    function calcTotal(){
-      let tot=0;
-      document.querySelectorAll('#tbody .hours').forEach(c=>{
-        const m = Number(c.dataset.minutes || 0);
-        if(!isNaN(m) && c.textContent !== '⚠️') tot += m;
-      });
-      document.getElementById('total').textContent=toHM(tot);
-      updateStats();
+    function toggleMobileMenu() {
+      document.querySelector('.burger-toggle').classList.toggle('active');
+      document.getElementById('mobileMenu').classList.toggle('active');
     }
 
-    function updateStats(){
-      const stats={};let hasData=false;
-      document.querySelectorAll('#tbody tr').forEach(row=>{
-        const task=row.querySelector('.task-sel')?.value;
-        const m=Number(row.querySelector('.hours')?.dataset.minutes||0);
-        const warn=(row.querySelector('.hours')?.textContent==='⚠️');
-        if(task && !isNaN(m) && !warn){hasData=true;stats[task]=(stats[task]||0)+m;}
-      });
-      const sec=document.getElementById('stats');
-      const grid=document.getElementById('statsGrid');
-      if(!sec||!grid){return}
-      if(!hasData){sec.style.display='none';return}
-      sec.style.display='block';
-      grid.innerHTML=Object.entries(stats).sort((a,b)=>b[1]-a[1]).map(([t,m])=>`
-        <div class="stat-item"><div class="stat-label">${t}</div><div class="stat-value">${toHM(m)}</div></div>
-      `).join('');
+    function toast(msg, type='info') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = `toast ${type}`;
+      t.style.display = 'block';
+      setTimeout(() => t.style.display = 'none', 3000);
     }
 
-    function attachRow(row){
-      row.querySelector('.time-start').addEventListener('change',()=>calcRow(row));
-      row.querySelector('.time-end').addEventListener('change',()=>calcRow(row));
-      row.querySelector('.task-sel').addEventListener('change',()=>{updateStats();markUnsaved()});
-      row.querySelector('.date-in').addEventListener('change',markUnsaved);
-    }
-
-    function addRow(){
-      const last=document.querySelector('#tbody tr:last-child');
-      const lastDate=last?last.querySelector('.date-in').value:'';
-      rowNum++;
-      const tr=document.createElement('tr');
-      tr.innerHTML=`
-        <td>${rowNum}</td>
-        <td><input type="date" class="date-in" value="${lastDate}"></td>
+    /* --- TABELLEN LOGIK --- */
+    function addRow(data = {}) {
+      rowCount++;
+      const tbody = document.getElementById('tbody');
+      const tr = document.createElement('tr');
+      
+      tr.innerHTML = `
+        <td>${rowCount}</td>
+        <td><input type="date" class="date-in" value="${data.date || ''}"></td>
         <td>
-          <select class="task-sel">
-            <option value="">-</option>
+          <select class="task-sel" onchange="calcTotal()">
+            <option value="">- Wählen -</option>
             <option>Anfahrt</option>
             <option>Installation</option>
-            <option>Schulung</option>
-            <option>Inbetriebnahme</option>
-            <option>Fehlerbehebung</option>
-            <option>Support</option>
-            <option>Test</option>
             <option>Wartung</option>
-            <option>Dokumentation</option>
+            <option>Reparatur</option>
+            <option>Beratung</option>
+            <option>Programmierung</option>
+            <option>Sonstiges</option>
           </select>
         </td>
         <td>
-          <input type="time" class="time-start" style="width:45%;display:inline-block"> -
-          <input type="time" class="time-end" style="width:45%;display:inline-block">
-        </td>
-        <td class="hours"  data-minutes="0">00:00</td>
-        <td><button class="btn-row" onclick="dupRow(this)">⊕</button> <button class="btn-row danger" onclick="delRow(this)">⊗</button></td>
-      `;
-      document.getElementById('tbody').appendChild(tr);
-      attachRow(tr);
-      markUnsaved();
-      toast('Zeile hinzugefügt','success');
-    }
-
-    function dupRow(btn){
-      const row=btn.closest('tr');
-      rowNum++;
-      const tr=document.createElement('tr');
-      tr.innerHTML=`
-        <td>${rowNum}</td>
-        <td><input type="date" class="date-in" value="${row.querySelector('.date-in').value}"></td>
-        <td>
-          <select class="task-sel">
-            <option value="">-</option>
-            <option>Anfahrt</option>
-            <option>Installation</option>
-            <option>Schulung</option>
-            <option>Inbetriebnahme</option>
-            <option>Fehlerbehebung</option>
-            <option>Support</option>
-            <option>Test</option>
-            <option>Wartung</option>
-            <option>Dokumentation</option>
-          </select>
-        </td>
-        <td>
-          <input type="time" class="time-start" style="width:45%;display:inline-block" value="${row.querySelector('.time-start').value}">
-           -
-          <input type="time" class="time-end" style="width:45%;display:inline-block" value="${row.querySelector('.time-end').value}">
-        </td>
-        <td class="hours"  data-minutes="0">00:00</td>
-        <td><button class="btn-row" onclick="dupRow(this)">⊕</button> <button class="btn-row danger" onclick="delRow(this)">⊗</button></td>
-      `;
-      row.parentNode.insertBefore(tr,row.nextSibling);
-      tr.querySelector('.task-sel').value=row.querySelector('.task-sel').value;
-      tr.querySelectorAll('.overnight-note').forEach(n=>n.remove());
-      attachRow(tr);
-      calcRow(tr);
-      renumber();
-      markUnsaved();
-      toast('Zeile dupliziert','success');
-    }
-
-    function delRow(btn){
-      if(document.querySelectorAll('#tbody tr').length===1){
-        toast('Mindestens eine Zeile erforderlich!','error');return;
-      }
-      btn.closest('tr').remove();
-      renumber();
-      calcTotal();
-      markUnsaved();
-      toast('Zeile gelöscht','info');
-    }
-
-    function renumber(){
-      const rows=document.querySelectorAll('#tbody tr');
-      rowNum=0;
-      rows.forEach(r=>{
-        rowNum++;
-        r.querySelector('td:first-child').textContent=rowNum;
-      });
-    }
-
-    // Signature Modal
-    function openSig(){
-      document.getElementById('modal').style.display='block';
-      document.body.style.overflow='hidden';
-      if(!canvasInitialized){
-        setTimeout(initCanvas,100);
-        canvasInitialized=true;
-      }
-    }
-    function closeSig(){
-      document.getElementById('modal').style.display='none';
-      document.body.style.overflow='auto';
-    }
-    function initCanvas(){
-      canvas=document.getElementById('sigCanvas');
-      ctx=canvas.getContext('2d');
-      const rect=canvas.getBoundingClientRect();
-      const dpr=window.devicePixelRatio||1;
-      canvas.width=rect.width*dpr; canvas.height=rect.height*dpr;
-      ctx.scale(dpr,dpr);
-      ctx.strokeStyle='#000'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.lineJoin='round';
-
-      function getPos(e){const r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
-      function getTouchPos(t){const r=canvas.getBoundingClientRect();return{x:t.clientX-r.left,y:t.clientY-r.top};}
-      function startDraw(x,y){document.getElementById('hint').classList.add('hide');ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y);ctx.stroke();drawing=true;}
-      function draw(x,y){ctx.lineTo(x,y);ctx.stroke();ctx.beginPath();ctx.moveTo(x,y);}
-
-      canvas.addEventListener('mousedown',e=>{e.preventDefault();const{ x,y }=getPos(e);startDraw(x,y);});
-      canvas.addEventListener('mousemove',e=>{e.preventDefault();if(!drawing)return;const{ x,y }=getPos(e);draw(x,y);});
-      canvas.addEventListener('mouseup',()=>{if(drawing){drawing=false;ctx.beginPath()}});
-      canvas.addEventListener('mouseleave',()=>{if(drawing){drawing=false;ctx.beginPath()}});
-      canvas.addEventListener('touchstart',e=>{e.preventDefault();const t=e.touches[0];const{ x,y }=getTouchPos(t);startDraw(x,y)},{passive:false});
-      canvas.addEventListener('touchmove',e=>{e.preventDefault();if(!drawing)return;const t=e.touches[0];const{ x,y }=getTouchPos(t);draw(x,y)},{passive:false});
-      canvas.addEventListener('touchend',e=>{e.preventDefault();if(drawing){drawing=false;ctx.beginPath()}},{passive:false});
-    }
-    function clearSig(){
-      if(!ctx||!canvas)return;
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      document.getElementById('hint').classList.remove('hide');
-      toast('Unterschrift gelöscht','info');
-    }
-    function isCanvasBlank(cnv){
-      const blank=document.createElement('canvas');
-      blank.width=cnv.width; blank.height=cnv.height;
-      return cnv.toDataURL()===blank.toDataURL();
-    }
-    function trimSignature(cnv){
-      const w=cnv.width,h=cnv.height, c=cnv.getContext('2d');
-      const img=c.getImageData(0,0,w,h).data;
-      let minX=w,minY=h,maxX=0,maxY=0,found=false;
-      for(let y=0;y<h;y++){
-        for(let x=0;x<w;x++){
-          const idx=(y*w+x)*4;
-          const a=img[idx+3];
-          if(a>0){found=true; if(x<minX)minX=x; if(y<minY)minY=y; if(x>maxX)maxX=x; if(y>maxY)maxY=y;}
-        }
-      }
-      if(!found)return null;
-      const tw=maxX-minX+1,th=maxY-minY+1;
-      const out=document.createElement('canvas');
-      out.width=tw; out.height=th;
-      out.getContext('2d').drawImage(cnv,minX,minY,tw,th,0,0,tw,th);
-      return out;
-    }
-    function saveSig(){
-      if(!canvas||isCanvasBlank(canvas)){toast('Bitte unterschreiben Sie zuerst!','error');return;}
-      const trimmed=trimSignature(canvas);
-      if(!trimmed){toast('Unterschrift leer. Bitte erneut zeichnen.','error');return;}
-      sigData=trimmed.toDataURL('image/png');
-      document.getElementById('sigPrev').innerHTML=`<img src="${sigData}" alt="Unterschrift">`;
-      closeSig();
-      markUnsaved();
-      toast('Unterschrift gespeichert','success');
-    }
-
-	// Bild-Datei als Unterschrift importieren
-function importSigFile(file){
-  if(!file){ return; }
-  if(!/^image\/(png|jpeg)$/i.test(file.type)){
-    toast('Nur PNG oder JPG erlaubt.','error'); return;
-  }
-  const maxBytes = 2 * 1024 * 1024; // 2 MB
-  if(file.size > maxBytes){
-    toast('Bild ist zu groß (max. 2 MB).','error'); return;
-  }
-  const reader = new FileReader();
-  reader.onload = e => {
-    sigData = e.target.result; // DataURL
-    document.getElementById('sigPrev').innerHTML = `<img src="${sigData}" alt="Unterschrift">`;
-    markUnsaved();
-    toast('Unterschrift-Bild übernommen','success');
-  };
-  reader.readAsDataURL(file);
-}
-
-// Firmenlogo importieren (Nexus ips)
-function importLogoFile(file){
-  if(!file){return;}
-  if(!/^image\//i.test(file.type)){
-    toast('Bitte ein Bild (PNG/JPG/SVG) wählen.','error'); return;
-  }
-  const maxBytes = 2 * 1024 * 1024;
-  if(file.size > maxBytes){
-    toast('Logo ist zu groß (max. 2 MB).','error'); return;
-  }
-  const reader = new FileReader();
-  reader.onload = e => {
-    logoData = e.target.result; // DataURL
-    document.getElementById('logoPrev').innerHTML = `<img src="${logoData}" alt="Logo">`;
-
-    // Upload-Button ausblenden, Aktionen einblenden
-    const up  = document.getElementById('logoUploadBtn');
-    const act = document.getElementById('logoActions');
-    if(up)  up.style.display  = 'none';
-    if(act) act.style.display = 'block';
-
-    markUnsaved();
-    toast('Logo übernommen','success');
-  };
-  reader.readAsDataURL(file);
-}
-function changeLogo(){
-  document.getElementById('logoFile')?.click();
-}
-
-function clearLogo(){
-  logoData = null;
-
-  const prev = document.getElementById('logoPrev');
-  if (prev) prev.innerHTML = '<span class="placeholder">Noch kein Logo ausgewählt</span>';
-
-  // Upload-Button und Aktionen korrekt umschalten
-  const up  = document.getElementById('logoUploadBtn');
-  const act = document.getElementById('logoActions');
-  if (up)  up.style.display  = '';
-  if (act) act.style.display = 'none';
-
-  const input = document.getElementById('logoFile');
-  if (input) input.value = '';
-
-  markUnsaved();
-  toast('Logo entfernt', 'info');
-}
-
-
-    // Speichern/Reports
-    function saveReport(){
-      const kunde=document.getElementById('kunde').value.trim();
-      const projekt=document.getElementById('projekt').value.trim();
-      const datum=document.getElementById('datum').value;
-      const ma=document.getElementById('mitarbeiter').value.trim();
-      const notes=document.getElementById('notes').value.trim();
-      const sigName=document.getElementById('sigName').value.trim();
-      if(!kunde){toast('Bitte Kunde eingeben!','error');return}
-      if(!sigName){toast('Bitte Namen eingeben!','error');return}
-      if(!sigData){toast('Bitte unterschreiben!','error');return}
-		
-      const entries=[]; let hasErr=false;
-      document.querySelectorAll('#tbody tr').forEach((row,i)=>{
-        const d=row.querySelector('.date-in').value;
-        const task=row.querySelector('.task-sel').value;
-        const s=row.querySelector('.time-start').value;
-        const e=row.querySelector('.time-end').value;
-        let h=row.querySelector('.hours').textContent||'00:00';
-        h=h.replace('(über Mitternacht)','').trim();
-        if(h.includes('⚠️'))hasErr=true;
-        if(task||s||e||d)entries.push({nr:i+1,datum:d,aufgabe:task,start:s,end:e,stunden:h});
-      });
-      if(hasErr){toast('Bitte Zeitfehler korrigieren!','error');return}
-      if(!entries.length){toast('Bitte mindestens einen Eintrag!','error');return}
-
-      const report={
-        id:Date.now(),
-        kunde,projekt,datum,mitarbeiter:ma,
-        bemerkungen:notes,sigName,sigData,
-        logoData,
-        entries,
-        summe:document.getElementById('total').textContent,
-        erstellt:new Date().toLocaleString('de-DE')
-      };
-
-      try{
-        reports.push(report);
-        localStorage.setItem('reports',JSON.stringify(reports));
-        markSaved();
-        toast('✅ Bericht gespeichert!','success');
-        displayReports();
-      }catch(e){
-        if(e && e.name==='QuotaExceededError'){
-          toast('❌ Speicher voll! Bitte alte Berichte löschen.','error');
-        }else{
-          toast('❌ Fehler beim Speichern!','error'); console.error(e);
-        }
-      }
-    }
-
-    function esc(s){return String(s)
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-
-    function displayReports(){
-      const list=document.getElementById('reportsList');
-      if(!reports.length){
-        list.innerHTML='<p style="color:#999;padding:15px;text-align:center">Keine Berichte gespeichert</p>';
-        return;
-      }
-      const sorted=[...reports].sort((a,b)=>b.id-a.id);
-      list.innerHTML=sorted.map(r=>`
-        <div class="report-item">
-          <strong style="font-size:15px;color:#2C3E50">◉ ${esc(r.kunde)}</strong>${r.projekt?' – '+esc(r.projekt):''}<br>
-          <small style="color:#666">Erstellt: ${esc(r.erstellt)} | ${r.entries.length} Einträge | ${esc(r.summe)}</small>
-          ${r.sigData?'<br><img alt="Unterschrift" src="'+esc(r.sigData)+'" style="max-width:200px;max-height:60px;margin-top:8px;border:0;padding:0;background:#fff">':''}
-          <div class="report-actions">
-            <button class="report-btn report-load" onclick="loadReport(${r.id})">◎ Laden</button>
-            <button class="report-btn report-delete" onclick="deleteReport(${r.id})">🗑️ Löschen</button>
+          <div style="display:flex;gap:5px;">
+            <input type="time" class="t-start" value="${data.start || ''}" onchange="calcRow(this)">
+            <input type="time" class="t-end" value="${data.end || ''}" onchange="calcRow(this)">
           </div>
-        </div>
-      `).join('');
-    }
-
-    function loadReport(id){
-      const r=reports.find(x=>x.id===id);
-      if(!r)return;
-      if(hasUnsavedChanges&&!confirm('Nicht gespeicherte Änderungen gehen verloren. Fortfahren?'))return;
-
-      document.getElementById('kunde').value=r.kunde||'';
-      document.getElementById('projekt').value=r.projekt||'';
-      document.getElementById('datum').value=r.datum||'';
-      document.getElementById('mitarbeiter').value=r.mitarbeiter||'';
-      document.getElementById('notes').value=r.bemerkungen||'';
-      document.getElementById('sigName').value=r.sigName||'';
-
-      sigData=r.sigData||null;
-      document.getElementById('sigPrev').innerHTML=sigData?`<img src="${sigData}" alt="Unterschrift">`:'<span class="placeholder">Noch keine Unterschrift</span>';
-
-      // Logo wiederherstellen + UI-Zustand
-      logoData = r.logoData || null;
-      const logoPrev = document.getElementById('logoPrev');
-      logoPrev.innerHTML = logoData
-        ? `<img src="${esc(logoData)}" alt="Logo">`
-        : '<span class="placeholder">Noch kein Logo ausgewählt</span>';
-      document.getElementById('logoUploadBtn').style.display = logoData ? 'none'  : '';
-      document.getElementById('logoActions').style.display   = logoData ? 'block' : 'none';
-
-      document.getElementById('tbody').innerHTML='';
-      rowNum=0;
-
-      if(r.entries&&r.entries.length){
-        r.entries.forEach(e=>{
-          addRow();
-          const row=document.querySelector('#tbody tr:last-child');
-          row.querySelector('.date-in').value=e.datum||'';
-          row.querySelector('.task-sel').value=e.aufgabe||'';
-          row.querySelector('.time-start').value=e.start||'';
-          row.querySelector('.time-end').value=e.end||'';
-          calcRow(row);
-        });
-      }else{ addRow() }
-
-      markSaved();
-      window.scrollTo({top:0,behavior:'smooth'});
-      toast('Bericht geladen','success');
-    }
-
-    function deleteReport(id){
-      if(!confirm('Bericht wirklich löschen?'))return;
-      reports=reports.filter(r=>r.id!==id);
-      try{
-        localStorage.setItem('reports',JSON.stringify(reports));
-        displayReports();
-        toast('Bericht gelöscht','info');
-      }catch(e){
-        toast('Fehler beim Löschen!','error'); console.error(e);
+        </td>
+        <td class="hours">00:00</td>
+        <td>
+          <div style="display:flex;gap:5px;justify-content:center;">
+            <button class="btn-row" onclick="dupRow(this)" title="Duplizieren">${iconCopy}</button>
+            <button class="btn-row danger" onclick="delRow(this)" title="Löschen">${iconTrash}</button>
+          </div>
+        </td>
+      `;
+      
+      if(data.task) tr.querySelector('.task-sel').value = data.task;
+      
+      // Datum kopieren oder heute setzen
+      if(!data.date && rowCount > 1) {
+        const prev = tbody.rows[tbody.rows.length-1];
+        if(prev) tr.querySelector('.date-in').value = prev.querySelector('.date-in').value;
+      } else if(!data.date) {
+        tr.querySelector('.date-in').valueAsDate = new Date();
       }
+      
+      tbody.appendChild(tr);
+      if(data.start && data.end) calcRow(tr.querySelector('.t-start'));
     }
 
-    function exportPDF(){
-      toast('PDF wird vorbereitet...','info');
-      setTimeout(()=>window.print(),200);
+    function dupRow(btn) {
+      const src = btn.closest('tr');
+      addRow({
+        date: src.querySelector('.date-in').value,
+        task: src.querySelector('.task-sel').value,
+        start: src.querySelector('.t-start').value,
+        end: src.querySelector('.t-end').value
+      });
+      calcTotal();
     }
 
-    function exportJSON(){
-      const allData=captureCurrentAsObject();
-      const blob=new Blob([JSON.stringify(allData,null,2)],{type:'application/json'});
-      const a=document.createElement('a');
-      a.href=URL.createObjectURL(blob);
-      const safeName=(document.getElementById('kunde').value||'Unbekannt').replace(/[^\w\-]+/g,'_');
-      a.download=`Taetigkeitsbericht_${safeName}_${new Date().toISOString().slice(0,10)}.json`;
-      document.body.appendChild(a);a.click();a.remove();
-      toast('JSON exportiert','success');
+    function delRow(btn) {
+      if(document.querySelectorAll('#tbody tr').length <= 1) return toast('Mindestens eine Zeile ist erforderlich', 'error');
+      btn.closest('tr').remove();
+      renumberRows();
+      calcTotal();
     }
 
-    // >>>>>>> JSON IMPORT <<<<<<<<<
-    function importJSON(file){
-      if(!file){ return; }
-      if(file.type && file.type !== 'application/json' && !file.name.toLowerCase().endsWith('.json')){
-        toast('Bitte eine JSON-Datei wählen.','error'); return;
-      }
-      const maxBytes = 2 * 1024 * 1024; // 2 MB
-      if(file.size > maxBytes){
-        toast('Datei ist zu groß (max. 2 MB).','error'); return;
-      }
+    function renumberRows() {
+      let i = 1;
+      document.querySelectorAll('#tbody tr').forEach(r => r.querySelector('td:first-child').textContent = i++);
+      rowCount = i - 1;
+    }
 
-      const reader = new FileReader();
-      reader.onload = e => {
-        try{
-          const data = JSON.parse(e.target.result || '{}');
-          const r = data.report ? data.report : data;
+    function calcRow(inp) {
+      const r = inp.closest('tr');
+      const s = r.querySelector('.t-start').value;
+      const e = r.querySelector('.t-end').value;
+      if(!s || !e) return;
+      
+      const [h1, m1] = s.split(':').map(Number);
+      const [h2, m2] = e.split(':').map(Number);
+      let diff = (h2 * 60 + m2) - (h1 * 60 + m1);
+      if(diff < 0) diff += 1440; // Nachtschicht
+      
+      const hh = Math.floor(diff / 60);
+      const mm = diff % 60;
+      r.querySelector('.hours').textContent = `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;
+      r.querySelector('.hours').dataset.mins = diff;
+      calcTotal();
+    }
 
-          document.getElementById('kunde').value = r.kunde || '';
-          document.getElementById('projekt').value = r.projekt || '';
-          document.getElementById('datum').value = r.datum || '';
-          document.getElementById('mitarbeiter').value = r.mitarbeiter || '';
-          document.getElementById('notes').value = r.bemerkungen || r.notes || '';
-          document.getElementById('sigName').value = r.sigName || '';
-          sigData = r.sigData || null;
-          logoData = r.logoData || null;
-
-          // Signatur-Vorschau
-          document.getElementById('sigPrev').innerHTML = sigData
-            ? `<img src="${sigData}" alt="Unterschrift">`
-            : '<span class="placeholder">Noch keine Unterschrift</span>';
-
-          // Logo-Vorschau + UI-Zustand
-          const logoPrev = document.getElementById('logoPrev');
-          logoPrev.innerHTML = logoData
-            ? `<img src="${esc(logoData)}" alt="Logo">`
-            : '<span class="placeholder">Noch kein Logo ausgewählt</span>';
-          document.getElementById('logoUploadBtn').style.display = logoData ? 'none'  : '';
-          document.getElementById('logoActions').style.display   = logoData ? 'block' : 'none';
-
-          // Tabelle befüllen
-          document.getElementById('tbody').innerHTML = '';
-          rowNum = 0;
-          const entries = Array.isArray(r.entries) ? r.entries : [];
-          if(entries.length){
-            entries.forEach(eRow=>{
-              addRow();
-              const row=document.querySelector('#tbody tr:last-child');
-              row.querySelector('.date-in').value = eRow.datum || '';
-              row.querySelector('.task-sel').value = eRow.aufgabe || '';
-              row.querySelector('.time-start').value = eRow.start || '';
-              row.querySelector('.time-end').value = eRow.end || '';
-              calcRow(row);
-            });
-          }else{
-            addRow();
-          }
-
-          if(r.summe){ document.getElementById('total').textContent = r.summe; }
-          calcTotal();
-          updateStats();
-
-          const fileInput = document.getElementById('jsonFile');
-          if(fileInput) fileInput.value = '';
-          markSaved();
-          window.scrollTo({top:0,behavior:'smooth'});
-          toast('JSON importiert','success');
-
-        }catch(err){
-          console.error(err);
-          toast('JSON konnte nicht gelesen werden. Prüfen Sie das Format.','error');
+    function calcTotal() {
+      let sum = 0;
+      const stats = {};
+      document.querySelectorAll('#tbody tr').forEach(r => {
+        const m = parseInt(r.querySelector('.hours').dataset.mins || 0);
+        sum += m;
+        const t = r.querySelector('.task-sel').value || 'Sonstiges';
+        if(m > 0) stats[t] = (stats[t] || 0) + m;
+      });
+      
+      const h = Math.floor(sum / 60);
+      const m = sum % 60;
+      document.getElementById('total').textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+      
+      // Statistik rendern
+      const grid = document.getElementById('statsGrid');
+      grid.innerHTML = '';
+      if(sum > 0) {
+        document.getElementById('stats').style.display = 'block';
+        for(const [task, mins] of Object.entries(stats)) {
+          const sh = Math.floor(mins / 60);
+          const sm = mins % 60;
+          grid.innerHTML += `
+            <div class="stat-item">
+              <div class="stat-label">${task}</div>
+              <div class="stat-value">${String(sh).padStart(2,'0')}:${String(sm).padStart(2,'0')}</div>
+            </div>`;
         }
-      };
-      reader.readAsText(file, 'utf-8');
+      } else {
+        document.getElementById('stats').style.display = 'none';
+      }
     }
-    // <<<<<<<<< ENDE JSON IMPORT <<<<<<<<<
 
-    function captureCurrentAsObject(){
-      const entries=[];
-      document.querySelectorAll('#tbody tr').forEach((row,i)=>{
-        let h=row.querySelector('.hours').textContent||'00:00';
-        h=h.replace('(über Mitternacht)','').trim();
-        entries.push({
-          nr:i+1,
-          datum:row.querySelector('.date-in').value||'',
-          aufgabe:row.querySelector('.task-sel').value||'',
-          start:row.querySelector('.time-start').value||'',
-          end:row.querySelector('.time-end').value||'',
-          stunden:h
+    /* --- UNTERSCHRIFT & LOGO --- */
+    function openSigModal() {
+      document.getElementById('modal').style.display = 'flex';
+      canvas = document.getElementById('sigCanvas');
+      ctx = canvas.getContext('2d');
+      
+      // Resize
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      
+      // Style
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#000';
+      
+      // Events (Maus & Touch)
+      canvas.onmousedown = startDraw;
+      canvas.onmousemove = draw;
+      canvas.onmouseup = () => isDrawing = false;
+      canvas.ontouchstart = e => { e.preventDefault(); startDraw(e.touches[0]); };
+      canvas.ontouchmove = e => { e.preventDefault(); draw(e.touches[0]); };
+      canvas.ontouchend = () => isDrawing = false;
+    }
+
+    function startDraw(e) {
+      isDrawing = true;
+      document.getElementById('canvasHint').classList.add('hide');
+      const rect = canvas.getBoundingClientRect();
+      ctx.beginPath();
+      ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+    }
+    function draw(e) {
+      if(!isDrawing) return;
+      const rect = canvas.getBoundingClientRect();
+      ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+      ctx.stroke();
+    }
+    function clearCanvas() { 
+      ctx.clearRect(0,0,canvas.width,canvas.height); 
+      document.getElementById('canvasHint').classList.remove('hide'); 
+    }
+    function closeSigModal() { document.getElementById('modal').style.display = 'none'; }
+    function saveSignature() {
+      sigData = canvas.toDataURL();
+      document.getElementById('sigPrev').innerHTML = `<img src="${sigData}">`;
+      closeSigModal();
+    }
+
+    function importLogoFile(f) {
+      if(!f) return;
+      const r = new FileReader();
+      r.onload = e => { logoData = e.target.result; document.getElementById('logoPrev').innerHTML = `<img src="${logoData}">`; };
+      r.readAsDataURL(f);
+    }
+    function clearLogo() { logoData = null; document.getElementById('logoPrev').innerHTML = '<span class="placeholder">Kein Logo ausgewählt</span>'; }
+    function importSigFile(f) {
+      if(!f) return;
+      const r = new FileReader();
+      r.onload = e => { sigData = e.target.result; document.getElementById('sigPrev').innerHTML = `<img src="${sigData}">`; };
+      r.readAsDataURL(f);
+    }
+
+    /* --- SPEICHERN / LADEN --- */
+    function getFormData() {
+      const rows = [];
+      document.querySelectorAll('#tbody tr').forEach(r => {
+        rows.push({
+          date: r.querySelector('.date-in').value,
+          task: r.querySelector('.task-sel').value,
+          start: r.querySelector('.t-start').value,
+          end: r.querySelector('.t-end').value
         });
       });
       return {
-        meta:{version:'Tätigkeitsbericht-V25.10.23',exported:new Date().toISOString()},
-        kunde:document.getElementById('kunde').value.trim(),
-        projekt:document.getElementById('projekt').value.trim(),
-        datum:document.getElementById('datum').value,
-        mitarbeiter:document.getElementById('mitarbeiter').value.trim(),
-        bemerkungen:document.getElementById('notes').value.trim(),
-        sigName:document.getElementById('sigName').value.trim(),
-        sigData:sigData||null,
-        logoData:logoData||null,
-        entries,
-        summe:document.getElementById('total').textContent||'00:00'
+        id: Date.now(),
+        created: new Date().toLocaleString(),
+        kunde: document.getElementById('kunde').value,
+        projekt: document.getElementById('projekt').value,
+        datum: document.getElementById('datum').value,
+        mitarbeiter: document.getElementById('mitarbeiter').value,
+        notes: document.getElementById('notes').value,
+        sigName: document.getElementById('sigName').value,
+        rows, logo: logoData, sig: sigData
       };
     }
 
-    // Warnung bei ungespeicherten Änderungen
-    window.addEventListener('beforeunload',e=>{
-      if(hasUnsavedChanges){e.preventDefault();e.returnValue='';}
-    });
-
-	
-
-    // Initialisierung
-    document.querySelectorAll('#tbody tr').forEach(attachRow);
-    const saved=localStorage.getItem('reports');
-    if(saved){try{reports=JSON.parse(saved)||[]}catch{reports=[]}}
-    displayReports();
-
-    // ====== DRUCK: 20 Zeilen + Kopf & Fuß pro Seite ======
-    function buildPrintTables(){
-      const wrap = document.getElementById('printPages');
-      if(!wrap) return;
-      wrap.innerHTML = '';
-
-      const rows = Array.from(document.querySelectorAll('#tbody tr'));
-      if(rows.length === 0) return;
-
-      const chunkSize = 18;
-	
-	  const notesVal = document.getElementById('notes')?.value.trim() || '';
-
-      const kundeVal = document.getElementById('kunde')?.value || '';
-      const projektVal = document.getElementById('projekt')?.value || '';
-      const datumVal = document.getElementById('datum')?.value || '';
-      const mitarbeiterVal = document.getElementById('mitarbeiter')?.value || '';
-      const sigNameVal = document.getElementById('sigName')?.value || '';
-      const totalAll = document.getElementById('total')?.textContent || '00:00';
-      const sig = sigData || '';
-
-      const esc = (s)=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-
-      function makeHeader(){
-  const h = document.createElement('div');
-  h.className = 'print-header';
-
-  const esc = (s)=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-
-  const card = (title, value) => `
-    <div style="border:1px solid #8B1538;border-radius:6px;overflow:hidden;">
-      <div style="background:#8B1538;color:#fff;padding:6px 0;font-size:11px;font-weight:700;text-align:center;border-bottom:1px solid #8B1538;">${title}</div>
-      <div style="padding:8px 10px;text-align:center;font-size:12px;background:#fff;color:#2C3E50;">${value ? esc(value) : '&nbsp;'}</div>
-    </div>
-  `;
-
-  const topBar = `
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-      <div style="font-size:12px;color:#2C3E50;font-weight:600">Tätigkeitsbericht</div>
-      <div>${logoData ? `<img class="print-logo" src="${esc(logoData)}" alt="Nexus ips Logo">` : ''}</div>
-    </div>
-  `;
-
-  const kundeVal = document.getElementById('kunde')?.value || '';
-  const projektVal = document.getElementById('projekt')?.value || '';
-  const datumVal = document.getElementById('datum')?.value || '';
-  const mitarbeiterVal = document.getElementById('mitarbeiter')?.value || '';
-
-  h.innerHTML = `
-    ${topBar}
-    <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:10px;margin-bottom:10px;page-break-inside:avoid;">
-      ${card('Kunde:', kundeVal)}
-      ${card('Projekt / Tätigkeit:', projektVal)}
-      ${card('Datum:', datumVal)}
-      ${card('Mitarbeiter:', mitarbeiterVal)}
-    </div>
-  `;
-  return h;
-}
-
-
-
-      function makeFooter(){
-  const f = document.createElement('div');
-  f.className = 'print-footer';
-  f.innerHTML = `
-    <strong>Name:</strong>
-    ${esc(sigNameVal)}
-    ${sig ? `<img src="${esc(sig)}" alt="Unterschrift">` : ''}
-  `;
-  return f;
-}
-
-
-      for(let i=0;i<rows.length;i+=chunkSize){
-        const page = document.createElement('div');
-        page.className = 'print-table';
-
-        page.appendChild(makeHeader());
-
-        const tbl = document.createElement('table');
-        const thead = document.createElement('thead');
-        thead.innerHTML = '<tr>'+
-          '<th style="width:30px">#</th>'+
-          '<th style="width:90px">Datum</th>'+
-          '<th style="width:120px">Aufgabe</th>'+
-          '<th style="width:130px">Von - Bis</th>'+
-          '<th style="width:70px">Std</th>'+
-        '</tr>';
-        tbl.appendChild(thead);
-
-        const tbody = document.createElement('tbody');
-        const slice = rows.slice(i, i+chunkSize);
-        slice.forEach((tr, idx)=>{
-          const dateVal = tr.querySelector('.date-in')?.value || '';
-          const taskVal = tr.querySelector('.task-sel')?.value || '';
-          const s = tr.querySelector('.time-start')?.value || '';
-          const e = tr.querySelector('.time-end')?.value || '';
-          const h = tr.querySelector('.hours')?.textContent || '00:00';
-
-          const trOut = document.createElement('tr');
-          trOut.innerHTML = '<td>'+((i+idx)+1)+'</td>'+
-            '<td>'+esc(dateVal)+'</td>'+
-            '<td>'+esc(taskVal || '-')+'</td>'+
-            '<td>'+esc(s)+' - '+esc(e)+'</td>'+
-            '<td>'+esc(h)+'</td>';
-          tbody.appendChild(trOut);
-        });
-        tbl.appendChild(tbody);
-
-        if(i+chunkSize >= rows.length){
-          const tfoot = document.createElement('tfoot');
-          const trf = document.createElement('tr');
-          trf.className = 'print-foot';
-          trf.innerHTML = '<td colspan="4" style="text-align:right">Summe:</td><td>'+esc(totalAll)+'</td>';
-          tfoot.appendChild(trf);
-          tbl.appendChild(tfoot);
-        }
-
-        page.appendChild(tbl);
-
-        // >>> Bemerkungen auf der letzten Seite, wenn Text vorhanden
-        if (i + chunkSize >= rows.length && notesVal) {
-          const notesBox = document.createElement('div');
-          notesBox.className = 'print-notes';
-          notesBox.innerHTML = `
-            <div class="print-notes__title">Bemerkungen</div>
-            <div class="print-notes__body">${esc(notesVal)}</div>
-          `;
-          page.appendChild(notesBox);
-        }
-
-        page.appendChild(makeFooter());
-        wrap.appendChild(page);
-      }
+    function saveReport() {
+      const d = getFormData();
+      if(!d.kunde) return toast('Bitte Kundennamen eingeben', 'error');
+      reports.push(d);
+      localStorage.setItem('reports', JSON.stringify(reports));
+      loadReportsFromStorage();
+      toast('Bericht erfolgreich gespeichert', 'success');
+      if(document.getElementById('mobileMenu').classList.contains('active')) toggleMobileMenu();
     }
 
-    if(window.matchMedia){
-      window.addEventListener('beforeprint', buildPrintTables);
-      window.addEventListener('afterprint', function(){
-        const p=document.getElementById('printPages'); if(p) p.innerHTML='';
+    function loadReportsFromStorage() {
+      const r = localStorage.getItem('reports');
+      if(r) reports = JSON.parse(r);
+      const list = document.getElementById('reportsList');
+      list.innerHTML = '';
+      reports.slice().reverse().forEach(x => {
+        list.innerHTML += `
+          <div class="report-item">
+            <div class="report-info">
+              <strong>${x.kunde}</strong>
+              <small>${x.projekt || 'Ohne Projekt'} | ${x.created}</small>
+            </div>
+            <div style="display:flex;gap:5px">
+              <button class="btn-row" onclick="loadReport(${x.id})">${iconCopy}</button>
+              <button class="btn-row danger" onclick="deleteReport(${x.id})">${iconTrash}</button>
+            </div>
+          </div>`;
       });
-    } else {
-      window.onbeforeprint = buildPrintTables;
-      window.onafterprint = function(){ const p=document.getElementById('printPages'); if(p) p.innerHTML=''; };
     }
 
-    /* ===== Dark-Mode (UI only) ===== */
-    (function(){
-      const btn=document.getElementById('themeBtn');
-      const saved=localStorage.getItem('uiTheme');
-      if(saved==='dark')document.body.classList.add('dark-theme');
-      btn.addEventListener('click',()=>{
-        document.body.classList.toggle('dark-theme');
-        localStorage.setItem('uiTheme',document.body.classList.contains('dark-theme')?'dark':'light');
-      });
-      // Burger menu theme button
-      const menuThemeBtn = document.getElementById('themeBtnMenu');
-      if(menuThemeBtn) {
-        menuThemeBtn.addEventListener('click',()=>{
-          document.body.classList.toggle('dark-theme');
-          localStorage.setItem('uiTheme',document.body.classList.contains('dark-theme')?'dark':'light');
-          toggleMobileMenu();
-        });
+    function loadReport(id) {
+      const r = reports.find(x => x.id === id);
+      if(!r) return;
+      document.getElementById('kunde').value = r.kunde || '';
+      document.getElementById('projekt').value = r.projekt || '';
+      document.getElementById('datum').value = r.datum || '';
+      document.getElementById('mitarbeiter').value = r.mitarbeiter || '';
+      document.getElementById('notes').value = r.notes || '';
+      document.getElementById('sigName').value = r.sigName || '';
+      
+      logoData = r.logo;
+      document.getElementById('logoPrev').innerHTML = logoData ? `<img src="${logoData}">` : '<span class="placeholder">Kein Logo ausgewählt</span>';
+      sigData = r.sig;
+      document.getElementById('sigPrev').innerHTML = sigData ? `<img src="${sigData}">` : '<span class="placeholder">Keine Unterschrift</span>';
+      
+      document.getElementById('tbody').innerHTML = '';
+      rowCount = 0;
+      if(r.rows && r.rows.length) {
+        r.rows.forEach(row => addRow(row));
+      } else {
+        addRow();
       }
-    })();
+      calcTotal();
+      toast('Bericht geladen', 'success');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
+    function deleteReport(id) {
+      if(!confirm('Diesen Bericht wirklich löschen?')) return;
+      reports = reports.filter(x => x.id !== id);
+      localStorage.setItem('reports', JSON.stringify(reports));
+      loadReportsFromStorage();
+    }
+
+    function exportJSON() {
+      const d = getFormData();
+      const b = new Blob([JSON.stringify(d, null, 2)], {type:'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(b);
+      a.download = `Bericht_${d.kunde.replace(/\s+/g,'_')}_${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      if(document.getElementById('mobileMenu').classList.contains('active')) toggleMobileMenu();
+    }
     
-/* ===== Info-Modal ohne aria-hidden-Warnung ===== */
-    (function(){
-      const infoBtn=document.getElementById('infoBtn');
-      const modal=document.getElementById('infoModal');
-      const closeBtn=document.getElementById('infoCloseBtn');
-      let lastFocus=null;
-
-      function openInfo(){
-        lastFocus=document.activeElement;
-        modal.hidden=false;
-        document.body.style.overflow='hidden';
-        closeBtn && closeBtn.focus();
-      }
-      function closeInfo(){
-        modal.hidden=true;
-        document.body.style.overflow='auto';
-        if(lastFocus && typeof lastFocus.focus==='function') lastFocus.focus();
-      }
-      infoBtn && infoBtn.addEventListener('click',openInfo);
-      const menuInfoBtn = document.getElementById('infoBtnMenu');
-      menuInfoBtn && menuInfoBtn.addEventListener('click',()=>{openInfo();toggleMobileMenu();});
-      closeBtn && closeBtn.addEventListener('click',closeInfo);
-      modal && modal.addEventListener('click',e=>{if(e.target===modal)closeInfo();});
-      document.addEventListener('keydown',e=>{if(e.key==='Escape' && !modal.hidden) closeInfo();});
-    })();
-
-    // ===== iOS erkennen und Klasse setzen (für Print-Lock) =====
-    (function(){
-      var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      if(iOS) document.documentElement.classList.add('ios');
-    })();
-
-    // NEU: Standard-Logo initial setzen (mit deinem Bild-Link)
-	function initDefaultLogo(){
-		const DEFAULT_LOGO = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1shSo_HkAXx3y8zO86_q1fLiAZsrAm7DcVw&s';
-		if(!logoData){
-		logoData = DEFAULT_LOGO;
-
-      // Vorschau
-		const prev = document.getElementById('logoPrev');
-		if (prev) prev.innerHTML = `<img src="${logoData}" alt="Standardlogo">`;
-
-      // UI umschalten
-		const up  = document.getElementById('logoUploadBtn');
-		const act = document.getElementById('logoActions');
-		if (up)  up.style.display  = 'none';
-		if (act) act.style.display = 'block';
+    function importJSON(f) {
+      const r = new FileReader();
+      r.onload = e => {
+        try {
+          const d = JSON.parse(e.target.result);
+          d.id = Date.now();
+          reports.push(d);
+          loadReport(d.id);
+          reports.pop();
+          if(document.getElementById('mobileMenu').classList.contains('active')) toggleMobileMenu();
+          toast('Daten importiert', 'success');
+        } catch(err) { toast('Fehler beim Importieren', 'error'); }
+      };
+      r.readAsText(f);
     }
-  }
 
-  // Aufruf direkt nach deiner Initialisierung (z. B. nach displayReports();)
-  initDefaultLogo();
-
-
-
-  
-
-// Burger Menu Toggle
-function toggleMobileMenu() {
-  const menu = document.getElementById('mobileMenu');
-  const burger = document.querySelector('.burger-toggle');
-  if (menu && burger) {
-    menu.classList.toggle('active');
-    burger.classList.toggle('active');
-  }
-}
-
-// Close menu when clicking outside
-document.addEventListener('click', function(event) {
-  const menu = document.getElementById('mobileMenu');
-  const burger = document.querySelector('.burger-toggle');
-  if (menu && burger && menu.classList.contains('active')) {
-    if (!menu.contains(event.target) && !burger.contains(event.target)) {
-      menu.classList.remove('active');
-      burger.classList.remove('active');
+    /* --- DRUCK-LOGIK (PDF) --- */
+    
+    // Hilfsfunktion: Datum von YYYY-MM-DD zu DD.MM.YYYY
+    function formatDateDE(dateStr) {
+      if(!dateStr) return '';
+      const parts = dateStr.split('-');
+      if(parts.length !== 3) return dateStr;
+      return `${parts[2]}.${parts[1]}.${parts[0]}`;
     }
-  }
-});
+    
+    function startPrint() {
+      if(document.getElementById('mobileMenu').classList.contains('active')) toggleMobileMenu();
+      buildPrintPages();
+      setTimeout(() => window.print(), 500);
+    }
 
+    function buildPrintPages() {
+      const con = document.getElementById('printPages');
+      con.innerHTML = '';
+      const rows = Array.from(document.querySelectorAll('#tbody tr'));
+      const chunks = [];
+      
+      // Tabelle in Blöcke aufteilen (18 Zeilen pro Seite)
+      while(rows.length) chunks.push(rows.splice(0, 12));
+      if(chunks.length === 0) chunks.push([]);
+
+      const d = getFormData();
+      const total = document.getElementById('total').textContent;
+
+      chunks.forEach((chunk, i) => {
+        const isLast = i === chunks.length - 1;
+        let html = `
+          <div class="print-page">
+            <div class="print-header">
+              <div class="print-meta">
+                <h2 style="margin:0 0 10px 0;color:#1E2434;border:none;padding:0;background:none;font-size:20pt;box-shadow:none;text-shadow:none;">Tätigkeitsbericht</h2>
+                <div class="meta-row"><span class="meta-label">Kunde:</span><span>${d.kunde}</span></div>
+                <div class="meta-row"><span class="meta-label">Projekt:</span><span>${d.projekt}</span></div>
+                <div class="meta-row"><span class="meta-label">Mitarbeiter:</span><span>${d.mitarbeiter}</span></div>
+                <div class="meta-row"><span class="meta-label">Datum:</span><span>${formatDateDE(d.datum)}</span></div>
+              </div>
+              ${d.logo ? `<img src="${d.logo}" class="print-logo">` : ''}
+            </div>
+            <table class="print-table">
+              <thead><tr><th>Datum</th><th>Von</th><th>Bis</th><th>Aufgabe / Tätigkeit</th><th>Std.</th></tr></thead>
+              <tbody>
+        `;
+        
+        chunk.forEach(tr => {
+          const dateVal = tr.querySelector('.date-in').value;
+          const startVal = tr.querySelector('.t-start').value;
+          const endVal = tr.querySelector('.t-end').value;
+          const taskVal = tr.querySelector('.task-sel').value;
+          const hoursVal = tr.querySelector('.hours').textContent;
+
+          html += `<tr>
+            <td>${formatDateDE(dateVal)}</td>
+            <td>${startVal}</td>
+            <td>${endVal}</td>
+            <td style="text-align:left">${taskVal}</td>
+            <td>${hoursVal}</td>
+          </tr>`;
+        });
+        
+        html += `</tbody></table>`;
+        
+        if(isLast) {
+          html += `
+            <div style="text-align:right;font-weight:bold;font-size:12pt;margin-bottom:10px;border-top:2px solid #1E2434;padding-top:5px;">Gesamtstunden: ${total}</div>
+            ${d.notes ? `<div class="print-notes"><strong>Bemerkungen:</strong><br>${d.notes.replace(/\n/g,'<br>')}</div>` : ''}
+            
+            <div class="print-footer">
+              <div class="sig-box">
+                ${d.sig ? `<img src="${d.sig}" class="sig-img">` : '<div style="height:15mm"></div>'}
+                <div>${d.sigName ? d.sigName : 'Unterschrift'}</div>
+              </div>
+              <div class="page-num">Seite ${i+1} von ${chunks.length}</div>
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="print-footer">
+              <div></div>
+              <div class="page-num">Seite ${i+1} von ${chunks.length}</div>
+            </div>`;
+        }
+        
+        html += `</div>`;
+        con.innerHTML += html;
+      });
+    }
   </script>
 </body>
 </html>
