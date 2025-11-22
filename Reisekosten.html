@@ -915,7 +915,7 @@
       <div style="font-size:40px;margin-bottom:10px">🚆</div>
       <div style="font-weight:600;margin-bottom:5px">Tickets & Quittungen hochladen</div>
       <div style="font-size:12px;color:#718096">Klicken oder Dateien hierher ziehen (JPG, PNG, PDF)</div>
-      <input type="file" id="ocrFileOeffentlich" accept="image/*,.pdf" capture="environment" multiple style="display:none" onchange="handleOCRUpload(event, 'oeffentlich')">
+      <input type="file" id="ocrFileOeffentlich" accept="image/*,.pdf" multiple style="display:none" onchange="handleOCRUpload(event, 'oeffentlich')">
       <button type="button" class="btn-ocr-upload" onclick="document.getElementById('ocrFileOeffentlich').click()">📁 Dateien auswählen</button>
     </div>
     <div class="ocr-preview" id="ocrPreviewOeffentlich"></div>
@@ -988,7 +988,7 @@
       <div style="font-size:40px;margin-bottom:10px">📄</div>
       <div style="font-weight:600;margin-bottom:5px">Belege hochladen & automatisch auslesen</div>
       <div style="font-size:12px;color:#718096">Klicken oder Dateien hierher ziehen (JPG, PNG, PDF)</div>
-      <input type="file" id="ocrFileUebernachtung" accept="image/*,.pdf" capture="environment" multiple style="display:none" onchange="handleOCRUpload(event, 'uebernachtung')">
+      <input type="file" id="ocrFileUebernachtung" accept="image/*,.pdf" multiple style="display:none" onchange="handleOCRUpload(event, 'uebernachtung')">
       <button type="button" class="btn-ocr-upload" onclick="document.getElementById('ocrFileUebernachtung').click()">📁 Dateien auswählen</button>
     </div>
     <div class="ocr-preview" id="ocrPreviewUebernachtung"></div>
@@ -1057,7 +1057,7 @@
       <div style="font-size:40px;margin-bottom:10px">📄</div>
       <div style="font-weight:600;margin-bottom:5px">Belege hochladen & automatisch auslesen</div>
       <div style="font-size:12px;color:#718096">Klicken oder Dateien hierher ziehen (JPG, PNG, PDF)</div>
-      <input type="file" id="ocrFileNebenkosten" accept="image/*,.pdf" capture="environment" multiple style="display:none" onchange="handleOCRUpload(event, 'nebenkosten')">
+      <input type="file" id="ocrFileNebenkosten" accept="image/*,.pdf" multiple style="display:none" onchange="handleOCRUpload(event, 'nebenkosten')">
       <button type="button" class="btn-ocr-upload" onclick="document.getElementById('ocrFileNebenkosten').click()">📁 Dateien auswählen</button>
     </div>
     <div class="ocr-preview" id="ocrPreviewNebenkosten"></div>
@@ -1292,6 +1292,16 @@
     <li>Jeder Beleg wird automatisch mit der erstellten Zeile <strong>verknüpft</strong></li>
     <li>Zeilen mit Belegen haben einen <strong>grünen Rand</strong> und ein 📎-Symbol</li>
     <li>🔗 Beim Löschen der Zeile wird der Beleg automatisch mitgelöscht (und umgekehrt)</li>
+  </ul>
+
+  <p><strong>🔒 Datenschutz bei OCR:</strong></p>
+  <ul>
+    <li>✅ <strong>Ihre Belege bleiben 100% lokal</strong> auf Ihrem Gerät</li>
+    <li>✅ Die Text-Erkennung erfolgt <strong>komplett im Browser</strong> – keine Server-Übertragung</li>
+    <li>🌐 Nur die OCR-Software (Tesseract.js) wird beim ersten Mal aus dem Internet geladen</li>
+    <li>❌ <strong>KEINE Ihrer Daten werden ins Internet gesendet</strong></li>
+    <li>🔐 Alle Belege und Informationen verbleiben ausschließlich auf Ihrem Gerät</li>
+    <li>⚠️ OCR benötigt Internetverbindung beim ersten Laden, funktioniert danach aber lokal</li>
   </ul>
 
   <h3>💡 Wichtige Hinweise</h3>
