@@ -3,233 +3,704 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – v4.4.2 Pro-Print-Official</title>
-  <link rel="stylesheet" href="./Validierung/Styles.css" />
+  <title>CL Validierungsprotokoll – Web App (v0.3.0)</title>
+  <style>
+    :root{
+      --primary: #8B1538;
+      --bg: #F8F9FB;
+      --text: #1E2434;
+      --card: #ffffff;
+      --muted: #e9edf3;
+      --ok: #10b981;
+      --warn: #f59e0b;
+      --err: #ef4444;
+      --radius: 12px;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+    
+    .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+    .app { background: var(--card); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+    
+    /* Header & Toolbar */
+    header { background: var(--primary); color: #fff; padding: 20px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
+    header .title { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+    header .version { opacity: 0.8; font-size: 13px; margin-top: 4px; }
+    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; }
+    
+    /* Buttons */
+    .btn { appearance: none; border: 0; border-radius: 10px; padding: 10px 16px; font-weight: 600; font-size: 14px; background: #fff; color: var(--primary); cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .btn:active { transform: scale(0.96); }
+    .btn:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .btn.outline { background: transparent; border: 2px solid rgba(255,255,255,0.3); color: #fff; box-shadow: none; }
+    .btn.outline:hover { border-color: #fff; }
+    .btn.secondary { background: #1e293b; color: #fff; }
+    .btn.danger { background: #fee2e2; color: var(--err); }
+    
+    /* Layout Sections */
+    .section { padding: 24px; border-top: 1px solid var(--muted); }
+    .section h2 { margin: 0 0 16px 0; font-size: 18px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+    
+    /* Grid System */
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+    .col-4 { grid-column: span 4; }
+    .col-6 { grid-column: span 6; }
+    .col-8 { grid-column: span 8; }
+    .col-12 { grid-column: span 12; }
+    
+    /* Form Elements */
+    label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; color: #64748b; }
+    input[type="text"], input[type="date"], input[type="number"], textarea, select {
+      width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: var(--radius); 
+      background: #fff; font-size: 14px; outline: none; transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139, 21, 56, 0.1); }
+    textarea { min-height: 80px; resize: vertical; font-family: inherit; }
+    
+    .row { display: flex; gap: 12px; align-items: center; }
+    .chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: #f1f5f9; color: #334155; font-size: 13px; cursor: pointer; user-select: none; }
+    .chip:hover { background: #e2e8f0; }
+    .chip input { margin: 0; }
+    
+    /* Checkbox Lists */
+    .list { display: flex; flex-direction: column; gap: 10px; }
+    .check-row { display: flex; gap: 12px; align-items: flex-start; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--radius); background: #fff; transition: background 0.2s; }
+    .check-row:hover { background: #fafafa; }
+    
+    .check-row .tiny-input { width: 44px; flex-shrink: 0; text-align: center; font-weight: bold; border-color: #cbd5e1; padding: 8px; }
+    .check-row .content { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 4px; min-height: 40px; }
+    .check-row .text { font-size: 14px; line-height: 1.4; color: #334155; font-weight: 500; }
+    .check-row .note-input { width: 100%; font-size: 12px; border: 1px dashed #cbd5e1; padding: 6px 8px; background: #f8fafc; }
+    .check-row .status-check { width: 24px; height: 24px; margin-top: 8px; cursor: pointer; accent-color: var(--ok); }
+    
+    /* Dynamic Cards */
+    .card { background: #fff; border: 1px solid var(--muted); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    
+    /* Signatures */
+    .sig-block { background: #fff; border: 1px dashed #cbd5e1; border-radius: var(--radius); padding: 8px; position: relative; }
+    canvas.signature { width: 100%; height: 140px; border-radius: 8px; background: #fff; display: block; touch-action: none; cursor: crosshair; }
+    .sig-tools { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+    
+    /* Toast Notification */
+    #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+    .toast { background: #333; color: #fff; padding: 12px 20px; border-radius: 10px; font-size: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: slideIn 0.3s ease-out forwards; opacity: 0; transform: translateY(20px); pointer-events: auto; display: flex; align-items: center; gap: 10px; }
+    .toast.success { background: var(--ok); }
+    .toast.error { background: var(--err); }
+    @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeOut { to { opacity: 0; transform: translateY(10px); } }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container { padding: 10px; }
+      .app { border-radius: 0; }
+      header { padding: 16px; flex-direction: column; align-items: flex-start; }
+      .toolbar { width: 100%; }
+      .btn { flex: 1; text-align: center; justify-content: center; }
+      .grid { display: flex; flex-direction: column; gap: 16px; }
+      .col-4, .col-6, .col-8, .col-12 { width: 100%; }
+      .check-row { flex-direction: column; align-items: stretch; }
+      .check-row .row-top { display: flex; gap: 10px; align-items: flex-start; }
+      .check-row .status-check { align-self: flex-end; margin-top: -30px; }
+      .signature { height: 180px; }
+    }
+
+    /* Print / PDF */
+    @media print {
+      body { background: #fff; font-size: 12px; }
+      .container { padding: 0; max-width: none; }
+      .app { box-shadow: none; border: none; }
+      .toolbar, .btn, .toast { display: none !important; }
+      header { position: relative; border-bottom: 2px solid var(--primary); padding: 10px 0; color: #000; background: #fff; }
+      header .title { color: var(--primary); }
+      header .version { color: #555; }
+      .section { padding: 10px 0; page-break-inside: avoid; border-top: 1px solid #ccc; }
+      input, textarea, select { border: 1px solid #ddd; background: #fff !important; padding: 6px; font-size: 11px; }
+      .check-row { border: none; border-bottom: 1px solid #eee; padding: 4px 0; page-break-inside: avoid; }
+      .check-row .note-input { border: none; font-style: italic; }
+      .sig-block { border: 1px solid #000; }
+      .page-break { page-break-before: always; }
+      .footer { position: fixed; bottom: 0; left: 0; right: 0; font-size: 9px; color: #666; border-top: 1px solid #ccc; padding: 5px; display: flex; justify-content: space-between; }
+    }
+    .footer { display: none; }
+    @media print { .footer { display: flex; } }
+  </style>
 </head>
 <body>
 
-  <!-- Sticky Hamburger (Screen) -->
-  <div class="hamburger-container">
-    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menü">
-      <span></span><span></span><span></span>
-    </button>
-    <div class="hamburger-menu" id="hamburgerMenu">
-      <button class="btn" onclick="window.location.href='index.html'" style="background:#10b981;color:#fff">🏠 Home</button>
-      <button class="btn" id="btnNewGroup">➕ Neue Gruppe</button>
-      <button class="btn" id="btnNewSectionMenu">📝 Neuer Abschnitt</button>
-      <button class="btn switch" id="btnPageBreaks"><span>Seitenumbrüche</span><span id="pageBreakState">Aus</span></button>
-      <button class="btn" id="btnPDF">🖨️ PDF drucken</button>
-      <button class="btn secondary" id="btnSave">💾 Speichern</button>
-      <button class="btn secondary" id="btnLoad">📂 Laden</button>
-      <button class="btn danger" id="btnReset">🔄 Reset</button>
+<div id="toast-container"></div>
+
+<div class="container">
+  <div class="app" id="app">
+    <header>
+      <div>
+        <div class="title">CL Validierungsprotokoll</div>
+        <div class="version">Web App v0.3.0 • EuroSDS</div>
+      </div>
+      <div class="toolbar">
+        <button class="btn" id="btnSave">💾 Speichern (JSON)</button>
+        <button class="btn" id="btnLoad">📂 Laden</button>
+        <button class="btn secondary" id="btnNewSection">➕ Abschnitt</button>
+        <button class="btn outline" id="btnPDF">🖨️ PDF / Drucken</button>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>📋 Deckblatt & Kopfdaten</h2>
+      <div class="grid">
+        <div class="col-6">
+          <label>Name der Einrichtung</label>
+          <input id="instName" type="text" placeholder="z.B. Klinikum Musterstadt" />
+        </div>
+        <div class="col-6">
+          <label>Standort / Abteilung</label>
+          <input id="instOrt" type="text" placeholder="Ort der Installation" />
+        </div>
+        <div class="col-6">
+          <label>Verantwortlicher (Betreiber)</label>
+          <input id="betreiber" type="text" placeholder="Ansprechpartner" />
+        </div>
+        <div class="col-6">
+          <label>Produkt</label>
+          <input id="produkt" type="text" value="EuroSDS" />
+        </div>
+        <div class="col-4">
+          <label>Paket</label>
+          <input id="programmpaket" type="text" placeholder="z.B. Komplettpaket" />
+        </div>
+        <div class="col-4">
+          <label>Version</label>
+          <input id="version" type="text" placeholder="z.B. 6.4.x" />
+        </div>
+        <div class="col-4">
+          <label>Wartung / Pflege</label>
+          <select id="evbPflege">
+            <option value="">Bitte wählen…</option>
+            <option>Ja (EVB IT-Pflege S)</option>
+            <option>Nein</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label>Arbeitsplätze</label>
+          <input id="arbeitsplaetze" type="text" placeholder="Anzahl Clients, Packplätze..." />
+        </div>
+        <div class="col-6">
+          <label>Geräte-Anbindung</label>
+          <input id="geraete" type="text" placeholder="RDG, Steri, Scanner..." />
+        </div>
+        <div class="col-12">
+          <label>Bemerkung zur Installation</label>
+          <textarea id="bemerkung" placeholder="Besonderheiten, Abweichungen..."></textarea>
+        </div>
+      </div>
+      
+      <div class="grid" style="margin-top:20px; border-top:1px dashed #e2e8f0; padding-top:16px;">
+        <div class="col-4">
+          <label>Durchgeführt am</label>
+          <input id="valAm" type="date" />
+        </div>
+        <div class="col-4">
+          <label>Letzte Validierung</label>
+          <input id="valLast" type="date" />
+        </div>
+        <div class="col-4">
+          <label>Nächste Validierung</label>
+          <input id="valNext" type="date" />
+        </div>
+      </div>
+      
+      <div class="row" style="margin-top:20px">
+        <label class="chip"><input type="checkbox" id="chkVal" /> Erst-Validierung</label>
+        <label class="chip"><input type="checkbox" id="chkReval" /> Re-Validierung</label>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>✍️ Validierer & Freigabe</h2>
+      <div class="grid">
+        <div class="col-4">
+          <label>Validierer (NEXUS / IPS)</label>
+          <input id="validierer" type="text" placeholder="Name des Technikers" />
+        </div>
+        <div class="col-4">
+          <label>Qualifikation</label>
+          <input id="qualifikation" type="text" />
+        </div>
+        <div class="col-4">
+          <label>Schulung</label>
+          <input id="schulung" type="text" />
+        </div>
+        
+        <div class="col-6">
+          <label>Unterschrift Validierer</label>
+          <div class="sig-block">
+            <canvas class="signature" id="sigValidierer"></canvas>
+            <div class="sig-tools">
+              <input id="sigDate1" type="date" style="width:140px; padding:6px;" />
+              <button class="btn outline" style="color:#666; border-color:#ccc; padding:6px 10px; font-size:12px;" data-clear="sigValidierer">Löschen</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <label>Freigabe Betreiber (Unterschrift)</label>
+          <div class="sig-block">
+            <canvas class="signature" id="sigBetreiber"></canvas>
+            <div class="sig-tools">
+              <input id="sigDate2" type="date" style="width:140px; padding:6px;" />
+              <button class="btn outline" style="color:#666; border-color:#ccc; padding:6px 10px; font-size:12px;" data-clear="sigBetreiber">Löschen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>🗣️ Kundenvorgespräch</h2>
+      <div class="grid" style="margin-bottom:16px;">
+        <div class="col-12">
+          <label>Datum des Gesprächs</label>
+          <input id="kvDatum" type="date" style="max-width:200px;" />
+        </div>
+      </div>
+      <div class="list" id="kvChecks"></div>
+      <div class="row" style="margin-top:16px; background:#f8fafc; padding:10px; border-radius:10px;">
+        <input id="kvAddText" type="text" placeholder="Neuen Punkt hinzufügen..." style="border:1px solid #ddd;" />
+        <button class="btn secondary" id="kvAddBtn" style="white-space:nowrap;">+ Hinzufügen</button>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>🔌 Installationsqualifizierung (IQ)</h2>
+      <div class="list" id="iqList"></div>
+    </section>
+
+    <section class="section">
+      <h2>⚙️ Funktionsqualifizierung (OQ)</h2>
+      <div class="list" id="oqList"></div>
+    </section>
+
+    <section class="section">
+      <h2>➕ Weitere Protokolle</h2>
+      <div id="dynamicSections" class="list"></div>
+    </section>
+
+    <div class="footer">
+      <div>© NEXUS / IPS – Validierungsprotokoll v0.3.0</div>
+      <div>Generiert am: <span id="stamp"></span></div>
     </div>
   </div>
+</div>
 
-  <!-- Sichtbare Seitenumbrüche (nur Screen) -->
-  <div id="pageBreakMarkers" class="hidden"></div>
+<script>
+/**
+ * CL Validierungsprotokoll Logic v0.3.0 (ES6 Modernized)
+ */
 
-  <!-- ===== Titelseite (Deckblatt) ===== -->
-  <div class="title-page screen-only-hidden-in-print">
-    <img class="brand-logo-deckblatt" src="./Validierung/assets/NexusIPS.png" onerror="this.style.display='none'" alt="NEXUS / IPS">
-    <h1>VALIDIERUNGSPROTOKOLL</h1>
-    <h2>EuroSDS – Packplatz Validierung</h2>
-    <p class="meta">
-      Version <span id="deckblattVersion">6.4</span> •
-      Datum <span id="deckblattDatum"></span>
-    </p>
-    <!-- Deckt den globalen, fixed Footer nur auf Seite 1 ab -->
-    <div class="cover-footer-first"></div>
-  </div>
+const stateKey = 'valprotokoll_v030_data';
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 
-  <div class="container">
-    <div class="sheet" id="app">
+// --- Initial Data ---
+const defaultKV = [
+  { text: 'Offene Arbeitsaufträge vorhanden?', ok: false, note: '', code: '' },
+  { text: 'Programmstörungen gemeldet?', ok: false, note: '', code: '' },
+  { text: 'Probleme Datenübertragung?', ok: false, note: '', code: '' },
+  { text: 'Probleme Protokolldruck?', ok: false, note: '', code: '' }
+];
+const iqItems = [
+  { text: 'Netzwerk-Funktionalität geprüft (Ping/Speed)', note: '', code: '' },
+  { text: 'Druckerzuweisung korrekt', note: '', code: '' },
+  { text: 'Client-Arbeitsplätze funktionsfähig', note: '', code: '' },
+  { text: 'Server-Dienste aktiv & stabil', note: '', code: '' }
+];
+const oqItems = [
+  { text: 'RDG Beladungsmuster definiert', note: '', code: '' },
+  { text: 'Packplatz-Maske prüft', note: '', code: '' },
+  { text: 'Chargendokumentation vollständig', note: '', code: '' },
+  { text: 'Sterilisator-Freigabe Prozess', note: '', code: '' },
+  { text: 'Etikettendruck korrekt', note: '', code: '' }
+];
 
-      <!-- Kopf (Screen & Print, in Print fixed) -->
-      <header>
-        <div>
-          <div class="title">CL Validierungsprotokoll</div>
-          <div class="version">Version 4.4.2 – Pro-Print-Official</div>
-        </div>
-        <img id="brandLogo" class="brand-logo" src="./Validierung/assets/NexusIPS.png" alt="NEXUS / IPS" onerror="this.style.display='none'">
-      </header>
+let appState = { 
+  kv: structuredClone(defaultKV), 
+  iq: structuredClone(iqItems), 
+  oq: structuredClone(oqItems), 
+  dynamic: [] 
+};
 
-      <!-- Deckblatt & Kopfdaten -->
-      <div class="section collapsible">
-        <div class="section-header">
-          <div class="row">
-            <div class="title-wrap">
-              <button class="collapse-btn">−</button>
-              <h2>Deckblatt &amp; Kopfdaten</h2>
-            </div>
-          </div>
-        </div>
-        <div class="section-body">
-          <div class="grid info-grid">
-            <div class="col-6 info-field">
-              <label>Name der Einrichtung</label>
-              <input type="text" id="nameEinrichtung" placeholder="z.B. Klinikum Musterstadt" />
-            </div>
-            <div class="col-6 info-field">
-              <label>Standort der Installation</label>
-              <input type="text" id="standortInstallation" placeholder="Ort / Abteilung" />
-            </div>
-            <div class="col-6 info-field">
-              <label>Verantwortliche Person (Betreiber)</label>
-              <input type="text" id="verantwortlichePerson" placeholder="Name" />
-            </div>
-            <div class="col-6 info-field">
-              <label>Produkt</label>
-              <input type="text" id="produkt" placeholder="z.B. EuroSDS" />
-            </div>
-            <div class="col-4 info-field">
-              <label>Programm-Paket</label>
-              <input type="text" id="programmPaket" placeholder="z.B. Komplettpaket" />
-            </div>
-            <div class="col-4 info-field">
-              <label>Version</label>
-              <input type="text" id="version" placeholder="z.B. 6.4.x" />
-            </div>
-            <div class="col-4 info-field">
-              <label>Softwarepflege (SVB II-Pflege-S)</label>
-              <select id="softwarepflege">
-                <option value="">Bitte wählen...</option>
-                <option value="aktiv">Aktiv</option>
-                <option value="inaktiv">Inaktiv</option>
-                <option value="ausstehend">Ausstehend</option>
-              </select>
-            </div>
-            <div class="col-6 info-field">
-              <label>Art/Anzahl der Arbeitsplätze</label>
-              <input type="text" id="arbeitsplaetze" placeholder="z.B. 8 Clients + 1 Notfallarbeitsplatz" />
-            </div>
-            <div class="col-6 info-field">
-              <label>Angebundene Geräte</label>
-              <input type="text" id="angebundeneGeraete" placeholder="z.B. RDG, Autoklaven..." />
-            </div>
-            <div class="col-12 info-field">
-              <label>Bemerkung zur Installation</label>
-              <textarea id="bemerkungInstallation" placeholder="Weitere Informationen..."></textarea>
-            </div>
-            <div class="col-4 info-field">
-              <label>Validierung durchgeführt am</label>
-              <input type="date" id="validierungDatum" />
-            </div>
-            <div class="col-4 info-field">
-              <label>Letzte Validierung</label>
-              <input type="date" id="letzteValidierung" />
-            </div>
-            <div class="col-4 info-field">
-              <label>Nächste Validierung</label>
-              <input type="date" id="naechsteValidierung" />
-            </div>
-            <div class="col-6">
-              <div class="checkbox-inline">
-                <input type="checkbox" id="checkValidierung" />
-                <label for="checkValidierung">Validierung</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="checkbox-inline">
-                <input type="checkbox" id="checkRevalidierung" />
-                <label for="checkRevalidierung">Revalidierung</label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+// --- Utils ---
+function showToast(msg, type = 'success') {
+  const container = $('#toast-container');
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = type === 'success' ? '✅ ' + msg : '⚠️ ' + msg;
+  container.appendChild(el);
+  setTimeout(() => {
+    el.style.animation = 'fadeOut 0.3s forwards';
+    setTimeout(() => el.remove(), 300);
+  }, 3000);
+}
 
-      <!-- Validierer & Freigabe -->
-      <div class="section collapsible">
-        <div class="section-header">
-          <div class="row">
-            <div class="title-wrap">
-              <button class="collapse-btn">−</button>
-              <h2>Validierer &amp; Freigabe</h2>
-            </div>
-          </div>
-        </div>
-        <div class="section-body">
-          <div class="grid">
-            <div class="col-4">
-              <label>Validierer (NEXUS / IPS)</label>
-              <input type="text" id="validiererName" placeholder="Name" />
-            </div>
-            <div class="col-4">
-              <label>Fachliche Qualifikation</label>
-              <input type="text" id="qualifikation" placeholder="Qualifikation" />
-            </div>
-            <div class="col-4">
-              <label>Produktschulung (Programmpaket)</label>
-              <input type="text" id="produktschulung" placeholder="Schulung" />
-            </div>
-            <div class="col-6">
-              <label>Datum / Unterschrift Validierer</label>
-              <div class="sig-area">
-                <textarea id="unterschriftValidierer" placeholder="Datum und Unterschrift eingeben..."></textarea>
-                <div class="sig-controls" style="justify-content:flex-end;margin-top:8px">
-                  <button class="btn icon" data-clear-text="unterschriftValidierer">🗑️ Löschen</button>
-                </div>
-              </div>
-            </div>
-            <div class="col-6">
-              <label>Freigabe durch Betreiber - Datum / Unterschrift</label>
-              <div class="sig-area">
-                <textarea id="freigabeBetreiber" placeholder="Datum und Unterschrift eingeben..."></textarea>
-                <div class="sig-controls" style="justify-content:flex-end;margin-top:8px">
-                  <button class="btn icon" data-clear-text="freigabeBetreiber">🗑️ Löschen</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
 
-      <!-- Dynamische Gruppen -->
-      <div id="groupsContainer"></div>
+function structuredClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
 
-      <!-- Signaturblock (Print-Seite am Ende) -->
-      <div class="signature-block">
-        <h3>Freigabe & Unterschriften</h3>
-        <table class="signature-table">
-          <tr><td>Validierung durchgeführt von:</td><td>_____________________________</td></tr>
-          <tr><td>Datum:</td><td>_____________________________</td></tr>
-          <tr><td>Freigegeben durch (Betreiber):</td><td>_____________________________</td></tr>
-          <tr><td>Datum:</td><td>_____________________________</td></tr>
-        </table>
-      </div>
-
-      <!-- Fester Druck-Footer -->
-      <div class="print-footer" id="printFooter"></div>
-
-    </div>
-  </div>
-
-  <!-- Abschnittstyp wählen -->
-  <div class="modal" id="sectionTypeModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="modal-title">Abschnittstyp wählen</div>
-        <button class="modal-close" id="sectionTypeClose">×</button>
-      </div>
-      <div class="section-type-grid">
-        <div class="section-type-card" data-type="checklist"><div class="icon">✓</div><div class="name">Checkliste</div></div>
-        <div class="section-type-card" data-type="spacing"><div class="icon">↕</div><div class="name">Abstand</div></div>
-        <div class="section-type-card" data-type="text"><div class="icon">📝</div><div class="name">Text</div></div>
-        <div class="section-type-card" data-type="image"><div class="icon">🖼</div><div class="name">Bilder</div></div>
+// --- Render Logic ---
+function createCheckRow(item, onChange) {
+  const div = document.createElement('div');
+  div.className = 'check-row';
+  div.innerHTML = `
+    <div class="row-top" style="display:contents">
+      <input class="tiny-input" type="text" placeholder="Kz" maxlength="3" value="${escapeHtml(item.code)}" title="Kürzel / ID">
+      <div class="content">
+        <div class="text" contenteditable="true">${escapeHtml(item.text)}</div>
+        <input class="note-input" type="text" placeholder="Bemerkung / Fehlerbeschreibung..." value="${escapeHtml(item.note)}">
       </div>
     </div>
-  </div>
+    <input class="status-check" type="checkbox" ${item.ok ? 'checked' : ''} title="Erledigt / OK">
+  `;
 
-  <!-- Scripts -->
-  <script src="./Validierung/js/utils.js"></script>
-  <script src="./Validierung/js/render.js"></script>
-  <script src="./Validierung/js/app.js"></script>
-  <script src="./Validierung/js/pdf.js"></script>
-  <script>
-    (function(){
-      const el = document.getElementById('deckblattDatum');
-      if(el) el.textContent = new Date().toLocaleDateString('de-DE');
-    })();
-  </script>
+  const [codeIn, noteIn, checkIn] = [div.querySelector('.tiny-input'), div.querySelector('.note-input'), div.querySelector('.status-check')];
+  const textDiv = div.querySelector('.text');
+
+  codeIn.oninput = () => { item.code = codeIn.value; saveLocal(); };
+  noteIn.oninput = () => { item.note = noteIn.value; saveLocal(); };
+  checkIn.onchange = () => { item.ok = checkIn.checked; saveLocal(); };
+  
+  // Editierbarer Text (nur für dynamische Zeilen wichtig, aber überall nett)
+  textDiv.oninput = () => { item.text = textDiv.innerText; saveLocal(); };
+
+  return div;
+}
+
+function renderAllLists() {
+  const renderTarget = (id, list) => {
+    const el = $(id);
+    el.innerHTML = '';
+    list.forEach(item => el.appendChild(createCheckRow(item)));
+  };
+  
+  renderTarget('#kvChecks', appState.kv);
+  renderTarget('#iqList', appState.iq);
+  renderTarget('#oqList', appState.oq);
+}
+
+function drawDynamicSections() {
+  const container = $('#dynamicSections');
+  container.innerHTML = '';
+  
+  appState.dynamic.forEach((sec, idx) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    
+    // Header mit Titel und Löschen
+    const header = document.createElement('div');
+    header.className = 'card-header';
+    header.innerHTML = `<strong>${escapeHtml(sec.title)}</strong>`;
+    
+    const btnGroup = document.createElement('div');
+    btnGroup.style.display = 'flex';
+    btnGroup.style.gap = '8px';
+
+    const btnAdd = document.createElement('button');
+    btnAdd.className = 'btn secondary';
+    btnAdd.style.padding = '6px 12px';
+    btnAdd.style.fontSize = '12px';
+    btnAdd.textContent = '+ Zeile';
+    btnAdd.onclick = () => { sec.rows.push({text:'Neue Prüfung', ok:false, note:'', code:''}); drawDynamicSections(); saveLocal(); };
+
+    const btnDel = document.createElement('button');
+    btnDel.className = 'btn danger outline';
+    btnDel.style.padding = '6px 12px';
+    btnDel.style.fontSize = '12px';
+    btnDel.textContent = '🗑️';
+    btnDel.onclick = () => { 
+      if(confirm(`Abschnitt "${sec.title}" wirklich löschen?`)) {
+        appState.dynamic.splice(idx, 1);
+        drawDynamicSections();
+        saveLocal();
+      }
+    };
+
+    btnGroup.append(btnAdd, btnDel);
+    header.appendChild(btnGroup);
+    card.appendChild(header);
+
+    // Rows
+    sec.rows.forEach(row => card.appendChild(createCheckRow(row)));
+    container.appendChild(card);
+  });
+}
+
+// --- Actions ---
+function addNewKV() {
+  const input = $('#kvAddText');
+  const val = input.value.trim();
+  if (!val) return showToast('Bitte Text eingeben', 'error');
+  
+  appState.kv.push({ text: val, ok: false, note: '', code: '' });
+  input.value = '';
+  renderAllLists();
+  saveLocal();
+  showToast('Punkt hinzugefügt');
+}
+
+function addNewSection() {
+  const title = prompt("Name des neuen Abschnitts (z.B. 'Schnittstelle SAP'):");
+  if (!title) return;
+  appState.dynamic.push({ title, rows: [] });
+  drawDynamicSections();
+  saveLocal();
+}
+
+// --- JSON I/O ---
+function collectData() {
+  // Unterschriften sicher holen
+  const sig1 = document.getElementById('sigValidierer');
+  const sig2 = document.getElementById('sigBetreiber');
+
+  return {
+    meta: { version: '0.3.0', date: new Date().toISOString() },
+    kopf: {
+      instName: $('#instName').value,
+      instOrt: $('#instOrt').value,
+      betreiber: $('#betreiber').value,
+      produkt: $('#produkt').value,
+      programmpaket: $('#programmpaket').value,
+      version: $('#version').value,
+      evbPflege: $('#evbPflege').value,
+      arbeitsplaetze: $('#arbeitsplaetze').value,
+      geraete: $('#geraete').value,
+      bemerkung: $('#bemerkung').value,
+      valAm: $('#valAm').value,
+      valLast: $('#valLast').value,
+      valNext: $('#valNext').value,
+      chkVal: $('#chkVal').checked,
+      chkReval: $('#chkReval').checked,
+      kvDatum: $('#kvDatum').value
+    },
+    sign: {
+      date1: $('#sigDate1').value,
+      date2: $('#sigDate2').value,
+      img1: sig1.toDataURL(),
+      img2: sig2.toDataURL()
+    },
+    lists: {
+      kv: appState.kv,
+      iq: appState.iq,
+      oq: appState.oq,
+      dynamic: appState.dynamic
+    }
+  };
+}
+
+function exportJSON() {
+  const data = collectData();
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Validierung_${data.kopf.instName || 'Entwurf'}_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Datei heruntergeladen');
+}
+
+function importJSON() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = evt => {
+      try {
+        const data = JSON.parse(evt.target.result);
+        if(!data.kopf || !data.lists) throw new Error("Struktur ungültig");
+        
+        // Apply Head
+        Object.keys(data.kopf).forEach(k => {
+          const el = $('#'+k);
+          if(el) {
+            if(el.type === 'checkbox') el.checked = data.kopf[k];
+            else el.value = data.kopf[k];
+          }
+        });
+
+        // Apply Lists
+        appState.kv = data.lists.kv || structuredClone(defaultKV);
+        appState.iq = data.lists.iq || structuredClone(iqItems);
+        appState.oq = data.lists.oq || structuredClone(oqItems);
+        appState.dynamic = data.lists.dynamic || [];
+
+        renderAllLists();
+        drawDynamicSections();
+
+        // Apply Signatures
+        if(data.sign) {
+          $('#sigDate1').value = data.sign.date1 || '';
+          $('#sigDate2').value = data.sign.date2 || '';
+          loadSig('sigValidierer', data.sign.img1);
+          loadSig('sigBetreiber', data.sign.img2);
+        }
+
+        saveLocal();
+        showToast('Protokoll erfolgreich geladen');
+      } catch (err) {
+        showToast('Fehler: ' + err.message, 'error');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+function saveLocal() {
+  localStorage.setItem(stateKey, JSON.stringify(collectData()));
+}
+
+// --- Signature Logic (Fixed) ---
+function initCanvas(id) {
+  const c = document.getElementById(id);
+  const ctx = c.getContext('2d');
+  let drawing = false, last = {x:0, y:0};
+
+  // High DPI Fix
+  function resize() {
+    // Save Content
+    const saved = c.toDataURL();
+    const rect = c.getBoundingClientRect();
+    c.width = rect.width;
+    c.height = rect.height;
+    
+    // Restore Content
+    const img = new Image();
+    img.onload = () => ctx.drawImage(img, 0, 0, c.width, c.height);
+    img.src = saved;
+  }
+  
+  // Initial Resize & Observer
+  // Delay initial resize slightly to ensure layout is done
+  setTimeout(resize, 100);
+  window.addEventListener('resize', () => {
+     // Simple debounce could be added here
+     resize(); 
+  });
+
+  // Drawing
+  const getPos = (e) => {
+    const r = c.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return { x: t.clientX - r.left, y: t.clientY - r.top };
+  };
+
+  const start = (e) => { drawing = true; last = getPos(e); e.preventDefault(); };
+  const move = (e) => {
+    if(!drawing) return;
+    e.preventDefault();
+    const p = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(last.x, last.y);
+    ctx.lineTo(p.x, p.y);
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+    last = p;
+  };
+  const end = () => { 
+    if(drawing) {
+      drawing = false; 
+      saveLocal(); 
+    }
+  };
+
+  c.addEventListener('mousedown', start);
+  c.addEventListener('mousemove', move);
+  c.addEventListener('mouseup', end);
+  c.addEventListener('mouseleave', end);
+  c.addEventListener('touchstart', start, {passive: false});
+  c.addEventListener('touchmove', move, {passive: false});
+  c.addEventListener('touchend', end);
+}
+
+function loadSig(id, dataUrl) {
+  if(!dataUrl) return;
+  const c = document.getElementById(id);
+  const ctx = c.getContext('2d');
+  const img = new Image();
+  img.onload = () => {
+    ctx.clearRect(0,0,c.width, c.height);
+    ctx.drawImage(img, 0, 0, c.width, c.height);
+  };
+  img.src = dataUrl;
+}
+
+function clearSig(id) {
+  const c = document.getElementById(id);
+  c.getContext('2d').clearRect(0, 0, c.width, c.height);
+  saveLocal();
+}
+
+// --- Init Application ---
+window.addEventListener('DOMContentLoaded', () => {
+  // Events
+  $('#btnSave').onclick = exportJSON;
+  $('#btnLoad').onclick = importJSON;
+  $('#btnPDF').onclick = () => window.print();
+  $('#btnNewSection').onclick = addNewSection;
+  $('#kvAddBtn').onclick = addNewKV;
+  
+  $$('[data-clear]').forEach(btn => {
+    btn.onclick = () => clearSig(btn.dataset.clear);
+  });
+
+  // Load State
+  initCanvas('sigValidierer');
+  initCanvas('sigBetreiber');
+  
+  $('#stamp').innerText = new Date().toLocaleString();
+
+  try {
+    const saved = localStorage.getItem(stateKey);
+    if(saved) {
+      const data = JSON.parse(saved);
+      // Kopfdaten füllen
+      if(data.kopf) Object.keys(data.kopf).forEach(k => {
+          const el = $('#'+k);
+          if(el) el.type === 'checkbox' ? el.checked = data.kopf[k] : el.value = data.kopf[k];
+      });
+      if(data.lists) {
+        appState.kv = data.lists.kv;
+        appState.iq = data.lists.iq;
+        appState.oq = data.lists.oq;
+        appState.dynamic = data.lists.dynamic;
+      }
+      if(data.sign) {
+         $('#sigDate1').value = data.sign.date1 || '';
+         $('#sigDate2').value = data.sign.date2 || '';
+         // Delay signature load slightly to ensure canvas is sized
+         setTimeout(() => {
+           loadSig('sigValidierer', data.sign.img1);
+           loadSig('sigBetreiber', data.sign.img2);
+         }, 200);
+      }
+    }
+  } catch(e) { console.error("Load Error", e); }
+
+  renderAllLists();
+  drawDynamicSections();
+});
+
+</script>
 </body>
 </html>
