@@ -3,41 +3,77 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – Web App (v0.4.0)</title>
+  <title>CL Validierungsprotokoll – Web App (v0.5.0)</title>
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" integrity="sha512-hvNR0F/e2A7zDPbgYuE2wh2T4fg11T4GvuC5e1i5F4C1bX2K18v16D3F4H7411362302434204" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
-    /* --- Basis CSS aus v0.3.0 --- */
+    /* --- Basis CSS --- */
     :root{ --primary: #8B1538; --bg: #F8F9FB; --text: #1E2434; --card: #ffffff; --muted: #e9edf3; --ok: #10b981; --warn: #f59e0b; --err: #ef4444; --radius: 12px; }
     *, *::before, *::after { box-sizing: border-box; }
     html, body { height: 100%; }
     body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
     .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
-    .app { background: var(--card); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-    header { background: var(--primary); color: #fff; padding: 20px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
+    .app { background: var(--card); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: visible; position: relative; } /* overflow visible für Menü */
+    
+    /* Header & Burger Styles */
+    header { background: var(--primary); color: #fff; padding: 15px 24px; display: flex; align-items: center; justify-content: space-between; border-radius: 16px 16px 0 0; position: relative; }
     header .title { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
     header .version { opacity: 0.8; font-size: 13px; margin-top: 4px; }
-    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center;}
-    .btn { appearance: none; border: 0; border-radius: 10px; padding: 10px 16px; font-weight: 600; font-size: 14px; background: #fff; color: var(--primary); cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: inline-flex; align-items: center; gap:6px;}
-    .btn:active { transform: scale(0.96); }
-    .btn:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-    .btn.outline { background: transparent; border: 2px solid rgba(255,255,255,0.3); color: #fff; box-shadow: none; }
-    .btn.outline:hover { border-color: #fff; }
-    .btn.secondary { background: #1e293b; color: #fff; }
-    .btn.danger { background: #fee2e2; color: var(--err); }
-    .btn.success { background: var(--ok); color: white; }
+    
+    /* Burger Button */
+    .burger-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 8px; transition: background 0.2s; }
+    .burger-btn:hover { background: rgba(255,255,255,0.1); }
+
+    /* Das Dropdown Menü */
+    .mobile-menu { 
+      display: none; 
+      position: absolute; 
+      top: 70px; 
+      right: 20px; 
+      width: 260px; 
+      background: #fff; 
+      border-radius: 12px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+      z-index: 1000; 
+      overflow: hidden; 
+      border: 1px solid #e2e8f0;
+      animation: menuFadeIn 0.2s ease-out;
+    }
+    .mobile-menu.show { display: block; }
+    @keyframes menuFadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .menu-group { border-bottom: 1px solid #eef2f7; padding: 8px 0; }
+    .menu-group:last-child { border-bottom: none; }
+    .menu-label { font-size: 11px; text-transform: uppercase; color: #94a3b8; padding: 8px 16px 4px 16px; font-weight: 700; letter-spacing: 0.5px; }
+    
+    .menu-item { 
+      display: flex; align-items: center; gap: 12px; 
+      width: 100%; padding: 12px 16px; 
+      background: none; border: none; 
+      text-align: left; font-size: 14px; font-weight: 500; color: var(--text); 
+      cursor: pointer; transition: background 0.1s; 
+    }
+    .menu-item:hover { background: #f8fafc; color: var(--primary); }
+    .menu-item span { font-size: 18px; } /* Icon Größe */
+
+    /* Standard Elements */
     .section { padding: 24px; border-top: 1px solid var(--muted); }
     .section h2 { margin: 0 0 16px 0; font-size: 18px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
     .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
     .col-4 { grid-column: span 4; } .col-6 { grid-column: span 6; } .col-8 { grid-column: span 8; } .col-12 { grid-column: span 12; }
+    
     label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; color: #64748b; }
     input[type="text"], input[type="date"], input[type="number"], textarea, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: var(--radius); background: #fff; font-size: 14px; outline: none; transition: border-color 0.2s; }
     input:focus, textarea:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139, 21, 56, 0.1); }
     textarea { min-height: 80px; resize: vertical; font-family: inherit; }
-    .row { display: flex; gap: 12px; align-items: center; }
-    .chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: #f1f5f9; color: #334155; font-size: 13px; cursor: pointer; user-select: none; }
-    .list { display: flex; flex-direction: column; gap: 10px; }
+    
+    .btn { appearance: none; border: 0; border-radius: 10px; padding: 10px 16px; font-weight: 600; font-size: 14px; background: #fff; color: var(--primary); cursor: pointer; display: inline-flex; align-items: center; gap:6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .btn.outline { background: transparent; border: 1px solid #ccc; color: #666; box-shadow: none; }
+    .btn.secondary { background: #1e293b; color: #fff; }
+    .btn.danger { background: #fee2e2; color: var(--err); }
+    .btn.success { background: var(--ok); color: white; }
+
     .check-row { display: flex; gap: 12px; align-items: flex-start; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--radius); background: #fff; transition: background 0.2s; }
     .check-row:hover { background: #fafafa; }
     .check-row .tiny-input { width: 44px; flex-shrink: 0; text-align: center; font-weight: bold; border-color: #cbd5e1; padding: 8px; }
@@ -45,53 +81,45 @@
     .check-row .text { font-size: 14px; line-height: 1.4; color: #334155; font-weight: 500; }
     .check-row .note-input { width: 100%; font-size: 12px; border: 1px dashed #cbd5e1; padding: 6px 8px; background: #f8fafc; }
     .check-row .status-check { width: 24px; height: 24px; margin-top: 8px; cursor: pointer; accent-color: var(--ok); }
+    
     .card { background: #fff; border: 1px solid var(--muted); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #eee;}
+    
     .sig-block { background: #fff; border: 1px dashed #cbd5e1; border-radius: var(--radius); padding: 8px; position: relative; }
     canvas.signature { width: 100%; height: 140px; border-radius: 8px; background: #fff; display: block; touch-action: none; cursor: crosshair; }
     .sig-tools { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+
+    /* Toast */
     #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
     .toast { background: #333; color: #fff; padding: 12px 20px; border-radius: 10px; font-size: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: slideIn 0.3s ease-out forwards; opacity: 0; transform: translateY(20px); pointer-events: auto; display: flex; align-items: center; gap: 10px; }
     .toast.success { background: var(--ok); } .toast.error { background: var(--err); }
     @keyframes slideIn { to { opacity: 1; transform: translateY(0); } } @keyframes fadeOut { to { opacity: 0; transform: translateY(10px); } }
-    
-    /* --- Neu in v0.4.0 --- */
-    
-    /* Dropdown Menu für "Abschnitt hinzufügen" */
-    .dropdown { position: relative; display: inline-block; }
-    .dropdown-content { display: none; position: absolute; top: 100%; right: 0; background-color: #fff; min-width: 200px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); border-radius: 12px; z-index: 10; overflow: hidden; margin-top: 8px;border: 1px solid #e2e8f0;}
-    .dropdown-content button { width: 100%; text-align: left; padding: 12px 16px; background: none; border: none; font-weight: 600; color: var(--text); cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 10px;}
-    .dropdown-content button:hover { background-color: #f1f5f9; color: var(--primary); }
-    .dropdown:hover .dropdown-content { display: block; }
 
-    /* Image Section Styles */
+    /* Image Editor Styles */
     .image-editor-container { display: flex; flex-direction: column; gap: 12px; }
     .img-preview-wrapper { width: 100%; max-height: 500px; background: #eee; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; display: flex; justify-content: center; align-items: center;}
-    /* Das eigentliche Bild-Element (wichtig: display: block und max-width 100% für cropperjs) */
     .img-preview-wrapper img { display: block; max-width: 100%; } 
     .hidden-file-input { display: none; }
     .image-controls { display: flex; gap: 10px; flex-wrap: wrap; }
-
-
+    
     /* Responsive & Print */
     @media (max-width: 768px) {
       .container { padding: 10px; } .app { border-radius: 0; }
-      header { padding: 16px; flex-direction: column; align-items: flex-start; }
-      .toolbar { width: 100%; justify-content: space-between; }
-      .toolbar .btn { flex-grow: 1; justify-content: center; }
-      .dropdown { flex-grow: 1; } .dropdown .btn { width: 100%; }
       .grid { display: flex; flex-direction: column; gap: 16px; }
       .col-4, .col-6, .col-8, .col-12 { width: 100%; }
       .check-row { flex-direction: column; align-items: stretch; }
       .check-row .row-top { display: flex; gap: 10px; align-items: flex-start; }
       .check-row .status-check { align-self: flex-end; margin-top: -30px; }
-      .signature { height: 180px; }
     }
+    
     @media print {
       body { background: #fff; font-size: 12px; } .container { padding: 0; max-width: none; } .app { box-shadow: none; border: none; }
-      .toolbar, .btn, .toast, .dropdown, .image-controls { display: none !important; }
+      /* Hide Toolbar & Menu Buttons */
+      header .burger-btn, .mobile-menu, .toast, .image-controls { display: none !important; }
+      .btn { display: none !important; }
+      
       header { position: relative; border-bottom: 2px solid var(--primary); padding: 10px 0; color: #000; background: #fff; }
-      header .title { color: var(--primary); } header .version { color: #555; }
+      header .title { color: var(--primary); }
       .section { padding: 10px 0; page-break-inside: avoid; border-top: 1px solid #ccc; }
       input, textarea, select { border: 1px solid #ddd; background: #fff !important; padding: 6px; font-size: 11px; }
       .check-row { border: none; border-bottom: 1px solid #eee; padding: 4px 0; page-break-inside: avoid; }
@@ -99,10 +127,8 @@
       .sig-block { border: 1px solid #000; }
       .card { border: none; box-shadow: none; padding: 0; margin-bottom: 20px;}
       .card-header { border-bottom: 1px solid #000; margin-bottom: 10px; padding-bottom: 5px;}
-      /* Cropper UI beim Drucken ausblenden, nur das Ergebnis zeigen */
       .cropper-container { display: none !important; }
       .img-preview-wrapper img[src*="data:"] { display: block !important; max-height: 300px; object-fit: contain;}
-
       .page-break { page-break-before: always; }
       .footer { position: fixed; bottom: 0; left: 0; right: 0; font-size: 9px; color: #666; border-top: 1px solid #ccc; padding: 5px; display: flex; justify-content: space-between; }
     }
@@ -118,22 +144,31 @@
     <header>
       <div>
         <div class="title">CL Validierungsprotokoll</div>
-        <div class="version">Web App v0.4.0 • Bilder & Text</div>
+        <div class="version">Web App v0.5.0 • Bergermenü</div>
       </div>
-      <div class="toolbar">
-        <button class="btn" id="btnSave">💾 Speichern</button>
-        <button class="btn" id="btnLoad">📂 Laden</button>
+      
+      <button class="burger-btn" id="burgerToggle">☰</button>
+      
+      <div class="mobile-menu" id="mainMenu">
         
-        <div class="dropdown">
-          <button class="btn secondary" id="btnAddMenuBtn">➕ Abschnitt hinzufügen ▾</button>
-          <div class="dropdown-content">
-            <button onclick="addNewSection('checklist')">✅ Checkliste</button>
-            <button onclick="addNewSection('text')">📝 Textfeld</button>
-            <button onclick="addNewSection('image')">🖼️ Bild-Abschnitt</button>
-          </div>
+        <div class="menu-group">
+          <div class="menu-label">Datei</div>
+          <button class="menu-item" id="btnSave"><span>💾</span> Speichern (JSON)</button>
+          <button class="menu-item" id="btnLoad"><span>📂</span> Laden (JSON)</button>
         </div>
 
-        <button class="btn outline" id="btnPDF">🖨️ PDF / Drucken</button>
+        <div class="menu-group">
+          <div class="menu-label">Hinzufügen</div>
+          <button class="menu-item" onclick="addNewSection('checklist')"><span>✅</span> Neue Checkliste</button>
+          <button class="menu-item" onclick="addNewSection('text')"><span>📝</span> Neues Textfeld</button>
+          <button class="menu-item" onclick="addNewSection('image')"><span>🖼️</span> Neues Bild</button>
+        </div>
+
+        <div class="menu-group">
+          <div class="menu-label">Export</div>
+          <button class="menu-item" id="btnPDF"><span>🖨️</span> PDF / Drucken</button>
+        </div>
+        
       </div>
     </header>
 
@@ -182,7 +217,7 @@
       <div id="dynamicSections" class="list"></div>
     </section>
 
-    <div class="footer"><div>© NEXUS / IPS – Validierungsprotokoll v0.4.0</div><div>Generiert am: <span id="stamp"></span></div></div>
+    <div class="footer"><div>© NEXUS / IPS – Validierungsprotokoll v0.5.0</div><div>Generiert am: <span id="stamp"></span></div></div>
   </div>
 </div>
 
@@ -190,35 +225,23 @@
 
 <script>
 /**
- * CL Validierungsprotokoll Logic v0.4.0 (mit Bildbearbeitung)
+ * CL Validierungsprotokoll Logic v0.5.0 (Burger Menu)
  */
-
-const stateKey = 'valprotokoll_v040_data';
+const stateKey = 'valprotokoll_v050_data';
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 
-// --- Initial Data ---
+// Data Defaults
 const defaultKV = [ { text: 'Offene Arbeitsaufträge vorhanden?', ok: false, note: '', code: '' }, { text: 'Programmstörungen gemeldet?', ok: false, note: '', code: '' } ];
 const iqItems = [ { text: 'Netzwerk-Funktionalität geprüft', note: '', code: '' }, { text: 'Druckerzuweisung korrekt', note: '', code: '' } ];
 const oqItems = [ { text: 'RDG Beladungsmuster definiert', note: '', code: '' }, { text: 'Chargendokumentation vollständig', note: '', code: '' } ];
-
-// State Structure updated for different section types
-// dynamic: [ {id:123, type:'checklist', title:'..', rows:[]}, {id:456, type:'text', title:'..', content:''}, {id:789, type:'image', title:'..', data: null} ]
-let appState = { 
-  kv: structuredClone(defaultKV), 
-  iq: structuredClone(iqItems), 
-  oq: structuredClone(oqItems), 
-  dynamic: [] 
-};
-
-// Aktive Cropper Instanzen tracken, um sie sauber zu zerstören
+let appState = { kv: structuredClone(defaultKV), iq: structuredClone(iqItems), oq: structuredClone(oqItems), dynamic: [] };
 let activeCroppers = {}; 
 
 // --- Utils ---
 function showToast(msg, type = 'success') {
   const container = $('#toast-container');
-  const el = document.createElement('div');
-  el.className = `toast ${type}`;
+  const el = document.createElement('div'); el.className = `toast ${type}`;
   el.innerHTML = type === 'success' ? '✅ ' + msg : '⚠️ ' + msg;
   container.appendChild(el);
   setTimeout(() => { el.style.animation = 'fadeOut 0.3s forwards'; setTimeout(() => el.remove(), 300); }, 3000);
@@ -226,18 +249,32 @@ function showToast(msg, type = 'success') {
 function escapeHtml(str) { if (!str) return ''; return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
 function structuredClone(obj) { return JSON.parse(JSON.stringify(obj)); }
 
-// --- Render Logic für Checklisten (Basic) ---
+// --- Menu Logic (Burger) ---
+function toggleMenu() {
+  const menu = $('#mainMenu');
+  menu.classList.toggle('show');
+}
+// Close menu when clicking outside
+window.addEventListener('click', (e) => {
+  const menu = $('#mainMenu');
+  const btn = $('#burgerToggle');
+  if (!menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.classList.remove('show');
+  }
+});
+
+// --- Render Logic ---
 function createCheckRow(item, onChange) {
   const div = document.createElement('div'); div.className = 'check-row';
   div.innerHTML = `<div class="row-top" style="display:contents"><input class="tiny-input" type="text" placeholder="Kz" maxlength="3" value="${escapeHtml(item.code)}"><div class="content"><div class="text" contenteditable="true">${escapeHtml(item.text)}</div><input class="note-input" type="text" placeholder="Bemerkung..." value="${escapeHtml(item.note)}"></div></div><input class="status-check" type="checkbox" ${item.ok ? 'checked' : ''}>`;
   const [codeIn, noteIn, checkIn] = [div.querySelector('.tiny-input'), div.querySelector('.note-input'), div.querySelector('.status-check')];
-  const textDiv = div.querySelector('.text');
+  div.querySelector('.text').oninput = (e) => { item.text = e.target.innerText; saveLocal(); };
   codeIn.oninput = () => { item.code = codeIn.value; saveLocal(); };
   noteIn.oninput = () => { item.note = noteIn.value; saveLocal(); };
   checkIn.onchange = () => { item.ok = checkIn.checked; saveLocal(); };
-  textDiv.oninput = () => { item.text = textDiv.innerText; saveLocal(); };
   return div;
 }
+
 function renderAllLists() {
   ['#kvChecks', '#iqList', '#oqList'].forEach((id, idx) => {
     const el = $(id); el.innerHTML = '';
@@ -245,289 +282,145 @@ function renderAllLists() {
   });
 }
 
-// --- Haupt-Rendering für Dynamische Abschnitte (Komplex) ---
 function drawDynamicSections() {
   const container = $('#dynamicSections');
-  // Vor dem Neuzeichnen alle alten Cropper Instanzen aufräumen
-  Object.values(activeCroppers).forEach(c => c.destroy());
-  activeCroppers = {};
+  Object.values(activeCroppers).forEach(c => c.destroy()); activeCroppers = {};
   container.innerHTML = '';
   
   appState.dynamic.forEach((sec, idx) => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    
-    // Header bauen
-    let headerHtml = `<strong>${escapeHtml(sec.title)}</strong> <small style="opacity:0.6; margin-left:8px">(${sec.type.toUpperCase()})</small>`;
+    const card = document.createElement('div'); card.className = 'card';
     const header = document.createElement('div'); header.className = 'card-header';
-    header.innerHTML = headerHtml;
+    header.innerHTML = `<strong>${escapeHtml(sec.title)}</strong> <small style="opacity:0.6">(${sec.type.toUpperCase()})</small>`;
     
-    // Toolbar für Header (Löschen Button)
-    const btnGroup = document.createElement('div'); btnGroup.style.display = 'flex'; btnGroup.style.gap = '8px';
-    
-    // Für Checklisten: Button "+ Zeile"
+    const btnGroup = document.createElement('div'); btnGroup.style.display='flex'; btnGroup.style.gap='8px';
     if(sec.type === 'checklist') {
-        const btnAdd = document.createElement('button'); btnAdd.className = 'btn secondary'; btnAdd.style.padding = '4px 10px'; btnAdd.style.fontSize='11px'; btnAdd.textContent = '+ Zeile';
-        btnAdd.onclick = () => { sec.rows.push({text:'Neue Prüfung', ok:false, note:'', code:''}); drawDynamicSections(); saveLocal(); };
+        const btnAdd = document.createElement('button'); btnAdd.className = 'btn secondary outline'; btnAdd.style.padding='4px 8px'; btnAdd.style.fontSize='11px'; btnAdd.textContent='+ Zeile';
+        btnAdd.onclick = () => { sec.rows.push({text:'Neue Prüfung', ok:false}); drawDynamicSections(); saveLocal(); };
         btnGroup.appendChild(btnAdd);
     }
-
-    const btnDel = document.createElement('button'); btnDel.className = 'btn danger outline'; btnDel.style.padding = '4px 8px'; btnDel.textContent = '🗑️';
-    btnDel.onclick = () => { if(confirm(`Abschnitt "${sec.title}" löschen?`)) { appState.dynamic.splice(idx, 1); drawDynamicSections(); saveLocal(); }};
+    const btnDel = document.createElement('button'); btnDel.className = 'btn danger outline'; btnDel.style.padding='4px 8px'; btnDel.textContent = '🗑️';
+    btnDel.onclick = () => { if(confirm(`"${sec.title}" löschen?`)) { appState.dynamic.splice(idx, 1); drawDynamicSections(); saveLocal(); }};
     btnGroup.appendChild(btnDel);
-    header.appendChild(btnGroup);
-    card.appendChild(header);
+    header.appendChild(btnGroup); card.appendChild(header);
 
-    // Content Body basierend auf Typ
     const body = document.createElement('div');
-
-    if (sec.type === 'checklist') {
-      // --- TYP: CHECKLISTE ---
-      sec.rows.forEach(row => body.appendChild(createCheckRow(row)));
-
-    } else if (sec.type === 'text') {
-      // --- TYP: TEXTFELD ---
-      const textarea = document.createElement('textarea');
-      textarea.style.minHeight = '150px';
-      textarea.placeholder = 'Hier Text eingeben...';
-      textarea.value = sec.content || '';
-      textarea.oninput = (e) => { sec.content = e.target.value; saveLocal(); };
-      body.appendChild(textarea);
-
+    if (sec.type === 'checklist') { sec.rows.forEach(row => body.appendChild(createCheckRow(row))); }
+    else if (sec.type === 'text') {
+      const ta = document.createElement('textarea'); ta.style.minHeight='150px'; ta.placeholder='Text...'; ta.value=sec.content||'';
+      ta.oninput=(e)=>{sec.content=e.target.value; saveLocal();}; body.appendChild(ta);
     } else if (sec.type === 'image') {
-      // --- TYP: BILD (mit Cropper) ---
-      const imgContainer = document.createElement('div');
-      imgContainer.className = 'image-editor-container';
-      
-      const imgWrapper = document.createElement('div');
-      imgWrapper.className = 'img-preview-wrapper';
-      // Ein eindeutige ID für das Bild-Element dieses Abschnitts
+      const imgC = document.createElement('div'); imgC.className='image-editor-container';
+      const wrap = document.createElement('div'); wrap.className='img-preview-wrapper';
       const imgId = `img-dyn-${sec.id}`;
+      wrap.innerHTML = sec.data ? `<img id="${imgId}" src="${sec.data}" style="max-width:100%">` : `<div style="color:#999;padding:20px;">Kein Bild</div>`;
       
-      // Wenn Daten vorhanden sind, zeigen wir das Bild
-      if (sec.data) {
-          imgWrapper.innerHTML = `<img id="${imgId}" src="${sec.data}" alt="Bild" style="max-width:100%;">`;
-      } else {
-          imgWrapper.innerHTML = `<div style="color:#999; padding:20px;">Kein Bild ausgewählt</div>`;
-      }
+      const ctrls = document.createElement('div'); ctrls.className='image-controls';
+      const fIn = document.createElement('input'); fIn.type='file'; fIn.accept='image/*'; fIn.className='hidden-file-input';
+      const btnUp = document.createElement('button'); btnUp.className='btn secondary'; btnUp.innerHTML='📁 Bild wählen'; btnUp.onclick=()=>fIn.click();
+      const btnSaveCrop = document.createElement('button'); btnSaveCrop.className='btn success'; btnSaveCrop.innerHTML='✅ Speichern'; btnSaveCrop.style.display='none';
+      const btnReset = document.createElement('button'); btnReset.className='btn outline'; btnReset.innerHTML='🔄 Ändern'; btnReset.style.display=sec.data?'inline-flex':'none';
+      btnReset.onclick=()=>{if(activeCroppers[imgId])activeCroppers[imgId].destroy(); sec.data=null; drawDynamicSections();};
 
-      // Controls
-      const controls = document.createElement('div');
-      controls.className = 'image-controls';
-      
-      const fileInput = document.createElement('input');
-      fileInput.type = 'file'; fileInput.accept = 'image/*'; fileInput.className = 'hidden-file-input';
-      
-      const btnUpload = document.createElement('button');
-      btnUpload.className = 'btn secondary'; btnUpload.innerHTML = '📁 Bild auswählen...';
-      btnUpload.onclick = () => fileInput.click();
-
-      // Buttons für Cropping Steuerung
-      const btnSaveCrop = document.createElement('button');
-      btnSaveCrop.className = 'btn success'; btnSaveCrop.innerHTML = '✅ Zuschnitt speichern';
-      btnSaveCrop.style.display = 'none'; // Erst sichtbar wenn Cropper aktiv
-
-      const btnReset = document.createElement('button');
-      btnReset.className = 'btn outline'; btnReset.style.color='#333'; btnReset.style.borderColor='#ccc';
-      btnReset.innerHTML = '🔄 Bild ändern / Neu zuschneiden';
-      btnReset.style.display = sec.data ? 'inline-flex' : 'none';
-      btnReset.onclick = () => {
-           // Reset: Bild löschen und Upload wieder zeigen
-           if(activeCroppers[imgId]) activeCroppers[imgId].destroy();
-           sec.data = null;
-           drawDynamicSections(); // Neu zeichnen um Zustand zurückzusetzen
-      };
-
-      // File Input Change Handler (Das Herzstück)
-      fileInput.onchange = (e) => {
-         const file = e.target.files[0];
-         if (!file) return;
-         
-         const reader = new FileReader();
-         reader.onload = (evt) => {
-             // 1. Bild anzeigen
-             imgWrapper.innerHTML = `<img id="${imgId}" src="${evt.target.result}" style="max-width:100%; display:block;">`;
-             
-             // UI anpassen
-             btnUpload.style.display = 'none';
-             btnReset.style.display = 'none';
-             btnSaveCrop.style.display = 'inline-flex';
-             
-             // 2. Cropper.js initialisieren
-             const imageElement = document.getElementById(imgId);
-             // Falls noch ein alter Cropper läuft, zerstören
+      fIn.onchange=(e)=>{
+         const file=e.target.files[0]; if(!file)return;
+         const reader=new FileReader();
+         reader.onload=(evt)=>{
+             wrap.innerHTML=`<img id="${imgId}" src="${evt.target.result}" style="max-width:100%;display:block">`;
+             btnUp.style.display='none'; btnReset.style.display='none'; btnSaveCrop.style.display='inline-flex';
              if(activeCroppers[imgId]) activeCroppers[imgId].destroy();
-
-             const cropper = new Cropper(imageElement, {
-                 viewMode: 1, // Beschränkt die Crop-Box auf den Canvas
-                 autoCropArea: 0.8, // Startgröße
-                 responsive: true,
-             });
-             // Cropper Instanz speichern
-             activeCroppers[imgId] = cropper;
-
-             // 3. Save Handler definieren
-             btnSaveCrop.onclick = () => {
-                 // Ergebnis als Canvas holen
-                 const canvas = cropper.getCroppedCanvas({ maxWidth: 1024, maxHeight: 1024 }); // Begrenze Auflösung für Performance
-                 if(!canvas) return;
-                 
-                 // Als DataURL speichern
-                 const croppedDataUrl = canvas.toDataURL('image/jpeg', 0.85); // JPEG Kompression 85%
-                 
-                 // State updaten
-                 sec.data = croppedDataUrl;
-                 
-                 // Cropper zerstören und Ansicht aktualisieren
-                 cropper.destroy();
-                 delete activeCroppers[imgId];
-                 drawDynamicSections(); // Neu zeichnen, zeigt jetzt das gespeicherte Bild an
-                 saveLocal();
+             const c = new Cropper(document.getElementById(imgId), { viewMode:1, autoCropArea:0.8 });
+             activeCroppers[imgId]=c;
+             btnSaveCrop.onclick=()=>{
+                 const cvs=c.getCroppedCanvas({maxWidth:1024, maxHeight:1024});
+                 if(!cvs)return;
+                 sec.data=cvs.toDataURL('image/jpeg', 0.85);
+                 c.destroy(); delete activeCroppers[imgId]; drawDynamicSections(); saveLocal();
              };
-         }
+         };
          reader.readAsDataURL(file);
       };
-
-      controls.append(fileInput, btnUpload, btnSaveCrop, btnReset);
-      imgContainer.append(imgWrapper, controls);
-      body.appendChild(imgContainer);
+      ctrls.append(fIn, btnUp, btnSaveCrop, btnReset); imgC.append(wrap, ctrls); body.appendChild(imgC);
     }
-
-    card.appendChild(body);
-    container.appendChild(card);
+    card.appendChild(body); container.appendChild(card);
   });
 }
 
-// --- Actions ---
 function addNewSection(type) {
-  const title = prompt(`Titel für neuen ${type.toUpperCase()}-Abschnitt:`);
+  const title = prompt(`Titel für "${type.toUpperCase()}":`);
   if (!title) return;
-  
-  let newSection = { id: Date.now(), title: title, type: type };
-  
-  if(type === 'checklist') newSection.rows = [];
-  if(type === 'text') newSection.content = '';
-  if(type === 'image') newSection.data = null; // Hier kommt das base64 Bild rein
-
-  appState.dynamic.push(newSection);
-  drawDynamicSections();
-  saveLocal();
-  // Dropdown schließen (Trick: Fokus wegnehmen)
-  document.activeElement.blur();
+  appState.dynamic.push({ id: Date.now(), title, type, rows:[], content:'', data:null });
+  drawDynamicSections(); saveLocal();
+  $('#mainMenu').classList.remove('show'); // Menu schließen
 }
 
-// --- JSON I/O (angepasst für neue Struktur) ---
+// --- IO ---
 function collectData() {
-  const sig1 = document.getElementById('sigValidierer');
-  const sig2 = document.getElementById('sigBetreiber');
-  // Alle Textfelder im Kopfbereich sammeln
-  let kopfData = {};
-  $$('section:first-of-type input, section:first-of-type textarea, section:first-of-type select').forEach(el => {
-      kopfData[el.id] = el.type === 'checkbox' ? el.checked : el.value;
-  });
-
+  let kopfData={}; $$('section:first-of-type input, section:first-of-type textarea, section:first-of-type select').forEach(el=>kopfData[el.id]=el.type==='checkbox'?el.checked:el.value);
   return {
-    meta: { version: '0.4.0', date: new Date().toISOString() },
-    kopf: kopfData,
-    sign: { date1: $('#sigDate1').value, date2: $('#sigDate2').value, img1: sig1.toDataURL(), img2: sig2.toDataURL() },
+    meta: { version: '0.5.0', date: new Date().toISOString() }, kopf: kopfData,
+    sign: { date1: $('#sigDate1').value, date2: $('#sigDate2').value, img1: document.getElementById('sigValidierer').toDataURL(), img2: document.getElementById('sigBetreiber').toDataURL() },
     lists: { kv: appState.kv, iq: appState.iq, oq: appState.oq, dynamic: appState.dynamic }
   };
 }
-
 function exportJSON() {
-  const data = collectData();
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url;
-  a.download = `Validierung_${data.kopf.instName || 'Entwurf'}_v040.json`;
-  a.click(); URL.revokeObjectURL(url); showToast('Datei gespeichert');
+  const d = collectData(); const blob=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`Val_${d.kopf.instName||'Entwurf'}.json`; a.click(); URL.revokeObjectURL(url);
+  showToast('Gespeichert'); $('#mainMenu').classList.remove('show');
 }
-
 function importJSON() {
-  const input = document.createElement('input'); input.type = 'file'; input.accept = '.json';
-  input.onchange = e => {
-    const file = e.target.files[0]; if (!file) return;
-    const reader = new FileReader();
-    reader.onload = evt => {
+  const inp=document.createElement('input'); inp.type='file'; inp.accept='.json';
+  inp.onchange=e=>{
+    const f=e.target.files[0]; if(!f)return;
+    const r=new FileReader();
+    r.onload=evt=>{
       try {
-        const data = JSON.parse(evt.target.result);
-        if(!data.kopf || !data.lists) throw new Error("Struktur ungültig");
-        
-        // Apply Head
-        Object.keys(data.kopf).forEach(k => {
-          const el = $('#'+k); if(el) el.type === 'checkbox' ? el.checked = data.kopf[k] : el.value = data.kopf[k];
-        });
-        // Apply Lists
-        appState.kv = data.lists.kv || structuredClone(defaultKV);
-        appState.iq = data.lists.iq || structuredClone(iqItems);
-        appState.oq = data.lists.oq || structuredClone(oqItems);
-        // WICHTIG: Sicherstellen, dass alte dynamische Listen (v0.3.0) migriert werden
-        appState.dynamic = (data.lists.dynamic || []).map(sec => {
-             if(!sec.type) sec.type = 'checklist'; // Fallback für alte Versionen
-             if(!sec.id) sec.id = Date.now() + Math.random();
-             return sec;
-        });
-
-        renderAllLists();
-        drawDynamicSections();
-
-        if(data.sign) {
-          $('#sigDate1').value = data.sign.date1 || ''; $('#sigDate2').value = data.sign.date2 || '';
-          setTimeout(() => { loadSig('sigValidierer', data.sign.img1); loadSig('sigBetreiber', data.sign.img2); }, 200);
-        }
-        saveLocal(); showToast('Protokoll geladen');
-      } catch (err) { showToast('Fehler: ' + err.message, 'error'); }
-    };
-    reader.readAsText(file);
-  };
-  input.click();
+        const d=JSON.parse(evt.target.result);
+        if(!d.kopf) throw new Error("Format falsch");
+        Object.keys(d.kopf).forEach(k=>{const el=$('#'+k);if(el)el.type==='checkbox'?el.checked=d.kopf[k]:el.value=d.kopf[k]});
+        appState.kv=d.lists.kv||structuredClone(defaultKV); appState.iq=d.lists.iq||structuredClone(iqItems); appState.oq=d.lists.oq||structuredClone(oqItems);
+        appState.dynamic=(d.lists.dynamic||[]).map(s=>{if(!s.type)s.type='checklist'; if(!s.id)s.id=Date.now()+Math.random(); return s;});
+        renderAllLists(); drawDynamicSections();
+        if(d.sign){ $('#sigDate1').value=d.sign.date1; $('#sigDate2').value=d.sign.date2; setTimeout(()=>{loadSig('sigValidierer',d.sign.img1);loadSig('sigBetreiber',d.sign.img2)},200);}
+        saveLocal(); showToast('Geladen'); $('#mainMenu').classList.remove('show');
+      } catch(err){ showToast(err.message,'error'); }
+    }; r.readAsText(f);
+  }; inp.click();
 }
+function saveLocal(){ localStorage.setItem(stateKey, JSON.stringify(collectData())); }
 
-function saveLocal() { localStorage.setItem(stateKey, JSON.stringify(collectData())); }
-
-// --- Signature Logic (Unverändert) ---
-function initCanvas(id) {
-  const c = document.getElementById(id); const ctx = c.getContext('2d');
-  let drawing = false, last = {x:0, y:0};
-  function resize() {
-    const saved = c.toDataURL(); const rect = c.getBoundingClientRect();
-    c.width = rect.width; c.height = rect.height;
-    const img = new Image(); img.onload = () => ctx.drawImage(img, 0, 0, c.width, c.height); img.src = saved;
-  }
-  setTimeout(resize, 100); window.addEventListener('resize', resize);
-  const getPos = (e) => { const r = c.getBoundingClientRect(); const t = e.touches ? e.touches[0] : e; return { x: t.clientX - r.left, y: t.clientY - r.top }; };
-  const start = (e) => { drawing = true; last = getPos(e); e.preventDefault(); };
-  const move = (e) => { if(!drawing) return; e.preventDefault(); const p = getPos(e); ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.strokeStyle = '#000'; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.stroke(); last = p; };
-  const end = () => { if(drawing) { drawing = false; saveLocal(); } };
-  c.addEventListener('mousedown', start); c.addEventListener('mousemove', move); c.addEventListener('mouseup', end); c.addEventListener('mouseleave', end);
-  c.addEventListener('touchstart', start, {passive: false}); c.addEventListener('touchmove', move, {passive: false}); c.addEventListener('touchend', end);
+// --- Sig ---
+function initCanvas(id){
+  const c=document.getElementById(id), ctx=c.getContext('2d');
+  let d=false, l={x:0,y:0};
+  const rsz=()=>{ const s=c.toDataURL(); const r=c.getBoundingClientRect(); c.width=r.width; c.height=r.height; const i=new Image(); i.onload=()=>ctx.drawImage(i,0,0,c.width,c.height); i.src=s; };
+  setTimeout(rsz,100); window.addEventListener('resize',rsz);
+  const gp=e=>{const r=c.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top}};
+  const mv=e=>{if(!d)return;e.preventDefault();const p=gp(e);ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(p.x,p.y);ctx.stroke();l=p;};
+  c.addEventListener('mousedown',e=>{d=true;l=gp(e)}); c.addEventListener('mousemove',mv); window.addEventListener('mouseup',()=>d=false);
+  c.addEventListener('touchstart',e=>{d=true;l=gp(e);e.preventDefault()},{passive:false}); c.addEventListener('touchmove',mv,{passive:false}); window.addEventListener('touchend',()=>d=false);
 }
-function loadSig(id, dataUrl) { if(!dataUrl) return; const c = document.getElementById(id); const ctx = c.getContext('2d'); const img = new Image(); img.onload = () => { ctx.clearRect(0,0,c.width, c.height); ctx.drawImage(img, 0, 0, c.width, c.height); }; img.src = dataUrl; }
-function clearSig(id) { const c = document.getElementById(id); c.getContext('2d').clearRect(0, 0, c.width, c.height); saveLocal(); }
+function loadSig(id,u){if(!u)return;const c=document.getElementById(id),x=c.getContext('2d'),i=new Image();i.onload=()=>{x.clearRect(0,0,c.width,c.height);x.drawImage(i,0,0,c.width,c.height)};i.src=u;}
+function clearSig(id){const c=document.getElementById(id);c.getContext('2d').clearRect(0,0,c.width,c.height);saveLocal();}
 
-// --- Init Application ---
+// --- Init ---
 window.addEventListener('DOMContentLoaded', () => {
-  $('#btnSave').onclick = exportJSON; $('#btnLoad').onclick = importJSON; $('#btnPDF').onclick = () => window.print();
-  $$('[data-clear]').forEach(btn => btn.onclick = () => clearSig(btn.dataset.clear));
+  $('#burgerToggle').onclick = toggleMenu;
+  $('#btnSave').onclick = exportJSON; $('#btnLoad').onclick = importJSON; $('#btnPDF').onclick = () => { $('#mainMenu').classList.remove('show'); window.print(); };
+  $$('[data-clear]').forEach(b=>b.onclick=()=>clearSig(b.dataset.clear));
   initCanvas('sigValidierer'); initCanvas('sigBetreiber');
   $('#stamp').innerText = new Date().toLocaleString();
-
+  
   try {
-    const saved = localStorage.getItem(stateKey);
-    if(saved) {
-      const data = JSON.parse(saved);
-      if(data.kopf) Object.keys(data.kopf).forEach(k => { const el = $('#'+k); if(el) el.type === 'checkbox' ? el.checked = data.kopf[k] : el.value = data.kopf[k]; });
-      if(data.lists) {
-        appState.kv = data.lists.kv; appState.iq = data.lists.iq; appState.oq = data.lists.oq;
-        // Migration für alte Daten
-        appState.dynamic = (data.lists.dynamic || []).map(sec => { if(!sec.type) sec.type = 'checklist'; if(!sec.id) sec.id = Date.now()+Math.random(); return sec; });
-      }
-      if(data.sign) { $('#sigDate1').value = data.sign.date1||''; $('#sigDate2').value = data.sign.date2||''; setTimeout(() => { loadSig('sigValidierer', data.sign.img1); loadSig('sigBetreiber', data.sign.img2); }, 200); }
+    const s=localStorage.getItem(stateKey);
+    if(s) {
+       const d=JSON.parse(s);
+       // Quick load logic (simplified)
+       if(d.kopf) Object.keys(d.kopf).forEach(k=>{const el=$('#'+k);if(el)el.type==='checkbox'?el.checked=d.kopf[k]:el.value=d.kopf[k]});
+       appState.kv=d.lists.kv; appState.iq=d.lists.iq; appState.oq=d.lists.oq; appState.dynamic=d.lists.dynamic;
+       if(d.sign){ $('#sigDate1').value=d.sign.date1; $('#sigDate2').value=d.sign.date2; setTimeout(()=>{loadSig('sigValidierer',d.sign.img1);loadSig('sigBetreiber',d.sign.img2)},200);}
     }
-  } catch(e) { console.error("Load Error", e); }
-
-  renderAllLists();
-  drawDynamicSections();
+  } catch(e){}
+  renderAllLists(); drawDynamicSections();
 });
 </script>
 </body>
