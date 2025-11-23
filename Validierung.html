@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – Web App (v0.6.0)</title>
+  <title>CL Validierungsprotokoll – Web App (v0.7.0)</title>
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
 
@@ -24,7 +24,7 @@
     .burger-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }
 
     /* Mobile Menu */
-    .mobile-menu { display: none; position: absolute; top: 70px; right: 20px; width: 280px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); z-index: 1000; overflow: hidden; border: 1px solid #e2e8f0; }
+    .mobile-menu { display: none; position: absolute; top: 70px; right: 20px; width: 300px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); z-index: 1000; overflow: hidden; border: 1px solid #e2e8f0; }
     .mobile-menu.show { display: block; animation: menuFadeIn 0.2s ease-out; }
     @keyframes menuFadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     .menu-group { border-bottom: 1px solid #eef2f7; padding: 8px 0; }
@@ -47,33 +47,46 @@
     /* Buttons */
     .btn { appearance: none; border: 0; border-radius: 8px; padding: 8px 14px; font-weight: 600; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap:6px; transition: transform 0.1s; }
     .btn:active { transform: scale(0.96); }
-    .btn-primary { background: var(--primary); color: #fff; }
     .btn.secondary { background: #1e293b; color: #fff; }
     .btn.outline { background: transparent; border: 1px solid #ccc; color: #475569; }
     .btn.danger { background: #fee2e2; color: var(--err); }
     .btn.success { background: var(--ok); color: white; }
     
-    /* Standard Check Rows */
+    /* CHECK ROWS with TYPE SELECTOR */
     .list { display: flex; flex-direction: column; gap: 8px; }
-    .check-row { display: flex; gap: 10px; align-items: flex-start; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; }
-    .check-row .tiny-input { width: 44px; flex-shrink: 0; text-align: center; font-weight: bold; border-color: #cbd5e1; padding: 8px; }
-    .check-row .content { flex: 1; }
-    .check-row .text { font-size: 14px; font-weight: 500; min-height: 20px; outline: none; margin-bottom: 4px; }
-    .check-row .note-input { width: 100%; font-size: 12px; border: 1px dashed #cbd5e1; padding: 6px; background: #f8fafc; }
-    .check-row .status-check { width: 24px; height: 24px; margin-top: 4px; cursor: pointer; accent-color: var(--ok); }
+    .check-row { display: flex; gap: 8px; align-items: flex-start; padding: 8px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; transition: background 0.2s; }
+    .check-row:hover { background: #fdfdfd; border-color: #cbd5e1; }
 
-    /* --- NEU: GRUPPEN STYLING --- */
+    /* Type Selector Styling */
+    .type-select { 
+      width: 45px; flex-shrink: 0; padding: 6px 2px; text-align: center; font-weight: 800; border-radius: 6px; 
+      border: 1px solid #cbd5e1; font-size: 12px; appearance: none; cursor: pointer;
+    }
+    /* Farben für Typen */
+    .type-select[data-val="F"] { background: #e0f2fe; color: #0369a1; border-color: #bae6fd; } /* Forderung (Blau) */
+    .type-select[data-val="V"] { background: #fce7f3; color: #be185d; border-color: #fbcfe8; } /* Voraussetzung (Pink) */
+    .type-select[data-val="T"] { background: #fef3c7; color: #b45309; border-color: #fde68a; } /* Tätigkeit (Gelb) */
+    .type-select[data-val="P"] { background: #dcfce7; color: #15803d; border-color: #bbf7d0; } /* Prüfpunkt (Grün) */
+    .type-select[data-val="K"] { background: #fee2e2; color: #b91c1c; border-color: #fecaca; } /* Korrektur (Rot) */
+
+    .check-row .tiny-input { width: 50px; flex-shrink: 0; text-align: center; font-weight: bold; padding: 6px; font-size: 12px; }
+    .check-row .content { flex: 1; min-width: 0; }
+    .check-row .text { font-size: 14px; font-weight: 500; min-height: 20px; outline: none; margin-bottom: 4px; line-height: 1.4; color: #334155; }
+    .check-row .note-input { width: 100%; font-size: 12px; border: 1px dashed #cbd5e1; padding: 4px 8px; background: #f8fafc; color: #64748b; }
+    .check-row .status-check { width: 24px; height: 24px; margin-top: 2px; cursor: pointer; accent-color: var(--ok); flex-shrink: 0; }
+
+    /* Groups */
     .group-wrapper { margin-bottom: 30px; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; background: #fff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
     .group-header { background: #f1f5f9; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #cbd5e1; }
-    .group-title { font-weight: 700; color: var(--text); font-size: 16px; }
-    .group-title input { background: transparent; border: none; font-size: 16px; font-weight: 700; color: var(--text); width: 200px; padding: 4px; }
-    .group-title input:focus { background: #fff; border: 1px solid var(--primary); }
+    .group-title-wrap { display: flex; flex-direction: column; gap: 2px; }
+    .group-title input { background: transparent; border: none; font-size: 16px; font-weight: 700; color: var(--text); width: 250px; padding: 0; }
+    .group-stats { font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; }
     .group-body { padding: 16px; display: flex; flex-direction: column; gap: 16px; }
     
     .sub-section { border-left: 3px solid var(--muted); padding-left: 12px; margin-bottom: 12px; }
     .sub-section h4 { margin: 0 0 8px 0; font-size: 13px; color: #64748b; text-transform: uppercase; display: flex; justify-content: space-between; }
     
-    /* --- NEU: BILD GALERIE --- */
+    /* Galerie */
     .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 10px; }
     .gallery-item { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; aspect-ratio: 1; }
     .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -96,11 +109,13 @@
     @media (max-width: 768px) {
       .grid { grid-template-columns: 1fr; }
       .col-4, .col-6, .col-12 { grid-column: span 1; }
-      .check-row { flex-direction: column; }
-      .check-row .status-check { align-self: flex-end; margin-top: -30px; }
+      .check-row { flex-wrap: wrap; }
+      .check-row .content { min-width: 100%; order: 3; margin-top: 4px; }
+      .check-row .type-select { order: 1; }
+      .check-row .tiny-input { order: 2; }
+      .check-row .status-check { order: 4; margin-left: auto; }
     }
 
-    /* PRINT LAYOUT */
     @media print {
       body { background: #fff; font-size: 11pt; }
       .container { padding: 0; max-width: none; }
@@ -109,18 +124,16 @@
       header .title { color: var(--primary); }
       .burger-btn, .mobile-menu, .toast, .btn, .cropper-ui, .gallery-del { display: none !important; }
       
-      /* Input Styling Print */
-      input, textarea, select { border: none; border-bottom: 1px dotted #ccc; background: transparent !important; padding: 4px 0; font-size: 11pt; width: auto; min-width: 50px; display: inline-block; }
+      input, textarea, select { border: none; border-bottom: 1px dotted #ccc; background: transparent !important; padding: 4px 0; font-size: 11pt; width: auto; min-width: 50px; display: inline-block; -webkit-appearance: none; }
       textarea { width: 100%; border: 1px solid #eee; }
       
-      /* Groups Print */
+      /* Print Type Badge as Text */
+      .type-select { border: none; font-weight: bold; width: auto; background: none !important; color: #000 !important; text-align: left; padding: 0; }
+      
       .group-wrapper { break-inside: avoid; border: 2px solid #000; margin-bottom: 20px; box-shadow: none; }
       .group-header { background: #eee !important; border-bottom: 1px solid #000; color: #000; -webkit-print-color-adjust: exact; }
-      
-      /* Images Grid Print */
       .gallery-grid { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 10px !important; }
       .gallery-item { border: 1px solid #000; aspect-ratio: 4/3; }
-      
       .page-break { page-break-before: always; }
       .footer { position: fixed; bottom: 0; left: 0; right: 0; font-size: 9px; color: #666; border-top: 1px solid #ccc; padding: 5px; display: flex; justify-content: space-between; }
     }
@@ -136,14 +149,16 @@
     <header>
       <div>
         <div class="title">CL Validierung</div>
-        <div class="version">v0.6.0 • Gruppen & Galerie</div>
+        <div class="version">v0.7.0 • Templates & Typen</div>
       </div>
       <button class="burger-btn" onclick="toggleMenu()">☰</button>
       
       <div class="mobile-menu" id="mainMenu">
         <div class="menu-group">
-          <div class="menu-label">Verwaltung</div>
-          <button class="menu-item" onclick="addNewGroup()"><span>📁</span> Neue Gruppe erstellen</button>
+          <div class="menu-label">Hinzufügen aus Vorlage</div>
+          <button class="menu-item" onclick="addFromTemplate('empty')"><span>📄</span> Leere Gruppe</button>
+          <button class="menu-item" onclick="addFromTemplate('p01')"><span>🧼</span> Prozess 01: RDG</button>
+          <button class="menu-item" onclick="addFromTemplate('p03')"><span>📦</span> Prozess 03: Packen</button>
         </div>
         <div class="menu-group">
           <div class="menu-label">Datei</div>
@@ -172,14 +187,18 @@
       </div>
     </section>
 
-    <section class="section"><h2>1. Kundenvorgespräch</h2><div class="list" id="kvChecks"></div></section>
-    <section class="section"><h2>2. IQ (Installation)</h2><div class="list" id="iqList"></div></section>
-    <section class="section"><h2>3. OQ (Funktion)</h2><div class="list" id="oqList"></div></section>
-
     <section class="section" style="background: #f8fafc; min-height:300px;">
-      <h2>4. Weitere Protokolle (Gruppen)</h2>
+      <h2>Protokollierte Prozess-Schritte</h2>
       <div id="dynamicContainer"></div>
-      <button class="btn secondary" style="margin-top:20px; width:100%; justify-content:center; padding:15px;" onclick="addNewGroup()">+ Neue Gruppe hinzufügen</button>
+      
+      <div style="margin-top:30px; text-align:center; padding:20px; border:2px dashed #cbd5e1; border-radius:12px; color:#64748b;">
+        <p>Neuen Bereich hinzufügen:</p>
+        <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+            <button class="btn secondary" onclick="addFromTemplate('p01')">+ 01 RDG</button>
+            <button class="btn secondary" onclick="addFromTemplate('p03')">+ 03 Packen</button>
+            <button class="btn outline" onclick="addFromTemplate('empty')">+ Leer</button>
+        </div>
+      </div>
     </section>
 
     <section class="section page-break">
@@ -198,26 +217,68 @@
       </div>
     </section>
 
-    <div class="footer"><div>© NEXUS / IPS v0.6.0</div><div><span id="stamp"></span></div></div>
+    <div class="footer"><div>© NEXUS / IPS v0.7.0</div><div><span id="stamp"></span></div></div>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 <script>
-/** * v0.6.0 - Gruppen & Multi-Image Logic 
- */
+/** * v0.7.0 - Template System & Extended Types */
 const $ = s => document.querySelector(s);
-const $$ = s => document.querySelectorAll(s);
-const stateKey = 'val_v060_store';
+const stateKey = 'val_v070_store';
 
-// Default Data
-const defaultKV = [{text:'Aufträge offen?',ok:false,note:'',code:''}, {text:'Störungen?',ok:false,note:'',code:''}];
-const iqItems = [{text:'Netzwerk OK',ok:false,note:'',code:''}, {text:'Drucker OK',ok:false,note:'',code:''}];
-const oqItems = [{text:'RDG Prozess',ok:false,note:'',code:''}, {text:'Packplatz',ok:false,note:'',code:''}];
+// --- TEMPLATES (Based on uploaded doc) ---
+const templates = {
+  p01: {
+    title: "Prozessschritt: 01 Reinigung/Desinfektion",
+    sections: [
+      {
+        type: 'checklist',
+        rows: [
+          { type:'F', text:'01.1 Programmaufruf', ok:false, code:'' },
+          { type:'P', text:'Reinigung/Desinfektion RDG auswählen', ok:false, code:'' },
+          { type:'P', text:'Chargenviewer wird geladen', ok:false, code:'' },
+          { type:'F', text:'01.2 Programmansicht', ok:false, code:'' },
+          { type:'P', text:'Chargenliste als Tagesansicht wird angezeigt', ok:false, code:'' },
+          { type:'P', text:'Chargen werden mit eindeutiger Nummer angezeigt', ok:false, code:'' },
+          { type:'P', text:'Programm/Datum/Ergebnis/Status der Chargen wird angezeigt', ok:false, code:'' },
+          { type:'F', text:'01.3 Erfassen der RDG Beladung (Vorbeladung)', ok:false, code:'' },
+          { type:'P', text:'Nächste Charge ist auswählbar', ok:false, code:'' },
+          { type:'P', text:'Öffnen der Beladung (Scan/Tastatur)', ok:false, code:'' },
+          { type:'P', text:'Benutzer Anmeldung mit Nutzerkürzel', ok:false, code:'' },
+          { type:'T', text:'VAL-001-01/02/03 erfassen', ok:false, code:'' },
+          { type:'P', text:'Abschließen der Beladung [F8]', ok:false, code:'' }
+        ]
+      }
+    ]
+  },
+  p03: {
+    title: "Prozessschritt: 03 Packen",
+    sections: [
+      {
+        type: 'checklist',
+        rows: [
+          { type:'V', text:'Erfasste Validierungs-Sets (Status gereinigt)', ok:false, code:'' },
+          { type:'V', text:'Berechtigung des Nutzers zum Packen', ok:false, code:'' },
+          { type:'V', text:'Funktionsfähiger Etikettendrucker & Scanner', ok:false, code:'' },
+          { type:'F', text:'03.1 Programmaufruf mit Berechtigungsprüfung', ok:false, code:'' },
+          { type:'P', text:'Benutzer Anmeldung mit Nutzerkürzel', ok:false, code:'' },
+          { type:'F', text:'03.2 Anzeige der Set-/Artikel-Übersicht', ok:false, code:'' },
+          { type:'P', text:'Kürzel, Bezeichnung, Individual-Sets sichtbar', ok:false, code:'' },
+          { type:'F', text:'03.5 Auswahl und Packen', ok:false, code:'' },
+          { type:'P', text:'Auswahl mit Scanner / Manuell / Touch', ok:false, code:'' },
+          { type:'F', text:'03.10 Etikettendruck', ok:false, code:'' },
+          { type:'P', text:'Dialog Packoptionen öffnet sich', ok:false, code:'' },
+          { type:'P', text:'Etikett wird nach Bestätigung gedruckt', ok:false, code:'' },
+          { type:'T', text:'Etiketten in Anlage einkleben', ok:false, code:'' },
+          { type:'P', text:'Statusanzeige = gepackt', ok:false, code:'' }
+        ]
+      }
+    ]
+  }
+};
 
-// Main State
-// groups = Array of { id, title, sections: [ {type:'checklist', rows:[]}, {type:'text', content:''}, {type:'gallery', images:[]} ] }
-let appState = { kv: clone(defaultKV), iq: clone(iqItems), oq: clone(oqItems), groups: [] };
+let appState = { groups: [] };
 let activeCropper = null;
 
 // --- Helper ---
@@ -228,80 +289,47 @@ function showToast(m){
   $('#toast-container').appendChild(d); setTimeout(()=>d.remove(), 3000); 
 }
 
-// --- Rendering Core ---
-function renderAll(){
-  renderList('#kvChecks', appState.kv);
-  renderList('#iqList', appState.iq);
-  renderList('#oqList', appState.oq);
-  renderGroups();
-}
-
-function renderList(sel, list){
-  const el = $(sel); el.innerHTML = '';
-  list.forEach(item => el.appendChild(createCheckRow(item)));
-}
-
-function createCheckRow(item){
-  let div = document.createElement('div'); div.className='check-row';
-  div.innerHTML = `
-    <input class="tiny-input" placeholder="Kz" value="${item.code||''}">
-    <div class="content">
-      <div class="text" contenteditable="true">${item.text}</div>
-      <input class="note-input" placeholder="Bemerkung" value="${item.note||''}">
-    </div>
-    <input type="checkbox" class="status-check" ${item.ok?'checked':''}>
-  `;
-  // Bindings
-  div.querySelector('.tiny-input').oninput=e=>{item.code=e.target.value; save();};
-  div.querySelector('.text').oninput=e=>{item.text=e.target.innerText; save();};
-  div.querySelector('.note-input').oninput=e=>{item.note=e.target.value; save();};
-  div.querySelector('.status-check').onchange=e=>{item.ok=e.target.checked; save();};
-  return div;
-}
-
-// --- Group Rendering Logic ---
+// --- Render Logic ---
 function renderGroups(){
   const con = $('#dynamicContainer'); con.innerHTML = '';
   appState.groups.forEach((group, gIdx) => {
     let gDiv = document.createElement('div'); gDiv.className = 'group-wrapper';
     
-    // Header
+    // Header Stats
+    let total = 0, done = 0;
+    group.sections.forEach(s => { if(s.type==='checklist') s.rows.forEach(r => { total++; if(r.ok) done++; }) });
+    let statsText = total > 0 ? `${done}/${total} Erledigt` : '';
+
     let head = document.createElement('div'); head.className = 'group-header';
-    head.innerHTML = `<div class="group-title"><input value="${group.title}" placeholder="Gruppen-Titel"></div>`;
+    head.innerHTML = `
+      <div class="group-title-wrap">
+        <div class="group-title"><input id="g-title-${gIdx}" value=""></div>
+        <div class="group-stats">${statsText}</div>
+      </div>`;
     
-    // Header Actions
+    let input = head.querySelector('input');
+    input.value = group.title;
+    input.oninput = e => { group.title = e.target.value; save(); };
+
     let acts = document.createElement('div'); acts.style.display='flex'; acts.style.gap='8px';
-    
-    let btnDup = document.createElement('button'); btnDup.className='btn secondary'; btnDup.innerText='D'; btnDup.title='Gruppe Duplizieren';
+    let btnDup = document.createElement('button'); btnDup.className='btn secondary'; btnDup.innerText='D'; btnDup.title='Duplizieren';
     btnDup.onclick = () => duplicateGroup(gIdx);
-    
     let btnDel = document.createElement('button'); btnDel.className='btn danger'; btnDel.innerText='X';
     btnDel.onclick = () => { if(confirm('Gruppe löschen?')) { appState.groups.splice(gIdx,1); renderGroups(); save(); }};
-    
     acts.append(btnDup, btnDel); head.append(acts); gDiv.append(head);
     
-    // Title Binding
-    head.querySelector('input').oninput = e => { group.title = e.target.value; save(); };
-
-    // Body (Sections)
     let body = document.createElement('div'); body.className = 'group-body';
     
     group.sections.forEach((sec, sIdx) => {
       let sDiv = document.createElement('div'); sDiv.className = 'sub-section';
-      
-      // Section Header (Titel + Delete)
       let sHead = document.createElement('h4'); 
-      let label = sec.type === 'checklist' ? 'Checkliste' : (sec.type==='gallery'?'Bilder Galerie':'Textfeld');
-      sHead.innerHTML = `<span>${label}</span>`;
-      let sDel = document.createElement('span'); sDel.innerHTML='🗑️'; sDel.style.cursor='pointer';
-      sDel.onclick = () => { group.sections.splice(sIdx,1); renderGroups(); save(); };
-      sHead.appendChild(sDel); sDiv.appendChild(sHead);
+      sHead.innerHTML = `<span>${sec.type==='checklist'?'Checkliste':(sec.type==='gallery'?'Bilder':'Text')}</span> <span style="cursor:pointer" onclick="delSec(${gIdx},${sIdx})">🗑️</span>`;
+      sDiv.appendChild(sHead);
 
-      // Section Content
       if(sec.type === 'checklist'){
         sec.rows.forEach(row => sDiv.appendChild(createCheckRow(row)));
         let btnAdd = document.createElement('button'); btnAdd.className='btn outline'; btnAdd.innerText='+ Zeile'; btnAdd.style.marginTop='5px'; btnAdd.style.fontSize='11px';
-        btnAdd.onclick = () => { sec.rows.push({text:'Prüfung',ok:false}); renderGroups(); save(); };
+        btnAdd.onclick = () => { sec.rows.push({type:'P', text:'Neue Prüfung',ok:false, code:''}); renderGroups(); save(); };
         sDiv.appendChild(btnAdd);
       } 
       else if(sec.type === 'text'){
@@ -310,25 +338,22 @@ function renderGroups(){
         sDiv.appendChild(ta);
       }
       else if(sec.type === 'gallery'){
-        // 1. Grid of existing images
         let grid = document.createElement('div'); grid.className = 'gallery-grid';
         (sec.images || []).forEach((imgSrc, imgIdx) => {
           let item = document.createElement('div'); item.className='gallery-item';
-          item.innerHTML = `<img src="${imgSrc}"><button class="gallery-del">X</button>`;
-          item.querySelector('button').onclick = () => { sec.images.splice(imgIdx,1); renderGroups(); save(); };
+          item.innerHTML = `<img src="${imgSrc}"><button class="gallery-del" onclick="delImg(${gIdx},${sIdx},${imgIdx})">X</button>`;
           grid.appendChild(item);
         });
         sDiv.appendChild(grid);
-
-        // 2. Add New Image UI
+        
         let ui = document.createElement('div'); ui.className='cropper-ui';
-        ui.innerHTML = `<input type="file" accept="image/*" style="margin-bottom:10px">`;
-        let fileIn = ui.querySelector('input');
+        ui.innerHTML = `<input type="file" accept="image/*" id="file-${gIdx}-${sIdx}" style="margin-bottom:10px">`;
         let wrap = document.createElement('div'); wrap.className='img-preview-wrapper';
-        let btnSave = document.createElement('button'); btnSave.className='btn success'; btnSave.innerText='Bild zuschneiden & hinzufügen'; btnSave.style.display='none';
+        let btnSave = document.createElement('button'); btnSave.className='btn success'; btnSave.innerText='Zuschnitt speichern'; btnSave.style.display='none';
         
         ui.append(wrap, btnSave); sDiv.appendChild(ui);
-
+        
+        let fileIn = ui.querySelector('input');
         fileIn.onchange = e => {
            let f = e.target.files[0]; if(!f) return;
            let r = new FileReader();
@@ -337,9 +362,8 @@ function renderGroups(){
              btnSave.style.display='inline-flex';
              if(activeCropper) activeCropper.destroy();
              activeCropper = new Cropper(document.getElementById(`crop-${gIdx}-${sIdx}`), { viewMode:1, autoCropArea:0.8 });
-             
              btnSave.onclick = () => {
-                let cvs = activeCropper.getCroppedCanvas({maxWidth:800});
+                let cvs = activeCropper.getCroppedCanvas({maxWidth:1024});
                 if(cvs){
                   if(!sec.images) sec.images = [];
                   sec.images.push(cvs.toDataURL('image/jpeg', 0.8));
@@ -351,58 +375,92 @@ function renderGroups(){
            r.readAsDataURL(f);
         };
       }
-
       body.appendChild(sDiv);
     });
 
-    // Footer Actions for Group (Add Section)
     let footer = document.createElement('div'); footer.style.borderTop='1px dashed #ccc'; footer.style.paddingTop='10px'; footer.style.display='flex'; footer.style.gap='10px';
-    footer.innerHTML = `<small style="align-self:center; color:#888">Hinzufügen:</small>`;
-    
-    let b1 = document.createElement('button'); b1.className='btn outline'; b1.innerText='+ Checkliste'; b1.onclick = () => addSec(gIdx, 'checklist');
-    let b2 = document.createElement('button'); b2.className='btn outline'; b2.innerText='+ Text'; b2.onclick = () => addSec(gIdx, 'text');
-    let b3 = document.createElement('button'); b3.className='btn outline'; b3.innerText='+ Bilder'; b3.onclick = () => addSec(gIdx, 'gallery');
-    
-    footer.append(b1,b2,b3); body.append(footer);
-    gDiv.append(body); con.append(gDiv);
+    footer.innerHTML = `<button class="btn outline" onclick="addSec(${gIdx},'checklist')">+ Checkliste</button><button class="btn outline" onclick="addSec(${gIdx},'text')">+ Text</button><button class="btn outline" onclick="addSec(${gIdx},'gallery')">+ Bilder</button>`;
+    body.append(footer); gDiv.append(body); con.append(gDiv);
   });
 }
 
-// --- Logic ---
-function addNewGroup(){
-  appState.groups.push({ id: Date.now(), title: 'Neue Gruppe', sections: [] });
+function createCheckRow(item){
+  let div = document.createElement('div'); div.className='check-row';
+  
+  // Type Select
+  let sel = document.createElement('select'); sel.className='type-select'; sel.dataset.val = item.type;
+  ['F','V','T','P','K'].forEach(o => { let opt=document.createElement('option'); opt.value=o; opt.text=o; sel.appendChild(opt); });
+  sel.value = item.type || 'P';
+  sel.onchange = e => { item.type = e.target.value; save(); renderGroups(); }; // Re-render for color update
+
+  div.appendChild(sel);
+  
+  div.insertAdjacentHTML('beforeend', `
+    <input class="tiny-input" placeholder="Kz" value="${item.code||''}">
+    <div class="content">
+      <div class="text" contenteditable="true">${item.text}</div>
+      <input class="note-input" placeholder="Bemerkung" value="${item.note||''}">
+    </div>
+    <input type="checkbox" class="status-check" ${item.ok?'checked':''}>
+  `);
+  
+  div.querySelector('.tiny-input').oninput=e=>{item.code=e.target.value; save();};
+  div.querySelector('.text').oninput=e=>{item.text=e.target.innerText; save();};
+  div.querySelector('.note-input').oninput=e=>{item.note=e.target.value; save();};
+  div.querySelector('.status-check').onchange=e=>{item.ok=e.target.checked; save(); renderGroups(); }; // Re-render for stats
+  return div;
+}
+
+// --- Logic Actions ---
+function addFromTemplate(key){
+  let newGroup;
+  if(key === 'empty') newGroup = { id: Date.now(), title: 'Neuer Abschnitt', sections: [] };
+  else newGroup = clone(templates[key]);
+  
+  newGroup.id = Date.now(); // Ensure unique ID
+  appState.groups.push(newGroup);
   renderGroups(); save();
+  toggleMenu();
 }
 
 function addSec(gIdx, type){
   let sec = { type: type };
-  if(type === 'checklist') sec.rows = [{text:'...',ok:false}];
+  if(type === 'checklist') sec.rows = [{type:'P', text:'...',ok:false}];
   if(type === 'text') sec.content = '';
   if(type === 'gallery') sec.images = [];
   appState.groups[gIdx].sections.push(sec);
   renderGroups(); save();
 }
 
-function duplicateGroup(gIdx){
-  let origin = appState.groups[gIdx];
-  let copy = JSON.parse(JSON.stringify(origin)); // Deep Clone
-  copy.id = Date.now(); // New ID
-  copy.title += " (Kopie)";
-  appState.groups.splice(gIdx + 1, 0, copy); // Insert after original
-  renderGroups(); save();
-  showToast('Gruppe dupliziert');
+function delSec(gIdx, sIdx){
+  if(confirm('Abschnitt entfernen?')) {
+    appState.groups[gIdx].sections.splice(sIdx,1); renderGroups(); save();
+  }
 }
 
-// --- I/O & Signatur ---
+function delImg(gIdx, sIdx, imgIdx){
+  if(confirm('Bild löschen?')) {
+    appState.groups[gIdx].sections[sIdx].images.splice(imgIdx,1); renderGroups(); save();
+  }
+}
+
+function duplicateGroup(gIdx){
+  let copy = clone(appState.groups[gIdx]);
+  copy.id = Date.now(); copy.title += " (Kopie)";
+  appState.groups.splice(gIdx+1, 0, copy);
+  renderGroups(); save(); showToast('Dupliziert');
+}
+
+// --- I/O & Sig ---
 function save(){ 
   let data = {
-    meta: { v:'0.6.0' },
+    meta: { v:'0.7.0' },
     kopf: {
        instName: $('#instName').value, instOrt: $('#instOrt').value, betreiber: $('#betreiber').value,
        produkt: $('#produkt').value, bemerkung: $('#bemerkung').value, valAm: $('#valAm').value,
        chkVal: $('#chkVal').checked, chkReval: $('#chkReval').checked
     },
-    lists: { kv: appState.kv, iq: appState.iq, oq: appState.oq, groups: appState.groups },
+    groups: appState.groups,
     sign: { 
       d1: $('#sigDate1').value, d2: $('#sigDate2').value,
       s1: document.getElementById('sigValidierer').toDataURL(), 
@@ -421,35 +479,28 @@ function loadData(){
      r.onload = evt => {
        try {
          let d = JSON.parse(evt.target.result);
-         // Load Header
          $('#instName').value = d.kopf.instName||''; $('#instOrt').value = d.kopf.instOrt||'';
          $('#betreiber').value = d.kopf.betreiber||''; $('#produkt').value = d.kopf.produkt||'';
          $('#bemerkung').value = d.kopf.bemerkung||''; $('#valAm').value = d.kopf.valAm||'';
          $('#chkVal').checked = d.kopf.chkVal; $('#chkReval').checked = d.kopf.chkReval;
          
-         // Load Lists
-         appState.kv = d.lists.kv || clone(defaultKV);
-         appState.iq = d.lists.iq || clone(iqItems);
-         appState.oq = d.lists.oq || clone(oqItems);
-         appState.groups = d.lists.groups || []; // Load Groups
-         
-         // Load Signatures
+         appState.groups = d.groups || [];
          if(d.sign){
            $('#sigDate1').value = d.sign.d1; $('#sigDate2').value = d.sign.d2;
            loadSig('sigValidierer', d.sign.s1); loadSig('sigBetreiber', d.sign.s2);
          }
-         renderAll(); save(); showToast('Daten geladen');
-       } catch(err){ alert('Fehler beim Laden'); console.error(err); }
+         renderGroups(); save(); showToast('Daten geladen');
+       } catch(err){ alert('Fehler beim Laden'); }
      };
      r.readAsText(f);
   };
   inp.click();
 }
 
-// Init & Signature Canvas Logic
 function initSig(id){
   let c=$(id), ctx=c.getContext('2d'), d=false;
-  c.width = c.getBoundingClientRect().width; c.height = 130;
+  const resize = () => { let r=c.getBoundingClientRect(); c.width=r.width; c.height=130; };
+  setTimeout(resize,100); 
   
   let getP = e => { let r=c.getBoundingClientRect(); return {x:(e.touches?e.touches[0].clientX:e.clientX)-r.left, y:(e.touches?e.touches[0].clientY:e.clientY)-r.top}};
   let start=e=>{ d=true; ctx.beginPath(); ctx.moveTo(getP(e).x, getP(e).y); e.preventDefault(); };
@@ -463,15 +514,13 @@ function loadSig(id,u){ let i=new Image(); i.onload=()=>document.getElementById(
 
 window.onload = () => {
   initSig('#sigValidierer'); initSig('#sigBetreiber');
-  // Try Load LocalStorage
   let s = localStorage.getItem(stateKey);
   if(s){ 
     let d=JSON.parse(s); 
-    // Simplified Restore (Full logic is in loadData, this is quick restore)
-    if(d.lists) { appState = d.lists; } 
-    if(d.kopf) { $('#instName').value = d.kopf.instName; } // etc... simplified
+    if(d.groups) appState.groups = d.groups;
+    if(d.kopf) { $('#instName').value = d.kopf.instName||''; }
   }
-  renderAll();
+  renderGroups();
   $('#stamp').innerText = new Date().toLocaleString();
 };
 </script>
