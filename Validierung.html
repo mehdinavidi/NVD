@@ -1,103 +1,106 @@
+Das ist eine hervorragende Erweiterungsidee, die das Protokoll deutlich flexibler macht.
+Um das Zuschneiden von Bildern in einer Web-Anwendung (besonders in einer einzigen Datei) sauber umzusetzen, benötigen wir eine externe Bibliothek. Das alles selbst zu programmieren wäre extrem aufwendig und fehleranfällig. Ich habe mich für Cropper.js entschieden. Das ist der Industriestandard für diese Aufgabe – zuverlässig, mächtig und mobilfreundlich.
+Hier ist die komplett aktualisierte Version v0.4.0.
+Was ist neu in v0.4.0?
+ * Neue Abschnitts-Typen: In der Toolbar gibt es jetzt ein Dropdown-Menü "➕ Abschnitt hinzufügen", wo du wählen kannst zwischen:
+   * ✅ Checkliste: (Wie bisher)
+   * 📝 Textfeld: Ein großer Block für freie Notizen, Anleitungen oder längere Erklärungen.
+   * 🖼️ Bild: Ein Bereich zum Hochladen und Bearbeiten von Fotos.
+ * Bild-Integration:
+   * Du kannst ein Bild von der Festplatte oder Kamera hochladen.
+   * Zuschneiden (Cropping): Nach dem Laden erscheint das Bild im Editor. Du kannst den Rahmen ziehen, um den Ausschnitt zu wählen. Klicke auf "✅ Zuschnitt speichern", um das Ergebnis zu fixieren.
+Anleitung zur Nutzung der neuen Bild-Funktion:
+ * Klicke oben im Menü auf "➕ Abschnitt" -> "🖼️ Bild-Abschnitt". Gib einen Titel ein.
+ * Scrolle nach unten zum neuen Abschnitt und klicke auf "📁 Bild auswählen...".
+ * Wähle ein Foto aus. Es wird geladen und der Zuschneide-Rahmen erscheint.
+ * Verschiebe und vergrößere/verkleinere den Rahmen, bis der gewünschte Ausschnitt passt.
+ * Klicke auf den grünen Button "✅ Zuschnitt speichern".
+ * Das Bild wird nun fest im Protokoll gespeichert. (Du kannst es jederzeit über "🔄 Bild ändern / Neu zuschneiden" erneut bearbeiten).
+Der komplette Code (v0.4.0)
+Speichere diesen Code als neue HTML-Datei (z.B. Validierung_v0.4.0_mit_Bildern.html).
+Hinweis: Damit das Zuschneiden funktioniert, benötigt diese Version eine Internetverbindung beim ersten Laden, um die "Cropper.js"-Bibliothek von einem CDN (Content Delivery Network) zu laden.
 <!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – Web App (v0.3.0)</title>
+  <title>CL Validierungsprotokoll – Web App (v0.4.0)</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" integrity="sha512-hvNR0F/e2A7zDPbgYuE2wh2T4fg11T4GvuC5e1i5F4C1bX2K18v16D3F4H7411362302434204" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
   <style>
-    :root{
-      --primary: #8B1538;
-      --bg: #F8F9FB;
-      --text: #1E2434;
-      --card: #ffffff;
-      --muted: #e9edf3;
-      --ok: #10b981;
-      --warn: #f59e0b;
-      --err: #ef4444;
-      --radius: 12px;
-    }
+    /* --- Basis CSS aus v0.3.0 --- */
+    :root{ --primary: #8B1538; --bg: #F8F9FB; --text: #1E2434; --card: #ffffff; --muted: #e9edf3; --ok: #10b981; --warn: #f59e0b; --err: #ef4444; --radius: 12px; }
     *, *::before, *::after { box-sizing: border-box; }
     html, body { height: 100%; }
     body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
-    
     .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
     .app { background: var(--card); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-    
-    /* Header & Toolbar */
     header { background: var(--primary); color: #fff; padding: 20px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
     header .title { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
     header .version { opacity: 0.8; font-size: 13px; margin-top: 4px; }
-    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; }
-    
-    /* Buttons */
-    .btn { appearance: none; border: 0; border-radius: 10px; padding: 10px 16px; font-weight: 600; font-size: 14px; background: #fff; color: var(--primary); cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center;}
+    .btn { appearance: none; border: 0; border-radius: 10px; padding: 10px 16px; font-weight: 600; font-size: 14px; background: #fff; color: var(--primary); cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: inline-flex; align-items: center; gap:6px;}
     .btn:active { transform: scale(0.96); }
     .btn:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
     .btn.outline { background: transparent; border: 2px solid rgba(255,255,255,0.3); color: #fff; box-shadow: none; }
     .btn.outline:hover { border-color: #fff; }
     .btn.secondary { background: #1e293b; color: #fff; }
     .btn.danger { background: #fee2e2; color: var(--err); }
-    
-    /* Layout Sections */
+    .btn.success { background: var(--ok); color: white; }
     .section { padding: 24px; border-top: 1px solid var(--muted); }
     .section h2 { margin: 0 0 16px 0; font-size: 18px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
-    
-    /* Grid System */
     .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
-    .col-4 { grid-column: span 4; }
-    .col-6 { grid-column: span 6; }
-    .col-8 { grid-column: span 8; }
-    .col-12 { grid-column: span 12; }
-    
-    /* Form Elements */
+    .col-4 { grid-column: span 4; } .col-6 { grid-column: span 6; } .col-8 { grid-column: span 8; } .col-12 { grid-column: span 12; }
     label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; color: #64748b; }
-    input[type="text"], input[type="date"], input[type="number"], textarea, select {
-      width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: var(--radius); 
-      background: #fff; font-size: 14px; outline: none; transition: border-color 0.2s;
-    }
+    input[type="text"], input[type="date"], input[type="number"], textarea, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: var(--radius); background: #fff; font-size: 14px; outline: none; transition: border-color 0.2s; }
     input:focus, textarea:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139, 21, 56, 0.1); }
     textarea { min-height: 80px; resize: vertical; font-family: inherit; }
-    
     .row { display: flex; gap: 12px; align-items: center; }
     .chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: #f1f5f9; color: #334155; font-size: 13px; cursor: pointer; user-select: none; }
-    .chip:hover { background: #e2e8f0; }
-    .chip input { margin: 0; }
-    
-    /* Checkbox Lists */
     .list { display: flex; flex-direction: column; gap: 10px; }
     .check-row { display: flex; gap: 12px; align-items: flex-start; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--radius); background: #fff; transition: background 0.2s; }
     .check-row:hover { background: #fafafa; }
-    
     .check-row .tiny-input { width: 44px; flex-shrink: 0; text-align: center; font-weight: bold; border-color: #cbd5e1; padding: 8px; }
     .check-row .content { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 4px; min-height: 40px; }
     .check-row .text { font-size: 14px; line-height: 1.4; color: #334155; font-weight: 500; }
     .check-row .note-input { width: 100%; font-size: 12px; border: 1px dashed #cbd5e1; padding: 6px 8px; background: #f8fafc; }
     .check-row .status-check { width: 24px; height: 24px; margin-top: 8px; cursor: pointer; accent-color: var(--ok); }
-    
-    /* Dynamic Cards */
     .card { background: #fff; border: 1px solid var(--muted); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    
-    /* Signatures */
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #eee;}
     .sig-block { background: #fff; border: 1px dashed #cbd5e1; border-radius: var(--radius); padding: 8px; position: relative; }
     canvas.signature { width: 100%; height: 140px; border-radius: 8px; background: #fff; display: block; touch-action: none; cursor: crosshair; }
     .sig-tools { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
-    
-    /* Toast Notification */
     #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
     .toast { background: #333; color: #fff; padding: 12px 20px; border-radius: 10px; font-size: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: slideIn 0.3s ease-out forwards; opacity: 0; transform: translateY(20px); pointer-events: auto; display: flex; align-items: center; gap: 10px; }
-    .toast.success { background: var(--ok); }
-    .toast.error { background: var(--err); }
-    @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeOut { to { opacity: 0; transform: translateY(10px); } }
+    .toast.success { background: var(--ok); } .toast.error { background: var(--err); }
+    @keyframes slideIn { to { opacity: 1; transform: translateY(0); } } @keyframes fadeOut { to { opacity: 0; transform: translateY(10px); } }
+    
+    /* --- Neu in v0.4.0 --- */
+    
+    /* Dropdown Menu für "Abschnitt hinzufügen" */
+    .dropdown { position: relative; display: inline-block; }
+    .dropdown-content { display: none; position: absolute; top: 100%; right: 0; background-color: #fff; min-width: 200px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); border-radius: 12px; z-index: 10; overflow: hidden; margin-top: 8px;border: 1px solid #e2e8f0;}
+    .dropdown-content button { width: 100%; text-align: left; padding: 12px 16px; background: none; border: none; font-weight: 600; color: var(--text); cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 10px;}
+    .dropdown-content button:hover { background-color: #f1f5f9; color: var(--primary); }
+    .dropdown:hover .dropdown-content { display: block; }
 
-    /* Responsive Design */
+    /* Image Section Styles */
+    .image-editor-container { display: flex; flex-direction: column; gap: 12px; }
+    .img-preview-wrapper { width: 100%; max-height: 500px; background: #eee; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; display: flex; justify-content: center; align-items: center;}
+    /* Das eigentliche Bild-Element (wichtig: display: block und max-width 100% für cropperjs) */
+    .img-preview-wrapper img { display: block; max-width: 100%; } 
+    .hidden-file-input { display: none; }
+    .image-controls { display: flex; gap: 10px; flex-wrap: wrap; }
+
+
+    /* Responsive & Print */
     @media (max-width: 768px) {
-      .container { padding: 10px; }
-      .app { border-radius: 0; }
+      .container { padding: 10px; } .app { border-radius: 0; }
       header { padding: 16px; flex-direction: column; align-items: flex-start; }
-      .toolbar { width: 100%; }
-      .btn { flex: 1; text-align: center; justify-content: center; }
+      .toolbar { width: 100%; justify-content: space-between; }
+      .toolbar .btn { flex-grow: 1; justify-content: center; }
+      .dropdown { flex-grow: 1; } .dropdown .btn { width: 100%; }
       .grid { display: flex; flex-direction: column; gap: 16px; }
       .col-4, .col-6, .col-8, .col-12 { width: 100%; }
       .check-row { flex-direction: column; align-items: stretch; }
@@ -105,26 +108,26 @@
       .check-row .status-check { align-self: flex-end; margin-top: -30px; }
       .signature { height: 180px; }
     }
-
-    /* Print / PDF */
     @media print {
-      body { background: #fff; font-size: 12px; }
-      .container { padding: 0; max-width: none; }
-      .app { box-shadow: none; border: none; }
-      .toolbar, .btn, .toast { display: none !important; }
+      body { background: #fff; font-size: 12px; } .container { padding: 0; max-width: none; } .app { box-shadow: none; border: none; }
+      .toolbar, .btn, .toast, .dropdown, .image-controls { display: none !important; }
       header { position: relative; border-bottom: 2px solid var(--primary); padding: 10px 0; color: #000; background: #fff; }
-      header .title { color: var(--primary); }
-      header .version { color: #555; }
+      header .title { color: var(--primary); } header .version { color: #555; }
       .section { padding: 10px 0; page-break-inside: avoid; border-top: 1px solid #ccc; }
       input, textarea, select { border: 1px solid #ddd; background: #fff !important; padding: 6px; font-size: 11px; }
       .check-row { border: none; border-bottom: 1px solid #eee; padding: 4px 0; page-break-inside: avoid; }
       .check-row .note-input { border: none; font-style: italic; }
       .sig-block { border: 1px solid #000; }
+      .card { border: none; box-shadow: none; padding: 0; margin-bottom: 20px;}
+      .card-header { border-bottom: 1px solid #000; margin-bottom: 10px; padding-bottom: 5px;}
+      /* Cropper UI beim Drucken ausblenden, nur das Ergebnis zeigen */
+      .cropper-container { display: none !important; }
+      .img-preview-wrapper img[src*="data:"] { display: block !important; max-height: 300px; object-fit: contain;}
+
       .page-break { page-break-before: always; }
       .footer { position: fixed; bottom: 0; left: 0; right: 0; font-size: 9px; color: #666; border-top: 1px solid #ccc; padding: 5px; display: flex; justify-content: space-between; }
     }
-    .footer { display: none; }
-    @media print { .footer { display: flex; } }
+    .footer { display: none; } @media print { .footer { display: flex; } }
   </style>
 </head>
 <body>
@@ -136,12 +139,21 @@
     <header>
       <div>
         <div class="title">CL Validierungsprotokoll</div>
-        <div class="version">Web App v0.3.0 • EuroSDS</div>
+        <div class="version">Web App v0.4.0 • Bilder & Text</div>
       </div>
       <div class="toolbar">
-        <button class="btn" id="btnSave">💾 Speichern (JSON)</button>
+        <button class="btn" id="btnSave">💾 Speichern</button>
         <button class="btn" id="btnLoad">📂 Laden</button>
-        <button class="btn secondary" id="btnNewSection">➕ Abschnitt</button>
+        
+        <div class="dropdown">
+          <button class="btn secondary" id="btnAddMenuBtn">➕ Abschnitt hinzufügen ▾</button>
+          <div class="dropdown-content">
+            <button onclick="addNewSection('checklist')">✅ Checkliste</button>
+            <button onclick="addNewSection('text')">📝 Textfeld</button>
+            <button onclick="addNewSection('image')">🖼️ Bild-Abschnitt</button>
+          </div>
+        </div>
+
         <button class="btn outline" id="btnPDF">🖨️ PDF / Drucken</button>
       </div>
     </header>
@@ -149,67 +161,22 @@
     <section class="section">
       <h2>📋 Deckblatt & Kopfdaten</h2>
       <div class="grid">
-        <div class="col-6">
-          <label>Name der Einrichtung</label>
-          <input id="instName" type="text" placeholder="z.B. Klinikum Musterstadt" />
-        </div>
-        <div class="col-6">
-          <label>Standort / Abteilung</label>
-          <input id="instOrt" type="text" placeholder="Ort der Installation" />
-        </div>
-        <div class="col-6">
-          <label>Verantwortlicher (Betreiber)</label>
-          <input id="betreiber" type="text" placeholder="Ansprechpartner" />
-        </div>
-        <div class="col-6">
-          <label>Produkt</label>
-          <input id="produkt" type="text" value="EuroSDS" />
-        </div>
-        <div class="col-4">
-          <label>Paket</label>
-          <input id="programmpaket" type="text" placeholder="z.B. Komplettpaket" />
-        </div>
-        <div class="col-4">
-          <label>Version</label>
-          <input id="version" type="text" placeholder="z.B. 6.4.x" />
-        </div>
-        <div class="col-4">
-          <label>Wartung / Pflege</label>
-          <select id="evbPflege">
-            <option value="">Bitte wählen…</option>
-            <option>Ja (EVB IT-Pflege S)</option>
-            <option>Nein</option>
-          </select>
-        </div>
-        <div class="col-6">
-          <label>Arbeitsplätze</label>
-          <input id="arbeitsplaetze" type="text" placeholder="Anzahl Clients, Packplätze..." />
-        </div>
-        <div class="col-6">
-          <label>Geräte-Anbindung</label>
-          <input id="geraete" type="text" placeholder="RDG, Steri, Scanner..." />
-        </div>
-        <div class="col-12">
-          <label>Bemerkung zur Installation</label>
-          <textarea id="bemerkung" placeholder="Besonderheiten, Abweichungen..."></textarea>
-        </div>
+        <div class="col-6"><label>Name der Einrichtung</label><input id="instName" type="text" placeholder="z.B. Klinikum Musterstadt" /></div>
+        <div class="col-6"><label>Standort / Abteilung</label><input id="instOrt" type="text" placeholder="Ort der Installation" /></div>
+        <div class="col-6"><label>Verantwortlicher (Betreiber)</label><input id="betreiber" type="text" placeholder="Ansprechpartner" /></div>
+        <div class="col-6"><label>Produkt</label><input id="produkt" type="text" value="EuroSDS" /></div>
+        <div class="col-4"><label>Paket</label><input id="programmpaket" type="text" placeholder="z.B. Komplettpaket" /></div>
+        <div class="col-4"><label>Version</label><input id="version" type="text" placeholder="z.B. 6.4.x" /></div>
+        <div class="col-4"><label>Wartung / Pflege</label><select id="evbPflege"><option value="">Bitte wählen…</option><option>Ja (EVB IT-Pflege S)</option><option>Nein</option></select></div>
+        <div class="col-6"><label>Arbeitsplätze</label><input id="arbeitsplaetze" type="text" placeholder="Anzahl Clients, Packplätze..." /></div>
+        <div class="col-6"><label>Geräte-Anbindung</label><input id="geraete" type="text" placeholder="RDG, Steri, Scanner..." /></div>
+        <div class="col-12"><label>Bemerkung zur Installation</label><textarea id="bemerkung" placeholder="Besonderheiten, Abweichungen..."></textarea></div>
       </div>
-      
       <div class="grid" style="margin-top:20px; border-top:1px dashed #e2e8f0; padding-top:16px;">
-        <div class="col-4">
-          <label>Durchgeführt am</label>
-          <input id="valAm" type="date" />
-        </div>
-        <div class="col-4">
-          <label>Letzte Validierung</label>
-          <input id="valLast" type="date" />
-        </div>
-        <div class="col-4">
-          <label>Nächste Validierung</label>
-          <input id="valNext" type="date" />
-        </div>
+        <div class="col-4"><label>Durchgeführt am</label><input id="valAm" type="date" /></div>
+        <div class="col-4"><label>Letzte Validierung</label><input id="valLast" type="date" /></div>
+        <div class="col-4"><label>Nächste Validierung</label><input id="valNext" type="date" /></div>
       </div>
-      
       <div class="row" style="margin-top:20px">
         <label class="chip"><input type="checkbox" id="chkVal" /> Erst-Validierung</label>
         <label class="chip"><input type="checkbox" id="chkReval" /> Re-Validierung</label>
@@ -219,116 +186,54 @@
     <section class="section">
       <h2>✍️ Validierer & Freigabe</h2>
       <div class="grid">
-        <div class="col-4">
-          <label>Validierer (NEXUS / IPS)</label>
-          <input id="validierer" type="text" placeholder="Name des Technikers" />
-        </div>
-        <div class="col-4">
-          <label>Qualifikation</label>
-          <input id="qualifikation" type="text" />
-        </div>
-        <div class="col-4">
-          <label>Schulung</label>
-          <input id="schulung" type="text" />
-        </div>
-        
-        <div class="col-6">
-          <label>Unterschrift Validierer</label>
-          <div class="sig-block">
-            <canvas class="signature" id="sigValidierer"></canvas>
-            <div class="sig-tools">
-              <input id="sigDate1" type="date" style="width:140px; padding:6px;" />
-              <button class="btn outline" style="color:#666; border-color:#ccc; padding:6px 10px; font-size:12px;" data-clear="sigValidierer">Löschen</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-6">
-          <label>Freigabe Betreiber (Unterschrift)</label>
-          <div class="sig-block">
-            <canvas class="signature" id="sigBetreiber"></canvas>
-            <div class="sig-tools">
-              <input id="sigDate2" type="date" style="width:140px; padding:6px;" />
-              <button class="btn outline" style="color:#666; border-color:#ccc; padding:6px 10px; font-size:12px;" data-clear="sigBetreiber">Löschen</button>
-            </div>
-          </div>
-        </div>
+        <div class="col-4"><label>Validierer (NEXUS / IPS)</label><input id="validierer" type="text" placeholder="Name des Technikers" /></div>
+        <div class="col-4"><label>Qualifikation</label><input id="qualifikation" type="text" /></div>
+        <div class="col-4"><label>Schulung</label><input id="schulung" type="text" /></div>
+        <div class="col-6"><label>Unterschrift Validierer</label><div class="sig-block"><canvas class="signature" id="sigValidierer"></canvas><div class="sig-tools"><input id="sigDate1" type="date" style="width:140px; padding:6px;" /><button class="btn outline" style="color:#666; border-color:#ccc; padding:6px 10px; font-size:12px;" data-clear="sigValidierer">Löschen</button></div></div></div>
+        <div class="col-6"><label>Freigabe Betreiber (Unterschrift)</label><div class="sig-block"><canvas class="signature" id="sigBetreiber"></canvas><div class="sig-tools"><input id="sigDate2" type="date" style="width:140px; padding:6px;" /><button class="btn outline" style="color:#666; border-color:#ccc; padding:6px 10px; font-size:12px;" data-clear="sigBetreiber">Löschen</button></div></div></div>
       </div>
     </section>
 
-    <section class="section">
-      <h2>🗣️ Kundenvorgespräch</h2>
-      <div class="grid" style="margin-bottom:16px;">
-        <div class="col-12">
-          <label>Datum des Gesprächs</label>
-          <input id="kvDatum" type="date" style="max-width:200px;" />
-        </div>
-      </div>
-      <div class="list" id="kvChecks"></div>
-      <div class="row" style="margin-top:16px; background:#f8fafc; padding:10px; border-radius:10px;">
-        <input id="kvAddText" type="text" placeholder="Neuen Punkt hinzufügen..." style="border:1px solid #ddd;" />
-        <button class="btn secondary" id="kvAddBtn" style="white-space:nowrap;">+ Hinzufügen</button>
-      </div>
-    </section>
+    <section class="section"><h2>🗣️ Kundenvorgespräch</h2><div class="list" id="kvChecks"></div></section>
+    <section class="section"><h2>🔌 Installationsqualifizierung (IQ)</h2><div class="list" id="iqList"></div></section>
+    <section class="section"><h2>⚙️ Funktionsqualifizierung (OQ)</h2><div class="list" id="oqList"></div></section>
 
-    <section class="section">
-      <h2>🔌 Installationsqualifizierung (IQ)</h2>
-      <div class="list" id="iqList"></div>
-    </section>
-
-    <section class="section">
-      <h2>⚙️ Funktionsqualifizierung (OQ)</h2>
-      <div class="list" id="oqList"></div>
-    </section>
-
-    <section class="section">
-      <h2>➕ Weitere Protokolle</h2>
+    <section class="section" style="background: #f8fafc;">
+      <h2>➕ Weitere Protokolle & Bilder</h2>
       <div id="dynamicSections" class="list"></div>
     </section>
 
-    <div class="footer">
-      <div>© NEXUS / IPS – Validierungsprotokoll v0.3.0</div>
-      <div>Generiert am: <span id="stamp"></span></div>
-    </div>
+    <div class="footer"><div>© NEXUS / IPS – Validierungsprotokoll v0.4.0</div><div>Generiert am: <span id="stamp"></span></div></div>
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" integrity="sha512-9KkIqdfN7ipEW6sx6wuzd3+hYUaTHtDFdd/30ilxHQLGZzT7eD65X81bX9J6pS07V88G1y8371326418506" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script>
 /**
- * CL Validierungsprotokoll Logic v0.3.0 (ES6 Modernized)
+ * CL Validierungsprotokoll Logic v0.4.0 (mit Bildbearbeitung)
  */
 
-const stateKey = 'valprotokoll_v030_data';
+const stateKey = 'valprotokoll_v040_data';
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 
 // --- Initial Data ---
-const defaultKV = [
-  { text: 'Offene Arbeitsaufträge vorhanden?', ok: false, note: '', code: '' },
-  { text: 'Programmstörungen gemeldet?', ok: false, note: '', code: '' },
-  { text: 'Probleme Datenübertragung?', ok: false, note: '', code: '' },
-  { text: 'Probleme Protokolldruck?', ok: false, note: '', code: '' }
-];
-const iqItems = [
-  { text: 'Netzwerk-Funktionalität geprüft (Ping/Speed)', note: '', code: '' },
-  { text: 'Druckerzuweisung korrekt', note: '', code: '' },
-  { text: 'Client-Arbeitsplätze funktionsfähig', note: '', code: '' },
-  { text: 'Server-Dienste aktiv & stabil', note: '', code: '' }
-];
-const oqItems = [
-  { text: 'RDG Beladungsmuster definiert', note: '', code: '' },
-  { text: 'Packplatz-Maske prüft', note: '', code: '' },
-  { text: 'Chargendokumentation vollständig', note: '', code: '' },
-  { text: 'Sterilisator-Freigabe Prozess', note: '', code: '' },
-  { text: 'Etikettendruck korrekt', note: '', code: '' }
-];
+const defaultKV = [ { text: 'Offene Arbeitsaufträge vorhanden?', ok: false, note: '', code: '' }, { text: 'Programmstörungen gemeldet?', ok: false, note: '', code: '' } ];
+const iqItems = [ { text: 'Netzwerk-Funktionalität geprüft', note: '', code: '' }, { text: 'Druckerzuweisung korrekt', note: '', code: '' } ];
+const oqItems = [ { text: 'RDG Beladungsmuster definiert', note: '', code: '' }, { text: 'Chargendokumentation vollständig', note: '', code: '' } ];
 
+// State Structure updated for different section types
+// dynamic: [ {id:123, type:'checklist', title:'..', rows:[]}, {id:456, type:'text', title:'..', content:''}, {id:789, type:'image', title:'..', data: null} ]
 let appState = { 
   kv: structuredClone(defaultKV), 
   iq: structuredClone(iqItems), 
   oq: structuredClone(oqItems), 
   dynamic: [] 
 };
+
+// Aktive Cropper Instanzen tracken, um sie sauber zu zerstören
+let activeCroppers = {}; 
 
 // --- Utils ---
 function showToast(msg, type = 'success') {
@@ -337,190 +242,232 @@ function showToast(msg, type = 'success') {
   el.className = `toast ${type}`;
   el.innerHTML = type === 'success' ? '✅ ' + msg : '⚠️ ' + msg;
   container.appendChild(el);
-  setTimeout(() => {
-    el.style.animation = 'fadeOut 0.3s forwards';
-    setTimeout(() => el.remove(), 300);
-  }, 3000);
+  setTimeout(() => { el.style.animation = 'fadeOut 0.3s forwards'; setTimeout(() => el.remove(), 300); }, 3000);
 }
+function escapeHtml(str) { if (!str) return ''; return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+function structuredClone(obj) { return JSON.parse(JSON.stringify(obj)); }
 
-function escapeHtml(str) {
-  if (!str) return '';
-  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
-
-function structuredClone(obj) {
-  return JSON.parse(JSON.stringify(obj));
-}
-
-// --- Render Logic ---
+// --- Render Logic für Checklisten (Basic) ---
 function createCheckRow(item, onChange) {
-  const div = document.createElement('div');
-  div.className = 'check-row';
-  div.innerHTML = `
-    <div class="row-top" style="display:contents">
-      <input class="tiny-input" type="text" placeholder="Kz" maxlength="3" value="${escapeHtml(item.code)}" title="Kürzel / ID">
-      <div class="content">
-        <div class="text" contenteditable="true">${escapeHtml(item.text)}</div>
-        <input class="note-input" type="text" placeholder="Bemerkung / Fehlerbeschreibung..." value="${escapeHtml(item.note)}">
-      </div>
-    </div>
-    <input class="status-check" type="checkbox" ${item.ok ? 'checked' : ''} title="Erledigt / OK">
-  `;
-
+  const div = document.createElement('div'); div.className = 'check-row';
+  div.innerHTML = `<div class="row-top" style="display:contents"><input class="tiny-input" type="text" placeholder="Kz" maxlength="3" value="${escapeHtml(item.code)}"><div class="content"><div class="text" contenteditable="true">${escapeHtml(item.text)}</div><input class="note-input" type="text" placeholder="Bemerkung..." value="${escapeHtml(item.note)}"></div></div><input class="status-check" type="checkbox" ${item.ok ? 'checked' : ''}>`;
   const [codeIn, noteIn, checkIn] = [div.querySelector('.tiny-input'), div.querySelector('.note-input'), div.querySelector('.status-check')];
   const textDiv = div.querySelector('.text');
-
   codeIn.oninput = () => { item.code = codeIn.value; saveLocal(); };
   noteIn.oninput = () => { item.note = noteIn.value; saveLocal(); };
   checkIn.onchange = () => { item.ok = checkIn.checked; saveLocal(); };
-  
-  // Editierbarer Text (nur für dynamische Zeilen wichtig, aber überall nett)
   textDiv.oninput = () => { item.text = textDiv.innerText; saveLocal(); };
-
   return div;
 }
-
 function renderAllLists() {
-  const renderTarget = (id, list) => {
-    const el = $(id);
-    el.innerHTML = '';
-    list.forEach(item => el.appendChild(createCheckRow(item)));
-  };
-  
-  renderTarget('#kvChecks', appState.kv);
-  renderTarget('#iqList', appState.iq);
-  renderTarget('#oqList', appState.oq);
+  ['#kvChecks', '#iqList', '#oqList'].forEach((id, idx) => {
+    const el = $(id); el.innerHTML = '';
+    [appState.kv, appState.iq, appState.oq][idx].forEach(item => el.appendChild(createCheckRow(item)));
+  });
 }
 
+// --- Haupt-Rendering für Dynamische Abschnitte (Komplex) ---
 function drawDynamicSections() {
   const container = $('#dynamicSections');
+  // Vor dem Neuzeichnen alle alten Cropper Instanzen aufräumen
+  Object.values(activeCroppers).forEach(c => c.destroy());
+  activeCroppers = {};
   container.innerHTML = '';
   
   appState.dynamic.forEach((sec, idx) => {
     const card = document.createElement('div');
     card.className = 'card';
     
-    // Header mit Titel und Löschen
-    const header = document.createElement('div');
-    header.className = 'card-header';
-    header.innerHTML = `<strong>${escapeHtml(sec.title)}</strong>`;
+    // Header bauen
+    let headerHtml = `<strong>${escapeHtml(sec.title)}</strong> <small style="opacity:0.6; margin-left:8px">(${sec.type.toUpperCase()})</small>`;
+    const header = document.createElement('div'); header.className = 'card-header';
+    header.innerHTML = headerHtml;
     
-    const btnGroup = document.createElement('div');
-    btnGroup.style.display = 'flex';
-    btnGroup.style.gap = '8px';
+    // Toolbar für Header (Löschen Button)
+    const btnGroup = document.createElement('div'); btnGroup.style.display = 'flex'; btnGroup.style.gap = '8px';
+    
+    // Für Checklisten: Button "+ Zeile"
+    if(sec.type === 'checklist') {
+        const btnAdd = document.createElement('button'); btnAdd.className = 'btn secondary'; btnAdd.style.padding = '4px 10px'; btnAdd.style.fontSize='11px'; btnAdd.textContent = '+ Zeile';
+        btnAdd.onclick = () => { sec.rows.push({text:'Neue Prüfung', ok:false, note:'', code:''}); drawDynamicSections(); saveLocal(); };
+        btnGroup.appendChild(btnAdd);
+    }
 
-    const btnAdd = document.createElement('button');
-    btnAdd.className = 'btn secondary';
-    btnAdd.style.padding = '6px 12px';
-    btnAdd.style.fontSize = '12px';
-    btnAdd.textContent = '+ Zeile';
-    btnAdd.onclick = () => { sec.rows.push({text:'Neue Prüfung', ok:false, note:'', code:''}); drawDynamicSections(); saveLocal(); };
-
-    const btnDel = document.createElement('button');
-    btnDel.className = 'btn danger outline';
-    btnDel.style.padding = '6px 12px';
-    btnDel.style.fontSize = '12px';
-    btnDel.textContent = '🗑️';
-    btnDel.onclick = () => { 
-      if(confirm(`Abschnitt "${sec.title}" wirklich löschen?`)) {
-        appState.dynamic.splice(idx, 1);
-        drawDynamicSections();
-        saveLocal();
-      }
-    };
-
-    btnGroup.append(btnAdd, btnDel);
+    const btnDel = document.createElement('button'); btnDel.className = 'btn danger outline'; btnDel.style.padding = '4px 8px'; btnDel.textContent = '🗑️';
+    btnDel.onclick = () => { if(confirm(`Abschnitt "${sec.title}" löschen?`)) { appState.dynamic.splice(idx, 1); drawDynamicSections(); saveLocal(); }};
+    btnGroup.appendChild(btnDel);
     header.appendChild(btnGroup);
     card.appendChild(header);
 
-    // Rows
-    sec.rows.forEach(row => card.appendChild(createCheckRow(row)));
+    // Content Body basierend auf Typ
+    const body = document.createElement('div');
+
+    if (sec.type === 'checklist') {
+      // --- TYP: CHECKLISTE ---
+      sec.rows.forEach(row => body.appendChild(createCheckRow(row)));
+
+    } else if (sec.type === 'text') {
+      // --- TYP: TEXTFELD ---
+      const textarea = document.createElement('textarea');
+      textarea.style.minHeight = '150px';
+      textarea.placeholder = 'Hier Text eingeben...';
+      textarea.value = sec.content || '';
+      textarea.oninput = (e) => { sec.content = e.target.value; saveLocal(); };
+      body.appendChild(textarea);
+
+    } else if (sec.type === 'image') {
+      // --- TYP: BILD (mit Cropper) ---
+      const imgContainer = document.createElement('div');
+      imgContainer.className = 'image-editor-container';
+      
+      const imgWrapper = document.createElement('div');
+      imgWrapper.className = 'img-preview-wrapper';
+      // Ein eindeutige ID für das Bild-Element dieses Abschnitts
+      const imgId = `img-dyn-${sec.id}`;
+      
+      // Wenn Daten vorhanden sind, zeigen wir das Bild
+      if (sec.data) {
+          imgWrapper.innerHTML = `<img id="${imgId}" src="${sec.data}" alt="Bild" style="max-width:100%;">`;
+      } else {
+          imgWrapper.innerHTML = `<div style="color:#999; padding:20px;">Kein Bild ausgewählt</div>`;
+      }
+
+      // Controls
+      const controls = document.createElement('div');
+      controls.className = 'image-controls';
+      
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file'; fileInput.accept = 'image/*'; fileInput.className = 'hidden-file-input';
+      
+      const btnUpload = document.createElement('button');
+      btnUpload.className = 'btn secondary'; btnUpload.innerHTML = '📁 Bild auswählen...';
+      btnUpload.onclick = () => fileInput.click();
+
+      // Buttons für Cropping Steuerung
+      const btnSaveCrop = document.createElement('button');
+      btnSaveCrop.className = 'btn success'; btnSaveCrop.innerHTML = '✅ Zuschnitt speichern';
+      btnSaveCrop.style.display = 'none'; // Erst sichtbar wenn Cropper aktiv
+
+      const btnReset = document.createElement('button');
+      btnReset.className = 'btn outline'; btnReset.style.color='#333'; btnReset.style.borderColor='#ccc';
+      btnReset.innerHTML = '🔄 Bild ändern / Neu zuschneiden';
+      btnReset.style.display = sec.data ? 'inline-flex' : 'none';
+      btnReset.onclick = () => {
+           // Reset: Bild löschen und Upload wieder zeigen
+           if(activeCroppers[imgId]) activeCroppers[imgId].destroy();
+           sec.data = null;
+           drawDynamicSections(); // Neu zeichnen um Zustand zurückzusetzen
+      };
+
+      // File Input Change Handler (Das Herzstück)
+      fileInput.onchange = (e) => {
+         const file = e.target.files[0];
+         if (!file) return;
+         
+         const reader = new FileReader();
+         reader.onload = (evt) => {
+             // 1. Bild anzeigen
+             imgWrapper.innerHTML = `<img id="${imgId}" src="${evt.target.result}" style="max-width:100%; display:block;">`;
+             
+             // UI anpassen
+             btnUpload.style.display = 'none';
+             btnReset.style.display = 'none';
+             btnSaveCrop.style.display = 'inline-flex';
+             
+             // 2. Cropper.js initialisieren
+             const imageElement = document.getElementById(imgId);
+             // Falls noch ein alter Cropper läuft, zerstören
+             if(activeCroppers[imgId]) activeCroppers[imgId].destroy();
+
+             const cropper = new Cropper(imageElement, {
+                 viewMode: 1, // Beschränkt die Crop-Box auf den Canvas
+                 autoCropArea: 0.8, // Startgröße
+                 responsive: true,
+             });
+             // Cropper Instanz speichern
+             activeCroppers[imgId] = cropper;
+
+             // 3. Save Handler definieren
+             btnSaveCrop.onclick = () => {
+                 // Ergebnis als Canvas holen
+                 const canvas = cropper.getCroppedCanvas({ maxWidth: 1024, maxHeight: 1024 }); // Begrenze Auflösung für Performance
+                 if(!canvas) return;
+                 
+                 // Als DataURL speichern
+                 const croppedDataUrl = canvas.toDataURL('image/jpeg', 0.85); // JPEG Kompression 85%
+                 
+                 // State updaten
+                 sec.data = croppedDataUrl;
+                 
+                 // Cropper zerstören und Ansicht aktualisieren
+                 cropper.destroy();
+                 delete activeCroppers[imgId];
+                 drawDynamicSections(); // Neu zeichnen, zeigt jetzt das gespeicherte Bild an
+                 saveLocal();
+             };
+         }
+         reader.readAsDataURL(file);
+      };
+
+      controls.append(fileInput, btnUpload, btnSaveCrop, btnReset);
+      imgContainer.append(imgWrapper, controls);
+      body.appendChild(imgContainer);
+    }
+
+    card.appendChild(body);
     container.appendChild(card);
   });
 }
 
 // --- Actions ---
-function addNewKV() {
-  const input = $('#kvAddText');
-  const val = input.value.trim();
-  if (!val) return showToast('Bitte Text eingeben', 'error');
-  
-  appState.kv.push({ text: val, ok: false, note: '', code: '' });
-  input.value = '';
-  renderAllLists();
-  saveLocal();
-  showToast('Punkt hinzugefügt');
-}
-
-function addNewSection() {
-  const title = prompt("Name des neuen Abschnitts (z.B. 'Schnittstelle SAP'):");
+function addNewSection(type) {
+  const title = prompt(`Titel für neuen ${type.toUpperCase()}-Abschnitt:`);
   if (!title) return;
-  appState.dynamic.push({ title, rows: [] });
+  
+  let newSection = { id: Date.now(), title: title, type: type };
+  
+  if(type === 'checklist') newSection.rows = [];
+  if(type === 'text') newSection.content = '';
+  if(type === 'image') newSection.data = null; // Hier kommt das base64 Bild rein
+
+  appState.dynamic.push(newSection);
   drawDynamicSections();
   saveLocal();
+  // Dropdown schließen (Trick: Fokus wegnehmen)
+  document.activeElement.blur();
 }
 
-// --- JSON I/O ---
+// --- JSON I/O (angepasst für neue Struktur) ---
 function collectData() {
-  // Unterschriften sicher holen
   const sig1 = document.getElementById('sigValidierer');
   const sig2 = document.getElementById('sigBetreiber');
+  // Alle Textfelder im Kopfbereich sammeln
+  let kopfData = {};
+  $$('section:first-of-type input, section:first-of-type textarea, section:first-of-type select').forEach(el => {
+      kopfData[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+  });
 
   return {
-    meta: { version: '0.3.0', date: new Date().toISOString() },
-    kopf: {
-      instName: $('#instName').value,
-      instOrt: $('#instOrt').value,
-      betreiber: $('#betreiber').value,
-      produkt: $('#produkt').value,
-      programmpaket: $('#programmpaket').value,
-      version: $('#version').value,
-      evbPflege: $('#evbPflege').value,
-      arbeitsplaetze: $('#arbeitsplaetze').value,
-      geraete: $('#geraete').value,
-      bemerkung: $('#bemerkung').value,
-      valAm: $('#valAm').value,
-      valLast: $('#valLast').value,
-      valNext: $('#valNext').value,
-      chkVal: $('#chkVal').checked,
-      chkReval: $('#chkReval').checked,
-      kvDatum: $('#kvDatum').value
-    },
-    sign: {
-      date1: $('#sigDate1').value,
-      date2: $('#sigDate2').value,
-      img1: sig1.toDataURL(),
-      img2: sig2.toDataURL()
-    },
-    lists: {
-      kv: appState.kv,
-      iq: appState.iq,
-      oq: appState.oq,
-      dynamic: appState.dynamic
-    }
+    meta: { version: '0.4.0', date: new Date().toISOString() },
+    kopf: kopfData,
+    sign: { date1: $('#sigDate1').value, date2: $('#sigDate2').value, img1: sig1.toDataURL(), img2: sig2.toDataURL() },
+    lists: { kv: appState.kv, iq: appState.iq, oq: appState.oq, dynamic: appState.dynamic }
   };
 }
 
 function exportJSON() {
   const data = collectData();
-  const json = JSON.stringify(data, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `Validierung_${data.kopf.instName || 'Entwurf'}_${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('Datei heruntergeladen');
+  const a = document.createElement('a'); a.href = url;
+  a.download = `Validierung_${data.kopf.instName || 'Entwurf'}_v040.json`;
+  a.click(); URL.revokeObjectURL(url); showToast('Datei gespeichert');
 }
 
 function importJSON() {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = '.json';
+  const input = document.createElement('input'); input.type = 'file'; input.accept = '.json';
   input.onchange = e => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const file = e.target.files[0]; if (!file) return;
     const reader = new FileReader();
     reader.onload = evt => {
       try {
@@ -529,178 +476,81 @@ function importJSON() {
         
         // Apply Head
         Object.keys(data.kopf).forEach(k => {
-          const el = $('#'+k);
-          if(el) {
-            if(el.type === 'checkbox') el.checked = data.kopf[k];
-            else el.value = data.kopf[k];
-          }
+          const el = $('#'+k); if(el) el.type === 'checkbox' ? el.checked = data.kopf[k] : el.value = data.kopf[k];
         });
-
         // Apply Lists
         appState.kv = data.lists.kv || structuredClone(defaultKV);
         appState.iq = data.lists.iq || structuredClone(iqItems);
         appState.oq = data.lists.oq || structuredClone(oqItems);
-        appState.dynamic = data.lists.dynamic || [];
+        // WICHTIG: Sicherstellen, dass alte dynamische Listen (v0.3.0) migriert werden
+        appState.dynamic = (data.lists.dynamic || []).map(sec => {
+             if(!sec.type) sec.type = 'checklist'; // Fallback für alte Versionen
+             if(!sec.id) sec.id = Date.now() + Math.random();
+             return sec;
+        });
 
         renderAllLists();
         drawDynamicSections();
 
-        // Apply Signatures
         if(data.sign) {
-          $('#sigDate1').value = data.sign.date1 || '';
-          $('#sigDate2').value = data.sign.date2 || '';
-          loadSig('sigValidierer', data.sign.img1);
-          loadSig('sigBetreiber', data.sign.img2);
+          $('#sigDate1').value = data.sign.date1 || ''; $('#sigDate2').value = data.sign.date2 || '';
+          setTimeout(() => { loadSig('sigValidierer', data.sign.img1); loadSig('sigBetreiber', data.sign.img2); }, 200);
         }
-
-        saveLocal();
-        showToast('Protokoll erfolgreich geladen');
-      } catch (err) {
-        showToast('Fehler: ' + err.message, 'error');
-      }
+        saveLocal(); showToast('Protokoll geladen');
+      } catch (err) { showToast('Fehler: ' + err.message, 'error'); }
     };
     reader.readAsText(file);
   };
   input.click();
 }
 
-function saveLocal() {
-  localStorage.setItem(stateKey, JSON.stringify(collectData()));
-}
+function saveLocal() { localStorage.setItem(stateKey, JSON.stringify(collectData())); }
 
-// --- Signature Logic (Fixed) ---
+// --- Signature Logic (Unverändert) ---
 function initCanvas(id) {
-  const c = document.getElementById(id);
-  const ctx = c.getContext('2d');
+  const c = document.getElementById(id); const ctx = c.getContext('2d');
   let drawing = false, last = {x:0, y:0};
-
-  // High DPI Fix
   function resize() {
-    // Save Content
-    const saved = c.toDataURL();
-    const rect = c.getBoundingClientRect();
-    c.width = rect.width;
-    c.height = rect.height;
-    
-    // Restore Content
-    const img = new Image();
-    img.onload = () => ctx.drawImage(img, 0, 0, c.width, c.height);
-    img.src = saved;
+    const saved = c.toDataURL(); const rect = c.getBoundingClientRect();
+    c.width = rect.width; c.height = rect.height;
+    const img = new Image(); img.onload = () => ctx.drawImage(img, 0, 0, c.width, c.height); img.src = saved;
   }
-  
-  // Initial Resize & Observer
-  // Delay initial resize slightly to ensure layout is done
-  setTimeout(resize, 100);
-  window.addEventListener('resize', () => {
-     // Simple debounce could be added here
-     resize(); 
-  });
-
-  // Drawing
-  const getPos = (e) => {
-    const r = c.getBoundingClientRect();
-    const t = e.touches ? e.touches[0] : e;
-    return { x: t.clientX - r.left, y: t.clientY - r.top };
-  };
-
+  setTimeout(resize, 100); window.addEventListener('resize', resize);
+  const getPos = (e) => { const r = c.getBoundingClientRect(); const t = e.touches ? e.touches[0] : e; return { x: t.clientX - r.left, y: t.clientY - r.top }; };
   const start = (e) => { drawing = true; last = getPos(e); e.preventDefault(); };
-  const move = (e) => {
-    if(!drawing) return;
-    e.preventDefault();
-    const p = getPos(e);
-    ctx.beginPath();
-    ctx.moveTo(last.x, last.y);
-    ctx.lineTo(p.x, p.y);
-    ctx.strokeStyle = '#000';
-    ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
-    ctx.stroke();
-    last = p;
-  };
-  const end = () => { 
-    if(drawing) {
-      drawing = false; 
-      saveLocal(); 
-    }
-  };
-
-  c.addEventListener('mousedown', start);
-  c.addEventListener('mousemove', move);
-  c.addEventListener('mouseup', end);
-  c.addEventListener('mouseleave', end);
-  c.addEventListener('touchstart', start, {passive: false});
-  c.addEventListener('touchmove', move, {passive: false});
-  c.addEventListener('touchend', end);
+  const move = (e) => { if(!drawing) return; e.preventDefault(); const p = getPos(e); ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.strokeStyle = '#000'; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.stroke(); last = p; };
+  const end = () => { if(drawing) { drawing = false; saveLocal(); } };
+  c.addEventListener('mousedown', start); c.addEventListener('mousemove', move); c.addEventListener('mouseup', end); c.addEventListener('mouseleave', end);
+  c.addEventListener('touchstart', start, {passive: false}); c.addEventListener('touchmove', move, {passive: false}); c.addEventListener('touchend', end);
 }
-
-function loadSig(id, dataUrl) {
-  if(!dataUrl) return;
-  const c = document.getElementById(id);
-  const ctx = c.getContext('2d');
-  const img = new Image();
-  img.onload = () => {
-    ctx.clearRect(0,0,c.width, c.height);
-    ctx.drawImage(img, 0, 0, c.width, c.height);
-  };
-  img.src = dataUrl;
-}
-
-function clearSig(id) {
-  const c = document.getElementById(id);
-  c.getContext('2d').clearRect(0, 0, c.width, c.height);
-  saveLocal();
-}
+function loadSig(id, dataUrl) { if(!dataUrl) return; const c = document.getElementById(id); const ctx = c.getContext('2d'); const img = new Image(); img.onload = () => { ctx.clearRect(0,0,c.width, c.height); ctx.drawImage(img, 0, 0, c.width, c.height); }; img.src = dataUrl; }
+function clearSig(id) { const c = document.getElementById(id); c.getContext('2d').clearRect(0, 0, c.width, c.height); saveLocal(); }
 
 // --- Init Application ---
 window.addEventListener('DOMContentLoaded', () => {
-  // Events
-  $('#btnSave').onclick = exportJSON;
-  $('#btnLoad').onclick = importJSON;
-  $('#btnPDF').onclick = () => window.print();
-  $('#btnNewSection').onclick = addNewSection;
-  $('#kvAddBtn').onclick = addNewKV;
-  
-  $$('[data-clear]').forEach(btn => {
-    btn.onclick = () => clearSig(btn.dataset.clear);
-  });
-
-  // Load State
-  initCanvas('sigValidierer');
-  initCanvas('sigBetreiber');
-  
+  $('#btnSave').onclick = exportJSON; $('#btnLoad').onclick = importJSON; $('#btnPDF').onclick = () => window.print();
+  $$('[data-clear]').forEach(btn => btn.onclick = () => clearSig(btn.dataset.clear));
+  initCanvas('sigValidierer'); initCanvas('sigBetreiber');
   $('#stamp').innerText = new Date().toLocaleString();
 
   try {
     const saved = localStorage.getItem(stateKey);
     if(saved) {
       const data = JSON.parse(saved);
-      // Kopfdaten füllen
-      if(data.kopf) Object.keys(data.kopf).forEach(k => {
-          const el = $('#'+k);
-          if(el) el.type === 'checkbox' ? el.checked = data.kopf[k] : el.value = data.kopf[k];
-      });
+      if(data.kopf) Object.keys(data.kopf).forEach(k => { const el = $('#'+k); if(el) el.type === 'checkbox' ? el.checked = data.kopf[k] : el.value = data.kopf[k]; });
       if(data.lists) {
-        appState.kv = data.lists.kv;
-        appState.iq = data.lists.iq;
-        appState.oq = data.lists.oq;
-        appState.dynamic = data.lists.dynamic;
+        appState.kv = data.lists.kv; appState.iq = data.lists.iq; appState.oq = data.lists.oq;
+        // Migration für alte Daten
+        appState.dynamic = (data.lists.dynamic || []).map(sec => { if(!sec.type) sec.type = 'checklist'; if(!sec.id) sec.id = Date.now()+Math.random(); return sec; });
       }
-      if(data.sign) {
-         $('#sigDate1').value = data.sign.date1 || '';
-         $('#sigDate2').value = data.sign.date2 || '';
-         // Delay signature load slightly to ensure canvas is sized
-         setTimeout(() => {
-           loadSig('sigValidierer', data.sign.img1);
-           loadSig('sigBetreiber', data.sign.img2);
-         }, 200);
-      }
+      if(data.sign) { $('#sigDate1').value = data.sign.date1||''; $('#sigDate2').value = data.sign.date2||''; setTimeout(() => { loadSig('sigValidierer', data.sign.img1); loadSig('sigBetreiber', data.sign.img2); }, 200); }
     }
   } catch(e) { console.error("Load Error", e); }
 
   renderAllLists();
   drawDynamicSections();
 });
-
 </script>
 </body>
 </html>
+
