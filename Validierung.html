@@ -3,163 +3,124 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>CL Validierungsprotokoll – Web App (v0.5.1)</title>
+  <title>CL Validierungsprotokoll – Web App (v0.6.0)</title>
   
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" integrity="sha512-hvNR0F/e2A7zDPbgYuE2wh2T4fg11T4GvuC5e1i5F4C1bX2K18v16D3F4H7411362302434204" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
 
   <style>
     /* --- Basis CSS --- */
     :root{ --primary: #8B1538; --bg: #F8F9FB; --text: #1E2434; --card: #ffffff; --muted: #e9edf3; --ok: #10b981; --warn: #f59e0b; --err: #ef4444; --radius: 12px; }
     *, *::before, *::after { box-sizing: border-box; }
     html, body { height: 100%; }
-    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); }
     
-    .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 20px; padding-bottom: 80px; }
+    .app { background: var(--card); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: visible; position: relative; }
     
-    /* App Container */
-    .app { 
-      background: var(--card); 
-      border-radius: 16px; 
-      box-shadow: 0 10px 40px rgba(0,0,0,0.08); 
-      overflow: visible; /* Wichtig für Sticky Header + Menü */
-      position: relative; 
-    }
-    
-    /* --- STICKY HEADER --- */
-    header { 
-      background: var(--primary); 
-      color: #fff; 
-      padding: 15px 24px; 
-      display: flex; 
-      align-items: center; 
-      justify-content: space-between; 
-      /* Hier passiert die Magie: */
-      position: sticky; 
-      top: 0; 
-      z-index: 800; /* Muss über dem Inhalt liegen */
-      border-radius: 16px 16px 0 0; 
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* Schatten damit man die Trennung sieht */
-    }
-
-    header .title { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+    /* Header & Sticky */
+    header { background: var(--primary); color: #fff; padding: 15px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 800; border-radius: 16px 16px 0 0; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    header .title { font-size: 20px; font-weight: 700; }
     header .version { opacity: 0.8; font-size: 13px; margin-top: 4px; }
-    
-    /* Burger Button */
-    .burger-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 8px; transition: background 0.2s; }
-    .burger-btn:hover { background: rgba(255,255,255,0.1); }
+    .burger-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }
 
-    /* Das Dropdown Menü */
-    .mobile-menu { 
-      display: none; 
-      position: absolute; 
-      top: 70px; /* Abstand von oben */
-      right: 20px; 
-      width: 260px; 
-      background: #fff; 
-      border-radius: 12px; 
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25); 
-      z-index: 1000; /* Muss höher als Header sein */
-      overflow: hidden; 
-      border: 1px solid #e2e8f0;
-      animation: menuFadeIn 0.2s ease-out;
-    }
-    .mobile-menu.show { display: block; }
+    /* Mobile Menu */
+    .mobile-menu { display: none; position: absolute; top: 70px; right: 20px; width: 280px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); z-index: 1000; overflow: hidden; border: 1px solid #e2e8f0; }
+    .mobile-menu.show { display: block; animation: menuFadeIn 0.2s ease-out; }
     @keyframes menuFadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
     .menu-group { border-bottom: 1px solid #eef2f7; padding: 8px 0; }
-    .menu-group:last-child { border-bottom: none; }
-    .menu-label { font-size: 11px; text-transform: uppercase; color: #94a3b8; padding: 8px 16px 4px 16px; font-weight: 700; letter-spacing: 0.5px; }
-    
-    .menu-item { 
-      display: flex; align-items: center; gap: 12px; 
-      width: 100%; padding: 12px 16px; 
-      background: none; border: none; 
-      text-align: left; font-size: 14px; font-weight: 500; color: var(--text); 
-      cursor: pointer; transition: background 0.1s; 
-    }
+    .menu-label { font-size: 11px; text-transform: uppercase; color: #94a3b8; padding: 8px 16px 4px; font-weight: 700; }
+    .menu-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 16px; background: none; border: none; text-align: left; font-size: 14px; font-weight: 500; color: var(--text); cursor: pointer; }
     .menu-item:hover { background: #f8fafc; color: var(--primary); }
-    .menu-item span { font-size: 18px; }
+    .menu-item span { font-size: 18px; width: 24px; text-align: center; }
 
-    /* Standard Elements */
+    /* Forms & Grid */
     .section { padding: 24px; border-top: 1px solid var(--muted); }
-    .section h2 { margin: 0 0 16px 0; font-size: 18px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+    .section h2 { margin: 0 0 16px 0; font-size: 18px; color: var(--primary); }
     .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
-    .col-4 { grid-column: span 4; } .col-6 { grid-column: span 6; } .col-8 { grid-column: span 8; } .col-12 { grid-column: span 12; }
-    
-    label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; color: #64748b; }
-    input[type="text"], input[type="date"], input[type="number"], textarea, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: var(--radius); background: #fff; font-size: 14px; outline: none; transition: border-color 0.2s; }
+    .col-4 { grid-column: span 4; } .col-6 { grid-column: span 6; } .col-12 { grid-column: span 12; }
+    label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; color: #64748b; margin-bottom: 6px; }
+    input, textarea, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: var(--radius); background: #fff; font-size: 14px; outline: none; }
     input:focus, textarea:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139, 21, 56, 0.1); }
-    textarea { min-height: 80px; resize: vertical; font-family: inherit; }
+    .row { display: flex; gap: 12px; align-items: center; }
+    .chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: #f1f5f9; font-size: 13px; cursor: pointer; }
     
-    .btn { appearance: none; border: 0; border-radius: 10px; padding: 10px 16px; font-weight: 600; font-size: 14px; background: #fff; color: var(--primary); cursor: pointer; display: inline-flex; align-items: center; gap:6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .btn.outline { background: transparent; border: 1px solid #ccc; color: #666; box-shadow: none; }
+    /* Buttons */
+    .btn { appearance: none; border: 0; border-radius: 8px; padding: 8px 14px; font-weight: 600; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap:6px; transition: transform 0.1s; }
+    .btn:active { transform: scale(0.96); }
+    .btn-primary { background: var(--primary); color: #fff; }
     .btn.secondary { background: #1e293b; color: #fff; }
+    .btn.outline { background: transparent; border: 1px solid #ccc; color: #475569; }
     .btn.danger { background: #fee2e2; color: var(--err); }
     .btn.success { background: var(--ok); color: white; }
-
-    .chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: #f1f5f9; color: #334155; font-size: 13px; cursor: pointer; user-select: none; }
-    .row { display: flex; gap: 12px; align-items: center; }
-
-    .check-row { display: flex; gap: 12px; align-items: flex-start; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--radius); background: #fff; transition: background 0.2s; }
-    .check-row:hover { background: #fafafa; }
+    
+    /* Standard Check Rows */
+    .list { display: flex; flex-direction: column; gap: 8px; }
+    .check-row { display: flex; gap: 10px; align-items: flex-start; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; }
     .check-row .tiny-input { width: 44px; flex-shrink: 0; text-align: center; font-weight: bold; border-color: #cbd5e1; padding: 8px; }
-    .check-row .content { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 4px; min-height: 40px; }
-    .check-row .text { font-size: 14px; line-height: 1.4; color: #334155; font-weight: 500; }
-    .check-row .note-input { width: 100%; font-size: 12px; border: 1px dashed #cbd5e1; padding: 6px 8px; background: #f8fafc; }
-    .check-row .status-check { width: 24px; height: 24px; margin-top: 8px; cursor: pointer; accent-color: var(--ok); }
+    .check-row .content { flex: 1; }
+    .check-row .text { font-size: 14px; font-weight: 500; min-height: 20px; outline: none; margin-bottom: 4px; }
+    .check-row .note-input { width: 100%; font-size: 12px; border: 1px dashed #cbd5e1; padding: 6px; background: #f8fafc; }
+    .check-row .status-check { width: 24px; height: 24px; margin-top: 4px; cursor: pointer; accent-color: var(--ok); }
+
+    /* --- NEU: GRUPPEN STYLING --- */
+    .group-wrapper { margin-bottom: 30px; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; background: #fff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    .group-header { background: #f1f5f9; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #cbd5e1; }
+    .group-title { font-weight: 700; color: var(--text); font-size: 16px; }
+    .group-title input { background: transparent; border: none; font-size: 16px; font-weight: 700; color: var(--text); width: 200px; padding: 4px; }
+    .group-title input:focus { background: #fff; border: 1px solid var(--primary); }
+    .group-body { padding: 16px; display: flex; flex-direction: column; gap: 16px; }
     
-    .card { background: #fff; border: 1px solid var(--muted); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #eee;}
+    .sub-section { border-left: 3px solid var(--muted); padding-left: 12px; margin-bottom: 12px; }
+    .sub-section h4 { margin: 0 0 8px 0; font-size: 13px; color: #64748b; text-transform: uppercase; display: flex; justify-content: space-between; }
     
-    .sig-block { background: #fff; border: 1px dashed #cbd5e1; border-radius: var(--radius); padding: 8px; position: relative; }
-    canvas.signature { width: 100%; height: 140px; border-radius: 8px; background: #fff; display: block; touch-action: none; cursor: crosshair; }
-    .sig-tools { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+    /* --- NEU: BILD GALERIE --- */
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 10px; }
+    .gallery-item { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; aspect-ratio: 1; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .gallery-del { position: absolute; top: 2px; right: 2px; background: rgba(255,255,255,0.9); border: none; border-radius: 4px; color: var(--err); cursor: pointer; padding: 2px 6px; font-weight: bold; font-size: 12px; }
+    
+    .cropper-ui { margin-top: 10px; padding: 10px; border: 1px dashed #ccc; border-radius: 8px; background: #fafafa; }
+    .img-preview-wrapper { max-height: 400px; overflow: hidden; background: #333; margin-bottom: 10px; }
+    .img-preview-wrapper img { max-width: 100%; display: block; }
+
+    /* Signatur */
+    .sig-block { border: 1px dashed #cbd5e1; border-radius: 8px; padding: 8px; }
+    canvas.signature { width: 100%; height: 130px; background: #fff; display: block; touch-action: none; }
 
     /* Toast */
-    #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-    .toast { background: #333; color: #fff; padding: 12px 20px; border-radius: 10px; font-size: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: slideIn 0.3s ease-out forwards; opacity: 0; transform: translateY(20px); pointer-events: auto; display: flex; align-items: center; gap: 10px; }
+    #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+    .toast { background: #333; color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); pointer-events: auto; }
     .toast.success { background: var(--ok); } .toast.error { background: var(--err); }
-    @keyframes slideIn { to { opacity: 1; transform: translateY(0); } } @keyframes fadeOut { to { opacity: 0; transform: translateY(10px); } }
 
-    /* Image Editor */
-    .image-editor-container { display: flex; flex-direction: column; gap: 12px; }
-    .img-preview-wrapper { width: 100%; max-height: 500px; background: #eee; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; display: flex; justify-content: center; align-items: center;}
-    .img-preview-wrapper img { display: block; max-width: 100%; } 
-    .hidden-file-input { display: none; }
-    .image-controls { display: flex; gap: 10px; flex-wrap: wrap; }
-    
-    /* Responsive & Print */
+    /* Responsive */
     @media (max-width: 768px) {
-      /* Auf Handy soll der Header am Rand keine Rundung haben, wenn er Sticky ist */
-      header { border-radius: 0; }
-      .container { padding: 0; } 
-      .app { border-radius: 0; box-shadow: none; }
-      
-      .grid { display: flex; flex-direction: column; gap: 16px; }
-      .col-4, .col-6, .col-8, .col-12 { width: 100%; }
-      .check-row { flex-direction: column; align-items: stretch; }
-      .check-row .row-top { display: flex; gap: 10px; align-items: flex-start; }
+      .grid { grid-template-columns: 1fr; }
+      .col-4, .col-6, .col-12 { grid-column: span 1; }
+      .check-row { flex-direction: column; }
       .check-row .status-check { align-self: flex-end; margin-top: -30px; }
     }
-    
+
+    /* PRINT LAYOUT */
     @media print {
-      body { background: #fff; font-size: 12px; } .container { padding: 0; max-width: none; } .app { box-shadow: none; border: none; }
-      /* Print: Sticky aus, Buttons weg */
-      header { position: relative !important; border-radius: 0; box-shadow: none; top: auto; }
-      header .burger-btn, .mobile-menu, .toast, .image-controls { display: none !important; }
-      .btn { display: none !important; }
-      
-      header { border-bottom: 2px solid var(--primary); padding: 10px 0; color: #000; background: #fff; }
+      body { background: #fff; font-size: 11pt; }
+      .container { padding: 0; max-width: none; }
+      .app { box-shadow: none; border: none; }
+      header { position: relative; border-radius: 0; box-shadow: none; padding: 10px 0; border-bottom: 2px solid var(--primary); background: #fff !important; color: #000 !important; }
       header .title { color: var(--primary); }
-      .section { padding: 10px 0; page-break-inside: avoid; border-top: 1px solid #ccc; }
-      input, textarea, select { border: 1px solid #ddd; background: #fff !important; padding: 6px; font-size: 11px; }
-      .check-row { border: none; border-bottom: 1px solid #eee; padding: 4px 0; page-break-inside: avoid; }
-      .check-row .note-input { border: none; font-style: italic; }
-      .sig-block { border: 1px solid #000; }
-      .card { border: none; box-shadow: none; padding: 0; margin-bottom: 20px;}
-      .card-header { border-bottom: 1px solid #000; margin-bottom: 10px; padding-bottom: 5px;}
-      .cropper-container { display: none !important; }
-      .img-preview-wrapper img[src*="data:"] { display: block !important; max-height: 300px; object-fit: contain;}
+      .burger-btn, .mobile-menu, .toast, .btn, .cropper-ui, .gallery-del { display: none !important; }
+      
+      /* Input Styling Print */
+      input, textarea, select { border: none; border-bottom: 1px dotted #ccc; background: transparent !important; padding: 4px 0; font-size: 11pt; width: auto; min-width: 50px; display: inline-block; }
+      textarea { width: 100%; border: 1px solid #eee; }
+      
+      /* Groups Print */
+      .group-wrapper { break-inside: avoid; border: 2px solid #000; margin-bottom: 20px; box-shadow: none; }
+      .group-header { background: #eee !important; border-bottom: 1px solid #000; color: #000; -webkit-print-color-adjust: exact; }
+      
+      /* Images Grid Print */
+      .gallery-grid { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 10px !important; }
+      .gallery-item { border: 1px solid #000; aspect-ratio: 4/3; }
+      
       .page-break { page-break-before: always; }
       .footer { position: fixed; bottom: 0; left: 0; right: 0; font-size: 9px; color: #666; border-top: 1px solid #ccc; padding: 5px; display: flex; justify-content: space-between; }
     }
@@ -171,279 +132,348 @@
 <div id="toast-container"></div>
 
 <div class="container">
-  <div class="app" id="app">
+  <div class="app">
     <header>
       <div>
-        <div class="title">CL Validierungsprotokoll</div>
-        <div class="version">Web App v0.5.1 • Sticky Header</div>
+        <div class="title">CL Validierung</div>
+        <div class="version">v0.6.0 • Gruppen & Galerie</div>
       </div>
-      
-      <button class="burger-btn" id="burgerToggle">☰</button>
+      <button class="burger-btn" onclick="toggleMenu()">☰</button>
       
       <div class="mobile-menu" id="mainMenu">
-        
+        <div class="menu-group">
+          <div class="menu-label">Verwaltung</div>
+          <button class="menu-item" onclick="addNewGroup()"><span>📁</span> Neue Gruppe erstellen</button>
+        </div>
         <div class="menu-group">
           <div class="menu-label">Datei</div>
-          <button class="menu-item" id="btnSave"><span>💾</span> Speichern (JSON)</button>
-          <button class="menu-item" id="btnLoad"><span>📂</span> Laden (JSON)</button>
+          <button class="menu-item" onclick="saveData()"><span>💾</span> Speichern</button>
+          <button class="menu-item" onclick="loadData()"><span>📂</span> Laden</button>
         </div>
-
-        <div class="menu-group">
-          <div class="menu-label">Hinzufügen</div>
-          <button class="menu-item" onclick="addNewSection('checklist')"><span>✅</span> Neue Checkliste</button>
-          <button class="menu-item" onclick="addNewSection('text')"><span>📝</span> Neues Textfeld</button>
-          <button class="menu-item" onclick="addNewSection('image')"><span>🖼️</span> Neues Bild</button>
-        </div>
-
         <div class="menu-group">
           <div class="menu-label">Export</div>
-          <button class="menu-item" id="btnPDF"><span>🖨️</span> PDF / Drucken</button>
+          <button class="menu-item" onclick="window.print()"><span>🖨️</span> PDF / Drucken</button>
         </div>
-        
       </div>
     </header>
 
     <section class="section">
-      <h2>📋 Deckblatt & Kopfdaten</h2>
+      <h2>📋 Kopfdaten</h2>
       <div class="grid">
-        <div class="col-6"><label>Name der Einrichtung</label><input id="instName" type="text" placeholder="z.B. Klinikum Musterstadt" /></div>
-        <div class="col-6"><label>Standort / Abteilung</label><input id="instOrt" type="text" placeholder="Ort der Installation" /></div>
-        <div class="col-6"><label>Verantwortlicher (Betreiber)</label><input id="betreiber" type="text" placeholder="Ansprechpartner" /></div>
-        <div class="col-6"><label>Produkt</label><input id="produkt" type="text" value="EuroSDS" /></div>
-        <div class="col-4"><label>Paket</label><input id="programmpaket" type="text" placeholder="z.B. Komplettpaket" /></div>
-        <div class="col-4"><label>Version</label><input id="version" type="text" placeholder="z.B. 6.4.x" /></div>
-        <div class="col-4"><label>Wartung / Pflege</label><select id="evbPflege"><option value="">Bitte wählen…</option><option>Ja (EVB IT-Pflege S)</option><option>Nein</option></select></div>
-        <div class="col-6"><label>Arbeitsplätze</label><input id="arbeitsplaetze" type="text" placeholder="Anzahl Clients, Packplätze..." /></div>
-        <div class="col-6"><label>Geräte-Anbindung</label><input id="geraete" type="text" placeholder="RDG, Steri, Scanner..." /></div>
-        <div class="col-12"><label>Bemerkung zur Installation</label><textarea id="bemerkung" placeholder="Besonderheiten, Abweichungen..."></textarea></div>
+        <div class="col-6"><label>Einrichtung</label><input id="instName" type="text" placeholder="Klinikum..." /></div>
+        <div class="col-6"><label>Standort</label><input id="instOrt" type="text" /></div>
+        <div class="col-6"><label>Betreiber</label><input id="betreiber" type="text" /></div>
+        <div class="col-6"><label>Produkt / Version</label><input id="produkt" type="text" value="EuroSDS 6.x" /></div>
+        <div class="col-12"><label>Bemerkung</label><textarea id="bemerkung"></textarea></div>
       </div>
-      <div class="grid" style="margin-top:20px; border-top:1px dashed #e2e8f0; padding-top:16px;">
-        <div class="col-4"><label>Durchgeführt am</label><input id="valAm" type="date" /></div>
-        <div class="col-4"><label>Letzte Validierung</label><input id="valLast" type="date" /></div>
-        <div class="col-4"><label>Nächste Validierung</label><input id="valNext" type="date" /></div>
-      </div>
-      <div class="row" style="margin-top:20px">
-        <label class="chip"><input type="checkbox" id="chkVal" /> Erst-Validierung</label>
-        <label class="chip"><input type="checkbox" id="chkReval" /> Re-Validierung</label>
+      <div class="grid" style="margin-top:15px">
+         <div class="col-6"><label>Datum</label><input id="valAm" type="date" /></div>
+         <div class="col-6"><div class="row" style="margin-top:20px"><label class="chip"><input type="checkbox" id="chkVal" /> Validierung</label> <label class="chip"><input type="checkbox" id="chkReval" /> Re-Validierung</label></div></div>
       </div>
     </section>
 
-    <section class="section">
-      <h2>✍️ Validierer & Freigabe</h2>
+    <section class="section"><h2>1. Kundenvorgespräch</h2><div class="list" id="kvChecks"></div></section>
+    <section class="section"><h2>2. IQ (Installation)</h2><div class="list" id="iqList"></div></section>
+    <section class="section"><h2>3. OQ (Funktion)</h2><div class="list" id="oqList"></div></section>
+
+    <section class="section" style="background: #f8fafc; min-height:300px;">
+      <h2>4. Weitere Protokolle (Gruppen)</h2>
+      <div id="dynamicContainer"></div>
+      <button class="btn secondary" style="margin-top:20px; width:100%; justify-content:center; padding:15px;" onclick="addNewGroup()">+ Neue Gruppe hinzufügen</button>
+    </section>
+
+    <section class="section page-break">
+      <h2>✍️ Abschluss & Freigabe</h2>
       <div class="grid">
-        <div class="col-4"><label>Validierer (NEXUS / IPS)</label><input id="validierer" type="text" placeholder="Name des Technikers" /></div>
-        <div class="col-4"><label>Qualifikation</label><input id="qualifikation" type="text" /></div>
-        <div class="col-4"><label>Schulung</label><input id="schulung" type="text" /></div>
-        <div class="col-6"><label>Unterschrift Validierer</label><div class="sig-block"><canvas class="signature" id="sigValidierer"></canvas><div class="sig-tools"><input id="sigDate1" type="date" style="width:140px; padding:6px;" /><button class="btn outline" style="color:#666; border-color:#ccc; padding:6px 10px; font-size:12px;" data-clear="sigValidierer">Löschen</button></div></div></div>
-        <div class="col-6"><label>Freigabe Betreiber (Unterschrift)</label><div class="sig-block"><canvas class="signature" id="sigBetreiber"></canvas><div class="sig-tools"><input id="sigDate2" type="date" style="width:140px; padding:6px;" /><button class="btn outline" style="color:#666; border-color:#ccc; padding:6px 10px; font-size:12px;" data-clear="sigBetreiber">Löschen</button></div></div></div>
+        <div class="col-6">
+          <label>Validierer</label>
+          <div class="sig-block"><canvas class="signature" id="sigValidierer"></canvas></div>
+          <div style="margin-top:5px; display:flex; justify-content:space-between"><input id="sigDate1" type="date" style="width:130px"/><button class="btn outline" onclick="clearSig('sigValidierer')">Löschen</button></div>
+        </div>
+        <div class="col-6">
+          <label>Betreiber</label>
+          <div class="sig-block"><canvas class="signature" id="sigBetreiber"></canvas></div>
+          <div style="margin-top:5px; display:flex; justify-content:space-between"><input id="sigDate2" type="date" style="width:130px"/><button class="btn outline" onclick="clearSig('sigBetreiber')">Löschen</button></div>
+        </div>
       </div>
     </section>
 
-    <section class="section"><h2>🗣️ Kundenvorgespräch</h2><div class="list" id="kvChecks"></div></section>
-    <section class="section"><h2>🔌 Installationsqualifizierung (IQ)</h2><div class="list" id="iqList"></div></section>
-    <section class="section"><h2>⚙️ Funktionsqualifizierung (OQ)</h2><div class="list" id="oqList"></div></section>
-
-    <section class="section" style="background: #f8fafc;">
-      <h2>➕ Weitere Protokolle & Bilder</h2>
-      <div id="dynamicSections" class="list"></div>
-    </section>
-
-    <div class="footer"><div>© NEXUS / IPS – Validierungsprotokoll v0.5.1</div><div>Generiert am: <span id="stamp"></span></div></div>
+    <div class="footer"><div>© NEXUS / IPS v0.6.0</div><div><span id="stamp"></span></div></div>
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" integrity="sha512-9KkIqdfN7ipEW6sx6wuzd3+hYUaTHtDFdd/30ilxHQLGZzT7eD65X81bX9J6pS07V88G1y8371326418506" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 <script>
-/**
- * CL Validierungsprotokoll Logic v0.5.1
+/** * v0.6.0 - Gruppen & Multi-Image Logic 
  */
-const stateKey = 'valprotokoll_v051_data';
-const $ = (sel) => document.querySelector(sel);
-const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const stateKey = 'val_v060_store';
 
-const defaultKV = [ { text: 'Offene Arbeitsaufträge vorhanden?', ok: false, note: '', code: '' }, { text: 'Programmstörungen gemeldet?', ok: false, note: '', code: '' } ];
-const iqItems = [ { text: 'Netzwerk-Funktionalität geprüft', note: '', code: '' }, { text: 'Druckerzuweisung korrekt', note: '', code: '' } ];
-const oqItems = [ { text: 'RDG Beladungsmuster definiert', note: '', code: '' }, { text: 'Chargendokumentation vollständig', note: '', code: '' } ];
-let appState = { kv: structuredClone(defaultKV), iq: structuredClone(iqItems), oq: structuredClone(oqItems), dynamic: [] };
-let activeCroppers = {}; 
+// Default Data
+const defaultKV = [{text:'Aufträge offen?',ok:false,note:'',code:''}, {text:'Störungen?',ok:false,note:'',code:''}];
+const iqItems = [{text:'Netzwerk OK',ok:false,note:'',code:''}, {text:'Drucker OK',ok:false,note:'',code:''}];
+const oqItems = [{text:'RDG Prozess',ok:false,note:'',code:''}, {text:'Packplatz',ok:false,note:'',code:''}];
 
-// --- Utils ---
-function showToast(msg, type = 'success') {
-  const container = $('#toast-container');
-  const el = document.createElement('div'); el.className = `toast ${type}`;
-  el.innerHTML = type === 'success' ? '✅ ' + msg : '⚠️ ' + msg;
-  container.appendChild(el);
-  setTimeout(() => { el.style.animation = 'fadeOut 0.3s forwards'; setTimeout(() => el.remove(), 300); }, 3000);
+// Main State
+// groups = Array of { id, title, sections: [ {type:'checklist', rows:[]}, {type:'text', content:''}, {type:'gallery', images:[]} ] }
+let appState = { kv: clone(defaultKV), iq: clone(iqItems), oq: clone(oqItems), groups: [] };
+let activeCropper = null;
+
+// --- Helper ---
+function clone(o){ return JSON.parse(JSON.stringify(o)); }
+function toggleMenu(){ $('#mainMenu').classList.toggle('show'); }
+function showToast(m){ 
+  let d=document.createElement('div'); d.className='toast success'; d.innerText=m; 
+  $('#toast-container').appendChild(d); setTimeout(()=>d.remove(), 3000); 
 }
-function escapeHtml(str) { if (!str) return ''; return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
-function structuredClone(obj) { return JSON.parse(JSON.stringify(obj)); }
 
-// --- Menu Logic (Burger) ---
-function toggleMenu() { $('#mainMenu').classList.toggle('show'); }
-window.addEventListener('click', (e) => {
-  const menu = $('#mainMenu'); const btn = $('#burgerToggle');
-  if (!menu.contains(e.target) && !btn.contains(e.target)) menu.classList.remove('show');
-});
+// --- Rendering Core ---
+function renderAll(){
+  renderList('#kvChecks', appState.kv);
+  renderList('#iqList', appState.iq);
+  renderList('#oqList', appState.oq);
+  renderGroups();
+}
 
-// --- Render Logic ---
-function createCheckRow(item, onChange) {
-  const div = document.createElement('div'); div.className = 'check-row';
-  div.innerHTML = `<div class="row-top" style="display:contents"><input class="tiny-input" type="text" placeholder="Kz" maxlength="3" value="${escapeHtml(item.code)}"><div class="content"><div class="text" contenteditable="true">${escapeHtml(item.text)}</div><input class="note-input" type="text" placeholder="Bemerkung..." value="${escapeHtml(item.note)}"></div></div><input class="status-check" type="checkbox" ${item.ok ? 'checked' : ''}>`;
-  const [codeIn, noteIn, checkIn] = [div.querySelector('.tiny-input'), div.querySelector('.note-input'), div.querySelector('.status-check')];
-  div.querySelector('.text').oninput = (e) => { item.text = e.target.innerText; saveLocal(); };
-  codeIn.oninput = () => { item.code = codeIn.value; saveLocal(); };
-  noteIn.oninput = () => { item.note = noteIn.value; saveLocal(); };
-  checkIn.onchange = () => { item.ok = checkIn.checked; saveLocal(); };
+function renderList(sel, list){
+  const el = $(sel); el.innerHTML = '';
+  list.forEach(item => el.appendChild(createCheckRow(item)));
+}
+
+function createCheckRow(item){
+  let div = document.createElement('div'); div.className='check-row';
+  div.innerHTML = `
+    <input class="tiny-input" placeholder="Kz" value="${item.code||''}">
+    <div class="content">
+      <div class="text" contenteditable="true">${item.text}</div>
+      <input class="note-input" placeholder="Bemerkung" value="${item.note||''}">
+    </div>
+    <input type="checkbox" class="status-check" ${item.ok?'checked':''}>
+  `;
+  // Bindings
+  div.querySelector('.tiny-input').oninput=e=>{item.code=e.target.value; save();};
+  div.querySelector('.text').oninput=e=>{item.text=e.target.innerText; save();};
+  div.querySelector('.note-input').oninput=e=>{item.note=e.target.value; save();};
+  div.querySelector('.status-check').onchange=e=>{item.ok=e.target.checked; save();};
   return div;
 }
 
-function renderAllLists() {
-  ['#kvChecks', '#iqList', '#oqList'].forEach((id, idx) => {
-    const el = $(id); el.innerHTML = '';
-    [appState.kv, appState.iq, appState.oq][idx].forEach(item => el.appendChild(createCheckRow(item)));
-  });
-}
-
-function drawDynamicSections() {
-  const container = $('#dynamicSections');
-  Object.values(activeCroppers).forEach(c => c.destroy()); activeCroppers = {};
-  container.innerHTML = '';
-  
-  appState.dynamic.forEach((sec, idx) => {
-    const card = document.createElement('div'); card.className = 'card';
-    const header = document.createElement('div'); header.className = 'card-header';
-    header.innerHTML = `<strong>${escapeHtml(sec.title)}</strong> <small style="opacity:0.6">(${sec.type.toUpperCase()})</small>`;
+// --- Group Rendering Logic ---
+function renderGroups(){
+  const con = $('#dynamicContainer'); con.innerHTML = '';
+  appState.groups.forEach((group, gIdx) => {
+    let gDiv = document.createElement('div'); gDiv.className = 'group-wrapper';
     
-    const btnGroup = document.createElement('div'); btnGroup.style.display='flex'; btnGroup.style.gap='8px';
-    if(sec.type === 'checklist') {
-        const btnAdd = document.createElement('button'); btnAdd.className = 'btn secondary outline'; btnAdd.style.padding='4px 8px'; btnAdd.style.fontSize='11px'; btnAdd.textContent='+ Zeile';
-        btnAdd.onclick = () => { sec.rows.push({text:'Neue Prüfung', ok:false}); drawDynamicSections(); saveLocal(); };
-        btnGroup.appendChild(btnAdd);
-    }
-    const btnDel = document.createElement('button'); btnDel.className = 'btn danger outline'; btnDel.style.padding='4px 8px'; btnDel.textContent = '🗑️';
-    btnDel.onclick = () => { if(confirm(`"${sec.title}" löschen?`)) { appState.dynamic.splice(idx, 1); drawDynamicSections(); saveLocal(); }};
-    btnGroup.appendChild(btnDel);
-    header.appendChild(btnGroup); card.appendChild(header);
+    // Header
+    let head = document.createElement('div'); head.className = 'group-header';
+    head.innerHTML = `<div class="group-title"><input value="${group.title}" placeholder="Gruppen-Titel"></div>`;
+    
+    // Header Actions
+    let acts = document.createElement('div'); acts.style.display='flex'; acts.style.gap='8px';
+    
+    let btnDup = document.createElement('button'); btnDup.className='btn secondary'; btnDup.innerText='D'; btnDup.title='Gruppe Duplizieren';
+    btnDup.onclick = () => duplicateGroup(gIdx);
+    
+    let btnDel = document.createElement('button'); btnDel.className='btn danger'; btnDel.innerText='X';
+    btnDel.onclick = () => { if(confirm('Gruppe löschen?')) { appState.groups.splice(gIdx,1); renderGroups(); save(); }};
+    
+    acts.append(btnDup, btnDel); head.append(acts); gDiv.append(head);
+    
+    // Title Binding
+    head.querySelector('input').oninput = e => { group.title = e.target.value; save(); };
 
-    const body = document.createElement('div');
-    if (sec.type === 'checklist') { sec.rows.forEach(row => body.appendChild(createCheckRow(row))); }
-    else if (sec.type === 'text') {
-      const ta = document.createElement('textarea'); ta.style.minHeight='150px'; ta.placeholder='Text...'; ta.value=sec.content||'';
-      ta.oninput=(e)=>{sec.content=e.target.value; saveLocal();}; body.appendChild(ta);
-    } else if (sec.type === 'image') {
-      const imgC = document.createElement('div'); imgC.className='image-editor-container';
-      const wrap = document.createElement('div'); wrap.className='img-preview-wrapper';
-      const imgId = `img-dyn-${sec.id}`;
-      wrap.innerHTML = sec.data ? `<img id="${imgId}" src="${sec.data}" style="max-width:100%">` : `<div style="color:#999;padding:20px;">Kein Bild</div>`;
+    // Body (Sections)
+    let body = document.createElement('div'); body.className = 'group-body';
+    
+    group.sections.forEach((sec, sIdx) => {
+      let sDiv = document.createElement('div'); sDiv.className = 'sub-section';
       
-      const ctrls = document.createElement('div'); ctrls.className='image-controls';
-      const fIn = document.createElement('input'); fIn.type='file'; fIn.accept='image/*'; fIn.className='hidden-file-input';
-      const btnUp = document.createElement('button'); btnUp.className='btn secondary'; btnUp.innerHTML='📁 Bild wählen'; btnUp.onclick=()=>fIn.click();
-      const btnSaveCrop = document.createElement('button'); btnSaveCrop.className='btn success'; btnSaveCrop.innerHTML='✅ Speichern'; btnSaveCrop.style.display='none';
-      const btnReset = document.createElement('button'); btnReset.className='btn outline'; btnReset.innerHTML='🔄 Ändern'; btnReset.style.display=sec.data?'inline-flex':'none';
-      btnReset.onclick=()=>{if(activeCroppers[imgId])activeCroppers[imgId].destroy(); sec.data=null; drawDynamicSections();};
+      // Section Header (Titel + Delete)
+      let sHead = document.createElement('h4'); 
+      let label = sec.type === 'checklist' ? 'Checkliste' : (sec.type==='gallery'?'Bilder Galerie':'Textfeld');
+      sHead.innerHTML = `<span>${label}</span>`;
+      let sDel = document.createElement('span'); sDel.innerHTML='🗑️'; sDel.style.cursor='pointer';
+      sDel.onclick = () => { group.sections.splice(sIdx,1); renderGroups(); save(); };
+      sHead.appendChild(sDel); sDiv.appendChild(sHead);
 
-      fIn.onchange=(e)=>{
-         const file=e.target.files[0]; if(!file)return;
-         const reader=new FileReader();
-         reader.onload=(evt)=>{
-             wrap.innerHTML=`<img id="${imgId}" src="${evt.target.result}" style="max-width:100%;display:block">`;
-             btnUp.style.display='none'; btnReset.style.display='none'; btnSaveCrop.style.display='inline-flex';
-             if(activeCroppers[imgId]) activeCroppers[imgId].destroy();
-             const c = new Cropper(document.getElementById(imgId), { viewMode:1, autoCropArea:0.8 });
-             activeCroppers[imgId]=c;
-             btnSaveCrop.onclick=()=>{
-                 const cvs=c.getCroppedCanvas({maxWidth:1024, maxHeight:1024});
-                 if(!cvs)return;
-                 sec.data=cvs.toDataURL('image/jpeg', 0.85);
-                 c.destroy(); delete activeCroppers[imgId]; drawDynamicSections(); saveLocal();
+      // Section Content
+      if(sec.type === 'checklist'){
+        sec.rows.forEach(row => sDiv.appendChild(createCheckRow(row)));
+        let btnAdd = document.createElement('button'); btnAdd.className='btn outline'; btnAdd.innerText='+ Zeile'; btnAdd.style.marginTop='5px'; btnAdd.style.fontSize='11px';
+        btnAdd.onclick = () => { sec.rows.push({text:'Prüfung',ok:false}); renderGroups(); save(); };
+        sDiv.appendChild(btnAdd);
+      } 
+      else if(sec.type === 'text'){
+        let ta = document.createElement('textarea'); ta.value = sec.content || '';
+        ta.oninput = e => { sec.content = e.target.value; save(); };
+        sDiv.appendChild(ta);
+      }
+      else if(sec.type === 'gallery'){
+        // 1. Grid of existing images
+        let grid = document.createElement('div'); grid.className = 'gallery-grid';
+        (sec.images || []).forEach((imgSrc, imgIdx) => {
+          let item = document.createElement('div'); item.className='gallery-item';
+          item.innerHTML = `<img src="${imgSrc}"><button class="gallery-del">X</button>`;
+          item.querySelector('button').onclick = () => { sec.images.splice(imgIdx,1); renderGroups(); save(); };
+          grid.appendChild(item);
+        });
+        sDiv.appendChild(grid);
+
+        // 2. Add New Image UI
+        let ui = document.createElement('div'); ui.className='cropper-ui';
+        ui.innerHTML = `<input type="file" accept="image/*" style="margin-bottom:10px">`;
+        let fileIn = ui.querySelector('input');
+        let wrap = document.createElement('div'); wrap.className='img-preview-wrapper';
+        let btnSave = document.createElement('button'); btnSave.className='btn success'; btnSave.innerText='Bild zuschneiden & hinzufügen'; btnSave.style.display='none';
+        
+        ui.append(wrap, btnSave); sDiv.appendChild(ui);
+
+        fileIn.onchange = e => {
+           let f = e.target.files[0]; if(!f) return;
+           let r = new FileReader();
+           r.onload = evt => {
+             wrap.innerHTML = `<img id="crop-${gIdx}-${sIdx}" src="${evt.target.result}">`;
+             btnSave.style.display='inline-flex';
+             if(activeCropper) activeCropper.destroy();
+             activeCropper = new Cropper(document.getElementById(`crop-${gIdx}-${sIdx}`), { viewMode:1, autoCropArea:0.8 });
+             
+             btnSave.onclick = () => {
+                let cvs = activeCropper.getCroppedCanvas({maxWidth:800});
+                if(cvs){
+                  if(!sec.images) sec.images = [];
+                  sec.images.push(cvs.toDataURL('image/jpeg', 0.8));
+                  activeCropper.destroy(); activeCropper = null;
+                  renderGroups(); save();
+                }
              };
-         };
-         reader.readAsDataURL(file);
-      };
-      ctrls.append(fIn, btnUp, btnSaveCrop, btnReset); imgC.append(wrap, ctrls); body.appendChild(imgC);
-    }
-    card.appendChild(body); container.appendChild(card);
+           };
+           r.readAsDataURL(f);
+        };
+      }
+
+      body.appendChild(sDiv);
+    });
+
+    // Footer Actions for Group (Add Section)
+    let footer = document.createElement('div'); footer.style.borderTop='1px dashed #ccc'; footer.style.paddingTop='10px'; footer.style.display='flex'; footer.style.gap='10px';
+    footer.innerHTML = `<small style="align-self:center; color:#888">Hinzufügen:</small>`;
+    
+    let b1 = document.createElement('button'); b1.className='btn outline'; b1.innerText='+ Checkliste'; b1.onclick = () => addSec(gIdx, 'checklist');
+    let b2 = document.createElement('button'); b2.className='btn outline'; b2.innerText='+ Text'; b2.onclick = () => addSec(gIdx, 'text');
+    let b3 = document.createElement('button'); b3.className='btn outline'; b3.innerText='+ Bilder'; b3.onclick = () => addSec(gIdx, 'gallery');
+    
+    footer.append(b1,b2,b3); body.append(footer);
+    gDiv.append(body); con.append(gDiv);
   });
 }
 
-function addNewSection(type) {
-  const title = prompt(`Titel für "${type.toUpperCase()}":`);
-  if (!title) return;
-  appState.dynamic.push({ id: Date.now(), title, type, rows:[], content:'', data:null });
-  drawDynamicSections(); saveLocal();
-  $('#mainMenu').classList.remove('show');
+// --- Logic ---
+function addNewGroup(){
+  appState.groups.push({ id: Date.now(), title: 'Neue Gruppe', sections: [] });
+  renderGroups(); save();
 }
 
-// --- IO ---
-function collectData() {
-  let kopfData={}; $$('section:first-of-type input, section:first-of-type textarea, section:first-of-type select').forEach(el=>kopfData[el.id]=el.type==='checkbox'?el.checked:el.value);
-  return {
-    meta: { version: '0.5.1', date: new Date().toISOString() }, kopf: kopfData,
-    sign: { date1: $('#sigDate1').value, date2: $('#sigDate2').value, img1: document.getElementById('sigValidierer').toDataURL(), img2: document.getElementById('sigBetreiber').toDataURL() },
-    lists: { kv: appState.kv, iq: appState.iq, oq: appState.oq, dynamic: appState.dynamic }
-  };
+function addSec(gIdx, type){
+  let sec = { type: type };
+  if(type === 'checklist') sec.rows = [{text:'...',ok:false}];
+  if(type === 'text') sec.content = '';
+  if(type === 'gallery') sec.images = [];
+  appState.groups[gIdx].sections.push(sec);
+  renderGroups(); save();
 }
-function exportJSON() {
-  const d = collectData(); const blob=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});
-  const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`Val_${d.kopf.instName||'Entwurf'}.json`; a.click(); URL.revokeObjectURL(url);
-  showToast('Gespeichert'); $('#mainMenu').classList.remove('show');
-}
-function importJSON() {
-  const inp=document.createElement('input'); inp.type='file'; inp.accept='.json';
-  inp.onchange=e=>{
-    const f=e.target.files[0]; if(!f)return;
-    const r=new FileReader();
-    r.onload=evt=>{
-      try {
-        const d=JSON.parse(evt.target.result);
-        if(!d.kopf) throw new Error("Format falsch");
-        Object.keys(d.kopf).forEach(k=>{const el=$('#'+k);if(el)el.type==='checkbox'?el.checked=d.kopf[k]:el.value=d.kopf[k]});
-        appState.kv=d.lists.kv||structuredClone(defaultKV); appState.iq=d.lists.iq||structuredClone(iqItems); appState.oq=d.lists.oq||structuredClone(oqItems);
-        appState.dynamic=(d.lists.dynamic||[]).map(s=>{if(!s.type)s.type='checklist'; if(!s.id)s.id=Date.now()+Math.random(); return s;});
-        renderAllLists(); drawDynamicSections();
-        if(d.sign){ $('#sigDate1').value=d.sign.date1; $('#sigDate2').value=d.sign.date2; setTimeout(()=>{loadSig('sigValidierer',d.sign.img1);loadSig('sigBetreiber',d.sign.img2)},200);}
-        saveLocal(); showToast('Geladen'); $('#mainMenu').classList.remove('show');
-      } catch(err){ showToast(err.message,'error'); }
-    }; r.readAsText(f);
-  }; inp.click();
-}
-function saveLocal(){ localStorage.setItem(stateKey, JSON.stringify(collectData())); }
 
-// --- Sig ---
-function initCanvas(id){
-  const c=document.getElementById(id), ctx=c.getContext('2d');
-  let d=false, l={x:0,y:0};
-  const rsz=()=>{ const s=c.toDataURL(); const r=c.getBoundingClientRect(); c.width=r.width; c.height=r.height; const i=new Image(); i.onload=()=>ctx.drawImage(i,0,0,c.width,c.height); i.src=s; };
-  setTimeout(rsz,100); window.addEventListener('resize',rsz);
-  const gp=e=>{const r=c.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top}};
-  const mv=e=>{if(!d)return;e.preventDefault();const p=gp(e);ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(p.x,p.y);ctx.stroke();l=p;};
-  c.addEventListener('mousedown',e=>{d=true;l=gp(e)}); c.addEventListener('mousemove',mv); window.addEventListener('mouseup',()=>d=false);
-  c.addEventListener('touchstart',e=>{d=true;l=gp(e);e.preventDefault()},{passive:false}); c.addEventListener('touchmove',mv,{passive:false}); window.addEventListener('touchend',()=>d=false);
+function duplicateGroup(gIdx){
+  let origin = appState.groups[gIdx];
+  let copy = JSON.parse(JSON.stringify(origin)); // Deep Clone
+  copy.id = Date.now(); // New ID
+  copy.title += " (Kopie)";
+  appState.groups.splice(gIdx + 1, 0, copy); // Insert after original
+  renderGroups(); save();
+  showToast('Gruppe dupliziert');
 }
-function loadSig(id,u){if(!u)return;const c=document.getElementById(id),x=c.getContext('2d'),i=new Image();i.onload=()=>{x.clearRect(0,0,c.width,c.height);x.drawImage(i,0,0,c.width,c.height)};i.src=u;}
-function clearSig(id){const c=document.getElementById(id);c.getContext('2d').clearRect(0,0,c.width,c.height);saveLocal();}
 
-// --- Init ---
-window.addEventListener('DOMContentLoaded', () => {
-  $('#burgerToggle').onclick = toggleMenu;
-  $('#btnSave').onclick = exportJSON; $('#btnLoad').onclick = importJSON; $('#btnPDF').onclick = () => { $('#mainMenu').classList.remove('show'); window.print(); };
-  $$('[data-clear]').forEach(b=>b.onclick=()=>clearSig(b.dataset.clear));
-  initCanvas('sigValidierer'); initCanvas('sigBetreiber');
-  $('#stamp').innerText = new Date().toLocaleString();
-  
-  try {
-    const s=localStorage.getItem(stateKey);
-    if(s) {
-       const d=JSON.parse(s);
-       if(d.kopf) Object.keys(d.kopf).forEach(k=>{const el=$('#'+k);if(el)el.type==='checkbox'?el.checked=d.kopf[k]:el.value=d.kopf[k]});
-       appState.kv=d.lists.kv; appState.iq=d.lists.iq; appState.oq=d.lists.oq; appState.dynamic=d.lists.dynamic;
-       if(d.sign){ $('#sigDate1').value=d.sign.date1; $('#sigDate2').value=d.sign.date2; setTimeout(()=>{loadSig('sigValidierer',d.sign.img1);loadSig('sigBetreiber',d.sign.img2)},200);}
+// --- I/O & Signatur ---
+function save(){ 
+  let data = {
+    meta: { v:'0.6.0' },
+    kopf: {
+       instName: $('#instName').value, instOrt: $('#instOrt').value, betreiber: $('#betreiber').value,
+       produkt: $('#produkt').value, bemerkung: $('#bemerkung').value, valAm: $('#valAm').value,
+       chkVal: $('#chkVal').checked, chkReval: $('#chkReval').checked
+    },
+    lists: { kv: appState.kv, iq: appState.iq, oq: appState.oq, groups: appState.groups },
+    sign: { 
+      d1: $('#sigDate1').value, d2: $('#sigDate2').value,
+      s1: document.getElementById('sigValidierer').toDataURL(), 
+      s2: document.getElementById('sigBetreiber').toDataURL() 
     }
-  } catch(e){}
-  renderAllLists(); drawDynamicSections();
-});
+  };
+  localStorage.setItem(stateKey, JSON.stringify(data));
+}
+function saveData(){ save(); showToast('Gespeichert'); }
+
+function loadData(){
+  let inp = document.createElement('input'); inp.type='file'; inp.accept='.json';
+  inp.onchange = e => {
+     let f = e.target.files[0]; if(!f) return;
+     let r = new FileReader();
+     r.onload = evt => {
+       try {
+         let d = JSON.parse(evt.target.result);
+         // Load Header
+         $('#instName').value = d.kopf.instName||''; $('#instOrt').value = d.kopf.instOrt||'';
+         $('#betreiber').value = d.kopf.betreiber||''; $('#produkt').value = d.kopf.produkt||'';
+         $('#bemerkung').value = d.kopf.bemerkung||''; $('#valAm').value = d.kopf.valAm||'';
+         $('#chkVal').checked = d.kopf.chkVal; $('#chkReval').checked = d.kopf.chkReval;
+         
+         // Load Lists
+         appState.kv = d.lists.kv || clone(defaultKV);
+         appState.iq = d.lists.iq || clone(iqItems);
+         appState.oq = d.lists.oq || clone(oqItems);
+         appState.groups = d.lists.groups || []; // Load Groups
+         
+         // Load Signatures
+         if(d.sign){
+           $('#sigDate1').value = d.sign.d1; $('#sigDate2').value = d.sign.d2;
+           loadSig('sigValidierer', d.sign.s1); loadSig('sigBetreiber', d.sign.s2);
+         }
+         renderAll(); save(); showToast('Daten geladen');
+       } catch(err){ alert('Fehler beim Laden'); console.error(err); }
+     };
+     r.readAsText(f);
+  };
+  inp.click();
+}
+
+// Init & Signature Canvas Logic
+function initSig(id){
+  let c=$(id), ctx=c.getContext('2d'), d=false;
+  c.width = c.getBoundingClientRect().width; c.height = 130;
+  
+  let getP = e => { let r=c.getBoundingClientRect(); return {x:(e.touches?e.touches[0].clientX:e.clientX)-r.left, y:(e.touches?e.touches[0].clientY:e.clientY)-r.top}};
+  let start=e=>{ d=true; ctx.beginPath(); ctx.moveTo(getP(e).x, getP(e).y); e.preventDefault(); };
+  let move=e=>{ if(!d)return; ctx.lineTo(getP(e).x, getP(e).y); ctx.stroke(); e.preventDefault(); };
+  
+  c.addEventListener('mousedown',start); c.addEventListener('mousemove',move); window.addEventListener('mouseup',()=>d=false);
+  c.addEventListener('touchstart',start,{passive:false}); c.addEventListener('touchmove',move,{passive:false});
+}
+function clearSig(id){ let c=document.getElementById(id); c.getContext('2d').clearRect(0,0,c.width,c.height); save(); }
+function loadSig(id,u){ let i=new Image(); i.onload=()=>document.getElementById(id).getContext('2d').drawImage(i,0,0); i.src=u; }
+
+window.onload = () => {
+  initSig('#sigValidierer'); initSig('#sigBetreiber');
+  // Try Load LocalStorage
+  let s = localStorage.getItem(stateKey);
+  if(s){ 
+    let d=JSON.parse(s); 
+    // Simplified Restore (Full logic is in loadData, this is quick restore)
+    if(d.lists) { appState = d.lists; } 
+    if(d.kopf) { $('#instName').value = d.kopf.instName; } // etc... simplified
+  }
+  renderAll();
+  $('#stamp').innerText = new Date().toLocaleString();
+};
 </script>
 </body>
 </html>
