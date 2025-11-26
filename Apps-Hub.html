@@ -1,232 +1,725 @@
 <!DOCTYPE html>
 <html data-theme="dark" lang="de">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
-<title>Apps Hub – v25.0.12</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>apps-hub</title>
 
-<meta content="#8B1538" name="theme-color"/>
-<link href="manifest.webmanifest" rel="manifest"/>
+  <meta name="theme-color" content="#8B1538" />
+  <link rel="manifest" href="manifest.webmanifest" />
 
-<style>
-:root{
-  --brand:#8B1538; --bg:#0b0f1a; --surface:#111826; --text:#e9edf3; --muted:#6e7a94;
-  --border:rgba(255,255,255,12); --glassA:rgba(12,16,27,65); --glassB:rgba(12,16,27,35);
-  --radius:22px; --gap:18px; --card-w:260px; --card-h:180px; --scale-hover:1.06; --scale-focus:1.10;
-}
-html[data-theme="light"]{
-  --bg:#f4f6fb; --surface:#ffffff; --text:#0f172a; --muted:#4b556b; --border:rgba(15,23,42,12);
-  --glassA:rgba(255,255,255,75); --glassB:rgba(255,255,255,55);
-}
+  <style>
+    :root {
+      --brand:#8B1538;
+      --bg:#0b0f1a;
+      --surface:#111826;
+      --text:#e9edf3;
+      --muted:#6e7a94;
+      --border:rgba(255,255,255,0.12);
+      --glassA:rgba(12,16,27,0.65);
+      --glassB:rgba(12,16,27,0.35);
+      --radius:22px;
+      --gap:18px;
+      --scale-hover:1.05;
+      --scale-focus:1.08;
+    }
 
-body{
-  margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; color:var(--text);
-  background:
-    radial-gradient(1200px 800px at 70% -10%, color-mix(in srgb, var(--brand), transparent 85%) 15%, transparent 60%),
-    linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg), #000 8%) 100%);
-  overflow-x:hidden;
-}
+    html[data-theme="light"] {
+      --bg:#f4f6fb;
+      --surface:#ffffff;
+      --text:#0f172a;
+      --muted:#4b556b;
+      --border:rgba(15,23,42,0.12);
+      --glassA:rgba(255,255,255,0.80);
+      --glassB:rgba(255,255,255,0.55);
+    }
 
-/* BACKDROP */
-.backdrop{position:fixed; inset:0; z-index:-1; pointer-events:none; background:center/cover no-repeat;
-  filter:blur(40px) saturate(120%) brightness(75%); opacity:.35; transition:background-image .35s ease, opacity .35s ease, filter .35s ease;}
+    * { box-sizing:border-box; }
 
-/* TOP BAR */
-header{position:sticky; top:0; z-index:10; backdrop-filter:blur(12px) saturate(160%);
-  background:linear-gradient(180deg, color-mix(in srgb, var(--bg), #000 20%) 85%, transparent); border-bottom:1px solid var(--border);}
-.topbar{max-width:1400px;margin:0 auto;padding:14px 18px;display:flex;align-items:center;gap:10px}
-.logo{width:28px;height:28px;border-radius:8px;overflow:hidden;display:grid;place-items:center}
-.logo img{width:100%;height:100%;object-fit:cover}
-.brand{font-weight:700}
+    html, body {
+      height:100%;
+      margin:0;
+      padding:0;
+    }
 
-.page{max-width:1400px;margin:24px auto 90px;padding:0 30px}
+    body {
+      font-family: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 70% -10%, color-mix(in srgb, var(--brand), transparent 85%) 15%, transparent 60%),
+        linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg), #000 8%) 100%);
+      overflow-x:hidden;
+    }
 
-/* HERO */
-.hero{
-  margin:10px 0 6px;border-radius:var(--radius);overflow:hidden;background:color-mix(in srgb,var(--bg),#000 20%);
-  display:grid;grid-template-columns:minmax(280px,1fr) minmax(380px,1fr);
-  box-shadow:0 20px 60px rgba(0,0,0,35);position:relative;
-}
-html[data-theme="light"] .hero{ box-shadow:0 12px 36px rgba(0,0,0,10); }
-.hero .art{min-height:300px;background:center/cover no-repeat;transform:scale(1.02);transition:transform .6s ease;}
-.hero:hover .art{transform:scale(1.06)}
-.hero .info{padding:28px 26px;display:flex;flex-direction:column;justify-content:center;gap:14px;
-  background:linear-gradient(180deg,color-mix(in srgb,var(--bg),#000 10%) 0%,color-mix(in srgb,var(--bg),#000 15%) 100%);}
-.badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--text);opacity:.85}
-.badge .dot{width:8px;height:8px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 4px color-mix(in srgb,var(--brand),transparent 75%)}
-.hero h1{margin:0;font-size:28px}
-.hero p{margin:0;color:var(--muted)}
-.actions{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
-.btn{border:none;padding:12px 18px;border-radius:12px;font-weight:700;cursor:pointer}
-.btn.primary{background:var(--brand);color:#fff}
-.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+    .backdrop {
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      background:center/cover no-repeat;
+      filter:blur(40px) saturate(120%) brightness(75%);
+      opacity:.35;
+      transition:background-image .35s ease, opacity .35s ease, filter .35s ease;
+    }
 
-/* RESPONSIVE GRID (NEU) */
-.row{margin-top:24px}
-.row h2{font-size:18px;margin:0 0 10px 6px;opacity:.9}
+    header {
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter:blur(12px) saturate(160%);
+      background:linear-gradient(180deg, color-mix(in srgb, var(--bg), #000 20%) 85%, transparent);
+      border-bottom:1px solid var(--border);
+    }
 
-.strip{
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(220px,1fr));
-  gap:clamp(10px,2vw,26px);
-  padding:20px 6px 26px;
-  justify-items:center;
-}
+    .topbar {
+      max-width:1400px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
 
-/* CARD */
-.card{
-  position:relative;width:100%;max-width:280px;height:clamp(160px,24vw,230px);
-  border-radius:18px;background:var(--surface);overflow:hidden;cursor:pointer;flex-shrink:0;
-  box-shadow:0 10px 24px rgba(0,0,0,35);transition:.18s ease;
-}
-.card:hover{transform:scale(1.05)}
-.thumb{position:absolute;inset:0;background:center/cover no-repeat;transition:.3s ease}
+    .logo {
+      width:28px;
+      height:28px;
+      border-radius:8px;
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+    }
 
-/* LABEL */
-.label{
-  position:absolute;left:10px;right:10px;bottom:10px;padding:8px 10px;border-radius:10px;
-  background:linear-gradient(180deg,var(--glassA),var(--glassB));color:var(--text);
-  display:flex;align-items:center;gap:8px;font-size:14px;border:1px solid var(--border);backdrop-filter:blur(8px)
-}
-.label .ico{width:16px;height:16px;border-radius:6px;background:linear-gradient(135deg,var(--brand),#f05880)}
+    .logo img {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
 
-/* MODAL */
-.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,45);backdrop-filter:blur(2px);z-index:50}
-.modal.is-open{display:flex}
-.modal .sheet{width:min(860px,92vw);max-height:84vh;overflow:auto;background:var(--surface);color:var(--text);border:1px solid var(--border);
-  border-radius:16px;padding:0 0 18px;box-shadow:0 20px 60px rgba(0,0,0,4)}
-footer{text-align:center;color:var(--muted);margin:40px 0 30px;font-size:13px}
-</style>
+    .brand {
+      font-weight:700;
+      letter-spacing:.02em;
+    }
 
+    .topbar-spacer {
+      flex:1;
+    }
+
+    .theme-toggle {
+      border:none;
+      background:transparent;
+      color:var(--text);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:13px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .theme-toggle span.ico {
+      font-size:16px;
+    }
+
+    .page {
+      max-width:1400px;
+      margin:24px auto 90px;
+      padding:0 18px;
+    }
+
+    /* Hero */
+    .hero {
+      margin:10px 0 6px;
+      border-radius:var(--radius);
+      overflow:hidden;
+      background:color-mix(in srgb, var(--bg), #000 20%);
+      display:grid;
+      grid-template-columns: minmax(260px,1fr) minmax(340px,1.1fr);
+      box-shadow:0 20px 60px rgba(0,0,0,0.35);
+      position:relative;
+    }
+
+    html[data-theme="light"] .hero {
+      box-shadow:0 12px 36px rgba(0,0,0,0.10);
+    }
+
+    .hero .art {
+      min-height:260px;
+      background:center/cover no-repeat;
+      transform:scale(1.02);
+      transition:transform .6s ease;
+    }
+
+    .hero:hover .art {
+      transform:scale(1.06);
+    }
+
+    .hero .info {
+      padding:24px 22px 26px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:14px;
+      background:linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--bg), #000 5%) 0%,
+        color-mix(in srgb, var(--bg), #000 15%) 100%
+      );
+    }
+
+    .badge {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      color:var(--text);
+      opacity:.9;
+    }
+
+    .badge .dot {
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:var(--brand);
+      box-shadow:0 0 0 4px color-mix(in srgb, var(--brand), transparent 75%);
+    }
+
+    .hero h1 {
+      margin:0;
+      font-size:26px;
+    }
+
+    .hero p {
+      margin:0;
+      color:var(--muted);
+      max-width:420px;
+    }
+
+    .actions {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .btn {
+      border:none;
+      padding:11px 18px;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+      font-size:14px;
+    }
+
+    .btn.primary {
+      background:var(--brand);
+      color:#fff;
+      box-shadow:0 10px 24px color-mix(in srgb, var(--brand), transparent 50%);
+    }
+
+    .btn.ghost {
+      background:transparent;
+      color:var(--text);
+      border:1px solid var(--border);
+    }
+
+        /* Apps / Grid */
+    .row {
+      margin-top:26px;
+    }
+
+    .row h2 {
+      font-size:18px;
+      margin:0 0 10px 4px;
+      opacity:.9;
+    }
+
+    .strip {
+      display:grid;
+      grid-template-columns:repeat(auto-fill, minmax(210px,1fr));
+      gap:clamp(10px, 2vw, 24px);
+      padding:18px 4px 26px;
+      justify-items:center;
+    }
+
+    .card {
+      position:relative;
+      width:100%;
+      max-width:270px;
+      height:clamp(160px, 22vw, 220px);
+      border-radius:18px;
+      background:var(--surface);
+      overflow:hidden;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(0,0,0,0.35);
+      transition:transform .18s ease, box-shadow .2s ease, filter .2s ease;
+    }
+
+    html[data-theme="light"] .card {
+      box-shadow:0 12px 30px rgba(0,0,0,0.10);
+    }
+
+    .card:hover {
+      transform:scale(var(--scale-hover));
+    }
+
+    .card:focus-visible {
+      outline:none;
+      transform:scale(var(--scale-focus));
+      box-shadow:
+        0 20px 50px rgba(0,0,0,0.30),
+        0 0 0 3px rgba(255,255,255,0.18),
+        0 0 0 8px color-mix(in srgb, var(--brand), transparent 70%);
+      z-index:5;
+    }
+
+    .thumb {
+      position:absolute;
+      inset:0;
+      background:center/cover no-repeat;
+      transition:transform .3s ease;
+      pointer-events:none;
+    }
+
+    .card:hover .thumb {
+      transform:scale(1.06);
+    }
+
+    .label {
+      position:absolute;
+      left:10px;
+      right:10px;
+      bottom:10px;
+      padding:8px 10px;
+      border-radius:10px;
+      background:linear-gradient(180deg, var(--glassA), var(--glassB));
+      color:var(--text);
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:14px;
+      border:1px solid var(--border);
+      backdrop-filter:blur(8px);
+    }
+
+    .label .ico {
+      width:16px;
+      height:16px;
+      border-radius:6px;
+      background:linear-gradient(135deg, var(--brand), #f05880);
+      flex-shrink:0;
+    }
+
+    .card.no-thumb .thumb {
+      background:#0f1524;
+    }
+
+    .card.no-thumb .thumb::after {
+      content:"Kein Bild";
+      position:absolute;
+      top:8px;
+      right:10px;
+      font-size:12px;
+      background:rgba(255,255,255,0.12);
+      padding:4px 8px;
+      border-radius:999px;
+    }
+
+    /* Modal */
+    .modal {
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,0.45);
+      backdrop-filter:blur(2px);
+      z-index:50;
+    }
+
+    .modal.is-open {
+      display:flex;
+    }
+
+    .modal .sheet {
+      width:min(860px,92vw);
+      max-height:84vh;
+      overflow:auto;
+      background:var(--surface);
+      color:var(--text);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:0 0 18px;
+      box-shadow:0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    .sheet .head {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--border);
+      background:linear-gradient(135deg,
+        color-mix(in srgb, var(--brand), transparent 75%),
+        transparent 60%);
+    }
+
+    .head .title {
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .head .title strong {
+      font-size:16px;
+      letter-spacing:.3px;
+    }
+
+    .head .subtitle {
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .head .badge {
+      background:var(--brand);
+      color:#fff;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:12px;
+      box-shadow:0 8px 22px color-mix(in srgb,var(--brand),transparent 60%);
+    }
+
+    .modal .close {
+      border:none;
+      background:transparent;
+      color:var(--text);
+      font-size:20px;
+      cursor:pointer;
+      padding:6px 10px;
+      border-radius:10px;
+    }
+
+    .modal .close:hover {
+      background:rgba(255,255,255,0.08);
+    }
+
+    .section {
+      padding:14px 18px 0;
+    }
+
+    .section h4 {
+      margin:0 0 6px;
+      font-size:15px;
+    }
+
+    .section p {
+      margin:4px 0;
+      color:var(--muted);
+    }
+
+    .section ul {
+      margin:6px 0 0 18px;
+    }
+
+    .pre {
+      font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      background:color-mix(in srgb, var(--bg), #000 10%);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:10px;
+      overflow:auto;
+      font-size:13px;
+      line-height:1.45;
+      margin:6px 0 12px;
+      white-space:pre;
+    }
+
+    footer {
+      text-align:center;
+      color:var(--muted);
+      margin:40px 0 30px;
+      font-size:13px;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: minmax(0,1fr);
+      }
+      .hero .art {
+        min-height:200px;
+      }
+      .page {
+        padding:0 12px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .topbar {
+        padding-inline:12px;
+      }
+      .hero h1 {
+        font-size:22px;
+      }
+      .strip {
+        grid-template-columns:repeat(auto-fill, minmax(160px,1fr));
+      }
+      .card {
+        max-width:220px;
+        height:clamp(150px, 40vw, 190px);
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="backdrop" id="backdrop"></div>
+  <div class="backdrop" id="backdrop"></div>
 
-<header>
-<div class="topbar">
-  <div class="logo"><img id="brandLogo" src="photos/logo/app-icon-192.png" alt="Logo"/></div>
-  <div class="brand">Apps Hub</div>
-</div>
-</header>
+  <header>
+    <div class="topbar">
+      <div class="logo" title="apps-hub">
+        <img id="brandLogo" src="photos/logo/app-icon-192.png" alt="Logo" />
+      </div>
+      <div class="brand">apps-hub</div>
+      <div class="topbar-spacer"></div>
+      <button class="theme-toggle" id="btnTheme">
+        <span class="ico">🌗</span>
+        <span class="txt">Modus: Hell</span>
+      </button>
+    </div>
+  </header>
 
-<main class="page">
+  <main class="page">
 
-<section class="hero">
-  <div class="art" id="heroArt"></div>
-  <div class="info">
-    <div class="badge"><span class="dot"></span> Neu &amp; empfohlen</div>
-    <h1>Dein zentraler Startpunkt</h1>
-    <p>Schneller Zugriff auf deine Web-Apps – jetzt mit automatischen Kachelbildern.</p>
-    <div class="actions">
-      <button class="btn primary" id="btnInfo">Info</button>
-      <button class="btn ghost" id="btnTheme">Modus: Hell</button>
+    <section class="hero">
+      <div class="art" id="heroArt"></div>
+      <div class="info">
+        <div class="badge">
+          <span class="dot"></span>
+          Auto-Bilder & Responsive Layout
+        </div>
+        <h1>Dein zentraler Startpunkt</h1>
+        <p>
+          Schnellzugriff auf Tätigkeitsbericht, Reisekosten, EuroSDS, Validierung
+          und Wissen – mit dynamischem Hintergrund & optimierten Kacheln.
+        </p>
+        <div class="actions">
+          <button class="btn primary" id="btnInfo">Info</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="row" id="apps">
+      <h2>Apps</h2>
+
+      <div class="strip">
+
+        <article class="card" aria-label="Tätigkeitsbericht" data-link="Tätigkeitsbericht.html">
+          <div class="thumb"></div>
+          <div class="label"><span class="ico"></span><span>Tätigkeitsbericht</span></div>
+        </article>
+
+        <article class="card" aria-label="Reisekosten" data-link="Reisekosten.html">
+          <div class="thumb"></div>
+          <div class="label"><span class="ico"></span><span>Reisekosten</span></div>
+        </article>
+
+        <article class="card" aria-label="EuroSDS" data-link="EuroSDS.html">
+          <div class="thumb"></div>
+          <div class="label"><span class="ico"></span><span>EuroSDS</span></div>
+        </article>
+
+        <article class="card" aria-label="Validierung" data-link="Validierung.html">
+          <div class="thumb"></div>
+          <div class="label"><span class="ico"></span><span>Validierung</span></div>
+        </article>
+
+        <article class="card" aria-label="Wissen" data-link="Wissen.html">
+          <div class="thumb"></div>
+          <div class="label"><span class="ico"></span><span>Wissen</span></div>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    apps-hub • Entwickelt von Nexus IPS (MENA)
+  </footer>
+
+  <div class="modal" id="infoModal">
+    <div class="sheet">
+      <div class="head">
+        <div class="title">
+          <strong>apps-hub</strong>
+          <div class="subtitle">Auto-Bilder aus photos/&lt;Name&gt;.jpg</div>
+        </div>
+        <span class="badge">v25.0.12</span>
+        <button class="close" aria-label="Schließen">×</button>
+      </div>
+
+      <div class="section">
+        <h4>Architektur & Technik</h4>
+        <ul>
+          <li>100% Vanilla HTML, CSS, JavaScript</li>
+          <li>Dark-/Light-Mode mit LocalStorage</li>
+          <li>Automatische Kachelbilder (photos/&lt;Name&gt;.jpg)</li>
+          <li>Dynamischer Backdrop pro Kachel</li>
+          <li>Responsive Grid (Mobil → Desktop)</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h4>Projektstruktur</h4>
+        <div class="pre" id="projStruct"></div>
+      </div>
+
     </div>
   </div>
-</section>
-
-<section class="row" id="apps">
-<h2>Apps</h2>
-
-<div class="strip">
-
-<!-- Deine KACHELN – Bilder werden automatisch geladen -->
-<article class="card" aria-label="Tätigkeitsbericht" data-link="Tätigkeitsbericht.html">
-  <div class="thumb"></div>
-  <div class="label"><span class="ico"></span>Tätigkeitsbericht</div>
-</article>
-
-<article class="card" aria-label="Reisekosten" data-link="Reisekosten.html">
-  <div class="thumb"></div>
-  <div class="label"><span class="ico"></span>Reisekosten</div>
-</article>
-
-<article class="card" aria-label="EuroSDS" data-link="EuroSDS.html">
-  <div class="thumb"></div>
-  <div class="label"><span class="ico"></span>EuroSDS</div>
-</article>
-
-<article class="card" aria-label="Validierung" data-link="Validierung.html">
-  <div class="thumb"></div>
-  <div class="label"><span class="ico"></span>Validierung</div>
-</article>
-
-<article class="card" aria-label="Wissen" data-link="Wissen.html">
-  <div class="thumb"></div>
-  <div class="label"><span class="ico"></span>Wissen</div>
-</article>
-
-</div>
-</section>
-
-</main>
-
-<footer>Apps Hub – Version 25.0.12 • Entwickelt von Nexus IPS (MENA)</footer>
-
-<!-- MODAL CODE BLEIBT -->
-<div class="modal" id="infoModal">
- <div class="sheet">
- <div class="head" style="padding:20px">
-   <div><strong>Apps Hub 25.0.12</strong><div class="subtitle">Auto-bilder + Responsive Grid</div></div>
-   <button class="close">×</button>
- </div>
- <div style="padding:20px">
-   <p>Alle Kacheln laden ihre Bilder jetzt automatisch aus <b>/photos/NAME.jpg</b>.</p>
- </div>
- </div>
-</div>
 
 <script>
-(function(){
 
-/* ===============================
-   AUTO-IMAGE LOADER
-   =============================== */
-document.querySelectorAll('.card').forEach(card => {
-    const name = card.getAttribute('aria-label') || "default";
-    const image = `photos/${name}.jpg`;
-    card.dataset.bg = image;
+  <script>
+(function () {
+
+  const heroArt   = document.getElementById('heroArt');
+  const backdrop  = document.getElementById('backdrop');
+  const cards     = document.querySelectorAll('.card');
+  const infoModal = document.getElementById('infoModal');
+  const btnInfo   = document.getElementById('btnInfo');
+  const btnTheme  = document.getElementById('btnTheme');
+  const proj      = document.getElementById('projStruct');
+
+  /* ===============================
+     HERO — nutzt neutrales Bild
+     =============================== */
+  heroArt.style.backgroundImage = "url('photos/Hero.jpg')";
+
+  /* ===============================
+     AUTO-IMAGE-LOADER
+     =============================== */
+  cards.forEach(card => {
+    const name = card.getAttribute('aria-label');
+    if (!name) return;
+
+    const imgUrl = `photos/${name}.jpg`;
+
     const thumb = card.querySelector('.thumb');
-    thumb.style.backgroundImage = `url('${image}')`;
-});
+    if (thumb) thumb.style.backgroundImage = `url('${imgUrl}')`;
 
-/* BACKDROP HOVER */
-const backdrop=document.getElementById('backdrop');
-function setBackdrop(card){
-  const url=card?.dataset?.bg||"";
-  if(url) backdrop.style.backgroundImage=`url('${url}')`;
-}
-document.addEventListener('pointerenter',e=>{
-  const c=e.target.closest('.card');
-  if(c) setBackdrop(c);
-},true);
+    card.dataset.bg = imgUrl; // für Backdrop
+  });
 
-/* HERO DEFAULT */
-const first=document.querySelector('.card');
-if(first) setBackdrop(first);
+  /* ===============================
+     BACKDROP HOVER
+     =============================== */
+  function setBackdrop(card) {
+    const url = card?.dataset?.bg || "";
+    if (url) backdrop.style.backgroundImage = `url('${url}')`;
+  }
 
-/* CARD CLICK */
-document.addEventListener('click',e=>{
-  const c=e.target.closest('.card');
-  if(c && c.dataset.link) location.href=c.dataset.link;
-});
+  const firstCard = document.querySelector('.card');
+  if (firstCard) setBackdrop(firstCard);
 
-/* MODAL */
-const modal=document.getElementById('infoModal');
-document.getElementById('btnInfo').onclick=()=>modal.classList.add('is-open');
-modal.querySelector('.close').onclick=()=>modal.classList.remove('is-open');
+  ['pointerenter','focusin','touchstart'].forEach(ev => {
+    document.addEventListener(ev, e => {
+      const card = e.target.closest?.('.card');
+      if (card) setBackdrop(card);
+    }, true);
+  });
 
-/* THEME SWITCH */
-const themeBtn=document.getElementById('btnTheme');
-function applyTheme(t){
-  document.documentElement.setAttribute('data-theme',t);
-  localStorage.setItem('theme',t);
-  themeBtn.textContent=t==='light'?'Modus: Dunkel':'Modus: Hell';
-}
-applyTheme(localStorage.getItem('theme')||'dark');
-themeBtn.onclick=()=>applyTheme(
-  document.documentElement.getAttribute('data-theme')==='light'?'dark':'light'
-);
+  /* ===============================
+     CARD CLICK
+     =============================== */
+  document.addEventListener('click', e => {
+    const card = e.target.closest?.('.card');
+    if (!card) return;
+    const href = card.dataset.link;
+    if (href) window.location.href = href;
+  });
+
+  /* ===============================
+     INFO-MODAL
+     =============================== */
+  if (btnInfo && infoModal) {
+
+    const closeBtn = infoModal.querySelector('.close');
+
+    btnInfo.onclick = () => {
+      infoModal.classList.add('is-open');
+      showProjectStructure();
+    };
+
+    closeBtn.onclick = () => infoModal.classList.remove('is-open');
+
+    infoModal.onclick = (e) => {
+      if (e.target === infoModal) infoModal.classList.remove('is-open');
+    };
+  }
+
+  /* ===============================
+     PROJEKTSTRUKTUR (apps-hub)
+     =============================== */
+  function detectDrive() {
+    try {
+      const href = decodeURIComponent(window.location.href);
+      let m = href.match(/file:\/\/\/([A-Za-z]):\//);
+      if (m) return m[1].toUpperCase();
+
+      m = window.location.pathname.match(/^\/([A-Za-z]):\//);
+      if (m) return m[1].toUpperCase();
+    } catch (e) {}
+    return "<Laufwerk>";
+  }
+
+  function showProjectStructure() {
+    const d = detectDrive();
+    proj.textContent =
+`${d}:/apps-hub/
+├─ photos/
+│   ├─ Hero.jpg
+│   ├─ Tätigkeitsbericht.jpg
+│   ├─ Reisekosten.jpg
+│   ├─ EuroSDS.jpg
+│   ├─ Validierung.jpg
+│   ├─ Wissen.jpg
+│   └─ logo/
+│        ├─ app-icon-32.png
+│        ├─ app-icon-192.png
+│        └─ app-icon-512.png
+│
+├─ Tätigkeitsbericht.html
+├─ Reisekosten.html
+├─ EuroSDS.html
+├─ Validierung.html
+├─ Wissen.html
+├─ manifest.webmanifest
+└─ apps-hub.html`;
+  }
+
+  /* ===============================
+     THEME (Dark/Light)
+     =============================== */
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+
+    const txt = btnTheme?.querySelector('.txt');
+    if (txt) txt.textContent = theme === 'light'
+      ? "Modus: Dunkel"
+      : "Modus: Hell";
+  }
+
+  applyTheme(localStorage.getItem('theme') || 'dark');
+
+  btnTheme.onclick = () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    applyTheme(current === 'light' ? 'dark' : 'light');
+  };
 
 })();
 </script>
