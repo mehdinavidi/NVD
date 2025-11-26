@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html data-theme="dark" lang="de">
+<html lang="de" data-theme="dark">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>apps-hub</title>
+  <meta name="viewport"
+        content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>Apps-hub</title>
 
   <meta name="theme-color" content="#8B1538" />
   <link rel="manifest" href="manifest.webmanifest" />
@@ -15,13 +16,15 @@
       --surface:#111826;
       --text:#e9edf3;
       --muted:#6e7a94;
-      --border:rgba(255,255,255,0.12);
-      --glassA:rgba(12,16,27,0.65);
-      --glassB:rgba(12,16,27,0.35);
+      --border:rgba(255,255,255,.12);
+      --glassA:rgba(12,16,27,.65);
+      --glassB:rgba(12,16,27,.35);
       --radius:22px;
       --gap:18px;
-      --scale-hover:1.05;
-      --scale-focus:1.08;
+      --card-w:260px;
+      --card-h:180px;
+      --scale-hover:1.06;
+      --scale-focus:1.10;
     }
 
     html[data-theme="light"] {
@@ -29,25 +32,23 @@
       --surface:#ffffff;
       --text:#0f172a;
       --muted:#4b556b;
-      --border:rgba(15,23,42,0.12);
-      --glassA:rgba(255,255,255,0.80);
-      --glassB:rgba(255,255,255,0.55);
+      --border:rgba(15,23,42,.12);
+      --glassA:rgba(255,255,255,.75);
+      --glassB:rgba(255,255,255,.55);
     }
 
     * { box-sizing:border-box; }
 
-    html, body {
-      height:100%;
-      margin:0;
-      padding:0;
-    }
+    html, body { height:100%; }
 
     body {
-      font-family: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      margin:0;
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(1200px 800px at 70% -10%, color-mix(in srgb, var(--brand), transparent 85%) 15%, transparent 60%),
-        linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg), #000 8%) 100%);
+        radial-gradient(1200px 800px at 70% -10%,
+          color-mix(in srgb,var(--brand),transparent 85%) 15%,transparent 60%),
+        linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg),#000 8%) 100%);
       overflow-x:hidden;
     }
 
@@ -59,7 +60,7 @@
       background:center/cover no-repeat;
       filter:blur(40px) saturate(120%) brightness(75%);
       opacity:.35;
-      transition:background-image .35s ease, opacity .35s ease, filter .35s ease;
+      transition:background-image .35s ease,opacity .35s ease,filter .35s ease;
     }
 
     header {
@@ -67,7 +68,8 @@
       top:0;
       z-index:10;
       backdrop-filter:blur(12px) saturate(160%);
-      background:linear-gradient(180deg, color-mix(in srgb, var(--bg), #000 20%) 85%, transparent);
+      background:linear-gradient(180deg,
+        color-mix(in srgb,var(--bg),#000 20%) 85%,transparent);
       border-bottom:1px solid var(--border);
     }
 
@@ -84,9 +86,11 @@
       width:28px;
       height:28px;
       border-radius:8px;
-      overflow:hidden;
+      background:none !important;
       display:grid;
       place-items:center;
+      overflow:hidden;
+      border:1px solid var(--border);
     }
 
     .logo img {
@@ -101,628 +105,624 @@
       letter-spacing:.02em;
     }
 
-    .topbar-spacer {
-      flex:1;
-    }
+    .spacer { flex:1; }
 
-    .theme-toggle {
+    .icon-btn {
       border:none;
-      background:transparent;
+      background:rgba(15,23,42,.4);
       color:var(--text);
       border-radius:999px;
-      padding:6px 10px;
-      font-size:13px;
-      cursor:pointer;
-      display:flex;
+      padding:6px 12px;
+      font-size:.8rem;
+      display:inline-flex;
       align-items:center;
       gap:6px;
+      cursor:pointer;
+      backdrop-filter:blur(10px);
+      border:1px solid var(--border);
     }
 
-    .theme-toggle span.ico {
-      font-size:16px;
+    .icon-btn span.symbol {
+      font-size:1.1rem;
+      translate:0 1px;
     }
 
     .page {
       max-width:1400px;
       margin:24px auto 90px;
-      padding:0 18px;
+      padding:0 30px;
     }
 
     /* Hero */
+
     .hero {
       margin:10px 0 6px;
       border-radius:var(--radius);
       overflow:hidden;
-      background:color-mix(in srgb, var(--bg), #000 20%);
+      background:color-mix(in srgb,var(--bg),#000 20%);
       display:grid;
-      grid-template-columns: minmax(260px,1fr) minmax(340px,1.1fr);
-      box-shadow:0 20px 60px rgba(0,0,0,0.35);
-      position:relative;
-    }
-
-    html[data-theme="light"] .hero {
-      box-shadow:0 12px 36px rgba(0,0,0,0.10);
+      grid-template-columns:minmax(260px,1.1fr) minmax(320px,1.2fr);
+      min-height:220px;
+      border:1px solid var(--border);
     }
 
     .hero .art {
-      min-height:260px;
-      background:center/cover no-repeat;
-      transform:scale(1.02);
-      transition:transform .6s ease;
+      position:relative;
+      overflow:hidden;
     }
 
-    .hero:hover .art {
-      transform:scale(1.06);
+    .hero .art::before {
+      content:"";
+      position:absolute;
+      inset:-20%;
+      background:
+        radial-gradient(circle at 20% 10%,rgba(255,255,255,.06) 0,transparent 60%),
+        radial-gradient(circle at 80% 90%,rgba(255,255,255,.05) 0,transparent 60%);
+      mix-blend-mode:screen;
     }
 
     .hero .info {
-      padding:24px 22px 26px;
+      padding:22px 22px 22px 0;
       display:flex;
       flex-direction:column;
       justify-content:center;
-      gap:14px;
-      background:linear-gradient(
-        180deg,
-        color-mix(in srgb, var(--bg), #000 5%) 0%,
-        color-mix(in srgb, var(--bg), #000 15%) 100%
-      );
+      gap:10px;
     }
 
     .badge {
       display:inline-flex;
       align-items:center;
-      gap:8px;
-      font-size:12px;
-      color:var(--text);
-      opacity:.9;
+      gap:6px;
+      font-size:.72rem;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      padding:4px 9px;
+      border-radius:999px;
+      background:rgba(15,23,42,.7);
+      border:1px solid var(--border);
+      color:var(--muted);
+      align-self:flex-start;
     }
 
     .badge .dot {
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      background:var(--brand);
-      box-shadow:0 0 0 4px color-mix(in srgb, var(--brand), transparent 75%);
+      width:7px;height:7px;border-radius:50%;
+      background:#22c55e;
+      box-shadow:0 0 0 5px rgba(34,197,94,.15);
     }
 
-    .hero h1 {
+    h1 {
+      font-size:1.7rem;
       margin:0;
-      font-size:26px;
     }
 
     .hero p {
       margin:0;
+      font-size:.94rem;
       color:var(--muted);
-      max-width:420px;
     }
 
     .actions {
+      margin-top:8px;
       display:flex;
       flex-wrap:wrap;
       gap:10px;
-      margin-top:10px;
     }
 
     .btn {
-      border:none;
-      padding:11px 18px;
-      border-radius:12px;
-      font-weight:700;
+      border-radius:999px;
+      border:1px solid transparent;
+      padding:8px 16px;
+      font-size:.85rem;
       cursor:pointer;
-      font-size:14px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-weight:500;
     }
 
     .btn.primary {
-      background:var(--brand);
+      background:linear-gradient(135deg,var(--brand),#e11d48);
       color:#fff;
-      box-shadow:0 10px 24px color-mix(in srgb, var(--brand), transparent 50%);
+      box-shadow:0 10px 30px rgba(248,113,113,.25);
     }
 
     .btn.ghost {
       background:transparent;
       color:var(--text);
-      border:1px solid var(--border);
+      border-color:var(--border);
     }
 
-        /* Apps / Grid */
+    /* Rows / Kacheln */
+
     .row {
-      margin-top:26px;
+      margin-top:28px;
     }
 
     .row h2 {
-      font-size:18px;
-      margin:0 0 10px 4px;
-      opacity:.9;
+      font-size:1.1rem;
+      margin:0 0 10px;
+    }
+
+    .row p.sub {
+      margin:0 0 14px;
+      font-size:.86rem;
+      color:var(--muted);
     }
 
     .strip {
       display:grid;
-      grid-template-columns:repeat(auto-fill, minmax(210px,1fr));
-      gap:clamp(10px, 2vw, 24px);
-      padding:18px 4px 26px;
-      justify-items:center;
+      grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+      gap:var(--gap);
     }
 
     .card {
       position:relative;
-      width:100%;
-      max-width:270px;
-      height:clamp(160px, 22vw, 220px);
-      border-radius:18px;
-      background:var(--surface);
+      min-height:var(--card-h);
+      border-radius:var(--radius);
       overflow:hidden;
+      background:var(--glassA);
+      border:1px solid var(--border);
       cursor:pointer;
-      box-shadow:0 10px 24px rgba(0,0,0,0.35);
-      transition:transform .18s ease, box-shadow .2s ease, filter .2s ease;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      padding:14px;
+      isolation:isolate;
+      transform-origin:center;
+      transition:transform .16s ease-out, box-shadow .16s ease-out,
+                 border-color .16s ease-out, background .16s ease-out;
     }
 
-    html[data-theme="light"] .card {
-      box-shadow:0 12px 30px rgba(0,0,0,0.10);
+    .card:before {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,
+        rgba(15,23,42,.05) 0%,
+        rgba(15,23,42,.75) 100%);
+      opacity:.9;
+      z-index:0;
     }
 
-    .card:hover {
-      transform:scale(var(--scale-hover));
+    .card .thumb {
+      position:absolute;
+      inset:0;
+      background-size:cover;
+      background-position:center;
+      transform:scale(1.06);
+      filter:saturate(110%);
+      z-index:-1;
+      transition:transform .4s ease-out, filter .4s ease-out, opacity .3s ease-out;
+      opacity:.9;
+    }
+
+    .card .label {
+      position:relative;
+      z-index:1;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .card .label .ico {
+      width:28px;
+      height:28px;
+      border-radius:11px;
+      background:rgba(15,23,42,.55);
+      display:grid;
+      place-items:center;
+      font-size:1rem;
+    }
+
+    .card .label span.text {
+      font-weight:600;
+    }
+
+    .card small {
+      position:relative;
+      z-index:1;
+      display:block;
+      margin-top:4px;
+      font-size:.75rem;
+      color:var(--muted);
+    }
+
+    .card:hover,
+    .card:focus-visible {
+      transform:scale(var(--scale-hover)) translateY(-2px);
+      box-shadow:0 14px 40px rgba(15,23,42,.55);
+      border-color:color-mix(in srgb,var(--brand),#fff 10%);
     }
 
     .card:focus-visible {
-      outline:none;
+      outline:2px solid color-mix(in srgb,var(--brand),#fff 10%);
+      outline-offset:2px;
       transform:scale(var(--scale-focus));
-      box-shadow:
-        0 20px 50px rgba(0,0,0,0.30),
-        0 0 0 3px rgba(255,255,255,0.18),
-        0 0 0 8px color-mix(in srgb, var(--brand), transparent 70%);
-      z-index:5;
-    }
-
-    .thumb {
-      position:absolute;
-      inset:0;
-      background:center/cover no-repeat;
-      transition:transform .3s ease;
-      pointer-events:none;
     }
 
     .card:hover .thumb {
-      transform:scale(1.06);
+      transform:scale(1.12);
+      filter:saturate(125%) brightness(102%);
     }
 
-    .label {
-      position:absolute;
-      left:10px;
-      right:10px;
-      bottom:10px;
-      padding:8px 10px;
-      border-radius:10px;
-      background:linear-gradient(180deg, var(--glassA), var(--glassB));
-      color:var(--text);
+    footer {
+      margin-top:40px;
+      padding:18px 0 10px;
+      font-size:.75rem;
+      color:var(--muted);
+      border-top:1px solid var(--border);
       display:flex;
-      align-items:center;
-      gap:8px;
-      font-size:14px;
-      border:1px solid var(--border);
-      backdrop-filter:blur(8px);
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
     }
 
-    .label .ico {
-      width:16px;
-      height:16px;
-      border-radius:6px;
-      background:linear-gradient(135deg, var(--brand), #f05880);
-      flex-shrink:0;
-    }
-
-    .card.no-thumb .thumb {
-      background:#0f1524;
-    }
-
-    .card.no-thumb .thumb::after {
-      content:"Kein Bild";
-      position:absolute;
-      top:8px;
-      right:10px;
-      font-size:12px;
-      background:rgba(255,255,255,0.12);
-      padding:4px 8px;
-      border-radius:999px;
-    }
+    footer strong { font-weight:600; }
 
     /* Modal */
+
     .modal {
       position:fixed;
       inset:0;
       display:none;
-      align-items:center;
+      align-items:flex-end;
       justify-content:center;
-      background:rgba(0,0,0,0.45);
-      backdrop-filter:blur(2px);
-      z-index:50;
+      background:rgba(15,23,42,.52);
+      z-index:30;
+      padding:18px;
     }
 
-    .modal.is-open {
-      display:flex;
-    }
+    .modal.open { display:flex; }
 
     .modal .sheet {
-      width:min(860px,92vw);
-      max-height:84vh;
-      overflow:auto;
+      width:100%;
+      max-width:640px;
       background:var(--surface);
-      color:var(--text);
+      border-radius:22px 22px 0 0;
       border:1px solid var(--border);
-      border-radius:16px;
-      padding:0 0 18px;
-      box-shadow:0 20px 60px rgba(0,0,0,0.4);
-    }
-
-    .sheet .head {
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:16px 18px;
-      border-bottom:1px solid var(--border);
-      background:linear-gradient(135deg,
-        color-mix(in srgb, var(--brand), transparent 75%),
-        transparent 60%);
-    }
-
-    .head .title {
+      max-height:90vh;
       display:flex;
       flex-direction:column;
-      gap:4px;
+      overflow:hidden;
     }
 
-    .head .title strong {
-      font-size:16px;
-      letter-spacing:.3px;
+    .modal .head {
+      padding:14px 18px 10px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      border-bottom:1px solid var(--border);
     }
 
-    .head .subtitle {
+    .modal .head .title {
+      flex:1;
+    }
+
+    .modal .head .title strong {
+      display:block;
+      font-size:.98rem;
+    }
+
+    .modal .head .title .subtitle {
+      font-size:.8rem;
       color:var(--muted);
-      font-size:13px;
     }
 
-    .head .badge {
-      background:var(--brand);
-      color:#fff;
-      padding:6px 10px;
-      border-radius:999px;
-      font-weight:700;
-      font-size:12px;
-      box-shadow:0 8px 22px color-mix(in srgb,var(--brand),transparent 60%);
+    .modal .badge {
+      margin:0;
     }
 
     .modal .close {
       border:none;
       background:transparent;
-      color:var(--text);
-      font-size:20px;
-      cursor:pointer;
-      padding:6px 10px;
-      border-radius:10px;
-    }
-
-    .modal .close:hover {
-      background:rgba(255,255,255,0.08);
-    }
-
-    .section {
-      padding:14px 18px 0;
-    }
-
-    .section h4 {
-      margin:0 0 6px;
-      font-size:15px;
-    }
-
-    .section p {
-      margin:4px 0;
       color:var(--muted);
+      font-size:1.3rem;
+      cursor:pointer;
+      padding:0 3px;
     }
 
-    .section ul {
-      margin:6px 0 0 18px;
+    .modal .body {
+      padding:12px 18px 16px;
+      overflow:auto;
+      font-size:.85rem;
+    }
+
+    .modal h4 {
+      margin:10px 0 4px;
+      font-size:.9rem;
     }
 
     .pre {
-      font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-      background:color-mix(in srgb, var(--bg), #000 10%);
+      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:.75rem;
+      background:rgba(15,23,42,.7);
+      padding:10px 12px;
+      border-radius:12px;
       border:1px solid var(--border);
-      border-radius:10px;
-      padding:10px;
-      overflow:auto;
-      font-size:13px;
-      line-height:1.45;
-      margin:6px 0 12px;
       white-space:pre;
+      overflow:auto;
     }
 
-    footer {
-      text-align:center;
-      color:var(--muted);
-      margin:40px 0 30px;
-      font-size:13px;
-    }
+    /* Responsive */
 
-    @media (max-width: 900px) {
+    @media (max-width:900px) {
+      .page { padding:0 16px; }
       .hero {
-        grid-template-columns: minmax(0,1fr);
+        grid-template-columns:1fr;
+        min-height:0;
       }
-      .hero .art {
-        min-height:200px;
-      }
-      .page {
-        padding:0 12px;
+      .hero .info {
+        padding:18px;
       }
     }
 
-    @media (max-width: 600px) {
+    @media (max-width:600px) {
       .topbar {
-        padding-inline:12px;
+        padding:10px 14px;
       }
-      .hero h1 {
-        font-size:22px;
-      }
-      .strip {
-        grid-template-columns:repeat(auto-fill, minmax(160px,1fr));
-      }
-      .card {
-        max-width:220px;
-        height:clamp(150px, 40vw, 190px);
+      .brand { font-size:.9rem; }
+      .hero { margin-top:4px; }
+      footer {
+        flex-direction:column;
+        align-items:flex-start;
       }
     }
   </style>
 </head>
-
 <body>
-
   <div class="backdrop" id="backdrop"></div>
 
   <header>
     <div class="topbar">
-      <div class="logo" title="apps-hub">
-        <img id="brandLogo" src="photos/logo/app-icon-192.png" alt="Logo" />
+      <div class="logo">
+        <!-- Wenn du willst, kannst du hier später ein echtes Logo einbauen -->
+        <img src="photos/EuroSDS.jpg" alt="Logo" />
       </div>
-      <div class="brand">apps-hub</div>
-      <div class="topbar-spacer"></div>
-      <button class="theme-toggle" id="btnTheme">
-        <span class="ico">🌗</span>
-        <span class="txt">Modus: Hell</span>
+      <div class="brand">Apps-hub</div>
+      <div class="spacer"></div>
+      <button class="icon-btn" id="btnThemeTop" type="button">
+        <span class="symbol">🌗</span>
+        <span class="label">Modus</span>
       </button>
     </div>
   </header>
 
   <main class="page">
-
     <section class="hero">
       <div class="art" id="heroArt"></div>
       <div class="info">
         <div class="badge">
-          <span class="dot"></span>
-          Auto-Bilder & Responsive Layout
+          <span class="dot"></span> Zentraler Startpunkt
         </div>
-        <h1>Dein zentraler Startpunkt</h1>
+        <h1>Deine Nexus-Apps auf einen Blick</h1>
         <p>
-          Schnellzugriff auf Tätigkeitsbericht, Reisekosten, EuroSDS, Validierung
-          und Wissen – mit dynamischem Hintergrund & optimierten Kacheln.
+          Schneller Zugriff auf Tätigkeitsbericht, Reisekosten, Validierung und weitere Tools –
+          mit dynamischem Hintergrund passend zur gewählten App.
         </p>
         <div class="actions">
-          <button class="btn primary" id="btnInfo">Info</button>
+          <button class="btn primary" id="btnInfo" type="button">Info</button>
+          <button class="btn ghost" id="btnTheme" type="button">Modus: Hell</button>
         </div>
       </div>
     </section>
 
     <section class="row" id="apps">
       <h2>Apps</h2>
+      <p class="sub">Alle Apps nutzen dieselbe Struktur – lokal, auf GitHub oder woanders.</p>
 
       <div class="strip">
-
-        <article class="card" aria-label="Tätigkeitsbericht" data-link="Tätigkeitsbericht.html">
+        <article class="card"
+                 tabindex="0"
+                 data-link="Tätigkeitsbericht.html"
+                 data-bg="photos/Tätigkeitsbericht.jpg">
           <div class="thumb"></div>
-          <div class="label"><span class="ico"></span><span>Tätigkeitsbericht</span></div>
+          <div class="label">
+            <span class="ico">📋</span>
+            <span class="text">Tätigkeitsbericht</span>
+          </div>
+          <small>Einsatz- und Arbeitszeiten dokumentieren.</small>
         </article>
 
-        <article class="card" aria-label="Reisekosten" data-link="Reisekosten.html">
+        <article class="card"
+                 tabindex="0"
+                 data-link="Reisekosten.html"
+                 data-bg="photos/Reisekosten.jpg">
           <div class="thumb"></div>
-          <div class="label"><span class="ico"></span><span>Reisekosten</span></div>
+          <div class="label">
+            <span class="ico">🧾</span>
+            <span class="text">Reisekosten</span>
+          </div>
+          <small>Spesen, Fahrten und Belege erfassen.</small>
         </article>
 
-        <article class="card" aria-label="EuroSDS" data-link="EuroSDS.html">
+        <article class="card"
+                 tabindex="0"
+                 data-link="EuroSDS.html"
+                 data-bg="photos/EuroSDS.jpg">
           <div class="thumb"></div>
-          <div class="label"><span class="ico"></span><span>EuroSDS</span></div>
+          <div class="label">
+            <span class="ico">🧴</span>
+            <span class="text">EuroSDS</span>
+          </div>
+          <small>AEMP / Steri-Workflows im Blick.</small>
         </article>
 
-        <article class="card" aria-label="Validierung" data-link="Validierung.html">
+        <article class="card"
+                 tabindex="0"
+                 data-link="Validierung.html"
+                 data-bg="photos/Validierung.jpg">
           <div class="thumb"></div>
-          <div class="label"><span class="ico"></span><span>Validierung</span></div>
+          <div class="label">
+            <span class="ico">✅</span>
+            <span class="text">Validierung</span>
+          </div>
+          <small>Validierungsprozesse Schritt für Schritt.</small>
         </article>
 
-        <article class="card" aria-label="Wissen" data-link="Wissen.html">
+        <article class="card"
+                 tabindex="0"
+                 data-link="Wissen.html"
+                 data-bg="photos/Wissen.jpg">
           <div class="thumb"></div>
-          <div class="label"><span class="ico"></span><span>Wissen</span></div>
+          <div class="label">
+            <span class="ico">📚</span>
+            <span class="text">Wissen</span>
+          </div>
+          <small>Dokumentation, How-Tos und Notizen.</small>
         </article>
-
       </div>
     </section>
 
+    <footer>
+      <div>
+        <strong>Apps-hub</strong> – zentrale Startseite für deine Nexus-Tools.
+      </div>
+      <div>
+        Entwickelt von Nexus IPS (MENA)
+      </div>
+    </footer>
   </main>
 
-  <footer>
-    apps-hub • Entwickelt von Nexus IPS (MENA)
-  </footer>
-
-  <div class="modal" id="infoModal">
+  <!-- Info-Modal -->
+  <div class="modal" id="infoModal" aria-hidden="true">
     <div class="sheet">
       <div class="head">
         <div class="title">
-          <strong>apps-hub</strong>
-          <div class="subtitle">Auto-Bilder aus photos/&lt;Name&gt;.jpg</div>
+          <strong>Nexus IPS – Apps-hub</strong>
+          <div class="subtitle">Zentraler Einstieg für Tätigkeitsbericht, Reisekosten &amp; mehr.</div>
         </div>
-        <span class="badge">v25.0.12</span>
-        <button class="close" aria-label="Schließen">×</button>
+        <div class="badge">
+          <span class="dot"></span> Version&nbsp;25.0.11
+        </div>
+        <button class="close" type="button" aria-label="Schließen">&times;</button>
       </div>
-
-      <div class="section">
-        <h4>Architektur & Technik</h4>
+      <div class="body">
+        <h4>Architektur &amp; Technik</h4>
         <ul>
-          <li>100% Vanilla HTML, CSS, JavaScript</li>
-          <li>Dark-/Light-Mode mit LocalStorage</li>
-          <li>Automatische Kachelbilder (photos/&lt;Name&gt;.jpg)</li>
-          <li>Dynamischer Backdrop pro Kachel</li>
-          <li>Responsive Grid (Mobil → Desktop)</li>
+          <li>Reine Web-Technik: HTML, CSS, JavaScript (kein Framework).</li>
+          <li>Responsive Grid-Kacheln (auto-fit, minmax) für alle Gerätegrößen.</li>
+          <li>Dark/Light-Mode mit Speicherung im <code>localStorage</code>.</li>
+          <li>Dynamischer Hintergrund, abhängig von der gewählten App-Kachel.</li>
         </ul>
-      </div>
 
-      <div class="section">
-        <h4>Projektstruktur</h4>
+        <h4>Projektstruktur (Beispiel)</h4>
         <div class="pre" id="projStruct"></div>
       </div>
-
     </div>
   </div>
 
-<script>
-
   <script>
-(function () {
+    (function() {
+      const html = document.documentElement;
+      const backdrop = document.getElementById('backdrop');
+      const heroArt = document.getElementById('heroArt');
+      const cards = document.querySelectorAll('.card');
+      const btnTheme = document.getElementById('btnTheme');
+      const btnThemeTop = document.getElementById('btnThemeTop');
+      const modal = document.getElementById('infoModal');
+      const btnInfo = document.getElementById('btnInfo');
+      const btnClose = modal.querySelector('.close');
+      const projStruct = document.getElementById('projStruct');
 
-  const heroArt   = document.getElementById('heroArt');
-  const backdrop  = document.getElementById('backdrop');
-  const cards     = document.querySelectorAll('.card');
-  const infoModal = document.getElementById('infoModal');
-  const btnInfo   = document.getElementById('btnInfo');
-  const btnTheme  = document.getElementById('btnTheme');
-  const proj      = document.getElementById('projStruct');
+      /* --- Theme --- */
+      function applyTheme(mode) {
+        html.setAttribute('data-theme', mode);
+        localStorage.setItem('appsHubTheme', mode);
+        const isLight = mode === 'light';
+        btnTheme.textContent = isLight ? 'Modus: Dunkel' : 'Modus: Hell';
+        btnThemeTop.querySelector('.label').textContent = isLight ? 'Dunkel' : 'Hell';
+      }
 
-  /* ===============================
-     HERO — nutzt neutrales Bild
-     =============================== */
-  heroArt.style.backgroundImage = "url('photos/Hero.jpg')";
+      const storedTheme = localStorage.getItem('appsHubTheme');
+      applyTheme(storedTheme === 'light' ? 'light' : 'dark');
 
-  /* ===============================
-     AUTO-IMAGE-LOADER
-     =============================== */
-  cards.forEach(card => {
-    const name = card.getAttribute('aria-label');
-    if (!name) return;
+      function toggleTheme() {
+        const current = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        applyTheme(current);
+      }
 
-    const imgUrl = `photos/${name}.jpg`;
+      btnTheme.addEventListener('click', toggleTheme);
+      btnThemeTop.addEventListener('click', toggleTheme);
 
-    const thumb = card.querySelector('.thumb');
-    if (thumb) thumb.style.backgroundImage = `url('${imgUrl}')`;
+      /* --- Karten / Backdrop --- */
+      function setBackgroundFrom(card) {
+        const bg = card.getAttribute('data-bg');
+        if (!bg) return;
+        backdrop.style.backgroundImage = `url('${bg}')`;
+        heroArt.style.backgroundImage = `url('${bg}')`;
+        heroArt.style.backgroundSize = 'cover';
+        heroArt.style.backgroundPosition = 'center';
+      }
 
-    card.dataset.bg = imgUrl; // für Backdrop
-  });
+      cards.forEach(card => {
+        const bg = card.getAttribute('data-bg');
+        const thumb = card.querySelector('.thumb');
+        if (bg && thumb) {
+          thumb.style.backgroundImage = `url('${bg}')`;
+        }
 
-  /* ===============================
-     BACKDROP HOVER
-     =============================== */
-  function setBackdrop(card) {
-    const url = card?.dataset?.bg || "";
-    if (url) backdrop.style.backgroundImage = `url('${url}')`;
-  }
+        card.addEventListener('mouseenter', () => setBackgroundFrom(card));
+        card.addEventListener('focus', () => setBackgroundFrom(card));
 
-  const firstCard = document.querySelector('.card');
-  if (firstCard) setBackdrop(firstCard);
+        card.addEventListener('click', () => {
+          const link = card.getAttribute('data-link');
+          if (link) window.location.href = link;
+        });
 
-  ['pointerenter','focusin','touchstart'].forEach(ev => {
-    document.addEventListener(ev, e => {
-      const card = e.target.closest?.('.card');
-      if (card) setBackdrop(card);
-    }, true);
-  });
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            const link = card.getAttribute('data-link');
+            if (link) window.location.href = link;
+          }
+        });
+      });
 
-  /* ===============================
-     CARD CLICK
-     =============================== */
-  document.addEventListener('click', e => {
-    const card = e.target.closest?.('.card');
-    if (!card) return;
-    const href = card.dataset.link;
-    if (href) window.location.href = href;
-  });
+      // initialer Hintergrund von erster Karte
+      if (cards[0]) setBackgroundFrom(cards[0]);
 
-  /* ===============================
-     INFO-MODAL
-     =============================== */
-  if (btnInfo && infoModal) {
+      /* --- Modal --- */
+      function openModal() {
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+      }
 
-    const closeBtn = infoModal.querySelector('.close');
+      function closeModal() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
 
-    btnInfo.onclick = () => {
-      infoModal.classList.add('is-open');
-      showProjectStructure();
-    };
+      btnInfo.addEventListener('click', openModal);
+      btnClose.addEventListener('click', closeModal);
+      modal.addEventListener('click', e => {
+        if (e.target === modal) closeModal();
+      });
 
-    closeBtn.onclick = () => infoModal.classList.remove('is-open');
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && modal.classList.contains('open')) {
+          closeModal();
+        }
+      });
 
-    infoModal.onclick = (e) => {
-      if (e.target === infoModal) infoModal.classList.remove('is-open');
-    };
-  }
+      /* --- Projektstruktur Text --- */
+      const structText = [
+        'Apps-hub.html',
+        'Tätigkeitsbericht.html',
+        'Reisekosten.html',
+        'EuroSDS.html',
+        'Validierung.html',
+        'Wissen.html',
+        '',
+        'photos/',
+        '  Tätigkeitsbericht.jpg',
+        '  Reisekosten.jpg',
+        '  EuroSDS.jpg',
+        '  Validierung.jpg',
+        '  Wissen.jpg'
+      ].join('\n');
 
-  /* ===============================
-     PROJEKTSTRUKTUR (apps-hub)
-     =============================== */
-  function detectDrive() {
-    try {
-      const href = decodeURIComponent(window.location.href);
-      let m = href.match(/file:\/\/\/([A-Za-z]):\//);
-      if (m) return m[1].toUpperCase();
-
-      m = window.location.pathname.match(/^\/([A-Za-z]):\//);
-      if (m) return m[1].toUpperCase();
-    } catch (e) {}
-    return "<Laufwerk>";
-  }
-
-  function showProjectStructure() {
-    const d = detectDrive();
-    proj.textContent =
-`${d}:/apps-hub/
-├─ photos/
-│   ├─ Hero.jpg
-│   ├─ Tätigkeitsbericht.jpg
-│   ├─ Reisekosten.jpg
-│   ├─ EuroSDS.jpg
-│   ├─ Validierung.jpg
-│   ├─ Wissen.jpg
-│   └─ logo/
-│        ├─ app-icon-32.png
-│        ├─ app-icon-192.png
-│        └─ app-icon-512.png
-│
-├─ Tätigkeitsbericht.html
-├─ Reisekosten.html
-├─ EuroSDS.html
-├─ Validierung.html
-├─ Wissen.html
-├─ manifest.webmanifest
-└─ apps-hub.html`;
-  }
-
-  /* ===============================
-     THEME (Dark/Light)
-     =============================== */
-  function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-
-    const txt = btnTheme?.querySelector('.txt');
-    if (txt) txt.textContent = theme === 'light'
-      ? "Modus: Dunkel"
-      : "Modus: Hell";
-  }
-
-  applyTheme(localStorage.getItem('theme') || 'dark');
-
-  btnTheme.onclick = () => {
-    const current = document.documentElement.getAttribute('data-theme') || 'dark';
-    applyTheme(current === 'light' ? 'dark' : 'light');
-  };
-
-})();
-</script>
-
+      projStruct.textContent = structText;
+    })();
+  </script>
 </body>
 </html>
