@@ -3,7 +3,7 @@
 <html lang="de"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <title>Tätigkeitsbericht Pro</title>
 
   <style>
@@ -889,14 +889,15 @@
       
       <label class="label" style="margin-top:15px;">Unterschrift <span class="required">*</span></label>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-        <button class="btn btn-secondary" onclick="openSigModal()">
+        <button class="btn btn-secondary" style="margin:0;" onclick="openSigModal()">
           <svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path></svg>
           Zeichnen
         </button>
-        <label class="btn btn-secondary" style="margin:0;">
+        <button class="btn btn-secondary" style="margin:0;" onclick="document.getElementById('sigFileInput').click()">
           <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-          Hochladen <input type="file" accept="image/*" style="display:none" onchange="importSigFile(this.files[0])">
-        </label>
+          Hochladen
+        </button>
+        <input type="file" id="sigFileInput" accept="image/*" style="display:none" onchange="importSigFile(this.files[0])">
       </div>
       <div id="sigPrev" class="sig-preview"><span class="placeholder">Keine Unterschrift</span></div>
       <button class="btn btn-danger" style="margin-top:10px;" onclick="clearSignature()">
@@ -1210,6 +1211,52 @@
       };
     }
 
+    function checkTimeConflicts() {
+      const rows = Array.from(document.querySelectorAll('#tbody tr'));
+      const entries = [];
+      
+      // Alle Einträge sammeln
+      rows.forEach((row, index) => {
+        const date = row.querySelector('.date-in').value;
+        const start = row.querySelector('.t-start').value;
+        const end = row.querySelector('.t-end').value;
+        
+        if(date && start && end) {
+          entries.push({
+            rowNum: index + 1,
+            date: date,
+            start: start,
+            end: end,
+            startMins: timeToMins(start),
+            endMins: timeToMins(end)
+          });
+        }
+      });
+      
+      // Nach Datum gruppieren und Konflikte prüfen
+      for(let i = 0; i < entries.length; i++) {
+        for(let j = i + 1; j < entries.length; j++) {
+          if(entries[i].date === entries[j].date) {
+            // Gleicher Tag - prüfe Überlappung
+            const a = entries[i];
+            const b = entries[j];
+            
+            // Überlappung wenn: Start1 < Ende2 UND Start2 < Ende1
+            if(a.startMins < b.endMins && b.startMins < a.endMins) {
+              toast(`Zeitkonflikt: Zeile ${a.rowNum} und ${b.rowNum} überlappen sich am ${formatDateDE(a.date)}`, 'error');
+              return false;
+            }
+          }
+        }
+      }
+      return true;
+    }
+    
+    function timeToMins(timeStr) {
+      const [h, m] = timeStr.split(':').map(Number);
+      return h * 60 + m;
+    }
+
     function validateRequiredFields() {
       const kunde = document.getElementById('kunde').value.trim();
       const projekt = document.getElementById('projekt').value.trim();
@@ -1223,6 +1270,9 @@
       if(!mitarbeiter) { toast('Bitte Mitarbeiter eingeben', 'error'); return false; }
       if(!sigName) { toast('Bitte Name des Unterzeichners eingeben', 'error'); return false; }
       if(!sigData) { toast('Bitte Unterschrift hinzufügen', 'error'); return false; }
+      
+      // Zeitkonflikte prüfen
+      if(!checkTimeConflicts()) return false;
       
       return true;
     }
