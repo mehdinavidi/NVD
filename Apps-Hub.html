@@ -1,440 +1,306 @@
 <!DOCTYPE html>
 <html lang="de" data-theme="dark">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport"
-        content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>Apps-hub</title>
-
-  <meta name="theme-color" content="#8B1538" />
-  <link rel="manifest" href="manifest.webmanifest" />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Nexus Apps-hub</title>
+  <meta name="description" content="Zentrale App-Übersicht für Nexus IPS Mitarbeiter">
+  <meta name="theme-color" content="#8B1538">
+  <link rel="manifest" href="manifest.webmanifest">
+  
   <style>
     :root {
-      --brand:#8B1538;
-      --bg:#0b0f1a;
-      --surface:#111826;
-      --text:#e9edf3;
-      --muted:#6e7a94;
-      --border:rgba(255,255,255,.12);
-      --glassA:rgba(12,16,27,.65);
-      --glassB:rgba(12,16,27,.35);
-      --radius:22px;
-      --gap:18px;
-      --card-w:260px;
-      --card-h:180px;
-      --scale-hover:1.06;
-      --scale-focus:1.10;
+      --brand: #8B1538;
+      --bg: #0b0f1a;
+      --surface: #111826;
+      --text: #e9edf3;
+      --muted: #6e7a94;
+      --border: rgba(255, 255, 255, 0.12);
+      --radius: 16px;
+      --gap: 20px;
     }
-
+    
     html[data-theme="light"] {
-      --bg:#f4f6fb;
-      --surface:#ffffff;
-      --text:#0f172a;
-      --muted:#4b556b;
-      --border:rgba(15,23,42,.12);
-      --glassA:rgba(255,255,255,.75);
-      --glassB:rgba(255,255,255,.55);
+      --bg: #f4f6fb;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #4b556b;
+      --border: rgba(15, 23, 42, 0.12);
     }
-
-    * { box-sizing:border-box; }
-
-    html, body { height:100%; }
-
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
     body {
-      margin:0;
-      font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(1200px 800px at 70% -10%,
-          color-mix(in srgb,var(--brand),transparent 85%) 15%,transparent 60%),
-        linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg),#000 8%) 100%);
-      overflow-x:hidden;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, 
+        var(--bg) 0%, 
+        color-mix(in srgb, var(--bg) 95%, var(--brand) 5%) 100%
+      );
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px;
+      transition: background 0.3s ease;
     }
-
+    
     .backdrop {
-      position:fixed;
-      inset:0;
-      z-index:-1;
-      pointer-events:none;
-      background:center/cover no-repeat;
-      filter:blur(40px) saturate(120%) brightness(75%);
-      opacity:.35;
-      transition:background-image .35s ease,opacity .35s ease,filter .35s ease;
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-size: cover;
+      background-position: center;
+      filter: blur(50px) saturate(150%) brightness(0.6);
+      opacity: 0.4;
+      transition: background-image 0.4s ease, opacity 0.4s ease;
     }
-
+    
     header {
-      position:sticky;
-      top:0;
-      z-index:10;
-      backdrop-filter:blur(12px) saturate(160%);
-      background:linear-gradient(180deg,
-        color-mix(in srgb,var(--bg),#000 20%) 85%,transparent);
-      border-bottom:1px solid var(--border);
+      max-width: 1200px;
+      margin: 0 auto 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
     }
-
-    .topbar {
-      max-width:1400px;
-      margin:0 auto;
-      padding:14px 18px;
-      display:flex;
-      align-items:center;
-      gap:10px;
+    
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-
+    
     .logo {
-      width:28px;
-      height:28px;
-      border-radius:8px;
-      background:none !important;
-      display:grid;
-      place-items:center;
-      overflow:hidden;
-      border:1px solid var(--border);
+      font-size: 32px;
+      filter: drop-shadow(0 2px 8px rgba(139, 21, 56, 0.5));
     }
-
-    .logo img {
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-
-    .brand {
-      font-weight:700;
-      letter-spacing:.02em;
-    }
-
-    .spacer { flex:1; }
-
-    .icon-btn {
-      border:none;
-      background:rgba(15,23,42,.4);
-      color:var(--text);
-      border-radius:999px;
-      padding:6px 12px;
-      font-size:.8rem;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      cursor:pointer;
-      backdrop-filter:blur(10px);
-      border:1px solid var(--border);
-    }
-
-    .icon-btn span.symbol {
-      font-size:1.1rem;
-      translate:0 1px;
-    }
-
-    .page {
-      max-width:1400px;
-      margin:24px auto 90px;
-      padding:0 30px;
-    }
-
-    /* Hero */
-
-    .hero {
-      margin:10px 0 6px;
-      border-radius:var(--radius);
-      overflow:hidden;
-      background:color-mix(in srgb,var(--bg),#000 20%);
-      display:grid;
-      grid-template-columns:minmax(260px,1.1fr) minmax(320px,1.2fr);
-      min-height:220px;
-      border:1px solid var(--border);
-    }
-
-    .hero .art {
-      position:relative;
-      overflow:hidden;
-    }
-
-    .hero .art::before {
-      content:"";
-      position:absolute;
-      inset:-20%;
-      background:
-        radial-gradient(circle at 20% 10%,rgba(255,255,255,.06) 0,transparent 60%),
-        radial-gradient(circle at 80% 90%,rgba(255,255,255,.05) 0,transparent 60%);
-      mix-blend-mode:screen;
-    }
-
-    .hero .info {
-      padding:22px 22px 22px 0;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      gap:10px;
-    }
-
-    .badge {
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      font-size:.72rem;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      padding:4px 9px;
-      border-radius:999px;
-      background:rgba(15,23,42,.7);
-      border:1px solid var(--border);
-      color:var(--muted);
-      align-self:flex-start;
-    }
-
-    .badge .dot {
-      width:7px;height:7px;border-radius:50%;
-      background:#22c55e;
-      box-shadow:0 0 0 5px rgba(34,197,94,.15);
-    }
-
+    
     h1 {
-      font-size:1.7rem;
-      margin:0;
+      font-size: clamp(24px, 5vw, 32px);
+      font-weight: 700;
+      color: var(--text);
     }
-
-    .hero p {
-      margin:0;
-      font-size:.94rem;
-      color:var(--muted);
+    
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
-
-    .actions {
-      margin-top:8px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-    }
-
+    
     .btn {
-      border-radius:999px;
-      border:1px solid transparent;
-      padding:8px 16px;
-      font-size:.85rem;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      font-weight:500;
+      padding: 10px 18px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      white-space: nowrap;
     }
-
-    .btn.primary {
-      background:linear-gradient(135deg,var(--brand),#e11d48);
-      color:#fff;
-      box-shadow:0 10px 30px rgba(248,113,113,.25);
+    
+    .btn:hover {
+      background: color-mix(in srgb, var(--surface) 90%, var(--brand) 10%);
+      border-color: var(--brand);
+      transform: translateY(-1px);
     }
-
-    .btn.ghost {
-      background:transparent;
-      color:var(--text);
-      border-color:var(--border);
+    
+    .btn:active {
+      transform: translateY(0);
     }
-
-    /* Rows / Kacheln */
-
-    .row {
-      margin-top:28px;
+    
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
     }
-
-    .row h2 {
-      font-size:1.1rem;
-      margin:0 0 10px;
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--gap);
+      padding: 20px 0;
     }
-
-    .row p.sub {
-      margin:0 0 14px;
-      font-size:.86rem;
-      color:var(--muted);
-    }
-
-    .strip {
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
-      gap:var(--gap);
-    }
-
+    
     .card {
-      position:relative;
-      min-height:var(--card-h);
-      border-radius:var(--radius);
-      overflow:hidden;
-      background:var(--glassA);
-      border:1px solid var(--border);
-      cursor:pointer;
-      display:flex;
-      flex-direction:column;
-      justify-content:flex-end;
-      padding:14px;
-      isolation:isolate;
-      transform-origin:center;
-      transition:transform .16s ease-out, box-shadow .16s ease-out,
-                 border-color .16s ease-out, background .16s ease-out;
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
-
-    .card:before {
-      content:"";
-      position:absolute;
-      inset:0;
-      background:linear-gradient(180deg,
-        rgba(15,23,42,.05) 0%,
-        rgba(15,23,42,.75) 100%);
-      opacity:.9;
-      z-index:0;
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 0;
     }
-
-    .card .thumb {
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(135deg, rgba(139, 21, 56, 0.3), rgba(225, 29, 72, 0.2)),
-        center/cover no-repeat;
-      transform:scale(1.06);
-      filter:saturate(110%);
-      z-index:-1;
-      transition:transform .4s ease-out, filter .4s ease-out, opacity .3s ease-out;
-      opacity:.9;
+    
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, 
+        color-mix(in srgb, var(--surface) 85%, transparent 15%) 0%,
+        color-mix(in srgb, var(--surface) 90%, transparent 10%) 100%
+      );
+      backdrop-filter: blur(20px);
+      z-index: 1;
     }
-
-    .card .label {
-      position:relative;
-      z-index:1;
-      display:flex;
-      align-items:center;
-      gap:10px;
+    
+    .card:hover::before {
+      opacity: 0.15;
     }
-
-    .card .label .ico {
-      width:28px;
-      height:28px;
-      border-radius:11px;
-      background:rgba(15,23,42,.55);
-      display:grid;
-      place-items:center;
-      font-size:1rem;
+    
+    .card:hover {
+      transform: translateY(-4px) scale(1.02);
+      border-color: var(--brand);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
+                  0 0 0 1px color-mix(in srgb, var(--brand) 50%, transparent 50%);
     }
-
-    .card .label span.text {
-      font-weight:600;
+    
+    .card:active {
+      transform: translateY(-2px) scale(1.01);
     }
-
-    .card small {
-      position:relative;
-      z-index:1;
-      display:block;
-      margin-top:4px;
-      font-size:.75rem;
-      color:var(--muted);
-    }
-
-    .card:hover,
+    
     .card:focus-visible {
-      transform:scale(var(--scale-hover)) translateY(-2px);
-      box-shadow:0 14px 40px rgba(15,23,42,.55);
-      border-color:color-mix(in srgb,var(--brand),#fff 10%);
+      outline: 2px solid var(--brand);
+      outline-offset: 2px;
+      transform: translateY(-4px) scale(1.03);
     }
-
-    .card:focus-visible {
-      outline:2px solid color-mix(in srgb,var(--brand),#fff 10%);
-      outline-offset:2px;
-      transform:scale(var(--scale-focus));
+    
+    .card > * {
+      position: relative;
+      z-index: 2;
     }
-
-    .card:hover .thumb {
-      transform:scale(1.12);
-      filter:saturate(125%) brightness(102%);
+    
+    .ico {
+      font-size: 40px;
+      line-height: 1;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
     }
-
+    
+    .text {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin-top: auto;
+    }
+    
+    small {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    
     footer {
-      margin-top:40px;
-      padding:18px 0 10px;
-      font-size:.75rem;
-      color:var(--muted);
-      border-top:1px solid var(--border);
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
+      max-width: 1200px;
+      margin: 60px auto 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
     }
-
-    footer strong { font-weight:600; }
-
+    
+    .version {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      margin-top: 10px;
+    }
+    
     /* Modal */
-
     .modal {
-      position:fixed;
-      inset:0;
-      display:none;
-      align-items:flex-end;
-      justify-content:center;
-      background:rgba(15,23,42,.52);
-      z-index:30;
-      padding:18px;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.2s ease;
     }
-
-    .modal.open { display:flex; }
-
-    .modal .sheet {
-      width:100%;
-      max-width:640px;
-      background:var(--surface);
-      border-radius:22px 22px 0 0;
-      border:1px solid var(--border);
-      max-height:90vh;
-      display:flex;
-      flex-direction:column;
-      overflow:hidden;
+    
+    .modal.open {
+      display: flex;
     }
-
-    .modal .head {
-      padding:14px 18px 10px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      border-bottom:1px solid var(--border);
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
-
-    .modal .head .title {
-      flex:1;
+    
+    .modal-content {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 30px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+      position: relative;
     }
-
-    .modal .head .title strong {
-      display:block;
-      font-size:.98rem;
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-
-    .modal .head .title .subtitle {
-      font-size:.8rem;
-      color:var(--muted);
+    
+    .modal h2 {
+      margin-bottom: 20px;
+      color: var(--text);
+      font-size: 24px;
     }
-
-    .modal .badge {
-      margin:0;
+    
+    .modal p {
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 15px;
     }
-
-    .modal .close {
-      border:none;
-      background:transparent;
-      color:var(--muted);
-      font-size:1.3rem;
-      cursor:pointer;
-      padding:0 3px;
+    
+    .modal pre {
+      background: color-mix(in srgb, var(--bg) 50%, var(--surface) 50%);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text);
     }
-
-    .modal .body {
-      padding:12px 18px 16px;
-      overflow:auto;
-      font-size:.85rem;
-    }
-
-    .modal h4 {
-      margin:10px 0 4px;
-      font-size:.9rem;
-    }
-
+    
     .modal code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-family: ui-monospace, 'Courier New', monospace;
       font-size: 0.85em;
       background: rgba(139, 21, 56, 0.15);
       padding: 2px 6px;
@@ -442,359 +308,318 @@
       color: var(--brand);
       border: 1px solid rgba(139, 21, 56, 0.2);
     }
-
-    .pre {
-      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size:.75rem;
-      background:rgba(15,23,42,.7);
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid var(--border);
-      white-space:pre;
-      overflow:auto;
+    
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 24px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-
-    /* Responsive */
-
-    @media (max-width:900px) {
-      .page { padding:0 16px; }
-      .hero {
-        grid-template-columns:1fr;
-        min-height:0;
-      }
-      .hero .info {
-        padding:18px;
-      }
+    
+    .close:hover {
+      background: color-mix(in srgb, var(--brand) 20%, transparent 80%);
+      color: var(--brand);
     }
-
-    @media (max-width:600px) {
-      .topbar {
-        padding:10px 14px;
+    
+    @media (max-width: 640px) {
+      body {
+        padding: 15px;
       }
-      .brand { font-size:.9rem; }
-      .hero { margin-top:4px; }
-      footer {
-        flex-direction:column;
-        align-items:flex-start;
+      
+      header {
+        margin-bottom: 30px;
+      }
+      
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .modal-content {
+        padding: 20px;
+      }
+      
+      .close {
+        top: 15px;
+        right: 15px;
       }
     }
   </style>
 </head>
 <body>
   <div class="backdrop" id="backdrop"></div>
-
+  
   <header>
-    <div class="topbar">
-      <div class="logo">
-        <img src="photos/EuroSDS.png" alt="Nexus IPS Logo" />
-      </div>
-      <div class="brand">Apps-hub</div>
-      <div class="spacer"></div>
-      <button class="icon-btn" id="btnThemeTop" type="button" aria-label="Theme wechseln">
-        <span class="symbol">🌗</span>
-        <span class="label">Modus</span>
-      </button>
+    <div class="logo-area">
+      <span class="logo">🏢</span>
+      <h1>Nexus Apps-hub</h1>
+    </div>
+    <div class="controls">
+      <button class="btn" id="themeBtn" aria-label="Theme umschalten">Modus: Hell</button>
+      <button class="btn" id="infoBtn" aria-label="Info anzeigen">ℹ️ Info</button>
     </div>
   </header>
-
-  <main class="page">
-    <section class="hero">
-      <div class="art" id="heroArt"></div>
-      <div class="info">
-        <div class="badge">
-          <span class="dot"></span> Zentraler Startpunkt
-        </div>
-        <h1>Deine Nexus-Apps auf einen Blick</h1>
-        <p>
-          Schneller Zugriff auf Tätigkeitsbericht, Reisekosten, Validierung und weitere Tools –
-          mit dynamischem Hintergrund passend zur gewählten App.
-        </p>
-        <div class="actions">
-          <button class="btn primary" id="btnInfo" type="button">Info</button>
-          <button class="btn ghost" id="btnTheme" type="button">Modus: Hell</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="row" id="apps">
-      <h2>Apps</h2>
-      <p class="sub">Alle Apps nutzen dieselbe Struktur – lokal, auf GitHub oder woanders.</p>
-
-      <div class="strip">
-        <article class="card"
-                 tabindex="0"
-                 data-link="Tätigkeitsbericht.html"
-                 data-bg="photos/Tätigkeitsbericht.png"
-                 role="button"
-                 aria-label="Tätigkeitsbericht App öffnen">
-          <div class="thumb"></div>
-          <div class="label">
-            <span class="ico">📋</span>
-            <span class="text">Tätigkeitsbericht</span>
-          </div>
-          <small>Einsatz- und Arbeitszeiten dokumentieren.</small>
-        </article>
-
-        <article class="card"
-                 tabindex="0"
-                 data-link="MehrArbeit.html"
-                 data-bg="photos/Mehrarbeit.png"
-                 role="button"
-                 aria-label="Mehrarbeit App öffnen">
-          <div class="thumb"></div>
-          <div class="label">
-            <span class="ico">⏰</span>
-            <span class="text">Mehrarbeit</span>
-          </div>
-          <small>Überstunden und Mehrarbeit erfassen.</small>
-        </article>
-
-        <article class="card"
-                 tabindex="0"
-                 data-link="Reisekosten.html"
-                 data-bg="photos/Reisekosten.png"
-                 role="button"
-                 aria-label="Reisekosten App öffnen">
-          <div class="thumb"></div>
-          <div class="label">
-            <span class="ico">🧾</span>
-            <span class="text">Reisekosten</span>
-          </div>
-          <small>Spesen, Fahrten und Belege erfassen.</small>
-        </article>
-
-        <article class="card"
-                 tabindex="0"
-                 data-link="EuroSDS.html"
-                 data-bg="photos/EuroSDS.png"
-                 role="button"
-                 aria-label="EuroSDS App öffnen">
-          <div class="thumb"></div>
-          <div class="label">
-            <span class="ico">🧴</span>
-            <span class="text">EuroSDS</span>
-          </div>
-          <small>AEMP / Steri-Workflows im Blick.</small>
-        </article>
-
-        <article class="card"
-                 tabindex="0"
-                 data-link="Validierung.html"
-                 data-bg="photos/Validierung.png"
-                 role="button"
-                 aria-label="Validierung App öffnen">
-          <div class="thumb"></div>
-          <div class="label">
-            <span class="ico">✅</span>
-            <span class="text">Validierung</span>
-          </div>
-          <small>Validierungsprozesse Schritt für Schritt.</small>
-        </article>
-
-        <article class="card"
-                 tabindex="0"
-                 data-link="Wissen.html"
-                 data-bg="photos/Wissen.png"
-                 role="button"
-                 aria-label="Wissen App öffnen">
-          <div class="thumb"></div>
-          <div class="label">
-            <span class="ico">📚</span>
-            <span class="text">Wissen</span>
-          </div>
-          <small>Dokumentation, How-Tos und Notizen.</small>
-        </article>
-      </div>
-    </section>
-
-    <footer>
-      <div>
-        <strong>Apps-hub</strong> – zentrale Startseite für deine Nexus-Tools.
-      </div>
-      <div>
-        Entwickelt von Nexus IPS (MENA)
-      </div>
-    </footer>
+  
+  <main>
+    <div class="grid">
+      <article class="card" 
+               data-link="Tätigkeitsbericht.html" 
+               data-bg="photos/Tätigkeitsbericht.png"
+               tabindex="0"
+               role="button"
+               aria-label="Tätigkeitsbericht öffnen">
+        <span class="ico">📋</span>
+        <span class="text">Tätigkeitsbericht</span>
+        <small>Einsatz- und Arbeitszeiten dokumentieren.</small>
+      </article>
+      
+      <article class="card" 
+               data-link="MehrArbeit.html" 
+               data-bg="photos/Mehrarbeit.png"
+               tabindex="0"
+               role="button"
+               aria-label="Mehrarbeit öffnen">
+        <span class="ico">⏰</span>
+        <span class="text">Mehrarbeit</span>
+        <small>Überstunden und Mehrarbeit erfassen.</small>
+      </article>
+      
+      <article class="card" 
+               data-link="Reisekosten.html" 
+               data-bg="photos/Reisekosten.png"
+               tabindex="0"
+               role="button"
+               aria-label="Reisekosten öffnen">
+        <span class="ico">🧾</span>
+        <span class="text">Reisekosten</span>
+        <small>Spesen, Fahrten und Belege erfassen.</small>
+      </article>
+      
+      <article class="card" 
+               data-link="EuroSDS.html" 
+               data-bg="photos/EuroSDS.png"
+               tabindex="0"
+               role="button"
+               aria-label="EuroSDS öffnen">
+        <span class="ico">🧴</span>
+        <span class="text">EuroSDS</span>
+        <small>AEMP / Steri-Workflows im Blick.</small>
+      </article>
+      
+      <article class="card" 
+               data-link="Validierung.html" 
+               data-bg="photos/Validierung.png"
+               tabindex="0"
+               role="button"
+               aria-label="Validierung öffnen">
+        <span class="ico">✅</span>
+        <span class="text">Validierung</span>
+        <small>Validierungsprozesse Schritt für Schritt.</small>
+      </article>
+      
+      <article class="card" 
+               data-link="Wissen.html" 
+               data-bg="photos/Wissen.png"
+               tabindex="0"
+               role="button"
+               aria-label="Wissen öffnen">
+        <span class="ico">📚</span>
+        <span class="text">Wissen</span>
+        <small>Dokumentation, How-Tos und Notizen.</small>
+      </article>
+    </div>
   </main>
-
-  <!-- Info-Modal -->
-  <div class="modal" id="infoModal" aria-hidden="true" role="dialog" aria-labelledby="modalTitle">
-    <div class="sheet">
-      <div class="head">
-        <div class="title">
-          <strong id="modalTitle">Nexus IPS – Apps-hub</strong>
-          <div class="subtitle">Zentraler Einstieg für Tätigkeitsbericht, Reisekosten &amp; mehr.</div>
-        </div>
-        <div class="badge">
-          <span class="dot"></span> Version&nbsp;<span id="versionNumber">25.0.11</span>
-        </div>
-        <button class="close" type="button" aria-label="Schließen">&times;</button>
-      </div>
-      <div class="body">
-        <h4>Architektur &amp; Technik</h4>
-        <ul>
-          <li>Reine Web-Technik: HTML, CSS, JavaScript (kein Framework).</li>
-          <li>Responsive Grid-Kacheln (auto-fit, minmax) für alle Gerätegrößen.</li>
-          <li>Dark/Light-Mode mit Speicherung im <code>localStorage</code>.</li>
-          <li>Dynamischer Hintergrund, abhängig von der gewählten App-Kachel.</li>
-          <li>Fehlerbehandlung für fehlende Bilder mit Fallback-Gradient.</li>
-        </ul>
-
-        <h4>Projektstruktur (Beispiel)</h4>
-        <div class="pre" id="projStruct"></div>
-      </div>
+  
+  <footer>
+    <div>© 2025 Nexus IPS · Interne Anwendungen</div>
+    <div class="version">
+      <span>Version</span>
+      <strong id="versionNumber">25.0.12</strong>
+    </div>
+  </footer>
+  
+  <!-- Info Modal -->
+  <div class="modal" id="infoModal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+    <div class="modal-content">
+      <button class="close" aria-label="Schließen" id="closeModal">×</button>
+      <h2 id="modalTitle">Projektstruktur</h2>
+      <p>Die Anwendung benötigt folgende Ordnerstruktur:</p>
+      <pre id="projectStructure"></pre>
+      <p><strong>Wichtig:</strong> Der <code>photos/</code> Ordner muss auf der gleichen Ebene wie die HTML-Datei liegen.</p>
+      <p>Alle Dateien sind als <strong>PWA</strong> (Progressive Web App) installierbar.</p>
     </div>
   </div>
-
+  
   <script>
     (function() {
+      'use strict';
+      
       const VERSION = '25.0.12';
       
+      // Theme Management
+      const themeBtn = document.getElementById('themeBtn');
       const html = document.documentElement;
+      
+      function setTheme(theme) {
+        html.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        themeBtn.textContent = theme === 'light' ? 'Modus: Dunkel' : 'Modus: Hell';
+      }
+      
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      setTheme(savedTheme);
+      
+      themeBtn.addEventListener('click', () => {
+        const currentTheme = html.getAttribute('data-theme');
+        setTheme(currentTheme === 'light' ? 'dark' : 'light');
+      });
+      
+      // Backdrop Management with Image Preloading
       const backdrop = document.getElementById('backdrop');
-      const heroArt = document.getElementById('heroArt');
       const cards = document.querySelectorAll('.card');
-      const btnTheme = document.getElementById('btnTheme');
-      const btnThemeTop = document.getElementById('btnThemeTop');
-      const modal = document.getElementById('infoModal');
-      const btnInfo = document.getElementById('btnInfo');
-      const btnClose = modal.querySelector('.close');
-      const projStruct = document.getElementById('projStruct');
-      const versionNumber = document.getElementById('versionNumber');
-
-      // Version setzen
-      versionNumber.textContent = VERSION;
-
-      /* --- Theme --- */
-      function applyTheme(mode) {
-        html.setAttribute('data-theme', mode);
-        localStorage.setItem('appsHubTheme', mode);
-        const isLight = mode === 'light';
-        btnTheme.textContent = isLight ? 'Modus: Dunkel' : 'Modus: Hell';
-        btnThemeTop.querySelector('.label').textContent = isLight ? 'Dunkel' : 'Hell';
-      }
-
-      const storedTheme = localStorage.getItem('appsHubTheme');
-      applyTheme(storedTheme === 'light' ? 'light' : 'dark');
-
-      function toggleTheme() {
-        const current = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-        applyTheme(current);
-      }
-
-      btnTheme.addEventListener('click', toggleTheme);
-      btnThemeTop.addEventListener('click', toggleTheme);
-
-      /* --- Karten / Backdrop mit Fehlerbehandlung --- */
-      function setBackgroundFrom(card) {
-        const bg = card.getAttribute('data-bg');
-        if (!bg) return;
-
-        // Bild vorladen und Fehler abfangen
-        const img = new Image();
-        
-        img.onload = () => {
-          backdrop.style.backgroundImage = `url('${bg}')`;
-          heroArt.style.backgroundImage = `url('${bg}')`;
-          heroArt.style.backgroundSize = 'cover';
-          heroArt.style.backgroundPosition = 'center';
-        };
-        
-        img.onerror = () => {
-          console.warn(`Bild nicht gefunden: ${bg}`);
-          // Fallback auf Gradient
-          backdrop.style.backgroundImage = 'none';
-          heroArt.style.background = 'linear-gradient(135deg, rgba(139, 21, 56, 0.3), rgba(225, 29, 72, 0.2))';
-        };
-        
-        img.src = bg;
-      }
-
-      cards.forEach(card => {
-        const bg = card.getAttribute('data-bg');
-        const thumb = card.querySelector('.thumb');
-        
-        if (bg && thumb) {
-          // Bild für Thumbnail vorladen
+      
+      function preloadImage(url) {
+        return new Promise((resolve, reject) => {
           const img = new Image();
-          img.onload = () => {
-            thumb.style.backgroundImage = `linear-gradient(135deg, rgba(139, 21, 56, 0.3), rgba(225, 29, 72, 0.2)), url('${bg}')`;
-          };
+          img.onload = () => resolve(url);
           img.onerror = () => {
-            console.warn(`Thumbnail nicht gefunden: ${bg}`);
-            // Fallback-Gradient bleibt bereits im CSS
+            console.warn(`Failed to load background image: ${url}`);
+            reject();
           };
-          img.src = bg;
+          img.src = url;
+        });
+      }
+      
+      function setBackdrop(imagePath) {
+        if (!imagePath) return;
+        
+        preloadImage(imagePath)
+          .then(url => {
+            backdrop.style.backgroundImage = `url('${url}')`;
+            backdrop.style.opacity = '0.4';
+          })
+          .catch(() => {
+            // Fallback to gradient on error
+            backdrop.style.backgroundImage = 'linear-gradient(135deg, rgba(139, 21, 56, 0.3), rgba(225, 29, 72, 0.2))';
+            backdrop.style.opacity = '0.3';
+          });
+      }
+      
+      // Set card backgrounds with fallback
+      cards.forEach(card => {
+        const bgPath = card.dataset.bg;
+        if (bgPath) {
+          preloadImage(bgPath)
+            .then(url => {
+              card.style.setProperty('--card-bg', `url('${url}')`);
+              card.querySelector('::before')?.style.setProperty('background-image', `url('${url}')`);
+            })
+            .catch(() => {
+              // Use fallback gradient for card
+              const fallbackGradient = 'linear-gradient(135deg, rgba(139, 21, 56, 0.3), rgba(225, 29, 72, 0.2))';
+              card.style.setProperty('--card-bg', fallbackGradient);
+            });
         }
-
-        card.addEventListener('mouseenter', () => setBackgroundFrom(card));
-        card.addEventListener('focus', () => setBackgroundFrom(card));
-
+      });
+      
+      // Set initial backdrop
+      if (cards.length > 0) {
+        const firstBg = cards[0].dataset.bg;
+        if (firstBg) setBackdrop(firstBg);
+      }
+      
+      // Backdrop hover effects
+      cards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+          const bgPath = card.dataset.bg;
+          if (bgPath) setBackdrop(bgPath);
+        });
+        
+        card.addEventListener('focus', () => {
+          const bgPath = card.dataset.bg;
+          if (bgPath) setBackdrop(bgPath);
+        });
+      });
+      
+      // Card Navigation
+      cards.forEach(card => {
         card.addEventListener('click', () => {
-          const link = card.getAttribute('data-link');
+          const link = card.dataset.link;
           if (link) window.location.href = link;
         });
-
-        card.addEventListener('keydown', e => {
+        
+        card.addEventListener('keydown', (e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
-            const link = card.getAttribute('data-link');
+            const link = card.dataset.link;
             if (link) window.location.href = link;
           }
         });
       });
-
-      // initialer Hintergrund von erster Karte
-      if (cards[0]) setBackgroundFrom(cards[0]);
-
-      /* --- Modal --- */
-      function openModal() {
+      
+      // Modal Management
+      const modal = document.getElementById('infoModal');
+      const infoBtn = document.getElementById('infoBtn');
+      const closeModal = document.getElementById('closeModal');
+      const projectStructure = document.getElementById('projectStructure');
+      
+      function showModal() {
+        const structure = `Projektordner/
+├── Apps-hub.html
+├── manifest.webmanifest
+├── photos/
+│   ├── Tätigkeitsbericht.png
+│   ├── Mehrarbeit.png
+│   ├── Reisekosten.png
+│   ├── EuroSDS.png
+│   ├── Validierung.png
+│   └── Wissen.png
+└── (HTML-Dateien für Apps)
+    ├── Tätigkeitsbericht.html
+    ├── MehrArbeit.html
+    ├── Reisekosten.html
+    ├── EuroSDS.html
+    ├── Validierung.html
+    └── Wissen.html`;
+        
+        projectStructure.textContent = structure;
         modal.classList.add('open');
-        modal.setAttribute('aria-hidden', 'false');
-        // Focus auf Close-Button setzen
-        btnClose.focus();
+        closeModal.focus();
       }
-
-      function closeModal() {
+      
+      function hideModal() {
         modal.classList.remove('open');
-        modal.setAttribute('aria-hidden', 'true');
-        // Focus zurück auf Info-Button
-        btnInfo.focus();
+        infoBtn.focus();
       }
-
-      btnInfo.addEventListener('click', openModal);
-      btnClose.addEventListener('click', closeModal);
-      modal.addEventListener('click', e => {
-        if (e.target === modal) closeModal();
+      
+      infoBtn.addEventListener('click', showModal);
+      closeModal.addEventListener('click', hideModal);
+      
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) hideModal();
       });
-
-      document.addEventListener('keydown', e => {
+      
+      document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modal.classList.contains('open')) {
-          closeModal();
+          hideModal();
         }
       });
-
-      /* --- Projektstruktur Text --- */
-      const structText = [
-        'Apps-hub.html',
-        'manifest.webmanifest',
-        'Tätigkeitsbericht.html',
-        'MehrArbeit.html',
-        'Reisekosten.html',
-        'EuroSDS.html',
-        'Validierung.html',
-        'Wissen.html',
-        '',
-        'photos/',
-        '  Tätigkeitsbericht.png',
-        '  Mehrarbeit.png',
-        '  Reisekosten.png',
-        '  EuroSDS.png',
-        '  Validierung.png',
-        '  Wissen.png'
-      ].join('\n');
-
-      projStruct.textContent = structText;
+      
+      // Set version number
+      const versionNumber = document.getElementById('versionNumber');
+      versionNumber.textContent = VERSION;
+      
     })();
   </script>
 </body>
