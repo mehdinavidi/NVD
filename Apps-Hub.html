@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
 <title>Apps Hub</title>
 
-<!-- Farben / Theme -->
 <meta name="theme-color" content="#8B1538" />
 
 <style>
@@ -36,8 +35,8 @@ html[data-theme="light"]{
   --glassB:rgba(255,255,255,.55);
 }
 
-*{ box-sizing:border-box; }
-html,body{ height:100%; }
+*{box-sizing:border-box;}
+html,body{height:100%;}
 
 body{
   margin:0;
@@ -55,40 +54,34 @@ body{
   background:center/cover no-repeat;
   filter:blur(40px) saturate(120%) brightness(75%);
   opacity:.35;
-  transition:background-image .35s ease, opacity .35s ease, filter .35s ease;
+  transition:background-image .35s ease;
 }
 
+/* HEADER */
 header{
   position:sticky; top:0; z-index:10;
   backdrop-filter:blur(12px) saturate(160%);
   background:linear-gradient(180deg, color-mix(in srgb,var(--bg),#000 20%) 85%, transparent);
   border-bottom:1px solid var(--border);
 }
-
 .topbar{
   max-width:1400px;
   margin:0 auto;
   padding:14px 18px;
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:12px;
 }
-
 .logo{
-  width:28px; height:28px;
+  width:32px; height:32px;
   border-radius:8px;
-  background:linear-gradient(135deg,var(--brand),#e43e6a);
-  display:grid;
-  place-items:center;
   overflow:hidden;
 }
-
 .logo img{
-  width:100%; height:100%; object-fit:cover; display:none;
+  width:100%; height:100%; object-fit:contain;
 }
 
-.brand{ font-weight:700; }
-
+/* PAGE */
 .page{
   max-width:1400px;
   margin:24px auto 90px;
@@ -105,16 +98,10 @@ header{
   grid-template-columns:minmax(280px,1fr) minmax(380px,1fr);
   box-shadow:0 20px 60px rgba(0,0,0,.35);
 }
-
 .hero .art{
   min-height:300px;
   background:center/cover no-repeat;
-  transform:scale(1.02);
-  transition:transform .6s ease;
 }
-
-.hero:hover .art{ transform:scale(1.06); }
-
 .hero .info{
   padding:28px 26px;
   display:flex;
@@ -123,50 +110,29 @@ header{
   gap:14px;
   background:linear-gradient(180deg, color-mix(in srgb,var(--bg),#000 10%) 0%, color-mix(in srgb,var(--bg),#000 15%) 100%);
 }
-
 .badge{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  font-size:12px;
-  opacity:.85;
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:12px; opacity:.85;
 }
-
 .badge .dot{
   width:8px; height:8px; border-radius:50%;
   background:var(--brand);
   box-shadow:0 0 0 4px color-mix(in srgb,var(--brand),transparent 75%);
 }
-
-.hero h1{
-  margin:0; font-size:28px;
-}
-
-.hero p{
-  margin:0; color:var(--muted);
-}
-
-.actions{
-  display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;
-}
-
+.hero h1{margin:0; font-size:28px;}
+.hero p{margin:0; color:var(--muted);}
+.actions{display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;}
 .btn{
   border:none; padding:12px 18px;
   border-radius:12px; font-weight:700;
   cursor:pointer;
 }
+.btn.primary{background:var(--brand); color:#fff;}
+.btn.ghost{background:transparent; color:var(--text); border:1px solid var(--border);}
 
-.btn.primary{
-  background:var(--brand); color:#fff;
-}
-
-.btn.ghost{
-  background:transparent; color:var(--text); border:1px solid var(--border);
-}
-
-/* CARDS */
-.row{ margin-top:24px; }
-.row h2{ font-size:18px; margin:0 0 10px 6px; opacity:.9; }
+/* APPS */
+.row{margin-top:24px;}
+.row h2{font-size:18px; margin:0 0 10px 6px; opacity:.9;}
 
 .strip{
   display:flex;
@@ -185,27 +151,21 @@ header{
   cursor:pointer;
   flex-shrink:0;
   box-shadow:0 10px 24px rgba(0,0,0,.35);
-  transition:transform .18s ease;
 }
-
-.card:hover{ transform:scale(var(--scale-hover)); }
-
 .thumb{
   position:absolute; inset:0;
   background:center/cover no-repeat;
 }
 
-/* Label */
 .label{
   position:absolute; left:10px; right:10px; bottom:10px;
   padding:8px 10px;
-  border-radius:10px;
-  background:linear-gradient(180deg,var(--glassA),var(--glassB));
-  display:flex;
-  align-items:center;
+  display:flex; align-items:center;
   gap:8px;
-  border:1px solid var(--border);
+  background:linear-gradient(180deg,var(--glassA),var(--glassB));
+  border-radius:10px;
   backdrop-filter:blur(8px);
+  border:1px solid var(--border);
 }
 
 .label .ico{
@@ -213,27 +173,33 @@ header{
   background:linear-gradient(135deg,var(--brand),#f05880);
 }
 
-/* MODAL */
-.modal{
-  position:fixed; inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  background:rgba(0,0,0,.45);
-  backdrop-filter:blur(2px);
-  z-index:50;
-}
+/* ------------- MOBILE FIX (2 SPALTEN + HERO) ---------------- */
+@media(max-width: 480px){
 
-.modal.is-open{ display:flex; }
+  .page{padding:0 14px;}
 
-.sheet{
-  width:min(860px,92vw);
-  max-height:84vh;
-  overflow:auto;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:0 0 18px;
+  .hero{
+    grid-template-columns:1fr !important;
+  }
+
+  .hero .art{
+    min-height:40vh !important;
+    border-bottom-left-radius:var(--radius);
+    border-bottom-right-radius:var(--radius);
+  }
+
+  /* 2 Spalten */
+  #apps .strip{
+    display:grid !important;
+    grid-template-columns:repeat(2, 1fr) !important;
+    gap:10px !important;
+    padding:16px 10px !important;
+  }
+
+  #apps .card{
+    width:100% !important;
+    height:160px !important;
+  }
 }
 
 /* FOOTER */
@@ -246,11 +212,14 @@ footer{
 </head>
 
 <body>
+
 <div class="backdrop" id="backdrop"></div>
 
 <header>
   <div class="topbar">
-    <div class="logo"><img id="brandLogo" src="photos/app-icon-192.png" alt="Logo" /></div>
+    <div class="logo">
+      <img src="photos/Logo.png" alt="App Logo" id="brandLogo">
+    </div>
     <div class="brand">Apps Hub</div>
   </div>
 </header>
@@ -263,7 +232,7 @@ footer{
   <div class="info">
     <div class="badge"><span class="dot"></span> Neu & empfohlen</div>
     <h1>Dein zentraler Startpunkt</h1>
-    <p>Schneller Zugriff auf deine Web-Apps mit dynamischem Hintergrund.</p>
+    <p>Schneller Zugriff auf deine Web-Apps mit sauberem Look.</p>
     <div class="actions">
       <button class="btn primary" id="btnInfo">Info</button>
       <button class="btn ghost" id="btnTheme">Modus: Hell</button>
@@ -271,7 +240,6 @@ footer{
   </div>
 </section>
 
-<!-- APPS -->
 <section class="row" id="apps">
 <h2>Apps</h2>
 <div class="strip">
@@ -306,7 +274,7 @@ footer{
   <div class="label"><span class="ico"></span>Wissen</div>
 </article>
 
-<!-- NEU: Mehrarbeit -->
+<!-- Mehrarbeit -->
 <article class="card" data-img="photos/Mehrarbeit.png" data-bg="photos/Mehrarbeit.png" data-link="Mehrarbeit.html">
   <div class="thumb"></div>
   <div class="label"><span class="ico"></span>Mehrarbeit</div>
@@ -316,6 +284,7 @@ footer{
 </section>
 
 <footer>Apps Hub – Version 25.0.4 • Entwickelt von Nexus IPS (MENA)</footer>
+
 </main>
 
 <script>
@@ -327,19 +296,19 @@ footer{
 
   const backdrop=document.getElementById('backdrop');
 
-  /* KACHEL-BILDER */
-  function setBackdrop(card){
-    const url=card?.dataset?.bg || "";
-    if(url) backdrop.style.backgroundImage = `url('${url}')`;
-  }
-
+  /* Kachelbilder setzen */
   document.querySelectorAll('.card').forEach(c=>{
     const t=c.querySelector('.thumb');
     const img=c.dataset.img;
     if(img) t.style.backgroundImage=`url('${img}')`;
   });
 
-  /* Hover-Effekt */
+  /* Backdrop dynamisch */
+  function setBackdrop(card){
+    const url=card?.dataset?.bg || "";
+    if(url) backdrop.style.backgroundImage=`url('${url}')`;
+  }
+
   const first=document.querySelector('.card');
   if(first) setBackdrop(first);
 
@@ -357,11 +326,7 @@ footer{
     }
   });
 
-  /* MODAL */
-  const modal=document.getElementById('infoModal');
-  const btn=document.getElementById('btnInfo');
-
-  /* THEME */
+  /* Theme */
   const themeBtn=document.getElementById('btnTheme');
   function apply(t){
     document.documentElement.setAttribute('data-theme',t);
@@ -369,7 +334,10 @@ footer{
     themeBtn.textContent = t==='light' ? 'Modus: Dunkel' : 'Modus: Hell';
   }
   apply(localStorage.getItem('theme')||'dark');
-  themeBtn.onclick=()=>apply(document.documentElement.getAttribute('data-theme')==='light'?'dark':'light');
+
+  themeBtn.onclick=()=>apply(
+    document.documentElement.getAttribute('data-theme')==='light'?'dark':'light'
+  );
 
 })();
 </script>
