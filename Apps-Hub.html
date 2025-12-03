@@ -18,28 +18,32 @@
             color: white;
         }
 
+        /* Container für zentrierte Inhalte */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
         /* Header */
         .header {
             display: flex;
             align-items: center;
-            padding: 20px 40px;
+            padding: 20px 0;
             gap: 12px;
         }
 
         .header-icon {
             width: 32px;
             height: 32px;
-            background: linear-gradient(135deg, #8B1538 0%, #a81d45 100%);
             border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            overflow: hidden;
         }
 
-        .header-icon::before {
-            content: "◼◼";
-            font-size: 12px;
-            color: white;
+        .header-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .header h1 {
@@ -49,7 +53,7 @@
 
         /* Hero Section */
         .hero {
-            margin: 40px 40px 60px;
+            margin: 40px 0 60px;
             background: rgba(0,0,0,0.3);
             border-radius: 20px;
             overflow: hidden;
@@ -62,6 +66,7 @@
             background: url('photos/Hero.jpg');
             background-size: cover;
             background-position: center;
+            min-height: 350px;
         }
 
         .hero-content {
@@ -69,6 +74,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            max-width: 100%;
         }
 
         .hero-badge {
@@ -138,7 +144,7 @@
 
         /* Apps Section */
         .apps-section {
-            padding: 0 40px 60px;
+            padding: 0 0 60px;
         }
 
         .apps-title {
@@ -151,6 +157,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
+            max-width: 100%;
         }
 
         /* App Card */
@@ -172,6 +179,7 @@
             width: 100%;
             height: auto;
             display: block;
+            max-width: 100%;
         }
 
         /* Footer */
@@ -199,19 +207,19 @@
             .hero-title {
                 font-size: 2em;
             }
+
+            .apps-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
         }
 
         @media (max-width: 768px) {
-            .header {
-                padding: 20px;
-            }
-
-            .apps-section {
-                padding: 0 20px 40px;
+            .container {
+                padding: 0 15px;
             }
 
             .hero {
-                margin: 20px;
+                margin: 20px 0 40px;
             }
 
             .hero-content {
@@ -222,75 +230,105 @@
                 font-size: 1.8em;
             }
 
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
             .apps-grid {
                 grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content {
+                padding: 25px;
+            }
+
+            .hero-title {
+                font-size: 1.5em;
+            }
+
+            .hero-description {
+                font-size: 1em;
+            }
+
+            .apps-title {
+                font-size: 1.5em;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <div class="header">
-        <div class="header-icon"></div>
-        <h1>Apps Hub</h1>
-    </div>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-icon">
+                <img src="photos/Apps-icone.png" alt="Apps Icon">
+            </div>
+            <h1>Apps Hub</h1>
+        </div>
 
-    <!-- Hero Section -->
-    <div class="hero">
-        <div class="hero-image"></div>
-        <div class="hero-content">
-            <div class="hero-badge">Neu & empfohlen</div>
-            <h2 class="hero-title">Dein zentraler Startpunkt</h2>
-            <p class="hero-description">
-                Schneller Zugriff auf deine Web-Apps mit dynamischem Hintergrund und kompakten Kacheln.
-            </p>
-            <div class="hero-buttons">
-                <button class="btn btn-primary">Info</button>
-                <button class="btn btn-secondary">Modus: Hell</button>
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-image"></div>
+            <div class="hero-content">
+                <div class="hero-badge">Neu & empfohlen</div>
+                <h2 class="hero-title">Dein zentraler Startpunkt</h2>
+                <p class="hero-description">
+                    Schneller Zugriff auf deine Web-Apps mit dynamischem Hintergrund und kompakten Kacheln.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary">Info</button>
+                    <button class="btn btn-secondary">Modus: Hell</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Apps Section -->
-    <div class="apps-section">
-        <h2 class="apps-title">Apps</h2>
-        <div class="apps-grid">
-            <!-- Tätigkeitsbericht -->
-            <a href="Tätigkeitsbericht.html" class="app-card">
-                <img src="photos/Tätigkeitsbericht.png" alt="Tätigkeitsbericht">
-            </a>
+        <!-- Apps Section -->
+        <div class="apps-section">
+            <h2 class="apps-title">Apps</h2>
+            <div class="apps-grid">
+                <!-- Tätigkeitsbericht -->
+                <a href="Tätigkeitsbericht.html" class="app-card">
+                    <img src="photos/tätigkeitsbericht.png" alt="Tätigkeitsbericht">
+                </a>
 
-            <!-- Reisekosten -->
-            <a href="Reisekostenabrechnung.html" class="app-card">
-                <img src="photos/Reisekosten.png" alt="Reisekosten">
-            </a>
+                <!-- Reisekosten -->
+                <a href="Reisekostenabrechnung.html" class="app-card">
+                    <img src="photos/Reisekosten.png" alt="Reisekosten">
+                </a>
 
-            <!-- EuroSDS -->
-            <a href="EuroSDS.html" class="app-card">
-                <img src="photos/EuroSDS.png" alt="EuroSDS">
-            </a>
+                <!-- EuroSDS -->
+                <a href="EuroSDS.html" class="app-card">
+                    <img src="photos/EuroSDS.png" alt="EuroSDS">
+                </a>
 
-            <!-- Validierung -->
-            <a href="Validierungs-Protokoll.html" class="app-card">
-                <img src="photos/Validierung.png" alt="Validierung">
-            </a>
+                <!-- Validierung -->
+                <a href="Validierungs-Protokoll.html" class="app-card">
+                    <img src="photos/Validierung.png" alt="Validierung">
+                </a>
 
-            <!-- Wissen -->
-            <a href="Wissen.html" class="app-card">
-                <img src="photos/Wissen.png" alt="Wissen">
-            </a>
+                <!-- Wissen -->
+                <a href="Wissen.html" class="app-card">
+                    <img src="photos/Wissen.png" alt="Wissen">
+                </a>
 
-            <!-- Mehrarbeit -->
-            <a href="Mehrarbeit.html" class="app-card">
-                <img src="photos/Mehrarbeit.png" alt="Mehrarbeit">
-            </a>
+                <!-- Mehrarbeit -->
+                <a href="Mehrarbeit.html" class="app-card">
+                    <img src="photos/Mehrarbeit.png" alt="Mehrarbeit">
+                </a>
+            </div>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <div class="footer">
-        <p><strong>Nexus/IPS</strong></p>
-        <p>© 2024 Alle Rechte vorbehalten</p>
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>Nexus/IPS</strong></p>
+            <p>© 2024 Alle Rechte vorbehalten</p>
+        </div>
     </div>
 </body>
 </html>
