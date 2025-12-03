@@ -287,8 +287,9 @@
     .card .thumb {
       position:absolute;
       inset:0;
-      background-size:cover;
-      background-position:center;
+      background:
+        linear-gradient(135deg, rgba(139, 21, 56, 0.3), rgba(225, 29, 72, 0.2)),
+        center/cover no-repeat;
       transform:scale(1.06);
       filter:saturate(110%);
       z-index:-1;
@@ -432,6 +433,16 @@
       font-size:.9rem;
     }
 
+    .modal code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.85em;
+      background: rgba(139, 21, 56, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--brand);
+      border: 1px solid rgba(139, 21, 56, 0.2);
+    }
+
     .pre {
       font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size:.75rem;
@@ -475,12 +486,11 @@
   <header>
     <div class="topbar">
       <div class="logo">
-        <!-- Wenn du willst, kannst du hier später ein echtes Logo einbauen -->
-        <img src="photos/EuroSDS.jpg" alt="Logo" />
+        <img src="photos/EuroSDS.png" alt="Nexus IPS Logo" />
       </div>
       <div class="brand">Apps-hub</div>
       <div class="spacer"></div>
-      <button class="icon-btn" id="btnThemeTop" type="button">
+      <button class="icon-btn" id="btnThemeTop" type="button" aria-label="Theme wechseln">
         <span class="symbol">🌗</span>
         <span class="label">Modus</span>
       </button>
@@ -514,7 +524,9 @@
         <article class="card"
                  tabindex="0"
                  data-link="Tätigkeitsbericht.html"
-                 data-bg="photos/Tätigkeitsbericht.jpg">
+                 data-bg="photos/Tätigkeitsbericht.png"
+                 role="button"
+                 aria-label="Tätigkeitsbericht App öffnen">
           <div class="thumb"></div>
           <div class="label">
             <span class="ico">📋</span>
@@ -525,8 +537,24 @@
 
         <article class="card"
                  tabindex="0"
+                 data-link="MehrArbeit.html"
+                 data-bg="photos/Mehrarbeit.png"
+                 role="button"
+                 aria-label="Mehrarbeit App öffnen">
+          <div class="thumb"></div>
+          <div class="label">
+            <span class="ico">⏰</span>
+            <span class="text">Mehrarbeit</span>
+          </div>
+          <small>Überstunden und Mehrarbeit erfassen.</small>
+        </article>
+
+        <article class="card"
+                 tabindex="0"
                  data-link="Reisekosten.html"
-                 data-bg="photos/Reisekosten.png">
+                 data-bg="photos/Reisekosten.png"
+                 role="button"
+                 aria-label="Reisekosten App öffnen">
           <div class="thumb"></div>
           <div class="label">
             <span class="ico">🧾</span>
@@ -538,7 +566,9 @@
         <article class="card"
                  tabindex="0"
                  data-link="EuroSDS.html"
-                 data-bg="photos/EuroSDS.jpg">
+                 data-bg="photos/EuroSDS.png"
+                 role="button"
+                 aria-label="EuroSDS App öffnen">
           <div class="thumb"></div>
           <div class="label">
             <span class="ico">🧴</span>
@@ -550,7 +580,9 @@
         <article class="card"
                  tabindex="0"
                  data-link="Validierung.html"
-                 data-bg="photos/Validierung.jpg">
+                 data-bg="photos/Validierung.png"
+                 role="button"
+                 aria-label="Validierung App öffnen">
           <div class="thumb"></div>
           <div class="label">
             <span class="ico">✅</span>
@@ -562,7 +594,9 @@
         <article class="card"
                  tabindex="0"
                  data-link="Wissen.html"
-                 data-bg="photos/Wissen.jpg">
+                 data-bg="photos/Wissen.png"
+                 role="button"
+                 aria-label="Wissen App öffnen">
           <div class="thumb"></div>
           <div class="label">
             <span class="ico">📚</span>
@@ -584,15 +618,15 @@
   </main>
 
   <!-- Info-Modal -->
-  <div class="modal" id="infoModal" aria-hidden="true">
+  <div class="modal" id="infoModal" aria-hidden="true" role="dialog" aria-labelledby="modalTitle">
     <div class="sheet">
       <div class="head">
         <div class="title">
-          <strong>Nexus IPS – Apps-hub</strong>
+          <strong id="modalTitle">Nexus IPS – Apps-hub</strong>
           <div class="subtitle">Zentraler Einstieg für Tätigkeitsbericht, Reisekosten &amp; mehr.</div>
         </div>
         <div class="badge">
-          <span class="dot"></span> Version&nbsp;25.0.11
+          <span class="dot"></span> Version&nbsp;<span id="versionNumber">25.0.11</span>
         </div>
         <button class="close" type="button" aria-label="Schließen">&times;</button>
       </div>
@@ -603,6 +637,7 @@
           <li>Responsive Grid-Kacheln (auto-fit, minmax) für alle Gerätegrößen.</li>
           <li>Dark/Light-Mode mit Speicherung im <code>localStorage</code>.</li>
           <li>Dynamischer Hintergrund, abhängig von der gewählten App-Kachel.</li>
+          <li>Fehlerbehandlung für fehlende Bilder mit Fallback-Gradient.</li>
         </ul>
 
         <h4>Projektstruktur (Beispiel)</h4>
@@ -613,6 +648,8 @@
 
   <script>
     (function() {
+      const VERSION = '25.0.12';
+      
       const html = document.documentElement;
       const backdrop = document.getElementById('backdrop');
       const heroArt = document.getElementById('heroArt');
@@ -623,6 +660,10 @@
       const btnInfo = document.getElementById('btnInfo');
       const btnClose = modal.querySelector('.close');
       const projStruct = document.getElementById('projStruct');
+      const versionNumber = document.getElementById('versionNumber');
+
+      // Version setzen
+      versionNumber.textContent = VERSION;
 
       /* --- Theme --- */
       function applyTheme(mode) {
@@ -644,21 +685,46 @@
       btnTheme.addEventListener('click', toggleTheme);
       btnThemeTop.addEventListener('click', toggleTheme);
 
-      /* --- Karten / Backdrop --- */
+      /* --- Karten / Backdrop mit Fehlerbehandlung --- */
       function setBackgroundFrom(card) {
         const bg = card.getAttribute('data-bg');
         if (!bg) return;
-        backdrop.style.backgroundImage = `url('${bg}')`;
-        heroArt.style.backgroundImage = `url('${bg}')`;
-        heroArt.style.backgroundSize = 'cover';
-        heroArt.style.backgroundPosition = 'center';
+
+        // Bild vorladen und Fehler abfangen
+        const img = new Image();
+        
+        img.onload = () => {
+          backdrop.style.backgroundImage = `url('${bg}')`;
+          heroArt.style.backgroundImage = `url('${bg}')`;
+          heroArt.style.backgroundSize = 'cover';
+          heroArt.style.backgroundPosition = 'center';
+        };
+        
+        img.onerror = () => {
+          console.warn(`Bild nicht gefunden: ${bg}`);
+          // Fallback auf Gradient
+          backdrop.style.backgroundImage = 'none';
+          heroArt.style.background = 'linear-gradient(135deg, rgba(139, 21, 56, 0.3), rgba(225, 29, 72, 0.2))';
+        };
+        
+        img.src = bg;
       }
 
       cards.forEach(card => {
         const bg = card.getAttribute('data-bg');
         const thumb = card.querySelector('.thumb');
+        
         if (bg && thumb) {
-          thumb.style.backgroundImage = `url('${bg}')`;
+          // Bild für Thumbnail vorladen
+          const img = new Image();
+          img.onload = () => {
+            thumb.style.backgroundImage = `linear-gradient(135deg, rgba(139, 21, 56, 0.3), rgba(225, 29, 72, 0.2)), url('${bg}')`;
+          };
+          img.onerror = () => {
+            console.warn(`Thumbnail nicht gefunden: ${bg}`);
+            // Fallback-Gradient bleibt bereits im CSS
+          };
+          img.src = bg;
         }
 
         card.addEventListener('mouseenter', () => setBackgroundFrom(card));
@@ -685,11 +751,15 @@
       function openModal() {
         modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
+        // Focus auf Close-Button setzen
+        btnClose.focus();
       }
 
       function closeModal() {
         modal.classList.remove('open');
         modal.setAttribute('aria-hidden', 'true');
+        // Focus zurück auf Info-Button
+        btnInfo.focus();
       }
 
       btnInfo.addEventListener('click', openModal);
@@ -707,18 +777,21 @@
       /* --- Projektstruktur Text --- */
       const structText = [
         'Apps-hub.html',
+        'manifest.webmanifest',
         'Tätigkeitsbericht.html',
+        'MehrArbeit.html',
         'Reisekosten.html',
         'EuroSDS.html',
         'Validierung.html',
         'Wissen.html',
         '',
         'photos/',
-        '  Tätigkeitsbericht.jpg',
+        '  Tätigkeitsbericht.png',
+        '  Mehrarbeit.png',
         '  Reisekosten.png',
-        '  EuroSDS.jpg',
-        '  Validierung.jpg',
-        '  Wissen.jpg'
+        '  EuroSDS.png',
+        '  Validierung.png',
+        '  Wissen.png'
       ].join('\n');
 
       projStruct.textContent = structText;
