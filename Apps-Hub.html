@@ -173,32 +173,36 @@ header{
   background:linear-gradient(135deg,var(--brand),#f05880);
 }
 
-/* ------------- MOBILE FIX (2 SPALTEN + HERO) ---------------- */
-@media(max-width: 480px){
+/* ===== UNIVERSAL HANDY FIX – GILT FÜR ALLE SMARTPHONES ===== */
+@media(max-width: 820px){
 
-  .page{padding:0 14px;}
+  .page{
+    padding:0 14px;
+  }
 
   .hero{
     grid-template-columns:1fr !important;
+    border-radius:var(--radius);
   }
 
   .hero .art{
     min-height:40vh !important;
+    background-position:center !important;
+    background-size:cover !important;
     border-bottom-left-radius:var(--radius);
     border-bottom-right-radius:var(--radius);
   }
 
-  /* 2 Spalten */
   #apps .strip{
     display:grid !important;
     grid-template-columns:repeat(2, 1fr) !important;
-    gap:10px !important;
+    gap:12px !important;
     padding:16px 10px !important;
   }
 
   #apps .card{
     width:100% !important;
-    height:160px !important;
+    height:180px !important;
   }
 }
 
