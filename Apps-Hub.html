@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus/IPS Apps Hub</title>
+    <title>Apps Hub - Nexus/IPS</title>
     <style>
         * {
             margin: 0;
@@ -13,255 +13,368 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #2d1b2e 0%, #4a2545 50%, #2d1b2e 100%);
             min-height: 100vh;
-            padding: 20px;
+            color: white;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 20px 40px;
+            gap: 12px;
         }
 
-        /* Hero Banner */
-        .hero-banner {
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('photos/Hero.jpg');
+        .header-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #8B1538 0%, #a81d45 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-icon::before {
+            content: "◼◼";
+            font-size: 12px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin: 40px 40px 60px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 350px;
+        }
+
+        .hero-image {
+            background: url('photos/Hero.jpg');
             background-size: cover;
             background-position: center;
+        }
+
+        .hero-content {
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(139, 21, 56, 0.3);
+            padding: 8px 16px;
             border-radius: 20px;
-            padding: 80px 40px;
-            margin-bottom: 40px;
-            text-align: center;
-            color: white;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            font-size: 0.85em;
+            margin-bottom: 20px;
+            width: fit-content;
         }
 
-        .hero-banner h1 {
-            font-size: 3em;
+        .hero-badge::before {
+            content: "🆕";
+        }
+
+        .hero-title {
+            font-size: 2.5em;
             font-weight: 700;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+            line-height: 1.2;
         }
 
-        .hero-banner p {
-            font-size: 1.3em;
-            opacity: 0.95;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        .hero-description {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            line-height: 1.6;
         }
 
-        /* Apps Grid */
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 10px;
+            border: none;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #8B1538;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #a81d45;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* Apps Section */
+        .apps-section {
+            padding: 0 40px 60px;
+        }
+
+        .apps-title {
+            font-size: 2em;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
         .apps-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
         }
 
         /* App Card */
         .app-card {
-            background: white;
-            border-radius: 15px;
-            overflow: visible;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 280px;
+            position: relative;
             cursor: pointer;
+            transition: all 0.3s ease;
             text-decoration: none;
-            color: inherit;
-            display: block;
-            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
         }
 
         .app-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
         }
 
-        .app-image {
-            width: 160px;
-            height: 160px;
+        .app-card-bg {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .app-card-bg img {
+            width: 140px;
+            height: 140px;
             object-fit: contain;
-            margin: 40px auto 20px;
-            display: block;
-            border-radius: 30px;
+            filter: drop-shadow(0 4px 20px rgba(0,0,0,0.2));
         }
 
-        .app-content {
-            padding: 0 25px 25px 25px;
-            text-align: center;
+        .app-card-label {
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .app-title {
-            font-size: 1.5em;
-            font-weight: 600;
+        .app-card-label::before {
+            content: "●";
             color: #8B1538;
-            margin-bottom: 10px;
+            font-size: 1.2em;
         }
 
-        .app-description {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        .app-status {
-            display: inline-block;
-            padding: 6px 15px;
-            background: #e8f5e9;
-            color: #2e7d32;
-            border-radius: 20px;
-            font-size: 0.85em;
+        .app-card-title {
+            font-size: 1.1em;
             font-weight: 500;
+            color: white;
         }
 
-        .app-status.beta {
-            background: #fff3e0;
-            color: #ef6c00;
+        /* Individual App Colors */
+        .app-taetigkeitsbericht { background: linear-gradient(135deg, #8B1538 0%, #c41f4a 100%); }
+        .app-reisekosten { background: linear-gradient(135deg, #1e3a5f 0%, #2d5a8f 100%); }
+        .app-eurosds { background: linear-gradient(135deg, #e8e8e8 0%, #ffffff 100%); }
+        .app-validierung { background: linear-gradient(135deg, #1e7acc 0%, #4fa3e0 100%); }
+        .app-wissen { background: linear-gradient(135deg, #ff9500 0%, #ffb347 100%); }
+        .app-mehrarbeit { background: linear-gradient(135deg, #00a896 0%, #02c9b3 100%); }
+
+        /* EuroSDS special styling (white background) */
+        .app-eurosds .app-card-label {
+            background: rgba(139, 21, 56, 0.15);
+        }
+
+        .app-eurosds .app-card-title {
+            color: #333;
+        }
+
+        .app-eurosds .app-card-label::before {
+            color: #8B1538;
         }
 
         /* Footer */
         .footer {
             text-align: center;
-            color: white;
-            padding: 30px;
-            opacity: 0.8;
-        }
-
-        .footer p {
-            margin: 5px 0;
+            padding: 40px;
+            opacity: 0.6;
+            font-size: 0.9em;
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            .hero-banner {
-                padding: 50px 25px;
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
             }
 
-            .hero-banner h1 {
+            .hero-image {
+                min-height: 250px;
+            }
+
+            .hero-content {
+                padding: 40px;
+            }
+
+            .hero-title {
                 font-size: 2em;
             }
+        }
 
-            .hero-banner p {
-                font-size: 1.1em;
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px;
+            }
+
+            .apps-section {
+                padding: 0 20px 40px;
+            }
+
+            .hero {
+                margin: 20px;
+            }
+
+            .hero-content {
+                padding: 30px;
+            }
+
+            .hero-title {
+                font-size: 1.8em;
             }
 
             .apps-grid {
                 grid-template-columns: 1fr;
-                gap: 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 15px;
-            }
-
-            .hero-banner {
-                padding: 40px 20px;
-                margin-bottom: 30px;
-            }
-
-            .hero-banner h1 {
-                font-size: 1.8em;
-            }
-
-            .app-content {
-                padding: 20px;
-            }
-
-            .app-title {
-                font-size: 1.3em;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Hero Banner -->
-        <div class="hero-banner">
-            <h1>Nexus/IPS Apps Hub</h1>
-            <p>Professionelle Anwendungen für Ihr Unternehmen</p>
-        </div>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-icon"></div>
+        <h1>Apps Hub</h1>
+    </div>
 
-        <!-- Apps Grid -->
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-image"></div>
+        <div class="hero-content">
+            <div class="hero-badge">Neu & empfohlen</div>
+            <h2 class="hero-title">Dein zentraler Startpunkt</h2>
+            <p class="hero-description">
+                Schneller Zugriff auf deine Web-Apps mit dynamischem Hintergrund und kompakten Kacheln.
+            </p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary">Info</button>
+                <button class="btn btn-secondary">Modus: Hell</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Apps Section -->
+    <div class="apps-section">
+        <h2 class="apps-title">Apps</h2>
         <div class="apps-grid">
-            <!-- App 1: Tätigkeitsbericht -->
-            <a href="Tätigkeitsbericht.html" class="app-card">
-                <img src="photos/tätigkeitsbericht.png" alt="Tätigkeitsbericht" class="app-image">
-                <div class="app-content">
-                    <div class="app-title">Tätigkeitsbericht</div>
-                    <div class="app-description">
-                        Erstellen Sie detaillierte Tätigkeitsberichte mit digitaler Unterschrift und professionellem PDF-Export.
-                    </div>
-                    <span class="app-status">Produktiv</span>
+            <!-- Tätigkeitsbericht -->
+            <a href="Tätigkeitsbericht.html" class="app-card app-taetigkeitsbericht">
+                <div class="app-card-bg">
+                    <img src="photos/tätigkeitsbericht.png" alt="Tätigkeitsbericht">
+                </div>
+                <div class="app-card-label">
+                    <div class="app-card-title">Tätigkeitsbericht</div>
                 </div>
             </a>
 
-            <!-- App 2: Reisekostenabrechnung -->
-            <a href="Reisekostenabrechnung.html" class="app-card">
-                <img src="photos/Reisekosten.png" alt="Reisekostenabrechnung" class="app-image">
-                <div class="app-content">
-                    <div class="app-title">Reisekostenabrechnung</div>
-                    <div class="app-description">
-                        Erfassen Sie Reisekosten schnell und einfach mit automatischen Berechnungen und Export-Funktionen.
-                    </div>
-                    <span class="app-status">Produktiv</span>
+            <!-- Reisekosten -->
+            <a href="Reisekostenabrechnung.html" class="app-card app-reisekosten">
+                <div class="app-card-bg">
+                    <img src="photos/Reisekosten.png" alt="Reisekosten">
+                </div>
+                <div class="app-card-label">
+                    <div class="app-card-title">Reisekosten</div>
                 </div>
             </a>
 
-            <!-- App 3: Validierungs-Protokoll -->
-            <a href="Validierungs-Protokoll.html" class="app-card">
-                <img src="photos/Validierung.png" alt="Validierungs-Protokoll" class="app-image">
-                <div class="app-content">
-                    <div class="app-title">Validierungs-Protokoll</div>
-                    <div class="app-description">
-                        Dokumentieren Sie Validierungen mit Checklisten, Notizen und professionellem PDF-Protokoll.
-                    </div>
-                    <span class="app-status">Produktiv</span>
+            <!-- EuroSDS -->
+            <a href="EuroSDS.html" class="app-card app-eurosds">
+                <div class="app-card-bg">
+                    <img src="photos/EuroSDS.png" alt="EuroSDS">
+                </div>
+                <div class="app-card-label">
+                    <div class="app-card-title">EuroSDS</div>
                 </div>
             </a>
 
-            <!-- App 4: Sterilgut Management -->
-            <a href="EuroSDS.html" class="app-card">
-                <img src="photos/EuroSDS.png" alt="Sterilgut Management" class="app-image">
-                <div class="app-content">
-                    <div class="app-title">Sterilgut Management</div>
-                    <div class="app-description">
-                        Umfassendes System zur Verwaltung von Sterilgut, Geräten und Prozessen im medizinischen Bereich.
-                    </div>
-                    <span class="app-status beta">Beta</span>
+            <!-- Validierung -->
+            <a href="Validierungs-Protokoll.html" class="app-card app-validierung">
+                <div class="app-card-bg">
+                    <img src="photos/Validierung.png" alt="Validierung">
+                </div>
+                <div class="app-card-label">
+                    <div class="app-card-title">Validierung</div>
                 </div>
             </a>
 
-            <!-- App 5: Wissen -->
-            <a href="Wissen.html" class="app-card">
-                <img src="photos/Wissen.png" alt="Wissen" class="app-image">
-                <div class="app-content">
-                    <div class="app-title">Wissen</div>
-                    <div class="app-description">
-                        Wissensdatenbank mit Dokumentationen, Anleitungen und wichtigen Informationen für Ihr Team.
-                    </div>
-                    <span class="app-status">Produktiv</span>
+            <!-- Wissen -->
+            <a href="Wissen.html" class="app-card app-wissen">
+                <div class="app-card-bg">
+                    <img src="photos/Wissen.png" alt="Wissen">
+                </div>
+                <div class="app-card-label">
+                    <div class="app-card-title">Entwicklung</div>
                 </div>
             </a>
 
-            <!-- App 6: Mehrarbeit -->
-            <a href="Mehrarbeit.html" class="app-card">
-                <img src="photos/Mehrarbeit.png" alt="Mehrarbeit" class="app-image">
-                <div class="app-content">
-                    <div class="app-title">Mehrarbeit</div>
-                    <div class="app-description">
-                        Erfassen und verwalten Sie Überstunden mit automatischer Berechnung basierend auf Gehalt und Zuschlägen.
-                    </div>
-                    <span class="app-status">Produktiv</span>
+            <!-- Mehrarbeit -->
+            <a href="Mehrarbeit.html" class="app-card app-mehrarbeit">
+                <div class="app-card-bg">
+                    <img src="photos/Mehrarbeit.png" alt="Mehrarbeit">
+                </div>
+                <div class="app-card-label">
+                    <div class="app-card-title">Mehrarbeit</div>
                 </div>
             </a>
         </div>
+    </div>
 
-        <!-- Footer -->
-        <div class="footer">
-            <p><strong>Nexus/IPS</strong></p>
-            <p>© 2024 Alle Rechte vorbehalten</p>
-        </div>
+    <!-- Footer -->
+    <div class="footer">
+        <p><strong>Nexus/IPS</strong></p>
+        <p>© 2024 Alle Rechte vorbehalten</p>
     </div>
 </body>
 </html>
