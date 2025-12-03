@@ -1,3040 +1,389 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>Mehrarbeit 2025 - Erfassung</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-
-  <style>
-    /* ==================== DESIGN SYSTEM (Dunkelblau/Rot) ==================== */
-    :root {
-      /* --- DARK MODE (Standard) --- */
-      --bg-app: #1E2434;
-      --bg-panel: #252d3d;
-      --bg-input: #2a3240;
-      --bg-hover: #323b4d;
-      --border-color: #3a4150;
-      --text-main: #e2e8f0;
-      --text-muted: #a0aec0;
-      
-      --accent-primary: #8B1538;
-      --accent-hover: #6B1028;
-      --accent-glow: rgba(139, 21, 56, 0.4);
-      --danger: #ef4444;
-      --success: #10b981;
-      
-      --gradient-header: linear-gradient(135deg, #1E2434 0%, #8B1538 100%);
-      --shadow-panel: 0 20px 60px rgba(0,0,0,0.4);
-    }
-
-    /* --- LIGHT MODE OVERRIDES --- */
-    body.light-theme {
-      --bg-app: #f0f2f5;
-      --bg-panel: #ffffff;
-      --bg-input: #f7fafc;
-      --bg-hover: #edf2f7;
-      --border-color: #e2e8f0;
-      --text-main: #2d3748;
-      --text-muted: #718096;
-      
-      --accent-primary: #8B1538;
-      --accent-hover: #6B1028;
-      --accent-glow: rgba(139, 21, 56, 0.2);
-      
-      --gradient-header: linear-gradient(135deg, #1E2434 0%, #8B1538 100%);
-      --shadow-panel: 0 10px 25px rgba(0,0,0,0.1);
-    }
-
-    /* ==================== GLOBAL STYLES ==================== */
-    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      background-color: var(--bg-app);
-      color: var(--text-main);
-      padding: 20px;
-      min-height: 100vh;
-      line-height: 1.5;
-      transition: background-color 0.3s, color 0.3s;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    /* Container Panel */
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      background: var(--bg-panel);
-      padding: 35px;
-      border-radius: 20px;
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow-panel);
-      animation: fadeIn 0.4s ease-out;
-    }
-    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
-    /* Typography */
-    h1 {
-      font-size: 28px;
-      font-weight: 800;
-      margin-bottom: 25px;
-      color: var(--text-main);
-      letter-spacing: -0.5px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border-color);
-      text-align: center;
-    }
-    
-    /* Light mode h1 with gradient */
-    body.light-theme h1 {
-      background: var(--gradient-header);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    h2 {
-      font-size: 18px;
-      color: #fff;
-      background: var(--accent-primary);
-      padding: 15px 20px;
-      border-radius: 12px;
-      margin: 25px 0 15px 0;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      box-shadow: 0 4px 15px var(--accent-glow);
-    }
-
-    /* Form Elements */
-    .label {
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      margin-bottom: 6px;
-      display: block;
-    }
-
-    label {
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      margin-bottom: 6px;
-      display: block;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 14px 16px;
-      background: var(--bg-input);
-      border: 2px solid var(--border-color);
-      border-radius: 10px;
-      color: var(--text-main);
-      font-family: inherit;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      margin-bottom: 12px;
-    }
-
-    input:hover, select:hover, textarea:hover {
-      border-color: var(--bg-hover);
-      background: var(--bg-panel);
-    }
-
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: var(--accent-primary);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-      background: var(--bg-panel);
-      transform: translateY(-1px);
-    }
-    
-    textarea { min-height: 90px; resize: vertical; }
-
-    /* Light Mode Input Styles */
-    body.light-theme input,
-    body.light-theme select,
-    body.light-theme textarea {
-      background: #f7fafc;
-      border-color: #e2e8f0;
-      color: #2d3748;
-    }
-
-    body.light-theme input:hover,
-    body.light-theme select:hover,
-    body.light-theme textarea:hover {
-      background: #fff;
-      border-color: #cbd5e0;
-    }
-
-    body.light-theme input:focus,
-    body.light-theme select:focus,
-    body.light-theme textarea:focus {
-      background: #fff;
-      border-color: #8B1538;
-    }
-
-    /* Header Grid Layout */
-    .header-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 15px;
-      border-bottom: 2px solid var(--border-color);
-      padding-bottom: 25px;
-      margin-bottom: 28px;
-    }
-
-    .header-grid > div {
-      background: var(--bg-input);
-      border: 2px solid var(--border-color);
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      transition: all 0.3s ease;
-    }
-
-    .header-grid > div:hover {
-      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-      transform: translateY(-2px);
-      border-color: var(--accent-primary);
-    }
-
-    .header-grid .label {
-      background: var(--accent-primary);
-      color: #fff;
-      padding: 12px 16px;
-      margin: 0;
-      border-radius: 0;
-      font-size: 13px;
-      text-align: center;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-
-    .header-grid .value {
-      margin: 0;
-      border-radius: 0;
-      border: none;
-      border-top: 2px solid var(--border-color);
-      font-size: 14px;
-      padding: 14px 16px;
-      text-align: center;
-      background: var(--bg-panel);
-      color: var(--text-main);
-      font-weight: 600;
-    }
-
-    /* Summary Cards */
-    .summary-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-bottom: 25px;
-    }
-
-    .summary-card {
-      background: var(--bg-input);
-      border: 2px solid var(--border-color);
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
-    }
-
-    .summary-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-      border-color: var(--accent-primary);
-    }
-
-    .summary-card .card-label {
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 600;
-      margin-bottom: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .summary-card .card-value {
-      font-size: 32px;
-      font-weight: 800;
-      color: var(--accent-primary);
-      letter-spacing: -1px;
-    }
-
-    /* Category Cards */
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 15px;
-      margin-bottom: 25px;
-    }
-
-    .category-card {
-      background: var(--bg-input);
-      border: 2px solid var(--border-color);
-      border-radius: 12px;
-      padding: 18px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
-    }
-
-    .category-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-      border-color: var(--accent-primary);
-    }
-
-    .category-card h4 {
-      color: var(--accent-primary);
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .category-card .cat-detail {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 5px;
-    }
-
-    .category-card .cat-rate {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text-main);
-      margin-top: 8px;
-    }
-
-    /* Form Grid */
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Buttons Standard */
-    .btn {
-      background: var(--accent-primary);
-      color: #fff;
-      border: none;
-      padding: 16px;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 16px;
-      transition: all 0.3s;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      text-decoration: none;
-      width: 100%;
-      margin: 12px 0;
-      position: relative;
-      overflow: hidden;
-      letter-spacing: 0.3px;
-    }
-
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(255,255,255,0.15);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .btn:hover::before { opacity: 1; }
-    .btn:active { transform: translateY(1px); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-
-    .btn-primary {
-      background: var(--accent-primary);
-      color: #fff;
-      border: none;
-      padding: 16px;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 16px;
-      transition: all 0.3s;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn-primary::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(255,255,255,0.15);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .btn-primary:hover::before { opacity: 1; }
-    .btn-primary:active { transform: translateY(1px); }
-
-    .btn-secondary {
-      background: var(--bg-input);
-      color: var(--text-main);
-      border: 2px solid var(--border-color);
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 16px;
-      transition: all 0.3s;
-    }
-
-    .btn-secondary:hover {
-      background: var(--bg-hover);
-      border-color: var(--accent-primary);
-    }
-
-    .btn-danger {
-      background: var(--danger);
-      color: #fff;
-    }
-
-    .btn-success {
-      background: var(--success);
-      color: #fff;
-    }
-
-    .button-group {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-top: 20px;
-    }
-
-    /* Table Styles */
-    .table-wrapper {
-      overflow-x: auto;
-      margin: 20px 0;
-      border-radius: 12px;
-      border: 2px solid var(--border-color);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: var(--bg-panel);
-    }
-
-    thead {
-      background: var(--accent-primary);
-      color: #fff;
-    }
-
-    th {
-      padding: 14px 12px;
-      text-align: left;
-      font-weight: 700;
-      font-size: 13px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-
-    td {
-      padding: 14px 12px;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 14px;
-      color: var(--text-main);
-    }
-
-    tbody tr {
-      transition: all 0.2s;
-    }
-
-    tbody tr:hover {
-      background: var(--bg-hover);
-    }
-
-    tfoot {
-      background: var(--bg-input);
-      font-weight: 700;
-    }
-
-    tfoot td {
-      border-bottom: none;
-      padding: 16px 12px;
-      font-size: 16px;
-    }
-
-    /* Signature Canvas */
-    .signature-canvas-wrapper {
-      border: 2px solid var(--border-color);
-      border-radius: 12px;
-      background: #fff;
-      margin: 15px 0;
-      overflow: hidden;
-    }
-
-    .signature-canvas {
-      width: 100%;
-      height: 250px;
-      cursor: crosshair;
-      touch-action: none;
-    }
-
-    .signature-toolbar {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-      flex-wrap: wrap;
-      padding: 15px;
-      background: var(--bg-input);
-      border: 2px solid var(--border-color);
-      border-radius: 12px;
-      margin-bottom: 15px;
-    }
-
-    .toolbar-section {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .tool-btn {
-      width: 40px;
-      height: 40px;
-      border: 2px solid var(--border-color);
-      background: var(--bg-panel);
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s;
-    }
-
-    .tool-btn:hover {
-      border-color: var(--accent-primary);
-      transform: scale(1.05);
-    }
-
-    .tool-btn.active {
-      border-color: var(--accent-primary);
-      border-width: 3px;
-      background: var(--bg-hover);
-    }
-
-    .tool-btn.color-btn {
-      border-width: 3px;
-    }
-
-    .signature-controls {
-      display: flex;
-      gap: 10px;
-      margin: 15px 0;
-    }
-
-    .btn-clear {
-      flex: 1;
-      padding: 12px;
-      background: var(--danger);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .btn-clear:hover {
-      opacity: 0.9;
-      transform: translateY(-2px);
-    }
-
-    .btn-upload {
-      flex: 1;
-      padding: 12px;
-      background: var(--bg-input);
-      color: var(--text-main);
-      border: 2px solid var(--border-color);
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .btn-upload:hover {
-      border-color: var(--accent-primary);
-      background: var(--bg-hover);
-    }
-
-    .signature-preview {
-      margin-top: 15px;
-      padding: 20px;
-      background: var(--bg-input);
-      border: 2px solid var(--border-color);
-      border-radius: 12px;
-      min-height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .signature-preview.empty {
-      color: var(--text-muted);
-      font-style: italic;
-    }
-
-    .signature-preview img {
-      max-width: 100%;
-      max-height: 200px;
-      border-radius: 8px;
-    }
-
-    /* Version Items */
-    .version-item {
-      background: var(--bg-input);
-      border: 2px solid var(--border-color);
-      border-radius: 12px;
-      padding: 15px;
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      transition: all 0.3s;
-    }
-
-    .version-item:hover {
-      border-color: var(--accent-primary);
-      transform: translateX(5px);
-    }
-
-    .version-info {
-      flex: 1;
-    }
-
-    .version-name {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 8px;
-    }
-
-    .version-details {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .version-details span {
-      display: flex;
-      align-items: center;
-    }
-
-    .version-actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
-      z-index: 9999;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-content {
-      background: var(--bg-panel);
-      padding: 30px;
-      border-radius: 20px;
-      max-width: 600px;
-      width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
-      border: 2px solid var(--border-color);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    }
-
-    #signatureModal .modal-content {
-      max-width: 500px;
-    }
-
-    #entryModal .modal-content {
-      max-width: 700px;
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 15px;
-      border-bottom: 2px solid var(--border-color);
-    }
-
-    .modal-header h2 {
-      margin: 0;
-      background: none;
-      box-shadow: none;
-      padding: 0;
-    }
-
-    .close-btn {
-      background: var(--danger);
-      color: #fff;
-      border: none;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .close-btn:hover {
-      transform: rotate(90deg);
-      opacity: 0.9;
-    }
-
-    /* Hamburger Menu (RIGHT) */
-    .hamburger-container {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      z-index: 10000;
-    }
-
-    .hamburger-btn {
-      width: 48px;
-      height: 48px;
-      background: var(--accent-primary);
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      box-shadow: 0 4px 15px var(--accent-glow);
-      transition: all 0.3s;
-    }
-
-    .hamburger-btn span {
-      width: 26px;
-      height: 3px;
-      background: #fff;
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    .hamburger-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 20px var(--accent-glow);
-    }
-
-    .hamburger-btn.active span:nth-child(1) {
-      transform: rotate(45deg) translate(6px, 6px);
-    }
-
-    .hamburger-btn.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .hamburger-btn.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(6px, -6px);
-    }
-
-    .hamburger-menu {
-      position: fixed;
-      top: 65px;
-      right: -260px;
-      width: 240px;
-      max-height: calc(100vh - 80px);
-      background: var(--bg-panel);
-      border: 2px solid var(--border-color);
-      border-radius: 15px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-      transition: right 0.3s ease;
-      z-index: 9999;
-      overflow-y: auto;
-      padding: 15px 12px;
-    }
-
-    body.light-theme .hamburger-menu {
-      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-    }
-
-    .hamburger-menu.active {
-      right: 15px;
-    }
-
-    .hamburger-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: transparent;
-      z-index: 9998;
-    }
-
-    body.light-theme .hamburger-overlay {
-      background: transparent;
-    }
-
-    .hamburger-overlay.active {
-      display: block;
-    }
-
-    .menu-section {
-      margin-bottom: 5px;
-    }
-
-    .menu-section h3 {
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 12px;
-      padding-left: 5px;
-    }
-
-    .menu-item {
-      width: 100%;
-      background: var(--accent-primary);
-      color: #fff;
-      border: none;
-      padding: 12px 14px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      text-align: left;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 5px;
-    }
-
-    a.menu-item {
-      color: #fff !important;
-      text-decoration: none;
-    }
-
-    a.menu-item:visited {
-      color: #fff !important;
-    }
-
-    body.light-theme a.menu-item {
-      color: #fff !important;
-    }
-
-    body.light-theme a.menu-item:visited {
-      color: #fff !important;
-    }
-
-    body.light-theme a.menu-item svg.icon {
-      stroke: #fff !important;
-    }
-
-    label.menu-item {
-      color: inherit;
-    }
-
-    body.light-theme label.menu-item.secondary {
-      color: var(--text-main);
-    }
-
-    body.light-theme label.menu-item.secondary svg.icon {
-      stroke: var(--text-main);
-    }
-
-    .menu-item:hover {
-      transform: translateX(-5px);
-      box-shadow: 0 4px 15px var(--accent-glow);
-    }
-
-    .menu-item.secondary {
-      background: var(--bg-input);
-      color: var(--text-main);
-      border: 2px solid var(--border-color);
-    }
-
-    .menu-item.secondary:hover {
-      background: var(--bg-hover);
-      border-color: var(--accent-primary);
-    }
-
-    .menu-item.success {
-      background: var(--success);
-    }
-
-    .menu-item.danger {
-      background: var(--danger);
-    }
-
-    .menu-item .icon {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-    }
-
-    .menu-item svg.icon {
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    /* Primary buttons (Apps Hub, Einstellungen, etc.) stay white in light mode */
-    body.light-theme .menu-item:not(.secondary):not(.danger) {
-      color: #fff !important;
-    }
-
-    body.light-theme .menu-item:not(.secondary):not(.danger) svg.icon {
-      stroke: #fff !important;
-    }
-
-    body.light-theme label.menu-item {
-      color: #fff;
-    }
-
-    /* Toast Notifications */
-    .toast {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background: var(--accent-primary);
-      color: #fff;
-      padding: 16px 24px;
-      border-radius: 12px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-      z-index: 10001;
-      animation: slideIn 0.3s ease-out;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .toast.success { background: var(--success); }
-    .toast.error { background: var(--danger); }
-
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateX(100px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      body { padding: 10px; }
-      .container { padding: 20px; }
-      h1 { font-size: 22px; }
-      h2 { font-size: 16px; padding: 12px 15px; }
-      
-      .hamburger-menu {
-        width: 70%;
-        max-width: 260px;
-        right: -75%;
-      }
-
-      .hamburger-menu.active {
-        right: 10px;
-      }
-      
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .summary-cards,
-      .category-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .table-wrapper {
-        font-size: 12px;
-      }
-
-      th, td {
-        padding: 10px 8px;
-        font-size: 12px;
-      }
-
-      /* Mobile buttons above table */
-      .btn-primary[onclick*="openSignatureModal"],
-      .btn-primary[onclick*="openEntryModal"] {
-        width: 100%;
-      }
-    }
-
-    /* Search Box */
-    .search-box {
-      margin: 0;
-    }
-
-    .search-box input {
-      width: 100%;
-      padding: 14px 16px;
-      background: var(--bg-input);
-      border: 2px solid var(--border-color);
-      border-radius: 10px;
-      color: var(--text-main);
-      font-size: 14px;
-      transition: all 0.3s;
-      margin-bottom: 0;
-    }
-
-    .search-box input:focus {
-      outline: none;
-      border-color: var(--accent-primary);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
-
-    /* Calculated Fields */
-    .calculated-field {
-      background: var(--bg-hover) !important;
-      cursor: not-allowed;
-      opacity: 0.8;
-    }
-
-    /* Action Buttons in Table */
-    .btn-action {
-      padding: 8px 12px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 600;
-      transition: all 0.3s;
-    }
-
-    .btn-action.edit {
-      background: var(--accent-primary);
-      color: #fff;
-    }
-
-    .btn-action.delete {
-      background: var(--danger);
-      color: #fff;
-    }
-
-    .btn-action:hover {
-      transform: scale(1.05);
-      opacity: 0.9;
-    }
-
-    /* Settings Grid */
-    .settings-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
-    }
-
-    /* Info Display */
-    .info-display {
-      background: var(--bg-input);
-      padding: 15px;
-      border-radius: 10px;
-      border: 2px solid var(--border-color);
-      margin: 10px 0;
-    }
-
-    .info-display .info-label {
-      font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 5px;
-    }
-
-    .info-display .info-value {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--accent-primary);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apps Hub - Nexus/IPS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #2d1b2e 0%, #4a2545 50%, #2d1b2e 100%);
+            min-height: 100vh;
+            color: white;
+            position: relative;
+        }
+
+        /* Container für zentrierte Inhalte */
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .header-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .header-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .header h1 {
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin: 40px 0 60px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 350px;
+            width: 100%;
+        }
+
+        .hero-image {
+            background: url('photos/Hero.png');
+            background-size: cover;
+            background-position: center;
+            min-height: 350px;
+        }
+
+        .hero-content {
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 100%;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(139, 21, 56, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 20px;
+            width: fit-content;
+        }
+
+        .hero-badge::before {
+            content: "🆕";
+        }
+
+        .hero-title {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-description {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 10px;
+            border: none;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #8B1538;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #a81d45;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* Apps Section */
+        .apps-section {
+            padding: 0 0 60px;
+            width: 100%;
+        }
+
+        .apps-title {
+            font-size: 2em;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            max-width: 100%;
+        }
+
+        /* App Card */
+        .app-card {
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            position: relative;
+        }
+
+        .app-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        .app-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Blur Background Effect beim Hover */
+        .app-card::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+            filter: blur(40px) brightness(0.7);
+            pointer-events: none;
+        }
+
+        .app-card:hover::before {
+            opacity: 0.4;
+        }
+
+        /* Individuelle Hintergrundbilder für jede Kachel */
+        .app-card:nth-child(1)::before {
+            background-image: url('photos/tätigkeitsbericht.png');
+        }
+
+        .app-card:nth-child(2)::before {
+            background-image: url('photos/Reisekosten.png');
+        }
+
+        .app-card:nth-child(3)::before {
+            background-image: url('photos/EuroSDS.png');
+        }
+
+        .app-card:nth-child(4)::before {
+            background-image: url('photos/Validierung.png');
+        }
+
+        .app-card:nth-child(5)::before {
+            background-image: url('photos/Wissen.png');
+        }
+
+        .app-card:nth-child(6)::before {
+            background-image: url('photos/Mehrarbeit.png');
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px;
+            opacity: 0.6;
+            font-size: 0.9em;
+            width: 100%;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-image {
+                min-height: 250px;
+            }
+
+            .hero-content {
+                padding: 40px;
+            }
+
+            .hero-title {
+                font-size: 2em;
+            }
+
+            .apps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .hero {
+                margin: 20px 0 40px;
+            }
+
+            .hero-content {
+                padding: 30px;
+            }
+
+            .hero-title {
+                font-size: 1.8em;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .apps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content {
+                padding: 25px;
+            }
+
+            .hero-title {
+                font-size: 1.5em;
+            }
+
+            .hero-description {
+                font-size: 1em;
+            }
+
+            .apps-title {
+                font-size: 1.5em;
+            }
+        }
+    </style>
 </head>
 <body>
-
-  <!-- Hamburger Menu Button (RIGHT) -->
-  <div class="hamburger-container">
-    <button id="hamburgerBtn" class="hamburger-btn" aria-label="Menü">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </div>
-
-  <!-- Hamburger Menu (RIGHT) -->
-  <div id="hamburgerMenu" class="hamburger-menu">
-    <!-- 1. Apps Hub -->
-    <div class="menu-section">
-      <a href="index.html" class="menu-item" style="text-decoration: none; color: inherit;">
-        <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-          <polyline points="9 22 9 12 15 12 15 22"></polyline>
-        </svg>
-        <span>Apps Hub</span>
-      </a>
-    </div>
-
-    <!-- 2. Einstellungen -->
-    <div class="menu-section">
-      <button class="menu-item" onclick="openSettings()">
-        <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
-          <circle cx="12" cy="12" r="3"></circle>
-          <path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H1m13.2 5.2l-4.2-4.2m0-6l-4.2-4.2"></path>
-        </svg>
-        <span>Einstellungen</span>
-      </button>
-    </div>
-
-    <!-- 3. Speichern -->
-    <div class="menu-section">
-      <button class="menu-item" onclick="openSavedVersionsModal()">
-        <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
-          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-          <polyline points="17 21 17 13 7 13 7 21"></polyline>
-          <polyline points="7 3 7 8 15 8"></polyline>
-        </svg>
-        <span>Speichern</span>
-      </button>
-    </div>
-
-    <!-- 4. Drucken / PDF -->
-    <div class="menu-section">
-      <button class="menu-item" onclick="exportPDF()">
-        <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
-          <polyline points="6 9 6 2 18 2 18 9"></polyline>
-          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-          <rect x="6" y="14" width="12" height="8"></rect>
-        </svg>
-        <span>Drucken / PDF</span>
-      </button>
-    </div>
-
-    <!-- 5. Hell/Dunkel -->
-    <div class="menu-section">
-      <button class="menu-item secondary" onclick="toggleTheme()">
-        <svg class="icon" id="themeIconSVG" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-        <span id="themeText">Hell</span>
-      </button>
-    </div>
-
-    <!-- 6. Export JSON -->
-    <div class="menu-section">
-      <button class="menu-item secondary" onclick="exportJSON()">
-        <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="7 10 12 15 17 10"></polyline>
-          <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
-        <span>Export JSON</span>
-      </button>
-    </div>
-
-    <!-- 7. Import JSON -->
-    <div class="menu-section">
-      <label class="menu-item secondary" style="cursor: pointer;">
-        <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="17 8 12 3 7 8"></polyline>
-          <line x1="12" y1="3" x2="12" y2="15"></line>
-        </svg>
-        <span>Import JSON</span>
-        <input type="file" id="importJSON" accept="application/json" style="display: none;" onchange="importJSON(this.files[0])">
-      </label>
-    </div>
-
-    <!-- 8. Beispieldaten -->
-    <div class="menu-section">
-      <button class="menu-item secondary" onclick="loadExampleData()">
-        <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-          <polyline points="14 2 14 8 20 8"></polyline>
-          <line x1="16" y1="13" x2="8" y2="13"></line>
-          <line x1="16" y1="17" x2="8" y2="17"></line>
-          <polyline points="10 9 9 9 8 9"></polyline>
-        </svg>
-        <span>Beispieldaten</span>
-      </button>
-    </div>
-
-    <!-- 9. Alles löschen -->
-    <div class="menu-section">
-      <button class="menu-item danger" onclick="clearAllData()">
-        <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
-          <polyline points="3 6 5 6 21 6"></polyline>
-          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-          <line x1="10" y1="11" x2="10" y2="17"></line>
-          <line x1="14" y1="11" x2="14" y2="17"></line>
-        </svg>
-        <span>Alles löschen</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- Hamburger Overlay -->
-  <div id="hamburgerOverlay" class="hamburger-overlay"></div>
-
-  <!-- Main Container -->
-  <div class="container">
-    <h1>
-      <svg viewBox="0 0 24 24" style="width: 32px; height: 32px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 8px;">
-        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-      </svg>
-      Mehrarbeit 2025 - Erfassung & Abrechnung
-    </h1>
-
-    <!-- Employee Header Grid -->
-    <div class="header-grid">
-      <div>
-        <div class="label">Vorname</div>
-        <div class="value" id="displayFirstName">Max</div>
-      </div>
-      <div>
-        <div class="label">Nachname</div>
-        <div class="value" id="displayLastName">Mustermann</div>
-      </div>
-      <div>
-        <div class="label">Bruttogehalt</div>
-        <div class="value" id="displaySalary">4.375,00 €</div>
-      </div>
-      <div>
-        <div class="label">Wochenarbeitszeit</div>
-        <div class="value" id="displayWeeklyHours">40,0 h</div>
-      </div>
-      <div>
-        <div class="label">Stundenlohn Basis</div>
-        <div class="value" id="displayHourlyRate">25,14 €/h</div>
-      </div>
-    </div>
-
-    <!-- Summary Cards -->
-    <div class="summary-cards">
-      <div class="summary-card">
-        <div class="card-label">
-          <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 4px;">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
-          </svg>
-          Gesamtstunden
-        </div>
-        <div class="card-value" id="totalHours">0,00</div>
-      </div>
-      <div class="summary-card">
-        <div class="card-label">
-          <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 4px;">
-            <line x1="12" y1="1" x2="12" y2="23"></line>
-            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-          </svg>
-          Gesamtbetrag
-        </div>
-        <div class="card-value" id="totalAmount">0,00 €</div>
-      </div>
-      <div class="summary-card">
-        <div class="card-label">
-          <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 4px;">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-            <line x1="16" y1="13" x2="8" y2="13"></line>
-            <line x1="16" y1="17" x2="8" y2="17"></line>
-            <polyline points="10 9 9 9 8 9"></polyline>
-          </svg>
-          Anzahl Einsätze
-        </div>
-        <div class="card-value" id="totalEntries">0</div>
-      </div>
-    </div>
-
-    <!-- Signature Preview Section -->
-    <div style="margin-top: 30px; margin-bottom: 30px;">
-      <h2>
-        <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
-          <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-          <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-          <path d="M2 2l7.586 7.586"></path>
-          <circle cx="11" cy="11" r="2"></circle>
-        </svg>
-        Unterschrift
-      </h2>
-      <div id="signaturePreview" class="signature-preview empty">
-        Keine Unterschrift vorhanden
-      </div>
-    </div>
-
-    <!-- Category Cards -->
-    <h2>
-      <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
-        <line x1="8" y1="6" x2="21" y2="6"></line>
-        <line x1="8" y1="12" x2="21" y2="12"></line>
-        <line x1="8" y1="18" x2="21" y2="18"></line>
-        <line x1="3" y1="6" x2="3.01" y2="6"></line>
-        <line x1="3" y1="12" x2="3.01" y2="12"></line>
-        <line x1="3" y1="18" x2="3.01" y2="18"></line>
-      </svg>
-      Vergütungskategorien
-    </h2>
-    <div class="category-grid">
-      <div class="category-card">
-        <h4>Kat. 1: Werktag Abend</h4>
-        <div class="cat-detail">18:00-20:00 Uhr</div>
-        <div class="cat-detail">Zuschlag: +25%</div>
-        <div class="cat-rate" id="rate1">31,43 €/h</div>
-      </div>
-      <div class="category-card">
-        <h4>Kat. 2: Werktag Nacht</h4>
-        <div class="cat-detail">20:00-07:00 Uhr</div>
-        <div class="cat-detail">Zuschlag: +50%</div>
-        <div class="cat-rate" id="rate2">37,71 €/h</div>
-      </div>
-      <div class="category-card">
-        <h4>Kat. 3: Samstag</h4>
-        <div class="cat-detail">Ganztägig</div>
-        <div class="cat-detail">Zuschlag: +50%</div>
-        <div class="cat-rate" id="rate3">37,71 €/h</div>
-      </div>
-      <div class="category-card">
-        <h4>Kat. 4: Sonntag</h4>
-        <div class="cat-detail">Ganztägig</div>
-        <div class="cat-detail">Zuschlag: +100%</div>
-        <div class="cat-rate" id="rate4">50,28 €/h</div>
-      </div>
-      <div class="category-card">
-        <h4>Kat. 5: Feiertag</h4>
-        <div class="cat-detail">Ganztägig</div>
-        <div class="cat-detail">Zuschlag: +100%</div>
-        <div class="cat-rate" id="rate5">50,28 €/h</div>
-      </div>
-    </div>
-
-    <!-- Entries Table -->
-    <h2>
-      <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
-        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-        <line x1="12" y1="22.08" x2="12" y2="12"></line>
-      </svg>
-      Erfasste Einsätze
-    </h2>
-    
-    <div style="display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
-      <div class="search-box" style="flex: 1; min-width: 250px; margin: 0;">
-        <input type="text" id="searchInput" placeholder="Suchen nach Kunde, Monat, Kategorie...">
-      </div>
-      <button class="btn-primary" onclick="openEntryModal()" style="flex: 0 0 auto; margin: 0; white-space: nowrap;">
-        <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-        Neuer Einsatz
-      </button>
-      <button class="btn-primary" onclick="openSignatureModal()" style="flex: 0 0 auto; margin: 0; white-space: nowrap;">
-        <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
-          <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-          <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-          <path d="M2 2l7.586 7.586"></path>
-          <circle cx="11" cy="11" r="2"></circle>
-        </svg>
-        Unterschrift
-      </button>
-    </div>
-    
-    <div class="table-wrapper">
-      <table id="entriesTable">
-        <thead>
-          <tr>
-            <th>Tag</th>
-            <th>Monat</th>
-            <th>Jahr</th>
-            <th>Beginn</th>
-            <th>Ende</th>
-            <th>Dauer (h)</th>
-            <th>Kategorie</th>
-            <th>Vergütung (€/h)</th>
-            <th>Kunde</th>
-            <th>Betrag (€)</th>
-            <th>Aktion</th>
-          </tr>
-        </thead>
-        <tbody id="entriesBody">
-          <!-- Entries will be added here dynamically -->
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="9" style="text-align: right;"><strong>Gesamtsumme:</strong></td>
-            <td colspan="2" id="footerTotal"><strong>0,00 €</strong></td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-  </div>
-
-  <!-- Settings Modal -->
-  <div id="settingsModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>
-          <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H1m13.2 5.2l-4.2-4.2m0-6l-4.2-4.2"></path>
-          </svg>
-          Persönliche Einstellungen
-        </h2>
-        <button class="close-btn" onclick="closeSettings()">&times;</button>
-      </div>
-      <form id="settingsForm">
-        <div class="settings-grid">
-          <div class="form-group">
-            <label for="settingFirstName">Vorname *</label>
-            <input type="text" id="settingFirstName" required>
-          </div>
-          <div class="form-group">
-            <label for="settingLastName">Nachname *</label>
-            <input type="text" id="settingLastName" required>
-          </div>
-          <div class="form-group">
-            <label for="settingSalary">Bruttogehalt (€/Monat) *</label>
-            <input type="number" id="settingSalary" step="0.01" required>
-          </div>
-          <div class="form-group">
-            <label for="settingWeeklyHours">Wochenarbeitszeit (Stunden) *</label>
-            <input type="number" id="settingWeeklyHours" step="0.5" required>
-          </div>
-          <div class="form-group" style="grid-column: 1 / -1;">
-            <label for="settingIBAN">IBAN</label>
-            <input type="text" id="settingIBAN" placeholder="z.B. DE21 5001 0517 5453 6769 08">
-          </div>
-          <div class="form-group" style="grid-column: 1 / -1;">
-            <label for="settingBank">Bank</label>
-            <input type="text" id="settingBank" placeholder="z.B. ING Bank">
-          </div>
-        </div>
-        
-        <div class="info-display" style="margin-top: 20px;">
-          <div class="info-label">Berechneter Stundenlohn brutto:</div>
-          <div class="info-value" id="calculatedHourlyRate">25,14 €/h</div>
-        </div>
-        
-        <div class="button-group" style="margin-top: 25px;">
-          <button type="submit" class="btn-primary">
-            <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
-              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-              <polyline points="17 21 17 13 7 13 7 21"></polyline>
-              <polyline points="7 3 7 8 15 8"></polyline>
-            </svg>
-            Einstellungen speichern
-          </button>
-          <button type="button" class="btn-secondary" onclick="closeSettings()">Abbrechen</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Entry Form Modal -->
-  <div id="entryModal" class="modal">
-    <div class="modal-content" style="max-width: 700px;">
-      <div class="modal-header">
-        <h2>
-          <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
-          Neuen Einsatz erfassen
-        </h2>
-        <button class="close-btn" onclick="closeEntryModal()">&times;</button>
-      </div>
-      
-      <form id="entryForm">
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="day">Tag *</label>
-            <input type="number" id="day" min="1" max="31" required>
-          </div>
-          <div class="form-group">
-            <label for="month">Monat *</label>
-            <select id="month" required>
-              <option value="">Bitte wählen...</option>
-              <option value="1">Januar</option>
-              <option value="2">Februar</option>
-              <option value="3">März</option>
-              <option value="4">April</option>
-              <option value="5">Mai</option>
-              <option value="6">Juni</option>
-              <option value="7">Juli</option>
-              <option value="8">August</option>
-              <option value="9">September</option>
-              <option value="10">Oktober</option>
-              <option value="11">November</option>
-              <option value="12">Dezember</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="year">Jahr</label>
-            <input type="number" id="year" value="2025" required>
-          </div>
-          <div class="form-group">
-            <label for="startTime">Beginn *</label>
-            <input type="time" id="startTime" required>
-          </div>
-          <div class="form-group">
-            <label for="endTime">Ende *</label>
-            <input type="time" id="endTime" required>
-          </div>
-          <div class="form-group">
-            <label for="duration">Dauer (Stunden)</label>
-            <input type="number" id="duration" step="0.01" class="calculated-field" readonly>
-          </div>
-          <div class="form-group">
-            <label for="category">Kategorie *</label>
-            <select id="category" required>
-              <option value="">Bitte wählen...</option>
-              <option value="Werktag +25%">Werktag +25% (18:00-20:00)</option>
-              <option value="Werktag +50%">Werktag +50% (20:00-07:00)</option>
-              <option value="Samstag +50%">Samstag +50%</option>
-              <option value="Sonntag +100%">Sonntag +100%</option>
-              <option value="Feiertag +100%">Feiertag +100%</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="rate">Vergütung (€/h)</label>
-            <input type="number" id="rate" step="0.01" class="calculated-field" readonly>
-          </div>
-          <div class="form-group" style="grid-column: 1 / -1;">
-            <label for="customer">Kunde</label>
-            <input type="text" id="customer" placeholder="z.B. NXKS-9781 - Marktredwitz">
-          </div>
-          <div class="form-group" style="grid-column: 1 / -1;">
-            <label for="amount">Betrag (€)</label>
-            <input type="number" id="amount" step="0.01" class="calculated-field" readonly>
-          </div>
-        </div>
-        <div class="button-group" style="margin-top: 25px;">
-          <button type="submit" class="btn-primary">
-            <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
-              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-              <polyline points="17 21 17 13 7 13 7 21"></polyline>
-              <polyline points="7 3 7 8 15 8"></polyline>
-            </svg>
-            Einsatz speichern
-          </button>
-          <button type="button" class="btn-secondary" onclick="resetForm()">
-            <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
-              <polyline points="23 4 23 10 17 10"></polyline>
-              <polyline points="1 20 1 14 7 14"></polyline>
-              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-            </svg>
-            Zurücksetzen
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Signature Modal -->
-  <div id="signatureModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>
-          <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
-            <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-            <path d="M2 2l7.586 7.586"></path>
-            <circle cx="11" cy="11" r="2"></circle>
-          </svg>
-          Unterschrift
-        </h2>
-        <button class="close-btn" onclick="closeSignatureModal()">&times;</button>
-      </div>
-      
-      <p style="color: var(--text-muted); margin-bottom: 15px;">Zeichnen Sie Ihre Unterschrift mit der Maus oder dem Finger, oder laden Sie eine Bilddatei hoch.</p>
-      
-      <!-- Signature Toolbar -->
-      <div class="signature-toolbar">
-        <div class="toolbar-section">
-          <label style="font-size: 13px; font-weight: 600; margin-right: 8px;">Stiftstärke:</label>
-          <button class="tool-btn" onclick="setPenSize(1)" id="pen1">
-            <div style="width: 8px; height: 8px; background: currentColor; border-radius: 50%;"></div>
-          </button>
-          <button class="tool-btn active" onclick="setPenSize(2)" id="pen2">
-            <div style="width: 12px; height: 12px; background: currentColor; border-radius: 50%;"></div>
-          </button>
-          <button class="tool-btn" onclick="setPenSize(3)" id="pen3">
-            <div style="width: 16px; height: 16px; background: currentColor; border-radius: 50%;"></div>
-          </button>
-          <button class="tool-btn" onclick="setPenSize(4)" id="pen4">
-            <div style="width: 20px; height: 20px; background: currentColor; border-radius: 50%;"></div>
-          </button>
-        </div>
-        
-        <div class="toolbar-section">
-          <label style="font-size: 13px; font-weight: 600; margin-right: 8px;">Farbe:</label>
-          <button class="tool-btn color-btn active" onclick="setPenColor('#000000')" id="colorBlack" style="background: #000000; border-color: var(--accent-primary);"></button>
-          <button class="tool-btn color-btn" onclick="setPenColor('#0066CC')" id="colorBlue" style="background: #0066CC;"></button>
-        </div>
-      </div>
-      
-      <div class="signature-canvas-wrapper">
-        <canvas id="signatureCanvas" class="signature-canvas"></canvas>
-      </div>
-      
-      <div class="signature-controls">
-        <button class="btn-clear" onclick="clearSignature()">
-          <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 4px;">
-            <polyline points="3 6 5 6 21 6"></polyline>
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-            <line x1="10" y1="11" x2="10" y2="17"></line>
-            <line x1="14" y1="11" x2="14" y2="17"></line>
-          </svg>
-          Löschen
-        </button>
-        <button class="btn-upload" onclick="document.getElementById('signatureUpload').click()">
-          <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 4px;">
-            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-            <polyline points="13 2 13 9 20 9"></polyline>
-          </svg>
-          Hochladen
-        </button>
-        <input type="file" id="signatureUpload" accept="image/*" style="display: none;" onchange="uploadSignature(event)">
-      </div>
-
-      <div class="button-group" style="margin-top: 25px;">
-        <button type="button" class="btn-primary" onclick="closeSignatureModal()">
-          <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-          Fertig
-        </button>
-        <button type="button" class="btn-secondary" onclick="closeSignatureModal()">Schließen</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Saved Versions Modal -->
-  <div id="savedVersionsModal" class="modal">
-    <div class="modal-content" style="max-width: 800px;">
-      <div class="modal-header">
-        <h2>
-          <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
-            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-            <polyline points="17 21 17 13 7 13 7 21"></polyline>
-            <polyline points="7 3 7 8 15 8"></polyline>
-          </svg>
-          Gespeicherte Versionen
-        </h2>
-        <button class="close-btn" onclick="closeSavedVersionsModal()">&times;</button>
-      </div>
-
-      <div style="margin-bottom: 20px;">
-        <button class="btn-primary" onclick="saveNewVersion()">
-          <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
-          Neue Version speichern
-        </button>
-      </div>
-
-      <div id="savedVersionsList" style="max-height: 400px; overflow-y: auto;">
-        <!-- Wird dynamisch gefüllt -->
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // ==================== GLOBAL STATE ====================
-    let userSettings = {
-      firstName: 'Max',
-      lastName: 'Mustermann',
-      salary: 4375,
-      weeklyHours: 40,
-      iban: 'DE21 5001 0517 5453 6769 08',
-      bank: 'ING Bank'
-    };
-
-    let entries = [];
-    let signatureData = null;
-    let currentEditingId = null; // Track which entry is being edited
-
-    // ==================== INITIALIZATION ====================
-    document.addEventListener('DOMContentLoaded', function() {
-      initHamburgerMenu();
-      loadTheme();
-      loadSettings();
-      loadEntries();
-      initSignatureCanvas();
-      loadSignature();
-      updateDisplay();
-      calculateRates();
-      
-      // Form event listeners
-      document.getElementById('entryForm').addEventListener('submit', handleFormSubmit);
-      document.getElementById('settingsForm').addEventListener('submit', handleSettingsSave);
-      document.getElementById('startTime').addEventListener('change', calculateDuration);
-      document.getElementById('endTime').addEventListener('change', calculateDuration);
-      document.getElementById('category').addEventListener('change', updateRateAndAmount);
-      document.getElementById('duration').addEventListener('input', updateAmount);
-      document.getElementById('searchInput').addEventListener('input', handleSearch);
-      
-      // Settings form live calculation
-      document.getElementById('settingSalary').addEventListener('input', updateSettingsHourlyRate);
-      document.getElementById('settingWeeklyHours').addEventListener('input', updateSettingsHourlyRate);
-    });
-
-    // ==================== HAMBURGER MENU ====================
-    function initHamburgerMenu() {
-      const btn = document.getElementById('hamburgerBtn');
-      const menu = document.getElementById('hamburgerMenu');
-      const overlay = document.getElementById('hamburgerOverlay');
-      
-      btn.addEventListener('click', toggleHamburgerMenu);
-      
-      // Overlay schließt Menü bei Klick
-      overlay.addEventListener('click', closeHamburgerMenu);
-      
-      // Close on ESC
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && menu.classList.contains('active')) {
-          closeHamburgerMenu();
-        }
-      });
-    }
-
-    function toggleHamburgerMenu() {
-      const btn = document.getElementById('hamburgerBtn');
-      const menu = document.getElementById('hamburgerMenu');
-      const overlay = document.getElementById('hamburgerOverlay');
-      
-      btn.classList.toggle('active');
-      menu.classList.toggle('active');
-      overlay.classList.toggle('active');
-      
-      // Erlaube Scrollen im Hintergrund - kein overflow: hidden mehr
-    }
-
-    function closeHamburgerMenu() {
-      const btn = document.getElementById('hamburgerBtn');
-      const menu = document.getElementById('hamburgerMenu');
-      const overlay = document.getElementById('hamburgerOverlay');
-      
-      btn.classList.remove('active');
-      menu.classList.remove('active');
-      overlay.classList.remove('active');
-    }
-
-    // ==================== THEME TOGGLE ====================
-    function loadTheme() {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'light') {
-        document.body.classList.add('light-theme');
-      }
-      updateThemeIcon();
-    }
-
-    function toggleTheme() {
-      document.body.classList.toggle('light-theme');
-      const isLight = document.body.classList.contains('light-theme');
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
-      updateThemeIcon();
-      updateCanvasTheme();
-    }
-
-    function updateThemeIcon() {
-      const iconSVG = document.getElementById('themeIconSVG');
-      const text = document.getElementById('themeText');
-      const isLight = document.body.classList.contains('light-theme');
-      
-      if (iconSVG && text) {
-        if (isLight) {
-          // Sun icon for light mode
-          iconSVG.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
-          text.textContent = 'Dunkel';
-        } else {
-          // Moon icon for dark mode
-          iconSVG.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
-          text.textContent = 'Hell';
-        }
-      }
-    }
-
-    function updateCanvasTheme() {
-      const ctx = canvas.getContext('2d');
-      const isLight = document.body.classList.contains('light-theme');
-      ctx.strokeStyle = isLight ? '#000' : '#000';
-    }
-
-    // ==================== TOAST NOTIFICATIONS ====================
-    function toast(message, type = 'success') {
-      const toast = document.createElement('div');
-      toast.className = `toast ${type}`;
-      toast.textContent = message;
-      document.body.appendChild(toast);
-      
-      setTimeout(() => {
-        toast.style.animation = 'slideIn 0.3s ease-out reverse';
-        setTimeout(() => toast.remove(), 300);
-      }, 3000);
-    }
-
-    // ==================== SETTINGS ====================
-    function loadSettings() {
-      const saved = localStorage.getItem('userSettings');
-      if (saved) {
-        userSettings = JSON.parse(saved);
-      }
-      updateDisplay();
-    }
-
-    function saveSettings() {
-      localStorage.setItem('userSettings', JSON.stringify(userSettings));
-      updateDisplay();
-      calculateRates();
-      toast('Einstellungen gespeichert', 'success');
-    }
-
-    function openSettings() {
-      document.getElementById('settingFirstName').value = userSettings.firstName;
-      document.getElementById('settingLastName').value = userSettings.lastName;
-      document.getElementById('settingSalary').value = userSettings.salary;
-      document.getElementById('settingWeeklyHours').value = userSettings.weeklyHours;
-      document.getElementById('settingIBAN').value = userSettings.iban || '';
-      document.getElementById('settingBank').value = userSettings.bank || '';
-      
-      updateSettingsHourlyRate();
-      document.getElementById('settingsModal').classList.add('active');
-      closeHamburgerMenu();
-    }
-
-    function closeSettings() {
-      document.getElementById('settingsModal').classList.remove('active');
-    }
-
-    function openSignatureModal() {
-      document.getElementById('signatureModal').classList.add('active');
-      closeHamburgerMenu();
-      
-      // Initialize or reinitialize canvas
-      setTimeout(() => {
-        initSignatureCanvas();
-        
-        // Redraw existing signature if available
-        if (signatureData && ctx) {
-          const img = new Image();
-          img.onload = function() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          };
-          img.src = signatureData;
-        }
-      }, 100);
-    }
-
-    function closeSignatureModal() {
-      document.getElementById('signatureModal').classList.remove('active');
-    }
-
-    function openEntryModal() {
-      // Reset editing mode
-      currentEditingId = null;
-      
-      // Reset modal title to "Neuen Einsatz erfassen"
-      document.querySelector('#entryModal .modal-header h2').innerHTML = `
-        <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-        Neuen Einsatz erfassen
-      `;
-      
-      document.getElementById('entryModal').classList.add('active');
-      closeHamburgerMenu();
-    }
-
-    function closeEntryModal() {
-      document.getElementById('entryModal').classList.remove('active');
-      currentEditingId = null; // Reset editing mode when closing
-    }
-
-    function handleSettingsSave(e) {
-      e.preventDefault();
-      
-      userSettings.firstName = document.getElementById('settingFirstName').value;
-      userSettings.lastName = document.getElementById('settingLastName').value;
-      userSettings.salary = parseFloat(document.getElementById('settingSalary').value);
-      userSettings.weeklyHours = parseFloat(document.getElementById('settingWeeklyHours').value);
-      userSettings.iban = document.getElementById('settingIBAN').value;
-      userSettings.bank = document.getElementById('settingBank').value;
-      
-      saveSettings();
-      closeSettings();
-      renderEntries();
-    }
-
-    function updateSettingsHourlyRate() {
-      const salary = parseFloat(document.getElementById('settingSalary').value) || 0;
-      const weeklyHours = parseFloat(document.getElementById('settingWeeklyHours').value) || 40;
-      
-      const hourlyRate = calculateHourlyRate(salary, weeklyHours);
-      document.getElementById('calculatedHourlyRate').textContent = formatCurrency(hourlyRate) + '/h';
-    }
-
-    function calculateHourlyRate(salary, weeklyHours) {
-      // Excel-kompatible Berechnung: Wochenstunden × 4,35 = Monatsstunden
-      const monthlyHours = weeklyHours * 4.35;
-      return salary / monthlyHours;
-    }
-
-    function updateDisplay() {
-      const hourlyRate = calculateHourlyRate(userSettings.salary, userSettings.weeklyHours);
-      
-      document.getElementById('displayFirstName').textContent = userSettings.firstName;
-      document.getElementById('displayLastName').textContent = userSettings.lastName;
-      document.getElementById('displaySalary').textContent = formatCurrency(userSettings.salary);
-      document.getElementById('displayWeeklyHours').textContent = userSettings.weeklyHours.toFixed(1) + ' h';
-      document.getElementById('displayHourlyRate').textContent = formatCurrency(hourlyRate) + '/h';
-    }
-
-    function calculateRates() {
-      const baseRate = calculateHourlyRate(userSettings.salary, userSettings.weeklyHours);
-      
-      document.getElementById('rate1').textContent = formatCurrency(baseRate * 1.25) + '/h';
-      document.getElementById('rate2').textContent = formatCurrency(baseRate * 1.5) + '/h';
-      document.getElementById('rate3').textContent = formatCurrency(baseRate * 1.5) + '/h';
-      document.getElementById('rate4').textContent = formatCurrency(baseRate * 2.0) + '/h';
-      document.getElementById('rate5').textContent = formatCurrency(baseRate * 2.0) + '/h';
-    }
-
-    // ==================== FORM HANDLING ====================
-    function calculateDuration() {
-      const start = document.getElementById('startTime').value;
-      const end = document.getElementById('endTime').value;
-      
-      if (start && end) {
-        const [startH, startM] = start.split(':').map(Number);
-        const [endH, endM] = end.split(':').map(Number);
-        
-        let duration = (endH * 60 + endM) - (startH * 60 + startM);
-        if (duration < 0) duration += 24 * 60;
-        
-        duration = duration / 60;
-        document.getElementById('duration').value = duration.toFixed(2);
-        updateAmount();
-      }
-    }
-
-    function updateRateAndAmount() {
-      const category = document.getElementById('category').value;
-      const baseRate = calculateHourlyRate(userSettings.salary, userSettings.weeklyHours);
-      
-      let multiplier = 1.0;
-      if (category.includes('+25%')) multiplier = 1.25;
-      else if (category.includes('+50%')) multiplier = 1.5;
-      else if (category.includes('+100%')) multiplier = 2.0;
-      
-      const rate = baseRate * multiplier;
-      document.getElementById('rate').value = rate.toFixed(2);
-      updateAmount();
-    }
-
-    function updateAmount() {
-      const duration = parseFloat(document.getElementById('duration').value) || 0;
-      const rate = parseFloat(document.getElementById('rate').value) || 0;
-      const amount = duration * rate;
-      document.getElementById('amount').value = amount.toFixed(2);
-    }
-
-    function handleFormSubmit(e) {
-      e.preventDefault();
-      
-      const day = parseInt(document.getElementById('day').value);
-      const month = parseInt(document.getElementById('month').value);
-      const year = parseInt(document.getElementById('year').value);
-      const startTime = document.getElementById('startTime').value;
-      const endTime = document.getElementById('endTime').value;
-      
-      // Konflikt-Prüfung: Gibt es bereits einen Einsatz am selben Tag zur gleichen Zeit?
-      const hasConflict = entries.some(e => {
-        // Ignoriere den aktuell bearbeiteten Eintrag
-        if (currentEditingId && e.id === currentEditingId) {
-          return false;
-        }
-        
-        if (e.day === day && e.month === month && e.year === year) {
-          // Zeitüberschneidung prüfen
-          const newStart = timeToMinutes(startTime);
-          const newEnd = timeToMinutes(endTime);
-          const existingStart = timeToMinutes(e.startTime);
-          const existingEnd = timeToMinutes(e.endTime);
-          
-          // Überschneidung wenn: (newStart < existingEnd) und (newEnd > existingStart)
-          return (newStart < existingEnd && newEnd > existingStart);
-        }
-        return false;
-      });
-      
-      if (hasConflict) {
-        toast('Konflikt! Es existiert bereits ein Einsatz zu dieser Zeit an diesem Tag.', 'error');
-        return;
-      }
-      
-      const entryData = {
-        day: day,
-        month: month,
-        year: year,
-        startTime: startTime,
-        endTime: endTime,
-        duration: parseFloat(document.getElementById('duration').value),
-        category: document.getElementById('category').value,
-        rate: parseFloat(document.getElementById('rate').value),
-        customer: document.getElementById('customer').value,
-        amount: parseFloat(document.getElementById('amount').value)
-      };
-      
-      if (currentEditingId) {
-        // Edit mode - update existing entry
-        const index = entries.findIndex(e => e.id === currentEditingId);
-        if (index !== -1) {
-          entries[index] = { ...entryData, id: currentEditingId };
-          toast('Einsatz erfolgreich aktualisiert', 'success');
-        }
-        currentEditingId = null;
-      } else {
-        // Create mode - add new entry
-        entries.push({ ...entryData, id: Date.now() });
-        toast('Einsatz erfolgreich gespeichert', 'success');
-      }
-      
-      saveEntries();
-      renderEntries();
-      resetForm();
-      closeEntryModal();
-    }
-    
-    // Hilfsfunktion: Zeit in Minuten umrechnen
-    function timeToMinutes(timeStr) {
-      const [hours, minutes] = timeStr.split(':').map(Number);
-      return hours * 60 + minutes;
-    }
-
-    function resetForm() {
-      document.getElementById('entryForm').reset();
-      document.getElementById('year').value = 2025;
-      document.getElementById('duration').value = '';
-      document.getElementById('rate').value = '';
-      document.getElementById('amount').value = '';
-      currentEditingId = null; // Reset editing mode
-    }
-
-    // ==================== ENTRIES MANAGEMENT ====================
-    function loadEntries() {
-      const saved = localStorage.getItem('entries');
-      if (saved) {
-        entries = JSON.parse(saved);
-      }
-      renderEntries();
-    }
-
-    function saveEntries() {
-      localStorage.setItem('entries', JSON.stringify(entries));
-    }
-
-    function renderEntries() {
-      const tbody = document.getElementById('entriesBody');
-      tbody.innerHTML = '';
-      
-      if (entries.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="11" style="text-align: center; padding: 30px; color: var(--text-muted);">Noch keine Einsätze erfasst</td></tr>';
-        updateSummary();
-        return;
-      }
-      
-      entries.forEach(entry => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${entry.day}</td>
-          <td>${getMonthName(entry.month)}</td>
-          <td>${entry.year}</td>
-          <td>${entry.startTime}</td>
-          <td>${entry.endTime}</td>
-          <td>${entry.duration.toFixed(2)}</td>
-          <td>${entry.category}</td>
-          <td>${formatCurrency(entry.rate)}</td>
-          <td>${entry.customer || '-'}</td>
-          <td><strong>${formatCurrency(entry.amount)}</strong></td>
-          <td>
-            <button class="btn-action edit" onclick="editEntry(${entry.id})" style="margin-right: 5px;">
-              <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-              </svg>
-            </button>
-            <button class="btn-action delete" onclick="deleteEntry(${entry.id})">
-              <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                <line x1="10" y1="11" x2="10" y2="17"></line>
-                <line x1="14" y1="11" x2="14" y2="17"></line>
-              </svg>
-            </button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-      
-      updateSummary();
-    }
-
-    function editEntry(id) {
-      const entry = entries.find(e => e.id === id);
-      if (!entry) {
-        toast('Einsatz nicht gefunden', 'error');
-        return;
-      }
-      
-      // Set editing mode
-      currentEditingId = id;
-      
-      // Fill form with entry data
-      document.getElementById('day').value = entry.day;
-      document.getElementById('month').value = entry.month;
-      document.getElementById('year').value = entry.year;
-      document.getElementById('startTime').value = entry.startTime;
-      document.getElementById('endTime').value = entry.endTime;
-      document.getElementById('duration').value = entry.duration.toFixed(2);
-      document.getElementById('category').value = entry.category;
-      document.getElementById('customer').value = entry.customer || '';
-      
-      // Update rate and amount
-      updateRateAndAmount();
-      
-      // Change modal title
-      document.querySelector('#entryModal .modal-header h2').innerHTML = `
-        <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
-          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-        </svg>
-        Einsatz bearbeiten
-      `;
-      
-      // Open modal directly without calling openEntryModal (which would reset currentEditingId)
-      document.getElementById('entryModal').classList.add('active');
-      closeHamburgerMenu();
-    }
-
-    function deleteEntry(id) {
-      if (!confirm('Diesen Einsatz wirklich löschen?')) return;
-      
-      entries = entries.filter(e => e.id !== id);
-      saveEntries();
-      renderEntries();
-      toast('Einsatz gelöscht', 'success');
-    }
-
-    function updateSummary() {
-      const totalHours = entries.reduce((sum, e) => sum + e.duration, 0);
-      const totalAmount = entries.reduce((sum, e) => sum + e.amount, 0);
-      const totalEntries = entries.length;
-      
-      document.getElementById('totalHours').textContent = totalHours.toFixed(2);
-      document.getElementById('totalAmount').textContent = formatCurrency(totalAmount);
-      document.getElementById('totalEntries').textContent = totalEntries;
-      document.getElementById('footerTotal').innerHTML = `<strong>${formatCurrency(totalAmount)}</strong>`;
-    }
-
-    function handleSearch() {
-      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-      const rows = document.querySelectorAll('#entriesBody tr');
-      
-      rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(searchTerm) ? '' : 'none';
-      });
-    }
-
-    // ==================== SIGNATURE CANVAS ====================
-    let canvas, ctx, isDrawing = false;
-    let penSize = 2;
-    let penColor = '#000000';
-    let lastX = 0;
-    let lastY = 0;
-    let startX = 0;
-    let startY = 0;
-    let hasMoved = false;
-
-    function initSignatureCanvas() {
-      canvas = document.getElementById('signatureCanvas');
-      if (!canvas) return;
-      
-      ctx = canvas.getContext('2d');
-      
-      // Set canvas size to match display size
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width;
-      canvas.height = rect.height;
-      
-      // Set drawing style
-      ctx.strokeStyle = penColor;
-      ctx.fillStyle = penColor;
-      ctx.lineWidth = penSize;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      
-      // Clear any existing listeners
-      const newCanvas = canvas.cloneNode(true);
-      canvas.parentNode.replaceChild(newCanvas, canvas);
-      canvas = newCanvas;
-      ctx = canvas.getContext('2d');
-      
-      // Reset canvas size after cloning
-      canvas.width = rect.width;
-      canvas.height = rect.height;
-      
-      // Reset style after cloning
-      ctx.strokeStyle = penColor;
-      ctx.fillStyle = penColor;
-      ctx.lineWidth = penSize;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      
-      // Mouse events
-      canvas.addEventListener('mousedown', function(e) {
-        e.preventDefault();
-        isDrawing = true;
-        hasMoved = false;
-        const rect = canvas.getBoundingClientRect();
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        startX = (e.clientX - rect.left) * scaleX;
-        startY = (e.clientY - rect.top) * scaleY;
-        lastX = startX;
-        lastY = startY;
-        
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-      });
-      
-      canvas.addEventListener('mousemove', function(e) {
-        if (!isDrawing) return;
-        e.preventDefault();
-        
-        hasMoved = true;
-        
-        const rect = canvas.getBoundingClientRect();
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        const x = (e.clientX - rect.left) * scaleX;
-        const y = (e.clientY - rect.top) * scaleY;
-        
-        ctx.lineTo(x, y);
-        ctx.stroke();
-        
-        lastX = x;
-        lastY = y;
-      });
-      
-      canvas.addEventListener('mouseup', function(e) {
-        if (isDrawing) {
-          if (!hasMoved) {
-            // Punkt zeichnen wenn nicht bewegt
-            ctx.beginPath();
-            ctx.arc(startX, startY, penSize * 1.5, 0, Math.PI * 2);
-            ctx.fill();
-          }
-          isDrawing = false;
-          hasMoved = false;
-          saveSignatureToPreview();
-        }
-      });
-      
-      canvas.addEventListener('mouseleave', function(e) {
-        if (isDrawing) {
-          isDrawing = false;
-          hasMoved = false;
-          saveSignatureToPreview();
-        }
-      });
-      
-      // Touch events
-      canvas.addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        isDrawing = true;
-        hasMoved = false;
-        const rect = canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        startX = (touch.clientX - rect.left) * scaleX;
-        startY = (touch.clientY - rect.top) * scaleY;
-        lastX = startX;
-        lastY = startY;
-        
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-      }, { passive: false });
-      
-      canvas.addEventListener('touchmove', function(e) {
-        if (!isDrawing) return;
-        e.preventDefault();
-        
-        hasMoved = true;
-        
-        const rect = canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        const x = (touch.clientX - rect.left) * scaleX;
-        const y = (touch.clientY - rect.top) * scaleY;
-        
-        ctx.lineTo(x, y);
-        ctx.stroke();
-        
-        lastX = x;
-        lastY = y;
-      }, { passive: false });
-      
-      canvas.addEventListener('touchend', function(e) {
-        if (isDrawing) {
-          if (!hasMoved) {
-            // Punkt zeichnen wenn nicht bewegt
-            ctx.beginPath();
-            ctx.arc(startX, startY, penSize * 1.5, 0, Math.PI * 2);
-            ctx.fill();
-          }
-          isDrawing = false;
-          hasMoved = false;
-          saveSignatureToPreview();
-        }
-      });
-    }
-
-    function updatePenSettings() {
-      if (!ctx) return;
-      ctx.strokeStyle = penColor;
-      ctx.fillStyle = penColor;
-      ctx.lineWidth = penSize;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-    }
-
-    function setPenSize(size) {
-      penSize = size;
-      updatePenSettings();
-      
-      // Update button states
-      document.querySelectorAll('.tool-btn[id^="pen"]').forEach(btn => btn.classList.remove('active'));
-      const btn = document.getElementById('pen' + size);
-      if (btn) btn.classList.add('active');
-    }
-
-    function setPenColor(color) {
-      penColor = color;
-      updatePenSettings();
-      
-      // Update button states
-      document.querySelectorAll('.tool-btn.color-btn').forEach(btn => btn.classList.remove('active'));
-      if (color === '#000000') {
-        document.getElementById('colorBlack').classList.add('active');
-      } else if (color === '#0066CC') {
-        document.getElementById('colorBlue').classList.add('active');
-      }
-    }
-
-    function clearSignature() {
-      if (!ctx || !canvas) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      signatureData = null;
-      document.getElementById('signaturePreview').innerHTML = 'Keine Unterschrift vorhanden';
-      document.getElementById('signaturePreview').classList.add('empty');
-      
-      localStorage.removeItem('signatureData');
-      toast('Unterschrift gelöscht', 'success');
-    }
-
-    function saveSignatureToPreview() {
-      if (!canvas) return;
-      signatureData = canvas.toDataURL('image/png');
-      const preview = document.getElementById('signaturePreview');
-      preview.innerHTML = `<img src="${signatureData}" alt="Unterschrift">`;
-      preview.classList.remove('empty');
-      localStorage.setItem('signatureData', signatureData);
-    }
-
-    function uploadSignature(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        signatureData = e.target.result;
-        const preview = document.getElementById('signaturePreview');
-        preview.innerHTML = `<img src="${signatureData}" alt="Unterschrift">`;
-        preview.classList.remove('empty');
-        
-        // Draw on canvas
-        if (ctx && canvas) {
-          const img = new Image();
-          img.onload = function() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          };
-          img.src = signatureData;
-        }
-        
-        localStorage.setItem('signatureData', signatureData);
-        toast('Unterschrift hochgeladen', 'success');
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function loadSignature() {
-      const savedSig = localStorage.getItem('signatureData');
-      if (savedSig) {
-        signatureData = savedSig;
-        const preview = document.getElementById('signaturePreview');
-        preview.innerHTML = `<img src="${signatureData}" alt="Unterschrift">`;
-        preview.classList.remove('empty');
-      }
-    }
-
-    // ==================== DATA MANAGEMENT ====================
-    function saveData() {
-      saveSettings();
-      saveEntries();
-      localStorage.setItem('signatureData', signatureData || '');
-      toast('Alle Daten gespeichert', 'success');
-      closeHamburgerMenu();
-    }
-
-    function loadData() {
-      loadSettings();
-      loadEntries();
-      const savedSig = localStorage.getItem('signatureData');
-      if (savedSig) {
-        signatureData = savedSig;
-        const preview = document.getElementById('signaturePreview');
-        preview.innerHTML = `<img src="${signatureData}" alt="Unterschrift">`;
-        preview.classList.remove('empty');
-        
-        // Also draw on canvas if it exists
-        if (canvas && ctx) {
-          const img = new Image();
-          img.onload = function() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          };
-          img.src = signatureData;
-        }
-      }
-      toast('Daten geladen', 'success');
-      closeHamburgerMenu();
-    }
-
-    function clearAllData() {
-      if (!confirm('Wirklich ALLE Daten löschen? Diese Aktion kann nicht rückgängig gemacht werden!')) return;
-      
-      localStorage.clear();
-      entries = [];
-      signatureData = null;
-      
-      userSettings = {
-        firstName: 'Max',
-        lastName: 'Mustermann',
-        salary: 4375,
-        weeklyHours: 40,
-        iban: 'DE21 5001 0517 5453 6769 08',
-        bank: 'ING Bank'
-      };
-      
-      clearSignature();
-      renderEntries();
-      updateDisplay();
-      calculateRates();
-      
-      toast('Alle Daten gelöscht', 'success');
-      closeHamburgerMenu();
-    }
-
-    function loadExampleData() {
-      if (!confirm('Beispieldaten laden? Vorhandene Daten werden überschrieben!')) return;
-      
-      // Berechne korrekte Sätze basierend auf aktuellem Stundenlohn
-      const baseRate = calculateHourlyRate(userSettings.salary, userSettings.weeklyHours);
-      const rate25 = baseRate * 1.25;
-      const rate50 = baseRate * 1.5;
-      const rate100 = baseRate * 2.0;
-      
-      entries = [
-        // Mai 2025
-        {id: Date.now(), day: 5, month: 5, year: 2025, startTime: '18:00', endTime: '20:00', duration: 2.0, category: 'Werktag +25%', rate: rate25, customer: 'NXKS-9781 - Marktredwitz', amount: 2.0 * rate25},
-        {id: Date.now()+1, day: 12, month: 5, year: 2025, startTime: '06:00', endTime: '07:30', duration: 1.5, category: 'Werktag +50%', rate: rate50, customer: 'NXKS-9623 - Gießen', amount: 1.5 * rate50},
-        {id: Date.now()+2, day: 19, month: 5, year: 2025, startTime: '20:00', endTime: '22:00', duration: 2.0, category: 'Werktag +50%', rate: rate50, customer: 'NXKS-10088 - Schärding', amount: 2.0 * rate50},
-        
-        // Juni 2025
-        {id: Date.now()+3, day: 2, month: 6, year: 2025, startTime: '18:30', endTime: '20:00', duration: 1.5, category: 'Werktag +25%', rate: rate25, customer: 'NXKS-12664 - Hamburg', amount: 1.5 * rate25},
-        {id: Date.now()+4, day: 7, month: 6, year: 2025, startTime: '08:00', endTime: '14:00', duration: 6.0, category: 'Samstag +50%', rate: rate50, customer: 'NXKS-12530 - Obernkirchen', amount: 6.0 * rate50},
-        {id: Date.now()+5, day: 14, month: 6, year: 2025, startTime: '05:30', endTime: '07:00', duration: 1.5, category: 'Werktag +50%', rate: rate50, customer: 'NXKS-14106 - Bad Salzungen', amount: 1.5 * rate50},
-        
-        // Juli 2025
-        {id: Date.now()+6, day: 5, month: 7, year: 2025, startTime: '08:00', endTime: '16:00', duration: 8.0, category: 'Samstag +50%', rate: rate50, customer: 'NXKS-13554 - Donauwörth', amount: 8.0 * rate50},
-        {id: Date.now()+7, day: 13, month: 7, year: 2025, startTime: '08:30', endTime: '12:30', duration: 4.0, category: 'Sonntag +100%', rate: rate100, customer: 'NXKS-13708 - Pforzheim', amount: 4.0 * rate100},
-        {id: Date.now()+8, day: 22, month: 7, year: 2025, startTime: '18:00', endTime: '19:30', duration: 1.5, category: 'Werktag +25%', rate: rate25, customer: 'NXKS-12787 - Stade', amount: 1.5 * rate25},
-        
-        // August 2025
-        {id: Date.now()+9, day: 4, month: 8, year: 2025, startTime: '06:00', endTime: '07:00', duration: 1.0, category: 'Werktag +50%', rate: rate50, customer: 'NXKS-15223 - Bremen', amount: 1.0 * rate50},
-        {id: Date.now()+10, day: 9, month: 8, year: 2025, startTime: '09:00', endTime: '15:00', duration: 6.0, category: 'Samstag +50%', rate: rate50, customer: 'NXKS-15447 - Kiel', amount: 6.0 * rate50},
-        {id: Date.now()+11, day: 17, month: 8, year: 2025, startTime: '10:00', endTime: '14:00', duration: 4.0, category: 'Sonntag +100%', rate: rate100, customer: 'NXKS-15889 - Lübeck', amount: 4.0 * rate100},
-        
-        // September 2025
-        {id: Date.now()+12, day: 6, month: 9, year: 2025, startTime: '08:00', endTime: '13:00', duration: 5.0, category: 'Samstag +50%', rate: rate50, customer: 'NXKS-16112 - Rostock', amount: 5.0 * rate50},
-        {id: Date.now()+13, day: 14, month: 9, year: 2025, startTime: '09:00', endTime: '16:00', duration: 7.0, category: 'Sonntag +100%', rate: rate100, customer: 'NXKS-16334 - Schwerin', amount: 7.0 * rate100},
-        {id: Date.now()+14, day: 23, month: 9, year: 2025, startTime: '20:00', endTime: '22:30', duration: 2.5, category: 'Werktag +50%', rate: rate50, customer: 'NXKS-16556 - Flensburg', amount: 2.5 * rate50}
-      ];
-      
-      saveEntries();
-      renderEntries();
-      toast('15 Beispieldaten geladen', 'success');
-      closeHamburgerMenu();
-    }
-
-    // ==================== VERSION MANAGEMENT ====================
-    function openSavedVersionsModal() {
-      loadSavedVersionsList();
-      document.getElementById('savedVersionsModal').classList.add('active');
-      closeHamburgerMenu();
-    }
-
-    function closeSavedVersionsModal() {
-      document.getElementById('savedVersionsModal').classList.remove('active');
-    }
-
-    function saveNewVersion() {
-      const name = prompt('Name für diese Version (optional):');
-      if (name === null) return; // User cancelled
-      
-      const versionName = name.trim() || `Version vom ${new Date().toLocaleString('de-DE')}`;
-      const versionData = {
-        name: versionName,
-        timestamp: new Date().toISOString(),
-        settings: userSettings,
-        entries: entries,
-        signature: signatureData
-      };
-      
-      // Get existing versions
-      const versions = JSON.parse(localStorage.getItem('mehrarbeit_versions') || '[]');
-      
-      // Add new version
-      versions.push(versionData);
-      
-      // Save back to localStorage
-      localStorage.setItem('mehrarbeit_versions', JSON.stringify(versions));
-      
-      toast('Version gespeichert: ' + versionName, 'success');
-      loadSavedVersionsList();
-    }
-
-    function loadSavedVersionsList() {
-      const versions = JSON.parse(localStorage.getItem('mehrarbeit_versions') || '[]');
-      const listContainer = document.getElementById('savedVersionsList');
-      
-      if (versions.length === 0) {
-        listContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 40px;">Noch keine Versionen gespeichert</p>';
-        return;
-      }
-      
-      listContainer.innerHTML = versions.map((version, index) => `
-        <div class="version-item">
-          <div class="version-info">
-            <div class="version-name">${version.name}</div>
-            <div class="version-details">
-              <span>${new Date(version.timestamp).toLocaleString('de-DE')}</span>
-              <span>${version.entries.length} Einsätze</span>
-              <span>${version.entries.reduce((sum, e) => sum + e.duration, 0).toFixed(2)} Stunden</span>
-              <span>${formatCurrency(version.entries.reduce((sum, e) => sum + e.amount, 0))}</span>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-icon">
+                <img src="photos/Apps-icone.png" alt="Apps Icon">
             </div>
-          </div>
-          <div class="version-actions">
-            <button class="btn-secondary" onclick="loadVersion(${index})">
-              <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 4px;">
-                <polyline points="1 4 1 10 7 10"></polyline>
-                <polyline points="23 20 23 14 17 14"></polyline>
-                <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
-              </svg>
-              Laden
-            </button>
-            <button class="btn-action delete" onclick="deleteVersion(${index})" style="padding: 8px 12px;">
-              <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                <line x1="10" y1="11" x2="10" y2="17"></line>
-                <line x1="14" y1="11" x2="14" y2="17"></line>
-              </svg>
-            </button>
-          </div>
+            <h1>Apps Hub</h1>
         </div>
-      `).reverse().join(''); // Neueste zuerst
-    }
 
-    function loadVersion(index) {
-      if (!confirm('Aktuelle Daten werden überschrieben. Fortfahren?')) return;
-      
-      const versions = JSON.parse(localStorage.getItem('mehrarbeit_versions') || '[]');
-      const version = versions[index];
-      
-      if (!version) {
-        toast('Version nicht gefunden', 'error');
-        return;
-      }
-      
-      // Load version data
-      userSettings = version.settings;
-      entries = version.entries;
-      signatureData = version.signature || '';
-      
-      // Save to current state
-      saveSettings();
-      saveEntries();
-      localStorage.setItem('signatureData', signatureData);
-      
-      // Update display
-      updateDisplay();
-      calculateRates();
-      renderEntries();
-      loadSignature();
-      
-      toast('Version geladen: ' + version.name, 'success');
-      closeSavedVersionsModal();
-    }
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-image"></div>
+            <div class="hero-content">
+                <div class="hero-badge">Neu & empfohlen</div>
+                <h2 class="hero-title">Dein zentraler Startpunkt</h2>
+                <p class="hero-description">
+                    Schneller Zugriff auf deine Web-Apps mit dynamischem Hintergrund und kompakten Kacheln.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary">Info</button>
+                    <button class="btn btn-secondary">Modus: Hell</button>
+                </div>
+            </div>
+        </div>
 
-    function deleteVersion(index) {
-      const versions = JSON.parse(localStorage.getItem('mehrarbeit_versions') || '[]');
-      const version = versions[index];
-      
-      if (!confirm(`Version "${version.name}" wirklich löschen?`)) return;
-      
-      versions.splice(index, 1);
-      localStorage.setItem('mehrarbeit_versions', JSON.stringify(versions));
-      
-      toast('Version gelöscht', 'success');
-      loadSavedVersionsList();
-    }
+        <!-- Apps Section -->
+        <div class="apps-section">
+            <h2 class="apps-title">Apps</h2>
+            <div class="apps-grid">
+                <!-- Tätigkeitsbericht -->
+                <a href="Tätigkeitsbericht.html" class="app-card">
+                    <img src="photos/tätigkeitsbericht.png" alt="Tätigkeitsbericht">
+                </a>
 
-    // ==================== EXPORT FUNCTIONS ====================
-    function exportJSON() {
-      const data = {
-        settings: userSettings,
-        entries: entries,
-        signature: signatureData,
-        exported: new Date().toISOString()
-      };
-      
-      const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `Mehrarbeit_${userSettings.lastName}_${new Date().toISOString().slice(0,10)}.json`;
-      a.click();
-      
-      toast('JSON exportiert', 'success');
-      closeHamburgerMenu();
-    }
+                <!-- Reisekosten -->
+                <a href="Reisekostenabrechnung.html" class="app-card">
+                    <img src="photos/Reisekosten.png" alt="Reisekosten">
+                </a>
 
-    function importJSON(file) {
-      if (!file) return;
-      
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const data = JSON.parse(e.target.result);
-          
-          // Load settings
-          if (data.settings) {
-            userSettings = data.settings;
-            saveSettings();
-          }
-          
-          // Load entries
-          if (data.entries) {
-            entries = data.entries;
-            saveEntries();
-            renderEntries();
-          }
-          
-          // Load signature
-          if (data.signature) {
-            signatureData = data.signature;
-            const preview = document.getElementById('signaturePreview');
-            preview.innerHTML = `<img src="${signatureData}" alt="Unterschrift">`;
-            preview.classList.remove('empty');
-          }
-          
-          toast('JSON importiert', 'success');
-          closeHamburgerMenu();
-        } catch (error) {
-          toast('Fehler beim Importieren', 'error');
-          console.error(error);
-        }
-      };
-      reader.readAsText(file);
-    }
+                <!-- EuroSDS -->
+                <a href="EuroSDS.html" class="app-card">
+                    <img src="photos/EuroSDS.png" alt="EuroSDS">
+                </a>
 
-    function exportExcel() {
-      if (typeof XLSX === 'undefined') {
-        toast('Excel-Bibliothek nicht geladen', 'error');
-        return;
-      }
-      
-      // Prepare data
-      const data = entries.map(e => ({
-        'Tag': e.day,
-        'Monat': getMonthName(e.month),
-        'Jahr': e.year,
-        'Beginn': e.startTime,
-        'Ende': e.endTime,
-        'Dauer (h)': e.duration,
-        'Kategorie': e.category,
-        'Vergütung (€/h)': e.rate,
-        'Kunde': e.customer || '-',
-        'Betrag (€)': e.amount
-      }));
-      
-      // Add summary row
-      const totalAmount = entries.reduce((sum, e) => sum + e.amount, 0);
-      data.push({
-        'Tag': '',
-        'Monat': '',
-        'Jahr': '',
-        'Beginn': '',
-        'Ende': '',
-        'Dauer (h)': '',
-        'Kategorie': '',
-        'Vergütung (€/h)': '',
-        'Kunde': 'GESAMT:',
-        'Betrag (€)': totalAmount
-      });
-      
-      // Create workbook
-      const ws = XLSX.utils.json_to_sheet(data);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Mehrarbeit 2025');
-      
-      // Download
-      XLSX.writeFile(wb, `Mehrarbeit_${userSettings.lastName}_${new Date().toISOString().slice(0,10)}.xlsx`);
-      
-      toast('Excel exportiert', 'success');
-      closeHamburgerMenu();
-    }
+                <!-- Validierung -->
+                <a href="Validierungs-Protokoll.html" class="app-card">
+                    <img src="photos/Validierung.png" alt="Validierung">
+                </a>
 
-    function exportPDF() {
-      if (typeof jspdf === 'undefined') {
-        toast('PDF-Bibliothek nicht geladen', 'error');
-        return;
-      }
-      
-      const { jsPDF } = jspdf;
-      const doc = new jsPDF();
-      
-      // Colors - Weinrot statt Blau
-      const headerWeinrot = [139, 21, 56];  // Weinrot für Header
-      const tableWeinrot = [139, 21, 56];   // Weinrot für Tabellen-Header
-      const lightGray = [245, 245, 245];    // Heller Hintergrund für alternierende Zeilen
-      const white = [255, 255, 255];        // Weiß für alternierende Zeilen
-      const darkText = [51, 51, 51];        // Dunkler Text
-      const normalText = [80, 80, 80];      // Normaler Text
-      
-      let currentPage = 1;
-      const totalHours = entries.reduce((sum, e) => sum + e.duration, 0);
-      const totalAmount = entries.reduce((sum, e) => sum + e.amount, 0);
-      
-      // ========== HEADER ==========
-      // Weinroter Header-Balken
-      doc.setFillColor(...headerWeinrot);
-      doc.rect(0, 0, 210, 35, 'F');
-      
-      // Titel
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(22);
-      doc.setFont('helvetica', 'bold');
-      doc.text('Arbeitseinsätze / Mehrarbeit 2025', 105, 15, {align: 'center'});
-      
-      doc.setFontSize(11);
-      doc.setFont('helvetica', 'normal');
-      doc.text('(außerhalb der Regelarbeitszeit)', 105, 25, {align: 'center'});
-      
-      let yPos = 45;
-      
-      // ========== MITARBEITERDATEN BOX ==========
-      doc.setFillColor(...lightGray);
-      doc.rect(15, yPos, 180, 30, 'F');
-      
-      doc.setFontSize(11);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(...darkText);
-      doc.text('Mitarbeiterdaten', 20, yPos + 7);
-      
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'bold');
-      
-      // Linke Spalte - Labels
-      doc.text('Name:', 20, yPos + 15);
-      doc.text('IBAN:', 20, yPos + 20);
-      doc.text('Bank:', 20, yPos + 25);
-      
-      // Linke Spalte - Werte
-      doc.setFont('helvetica', 'normal');
-      doc.text(userSettings.firstName + ' ' + userSettings.lastName, 45, yPos + 15);
-      doc.text(userSettings.iban || '-', 45, yPos + 20);
-      doc.text(userSettings.bank || '-', 45, yPos + 25);
-      
-      // Rechte Spalte - Labels
-      doc.setFont('helvetica', 'bold');
-      doc.text('Bruttogehalt:', 110, yPos + 15);
-      doc.text('Wochenarbeitszeit:', 110, yPos + 20);
-      doc.text('Stundenlohn brutto:', 110, yPos + 25);
-      
-      // Rechte Spalte - Werte
-      doc.setFont('helvetica', 'normal');
-      const hourlyRate = calculateHourlyRate(userSettings.salary, userSettings.weeklyHours);
-      doc.text(formatCurrency(userSettings.salary) + ' / Monat', 155, yPos + 15);
-      doc.text(userSettings.weeklyHours + ' Stunden', 155, yPos + 20);
-      doc.text(formatCurrency(hourlyRate) + ' / h', 155, yPos + 25);
-      
-      yPos += 40;
-      
-      // ========== VERGÜTUNGSKATEGORIEN ==========
-      // Weinroter Header
-      doc.setFillColor(...tableWeinrot);
-      doc.roundedRect(15, yPos, 180, 8, 3, 3, 'F');
-      
-      doc.setFontSize(11);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(255, 255, 255);
-      doc.text('Vergütungskategorien', 20, yPos + 6);
-      
-      yPos += 10;
-      
-      // Kategorien Tabelle
-      const categories = [
-        ['Kat. 1', 'Werktag 18:00-20:00', '+25%', formatCurrency(hourlyRate * 1.25) + '/h'],
-        ['Kat. 2', 'Werktag 20:00-07:00', '+50%', formatCurrency(hourlyRate * 1.5) + '/h'],
-        ['Kat. 3', 'Samstag ganztägig', '+50%', formatCurrency(hourlyRate * 1.5) + '/h'],
-        ['Kat. 4', 'Sonntag ganztägig', '+100%', formatCurrency(hourlyRate * 2.0) + '/h'],
-        ['Kat. 5', 'Feiertag ganztägig', '+100%', formatCurrency(hourlyRate * 2.0) + '/h']
-      ];
-      
-      doc.autoTable({
-        startY: yPos,
-        head: [['Kategorie', 'Zeitraum', 'Zuschlag', 'Vergütung']],
-        body: categories,
-        headStyles: {
-          fillColor: tableWeinrot,
-          textColor: [255, 255, 255],
-          fontStyle: 'bold',
-          fontSize: 9,
-          halign: 'left'
-        },
-        bodyStyles: {
-          fontSize: 9,
-          textColor: normalText
-        },
-        alternateRowStyles: {
-          fillColor: lightGray
-        },
-        margin: { left: 15, right: 15 },
-        tableWidth: 180
-      });
-      
-      yPos = doc.lastAutoTable.finalY + 10;
-      
-      // ========== ERFASSTE ARBEITSEINSÄTZE ==========
-      // Weinroter Header
-      doc.setFillColor(...tableWeinrot);
-      doc.roundedRect(15, yPos, 180, 8, 3, 3, 'F');
-      
-      doc.setFontSize(11);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(255, 255, 255);
-      doc.text('Erfasste Arbeitseinsätze', 20, yPos + 6);
-      
-      yPos += 10;
-      
-      // Einsätze Tabelle
-      const tableData = entries.map(e => [
-        `${String(e.day).padStart(2, '0')}.${String(e.month).padStart(2, '0')}.${e.year}`,
-        e.startTime,
-        e.endTime,
-        e.duration.toFixed(2) + ' h',
-        e.category,
-        formatCurrency(e.rate),
-        e.customer || '-',
-        formatCurrency(e.amount)
-      ]);
-      
-      doc.autoTable({
-        startY: yPos,
-        head: [['Datum', 'Beginn', 'Ende', 'Dauer', 'Kategorie', 'Vergütung', 'Kunde', 'Betrag']],
-        body: tableData,
-        headStyles: {
-          fillColor: tableWeinrot,
-          textColor: [255, 255, 255],
-          fontStyle: 'bold',
-          fontSize: 9,
-          halign: 'center'
-        },
-        bodyStyles: {
-          fontSize: 8,
-          textColor: normalText
-        },
-        alternateRowStyles: {
-          fillColor: lightGray
-        },
-        columnStyles: {
-          0: { halign: 'center', cellWidth: 22 },
-          1: { halign: 'center', cellWidth: 18 },
-          2: { halign: 'center', cellWidth: 18 },
-          3: { halign: 'center', cellWidth: 16 },
-          4: { halign: 'left', cellWidth: 25 },
-          5: { halign: 'right', cellWidth: 20 },
-          6: { halign: 'left', cellWidth: 35 },
-          7: { halign: 'right', cellWidth: 26 }
-        },
-        margin: { left: 15, right: 15 },
-        tableWidth: 180,
-        didDrawPage: function(data) {
-          // Footer auf jeder Seite
-          const pageNum = doc.internal.getCurrentPageInfo().pageNumber;
-          const totalPages = doc.internal.getNumberOfPages();
-          
-          doc.setFontSize(8);
-          doc.setTextColor(...normalText);
-          doc.text(`Erstellt am: ${new Date().toLocaleDateString('de-DE')}`, 15, 287);
-          doc.text(`Seite ${pageNum}`, 195, 287, {align: 'right'});
-        }
-      });
-      
-      yPos = doc.lastAutoTable.finalY + 10;
-      
-      // Neue Seite falls nötig
-      if (yPos > 220) {
-        doc.addPage();
-        yPos = 20;
-      }
-      
-      // ========== GESAMTSUMMEN ==========
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(...darkText);
-      doc.text('Gesamt Stunden:', 130, yPos);
-      doc.setTextColor(...tableWeinrot);
-      doc.text(totalHours.toFixed(2) + ' h', 195, yPos, {align: 'right'});
-      
-      doc.setTextColor(...darkText);
-      doc.text('Gesamtvergütung:', 130, yPos + 7);
-      doc.setTextColor(...tableWeinrot);
-      doc.setFontSize(12);
-      doc.text(formatCurrency(totalAmount), 195, yPos + 7, {align: 'right'});
-      
-      yPos += 20;
-      
-      // ========== UNTERSCHRIFTEN ==========
-      if (yPos > 240) {
-        doc.addPage();
-        yPos = 20;
-      }
-      
-      // Linie für Mitarbeiter
-      doc.setDrawColor(...normalText);
-      doc.setLineWidth(0.5);
-      doc.line(15, yPos + 30, 95, yPos + 30);
-      
-      doc.setFontSize(9);
-      doc.setTextColor(...normalText);
-      doc.setFont('helvetica', 'normal');
-      doc.text('Datum / Unterschrift Mitarbeiter', 55, yPos + 35, {align: 'center'});
-      
-      // Unterschrift einfügen wenn vorhanden
-      if (signatureData) {
-        try {
-          doc.addImage(signatureData, 'PNG', 20, yPos + 5, 70, 22);
-        } catch (e) {
-          console.error('Signature error:', e);
-        }
-      }
-      
-      // Linie für verantwortlichen Leiter
-      doc.line(115, yPos + 30, 195, yPos + 30);
-      doc.text('Datum / Unterschrift verantwortlicher Leiter', 155, yPos + 35, {align: 'center'});
-      
-      // Footer auf letzter Seite
-      const totalPages = doc.internal.getNumberOfPages();
-      doc.setPage(totalPages);
-      doc.setFontSize(8);
-      doc.setTextColor(...normalText);
-      doc.text(`Erstellt am: ${new Date().toLocaleDateString('de-DE')}`, 15, 287);
-      doc.text(`Seite ${totalPages}`, 195, 287, {align: 'right'});
-      
-      // Download
-      const filename = `Mehrarbeit_${userSettings.lastName}_${new Date().toISOString().slice(0,10)}.pdf`;
-      doc.save(filename);
-      
-      toast('PDF exportiert', 'success');
-      closeHamburgerMenu();
-    }
+                <!-- Wissen -->
+                <a href="Wissen.html" class="app-card">
+                    <img src="photos/Wissen.png" alt="Wissen">
+                </a>
 
-    // ==================== HELPER FUNCTIONS ====================
-    function formatCurrency(value) {
-      return new Intl.NumberFormat('de-DE', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }).format(value) + ' €';
-    }
+                <!-- Mehrarbeit -->
+                <a href="Mehrarbeit.html" class="app-card">
+                    <img src="photos/Mehrarbeit.png" alt="Mehrarbeit">
+                </a>
+            </div>
+        </div>
 
-    function getMonthName(month) {
-      const months = ['', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 
-                      'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
-      return months[month];
-    }
-  </script>
-
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>Nexus/IPS</strong></p>
+            <p>© 2024 Alle Rechte vorbehalten</p>
+        </div>
+    </div>
 </body>
-
 </html>
