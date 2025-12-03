@@ -25,7 +25,7 @@
 
         /* Hero Banner */
         .hero-banner {
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('Hero.jpg');
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('photos/Hero.jpg');
             background-size: cover;
             background-position: center;
             border-radius: 20px;
@@ -61,13 +61,14 @@
         .app-card {
             background: white;
             border-radius: 15px;
-            overflow: hidden;
+            overflow: visible;
             box-shadow: 0 5px 20px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
             cursor: pointer;
             text-decoration: none;
             color: inherit;
             display: block;
+            padding-top: 20px;
         }
 
         .app-card:hover {
@@ -76,13 +77,17 @@
         }
 
         .app-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
+            width: 160px;
+            height: 160px;
+            object-fit: contain;
+            margin: 40px auto 20px;
+            display: block;
+            border-radius: 30px;
         }
 
         .app-content {
-            padding: 25px;
+            padding: 0 25px 25px 25px;
+            text-align: center;
         }
 
         .app-title {
@@ -181,7 +186,7 @@
         <div class="apps-grid">
             <!-- App 1: Tätigkeitsbericht -->
             <a href="Tätigkeitsbericht.html" class="app-card">
-                <img src="tätigkeitsbericht.png" alt="Tätigkeitsbericht" class="app-image">
+                <img src="photos/tätigkeitsbericht.png" alt="Tätigkeitsbericht" class="app-image">
                 <div class="app-content">
                     <div class="app-title">Tätigkeitsbericht</div>
                     <div class="app-description">
@@ -193,7 +198,7 @@
 
             <!-- App 2: Reisekostenabrechnung -->
             <a href="Reisekostenabrechnung.html" class="app-card">
-                <img src="Reisekosten.png" alt="Reisekostenabrechnung" class="app-image">
+                <img src="photos/Reisekosten.png" alt="Reisekostenabrechnung" class="app-image">
                 <div class="app-content">
                     <div class="app-title">Reisekostenabrechnung</div>
                     <div class="app-description">
@@ -205,7 +210,7 @@
 
             <!-- App 3: Validierungs-Protokoll -->
             <a href="Validierungs-Protokoll.html" class="app-card">
-                <img src="Validierung.png" alt="Validierungs-Protokoll" class="app-image">
+                <img src="photos/Validierung.png" alt="Validierungs-Protokoll" class="app-image">
                 <div class="app-content">
                     <div class="app-title">Validierungs-Protokoll</div>
                     <div class="app-description">
@@ -217,7 +222,7 @@
 
             <!-- App 4: Sterilgut Management -->
             <a href="EuroSDS.html" class="app-card">
-                <img src="EuroSDS.png" alt="Sterilgut Management" class="app-image">
+                <img src="photos/EuroSDS.png" alt="Sterilgut Management" class="app-image">
                 <div class="app-content">
                     <div class="app-title">Sterilgut Management</div>
                     <div class="app-description">
@@ -229,7 +234,7 @@
 
             <!-- App 5: Wissen -->
             <a href="Wissen.html" class="app-card">
-                <img src="Wissen.png" alt="Wissen" class="app-image">
+                <img src="photos/Wissen.png" alt="Wissen" class="app-image">
                 <div class="app-content">
                     <div class="app-title">Wissen</div>
                     <div class="app-description">
@@ -241,7 +246,7 @@
 
             <!-- App 6: Mehrarbeit -->
             <a href="Mehrarbeit.html" class="app-card">
-                <img src="Mehrarbeit.png" alt="Mehrarbeit" class="app-image">
+                <img src="photos/Mehrarbeit.png" alt="Mehrarbeit" class="app-image">
                 <div class="app-content">
                     <div class="app-title">Mehrarbeit</div>
                     <div class="app-description">
