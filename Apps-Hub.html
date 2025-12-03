@@ -157,13 +157,10 @@
         .app-card {
             border-radius: 20px;
             overflow: hidden;
-            height: 280px;
-            position: relative;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
-            display: flex;
-            flex-direction: column;
+            display: block;
         }
 
         .app-card:hover {
@@ -171,61 +168,10 @@
             box-shadow: 0 12px 40px rgba(0,0,0,0.4);
         }
 
-        .app-card-bg {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-        }
-
-        .app-card-bg img {
-            width: 140px;
-            height: 140px;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 20px rgba(0,0,0,0.2));
-        }
-
-        .app-card-label {
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(10px);
-            padding: 18px 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .app-card-label::before {
-            content: "●";
-            color: #8B1538;
-            font-size: 1.2em;
-        }
-
-        .app-card-title {
-            font-size: 1.1em;
-            font-weight: 500;
-            color: white;
-        }
-
-        /* Individual App Colors */
-        .app-taetigkeitsbericht { background: linear-gradient(135deg, #8B1538 0%, #c41f4a 100%); }
-        .app-reisekosten { background: linear-gradient(135deg, #1e3a5f 0%, #2d5a8f 100%); }
-        .app-eurosds { background: linear-gradient(135deg, #e8e8e8 0%, #ffffff 100%); }
-        .app-validierung { background: linear-gradient(135deg, #1e7acc 0%, #4fa3e0 100%); }
-        .app-wissen { background: linear-gradient(135deg, #ff9500 0%, #ffb347 100%); }
-        .app-mehrarbeit { background: linear-gradient(135deg, #00a896 0%, #02c9b3 100%); }
-
-        /* EuroSDS special styling (white background) */
-        .app-eurosds .app-card-label {
-            background: rgba(139, 21, 56, 0.15);
-        }
-
-        .app-eurosds .app-card-title {
-            color: #333;
-        }
-
-        .app-eurosds .app-card-label::before {
-            color: #8B1538;
+        .app-card img {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
         /* Footer */
@@ -310,63 +256,33 @@
         <h2 class="apps-title">Apps</h2>
         <div class="apps-grid">
             <!-- Tätigkeitsbericht -->
-            <a href="Tätigkeitsbericht.html" class="app-card app-taetigkeitsbericht">
-                <div class="app-card-bg">
-                    <img src="photos/tätigkeitsbericht.png" alt="Tätigkeitsbericht">
-                </div>
-                <div class="app-card-label">
-                    <div class="app-card-title">Tätigkeitsbericht</div>
-                </div>
+            <a href="Tätigkeitsbericht.html" class="app-card">
+                <img src="photos/tätigkeitsbericht.png" alt="Tätigkeitsbericht">
             </a>
 
             <!-- Reisekosten -->
-            <a href="Reisekostenabrechnung.html" class="app-card app-reisekosten">
-                <div class="app-card-bg">
-                    <img src="photos/Reisekosten.png" alt="Reisekosten">
-                </div>
-                <div class="app-card-label">
-                    <div class="app-card-title">Reisekosten</div>
-                </div>
+            <a href="Reisekostenabrechnung.html" class="app-card">
+                <img src="photos/Reisekosten.png" alt="Reisekosten">
             </a>
 
             <!-- EuroSDS -->
-            <a href="EuroSDS.html" class="app-card app-eurosds">
-                <div class="app-card-bg">
-                    <img src="photos/EuroSDS.png" alt="EuroSDS">
-                </div>
-                <div class="app-card-label">
-                    <div class="app-card-title">EuroSDS</div>
-                </div>
+            <a href="EuroSDS.html" class="app-card">
+                <img src="photos/EuroSDS.png" alt="EuroSDS">
             </a>
 
             <!-- Validierung -->
-            <a href="Validierungs-Protokoll.html" class="app-card app-validierung">
-                <div class="app-card-bg">
-                    <img src="photos/Validierung.png" alt="Validierung">
-                </div>
-                <div class="app-card-label">
-                    <div class="app-card-title">Validierung</div>
-                </div>
+            <a href="Validierungs-Protokoll.html" class="app-card">
+                <img src="photos/Validierung.png" alt="Validierung">
             </a>
 
             <!-- Wissen -->
-            <a href="Wissen.html" class="app-card app-wissen">
-                <div class="app-card-bg">
-                    <img src="photos/Wissen.png" alt="Wissen">
-                </div>
-                <div class="app-card-label">
-                    <div class="app-card-title">Entwicklung</div>
-                </div>
+            <a href="Wissen.html" class="app-card">
+                <img src="photos/Wissen.png" alt="Wissen">
             </a>
 
             <!-- Mehrarbeit -->
-            <a href="Mehrarbeit.html" class="app-card app-mehrarbeit">
-                <div class="app-card-bg">
-                    <img src="photos/Mehrarbeit.png" alt="Mehrarbeit">
-                </div>
-                <div class="app-card-label">
-                    <div class="app-card-title">Mehrarbeit</div>
-                </div>
+            <a href="Mehrarbeit.html" class="app-card">
+                <img src="photos/Mehrarbeit.png" alt="Mehrarbeit">
             </a>
         </div>
     </div>
