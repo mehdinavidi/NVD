@@ -357,10 +357,12 @@ footer{
   border-radius:var(--radius);
   max-width:700px;
   width:100%;
+  max-height:90vh; /* Maximale Höhe begrenzen */
   padding:32px;
   position:relative;
   box-shadow:0 20px 60px rgba(0,0,0,.5);
   animation:modalFadeIn 0.3s ease;
+  overflow-y:auto; /* Scrollen ermöglichen */
 }
 
 @keyframes modalFadeIn{
@@ -381,6 +383,16 @@ footer{
   margin-bottom:24px;
   padding-bottom:16px;
   border-bottom:1px solid var(--border);
+  position:sticky;
+  top:-32px;
+  background:var(--surface);
+  z-index:10;
+  margin-top:-32px;
+  padding-top:32px;
+  margin-left:-32px;
+  margin-right:-32px;
+  padding-left:32px;
+  padding-right:32px;
 }
 
 .modal-header h2{
@@ -791,6 +803,10 @@ footer{
         <li>Klicke auf den Button <code>Jetzt herunterladen</code></li>
         <li>Speichere die Datei <code>Nexus-ips.zip</code> auf deinem Computer</li>
       </ol>
+      
+      <div style="text-align:center;margin:20px 0;">
+        <button class="btn btn-custom" onclick="downloadZip()">📦 Nexus-ips.zip herunterladen</button>
+      </div>
 
       <h3>Schritt 2: ZIP entpacken</h3>
       <ol>
@@ -1056,6 +1072,12 @@ footer{
   window.closeModal = function(){
     modal.classList.remove('active');
     document.body.style.overflow = ''; // Scrollen wieder erlauben
+  };
+
+  // ZIP Download Funktion für Modal
+  window.downloadZip = function(){
+    const zipUrl = 'Nexus-ips.zip';
+    window.location.href = zipUrl;
   };
 
   if(btnAnleitung){
