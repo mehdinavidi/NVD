@@ -88,16 +88,42 @@ header{
   padding:0 30px;
 }
 
-/* HERO */
-.hero{
+/* HERO CAROUSEL */
+.hero-container{
+  position:relative; /* Normal position - scrollt mit der Seite */
   margin:10px 0 6px;
   border-radius:var(--radius);
   overflow:hidden;
   background:color-mix(in srgb,var(--bg),#000 20%);
-  display:grid;
-  grid-template-columns:minmax(280px,1fr) minmax(380px,1fr);
   box-shadow:0 20px 60px rgba(0,0,0,.35);
 }
+
+.hero-wrapper{
+  position:relative;
+  /* Keine feste Höhe - passt sich automatisch an */
+}
+
+.hero{
+  display:none; /* Komplett versteckt */
+  grid-template-columns:minmax(280px,1fr) minmax(380px,1fr);
+  animation:fadeIn 0.5s ease;
+}
+
+.hero.active{
+  display:grid; /* Nur aktiver Slide sichtbar */
+}
+
+@keyframes fadeIn{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
 .hero .art{
   min-height:300px;
   background:center/cover no-repeat;
@@ -126,9 +152,85 @@ header{
   border:none; padding:12px 18px;
   border-radius:12px; font-weight:700;
   cursor:pointer;
+  transition:all 0.2s ease;
+}
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
 }
 .btn.primary{background:var(--brand); color:#fff;}
 .btn.ghost{background:transparent; color:var(--text); border:1px solid var(--border);}
+
+/* HERO NAVIGATION */
+.hero-nav{
+  position:absolute;
+  right:20px;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:5;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.hero-nav-btn{
+  width:44px;
+  height:44px;
+  border:none;
+  border-radius:50%;
+  background:var(--glassA);
+  backdrop-filter:blur(12px);
+  border:1px solid var(--border);
+  color:var(--text);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all 0.2s ease;
+  font-size:20px;
+}
+
+.hero-nav-btn:hover{
+  background:var(--brand);
+  transform:scale(1.1);
+}
+
+.hero-nav-btn:active{
+  transform:scale(0.95);
+}
+
+.hero-nav-btn:disabled{
+  opacity:0.3;
+  cursor:not-allowed;
+  background:var(--glassB);
+}
+
+/* HERO INDICATORS */
+.hero-indicators{
+  position:absolute;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:8px;
+  z-index:5;
+}
+
+.hero-indicator{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:rgba(255,255,255,.3);
+  border:1px solid var(--border);
+  cursor:pointer;
+  transition:all 0.3s ease;
+}
+
+.hero-indicator.active{
+  width:24px;
+  border-radius:4px;
+  background:var(--brand);
+}
 
 /* APPS */
 .row{margin-top:24px;}
@@ -151,7 +253,13 @@ header{
   cursor:pointer;
   flex-shrink:0;
   box-shadow:0 10px 24px rgba(0,0,0,.35);
+  transition:transform 0.2s ease;
 }
+
+.card:hover{
+  transform:translateY(-4px);
+}
+
 .thumb{
   position:absolute; inset:0;
   background:center/cover no-repeat;
@@ -180,6 +288,11 @@ header{
     padding:0 14px;
   }
 
+  .hero-wrapper{
+    height:auto;
+    min-height:300px;
+  }
+
   .hero{
     grid-template-columns:1fr !important;
     border-radius:var(--radius);
@@ -189,8 +302,16 @@ header{
     min-height:40vh !important;
     background-position:center !important;
     background-size:cover !important;
-    border-bottom-left-radius:var(--radius);
-    border-bottom-right-radius:var(--radius);
+  }
+
+  .hero-nav{
+    right:10px;
+  }
+
+  .hero-nav-btn{
+    width:36px;
+    height:36px;
+    font-size:16px;
   }
 
   #apps .strip{
@@ -212,6 +333,257 @@ footer{
   color:var(--muted);
   margin:40px 0;
 }
+
+/* MODAL */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:rgba(0,0,0,.85);
+  backdrop-filter:blur(8px);
+  padding:20px;
+  overflow-y:auto;
+}
+
+.modal.active{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.modal-content{
+  background:var(--surface);
+  border-radius:var(--radius);
+  max-width:700px;
+  width:100%;
+  padding:32px;
+  position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  animation:modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn{
+  from{
+    opacity:0;
+    transform:translateY(-20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:24px;
+  padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+}
+
+.modal-header h2{
+  margin:0;
+  font-size:24px;
+  color:var(--text);
+}
+
+.modal-close{
+  background:transparent;
+  border:none;
+  font-size:28px;
+  color:var(--muted);
+  cursor:pointer;
+  width:36px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  transition:all 0.2s ease;
+}
+
+.modal-close:hover{
+  background:var(--border);
+  color:var(--text);
+}
+
+.modal-body{
+  color:var(--text);
+  line-height:1.7;
+}
+
+.modal-body h3{
+  color:var(--brand);
+  margin:24px 0 12px 0;
+  font-size:18px;
+}
+
+.modal-body h3:first-child{
+  margin-top:0;
+}
+
+.modal-body p{
+  margin:12px 0;
+  color:var(--muted);
+}
+
+.modal-body ol, .modal-body ul{
+  margin:12px 0;
+  padding-left:24px;
+}
+
+.modal-body li{
+  margin:8px 0;
+  color:var(--muted);
+}
+
+.modal-body code{
+  background:color-mix(in srgb,var(--brand),transparent 85%);
+  padding:2px 8px;
+  border-radius:4px;
+  font-size:14px;
+  color:var(--text);
+}
+
+.icon-check{
+  color:#10b981;
+  margin-right:8px;
+}
+
+/* EUROSDS MODAL */
+.modal-eurosds{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:rgba(0,0,0,.85);
+  backdrop-filter:blur(8px);
+  padding:20px;
+  align-items:center;
+  justify-content:center;
+}
+
+.modal-eurosds.active{
+  display:flex;
+}
+
+.modal-eurosds-content{
+  background:var(--surface);
+  border-radius:var(--radius);
+  max-width:500px;
+  width:100%;
+  padding:32px;
+  position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  animation:modalFadeIn 0.3s ease;
+}
+
+.modal-eurosds-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+  padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+}
+
+.modal-eurosds-header h2{
+  margin:0;
+  font-size:22px;
+  color:var(--text);
+}
+
+.modal-eurosds-body{
+  margin-bottom:24px;
+}
+
+.modal-eurosds-body p{
+  color:var(--muted);
+  margin:0 0 20px 0;
+  font-size:14px;
+}
+
+.eurosds-option{
+  margin:16px 0;
+}
+
+.eurosds-option label{
+  display:block;
+  color:var(--text);
+  font-weight:600;
+  margin-bottom:8px;
+  font-size:14px;
+}
+
+.eurosds-input{
+  width:100%;
+  padding:12px 16px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:color-mix(in srgb,var(--bg),#000 10%);
+  color:var(--text);
+  font-size:15px;
+  font-family:inherit;
+  transition:all 0.2s ease;
+}
+
+.eurosds-input:focus{
+  outline:none;
+  border-color:var(--brand);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--brand),transparent 85%);
+}
+
+.eurosds-input::placeholder{
+  color:var(--muted);
+}
+
+.eurosds-buttons{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+
+.eurosds-buttons .btn{
+  flex:1;
+}
+
+.btn-localhost{
+  background:#10b981;
+  color:#fff;
+}
+
+.btn-localhost:hover{
+  background:#059669;
+}
+
+.btn-custom{
+  background:var(--brand);
+  color:#fff;
+}
+
+.btn-custom:hover{
+  background:#a01842;
+}
+
+.saved-server{
+  margin-top:12px;
+  padding:12px;
+  background:color-mix(in srgb,var(--brand),transparent 90%);
+  border-radius:8px;
+  font-size:13px;
+  color:var(--muted);
+  display:none;
+}
+
+.saved-server.active{
+  display:block;
+}
+
+.saved-server strong{
+  color:var(--text);
+}
 </style>
 </head>
 
@@ -230,18 +602,126 @@ footer{
 
 <main class="page">
 
-<!-- HERO -->
-<section class="hero">
-  <div class="art" id="heroArt"></div>
-  <div class="info">
-    <div class="badge"><span class="dot"></span> Neu & empfohlen</div>
-    <h1>Dein zentraler Startpunkt</h1>
-    <p>Schneller Zugriff auf deine Web-Apps mit sauberem Look.</p>
-    <div class="actions">
-      <button class="btn primary" id="btnInfo">Info</button>
-      <button class="btn ghost" id="btnTheme">Modus: Hell</button>
+<!-- HERO CAROUSEL -->
+<section class="hero-container">
+  <div class="hero-wrapper" id="heroWrapper">
+    
+    <!-- Slide 1 -->
+    <div class="hero active" data-bg="photos/Hero.png">
+      <div class="art" style="background-image:url('photos/Hero.png')"></div>
+      <div class="info">
+        <div class="badge"><span class="dot"></span> Neu & empfohlen</div>
+        <h1>Dein zentraler Startpunkt</h1>
+        <p>Schneller Zugriff auf deine Web-Apps mit sauberem Look.</p>
+        <div class="actions">
+          <button class="btn primary" id="btnInfo">Info</button>
+          <button class="btn ghost" id="btnTheme">Modus: Hell</button>
+        </div>
+      </div>
     </div>
+
+    <!-- Slide 2 -->
+    <div class="hero" data-bg="photos/Tätigkeitsbericht.png">
+      <div class="art" style="background-image:url('photos/Tätigkeitsbericht.png')"></div>
+      <div class="info">
+        <div class="badge"><span class="dot"></span> Produktivität</div>
+        <h1>Tätigkeitsberichte</h1>
+        <p>Erfasse und verwalte deine täglichen Aktivitäten effizient.</p>
+        <div class="actions">
+          <button class="btn primary" onclick="location.href='Tätigkeitsbericht.html'">Öffnen</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="hero" data-bg="photos/Reisekosten.png">
+      <div class="art" style="background-image:url('photos/Reisekosten.png')"></div>
+      <div class="info">
+        <div class="badge"><span class="dot"></span> Finanzen</div>
+        <h1>Reisekosten</h1>
+        <p>Verwalte deine Reisekosten digital und übersichtlich.</p>
+        <div class="actions">
+          <button class="btn primary" onclick="location.href='Reisekosten.html'">Öffnen</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4 -->
+    <div class="hero" data-bg="photos/EuroSDS.png">
+      <div class="art" style="background-image:url('photos/EuroSDS.png')"></div>
+      <div class="info">
+        <div class="badge"><span class="dot"></span> Datenbank</div>
+        <h1>EuroSDS System</h1>
+        <p>Zugriff auf das europäische Sicherheitsdatenblatt-System.</p>
+        <div class="actions">
+          <button class="btn primary" id="btnEuroSDS">Öffnen</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5 -->
+    <div class="hero" data-bg="photos/Validierung.png">
+      <div class="art" style="background-image:url('photos/Validierung.png')"></div>
+      <div class="info">
+        <div class="badge"><span class="dot"></span> Qualität</div>
+        <h1>Validierung</h1>
+        <p>Validiere und prüfe deine Prozesse systematisch.</p>
+        <div class="actions">
+          <button class="btn primary" onclick="location.href='Validierung.html'">Öffnen</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 6 -->
+    <div class="hero" data-bg="photos/Wissen.png">
+      <div class="art" style="background-image:url('photos/Wissen.png')"></div>
+      <div class="info">
+        <div class="badge"><span class="dot"></span> Wissensdatenbank</div>
+        <h1>Wissen</h1>
+        <p>Zentrale Wissensdatenbank für alle wichtigen Informationen.</p>
+        <div class="actions">
+          <button class="btn primary" onclick="location.href='Wissen.html'">Öffnen</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7 -->
+    <div class="hero" data-bg="photos/Mehrarbeit.png">
+      <div class="art" style="background-image:url('photos/Mehrarbeit.png')"></div>
+      <div class="info">
+        <div class="badge"><span class="dot"></span> Zeiterfassung</div>
+        <h1>Mehrarbeit</h1>
+        <p>Erfasse und verwalte deine Überstunden und Mehrarbeit.</p>
+        <div class="actions">
+          <button class="btn primary" onclick="location.href='Mehrarbeit.html'">Öffnen</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8 - Install -->
+    <div class="hero" data-bg="photos/Install.png">
+      <div class="art" style="background-image:url('photos/Install.png')"></div>
+      <div class="info">
+        <div class="badge"><span class="dot"></span> Offline Installation</div>
+        <h1>Nexus IPS Offline</h1>
+        <p>Lade alle Apps als ZIP-Paket herunter und nutze sie offline auf deinem PC.</p>
+        <div class="actions">
+          <button class="btn primary" onclick="location.href='Nexus-ips.zip'">Jetzt herunterladen</button>
+          <button class="btn ghost" id="btnAnleitung">Installationsanleitung</button>
+        </div>
+      </div>
+    </div>
+
   </div>
+
+  <!-- Navigation Buttons -->
+  <div class="hero-nav">
+    <button class="hero-nav-btn" id="btnPrev" title="Vorheriges">▲</button>
+    <button class="hero-nav-btn" id="btnNext" title="Nächstes">▼</button>
+  </div>
+
+  <!-- Indicators -->
+  <div class="hero-indicators" id="heroIndicators"></div>
 </section>
 
 <section class="row" id="apps">
@@ -261,7 +741,7 @@ footer{
 </article>
 
 <!-- EuroSDS -->
-<article class="card" data-img="photos/EuroSDS.png" data-bg="photos/EuroSDS.png" data-link="EuroSDS.html">
+<article class="card" data-img="photos/EuroSDS.png" data-bg="photos/EuroSDS.png" data-eurosds="true">
   <div class="thumb"></div>
   <div class="label"><span class="ico"></span>EuroSDS</div>
 </article>
@@ -284,6 +764,12 @@ footer{
   <div class="label"><span class="ico"></span>Mehrarbeit</div>
 </article>
 
+<!-- Install -->
+<article class="card" data-img="photos/Install.png" data-bg="photos/Install.png" data-link="Nexus-ips.zip">
+  <div class="thumb"></div>
+  <div class="label"><span class="ico" style="background:linear-gradient(135deg,#10b981,#34d399)"></span>Offline Installation</div>
+</article>
+
 </div>
 </section>
 
@@ -291,14 +777,191 @@ footer{
 
 </main>
 
+<!-- INSTALLATIONSANLEITUNG MODAL -->
+<div class="modal" id="modalAnleitung">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>📦 Installationsanleitung</h2>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      
+      <h3>Schritt 1: ZIP herunterladen</h3>
+      <ol>
+        <li>Klicke auf den Button <code>Jetzt herunterladen</code></li>
+        <li>Speichere die Datei <code>Nexus-ips.zip</code> auf deinem Computer</li>
+      </ol>
+
+      <h3>Schritt 2: ZIP entpacken</h3>
+      <ol>
+        <li>Rechtsklick auf <code>Nexus-ips.zip</code></li>
+        <li>Wähle "Alle extrahieren..." oder "Entpacken nach..."</li>
+        <li>Wähle einen Speicherort (z.B. Desktop oder Dokumente)</li>
+      </ol>
+
+      <h3>Schritt 3: Apps starten</h3>
+      <ol>
+        <li>Öffne den entpackten Ordner <code>Nexus-ips</code></li>
+        <li>Doppelklick auf <code>Apps-Hub-Scrollable.html</code></li>
+        <li>Die Hauptseite öffnet sich in deinem Browser</li>
+      </ol>
+
+      <h3>✅ Das funktioniert offline:</h3>
+      <ul>
+        <li><span class="icon-check">✓</span> Alle Apps ohne Internet-Verbindung</li>
+        <li><span class="icon-check">✓</span> Alle Bilder und Funktionen lokal verfügbar</li>
+        <li><span class="icon-check">✓</span> Keine Installation erforderlich</li>
+        <li><span class="icon-check">✓</span> Funktioniert auf Windows, Mac & Linux</li>
+      </ul>
+
+      <h3>💡 Tipp: Lesezeichen erstellen</h3>
+      <p>Für schnellen Zugriff:</p>
+      <ol>
+        <li>Öffne <code>Apps-Hub-Scrollable.html</code> im Browser</li>
+        <li>Drücke <code>Strg + D</code> (Windows) oder <code>Cmd + D</code> (Mac)</li>
+        <li>Speichere als Lesezeichen</li>
+      </ol>
+
+      <h3>🔧 Systemanforderungen</h3>
+      <ul>
+        <li>Browser: Chrome, Firefox, Edge oder Safari</li>
+        <li>Keine zusätzliche Software nötig</li>
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+<!-- EUROSDS SERVER AUSWAHL MODAL -->
+<div class="modal-eurosds" id="modalEuroSDS">
+  <div class="modal-eurosds-content">
+    <div class="modal-eurosds-header">
+      <h2>EuroSDS Server wählen</h2>
+      <button class="modal-close" onclick="closeEuroSDSModal()">×</button>
+    </div>
+    <div class="modal-eurosds-body">
+      <p>Wähle den Server für EuroSDS:</p>
+      
+      <div class="eurosds-option">
+        <button class="btn btn-localhost" onclick="openEuroSDS('localhost')" style="width:100%;">
+          🖥️ Localhost (dieser PC)
+        </button>
+      </div>
+      
+      <div class="eurosds-option">
+        <label>Eigener Server:</label>
+        <input 
+          type="text" 
+          id="euroSDSServerInput" 
+          class="eurosds-input" 
+          placeholder="z.B. 192.168.1.100 oder server-name"
+        >
+        <div class="saved-server" id="savedServerInfo">
+          Gespeichert: <strong id="savedServerName"></strong>
+        </div>
+      </div>
+
+      <div class="eurosds-buttons">
+        <button class="btn ghost" onclick="closeEuroSDSModal()">Abbrechen</button>
+        <button class="btn btn-custom" onclick="openEuroSDSCustom()">Verbinden</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
 
-  /* HERO */
-  const heroArt=document.getElementById('heroArt');
-  heroArt.style.backgroundImage="url('photos/Hero.png')";
-
   const backdrop=document.getElementById('backdrop');
+  const heroWrapper=document.getElementById('heroWrapper');
+  const heroes=Array.from(document.querySelectorAll('.hero'));
+  const btnPrev=document.getElementById('btnPrev');
+  const btnNext=document.getElementById('btnNext');
+  const indicatorsContainer=document.getElementById('heroIndicators');
+
+  let currentIndex=0;
+  let autoplayInterval=null;
+
+  /* Indicators erstellen */
+  heroes.forEach((_, i)=>{
+    const dot=document.createElement('div');
+    dot.className='hero-indicator';
+    if(i===0) dot.classList.add('active');
+    dot.onclick=()=>goToSlide(i);
+    indicatorsContainer.appendChild(dot);
+  });
+
+  const indicators=Array.from(document.querySelectorAll('.hero-indicator'));
+
+  function updateHero(){
+    heroes.forEach((h,i)=>{
+      h.classList.toggle('active', i===currentIndex);
+    });
+    
+    indicators.forEach((ind,i)=>{
+      ind.classList.toggle('active', i===currentIndex);
+    });
+
+    // Backdrop aktualisieren
+    const bg=heroes[currentIndex].dataset.bg;
+    if(bg) backdrop.style.backgroundImage=`url('${bg}')`;
+
+    // Buttons aktivieren/deaktivieren
+    btnPrev.disabled = currentIndex===0;
+    btnNext.disabled = currentIndex===heroes.length-1;
+  }
+
+  function goToSlide(index){
+    if(index<0 || index>=heroes.length) return;
+    currentIndex=index;
+    updateHero();
+    resetAutoplay(); // Reset timer bei manueller Navigation
+  }
+
+  // Autoplay Funktionen
+  function startAutoplay(){
+    stopAutoplay();
+    autoplayInterval = setInterval(()=>{
+      const nextIndex = (currentIndex + 1) % heroes.length; // Loop zurück zu 0
+      goToSlide(nextIndex);
+    }, 15000); // 15 Sekunden
+  }
+
+  function stopAutoplay(){
+    if(autoplayInterval){
+      clearInterval(autoplayInterval);
+      autoplayInterval = null;
+    }
+  }
+
+  function resetAutoplay(){
+    stopAutoplay();
+    startAutoplay();
+  }
+
+  btnPrev.onclick=()=>goToSlide(currentIndex-1);
+  btnNext.onclick=()=>goToSlide(currentIndex+1);
+
+  // Tastatur-Navigation
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowUp') goToSlide(currentIndex-1);
+    if(e.key==='ArrowDown') goToSlide(currentIndex+1);
+  });
+
+  // Touch-Swipe für Mobile
+  let touchStartY=0;
+  heroWrapper.addEventListener('touchstart', e=>{
+    touchStartY=e.touches[0].clientY;
+  }, {passive:true});
+
+  heroWrapper.addEventListener('touchend', e=>{
+    const touchEndY=e.changedTouches[0].clientY;
+    const diff=touchStartY-touchEndY;
+    if(Math.abs(diff)>50){
+      if(diff>0) goToSlide(currentIndex+1);
+      else goToSlide(currentIndex-1);
+    }
+  }, {passive:true});
 
   /* Kachelbilder setzen */
   document.querySelectorAll('.card').forEach(c=>{
@@ -307,28 +970,49 @@ footer{
     if(img) t.style.backgroundImage=`url('${img}')`;
   });
 
-  /* Backdrop dynamisch */
+  /* Backdrop dynamisch bei Kachel-Hover */
   function setBackdrop(card){
     const url=card?.dataset?.bg || "";
     if(url) backdrop.style.backgroundImage=`url('${url}')`;
   }
-
-  const first=document.querySelector('.card');
-  if(first) setBackdrop(first);
 
   document.addEventListener('mouseenter',e=>{
     const c=e.target.closest?.('.card');
     if(c) setBackdrop(c);
   },true);
 
-  /* Klick */
+  document.addEventListener('mouseleave',e=>{
+    const c=e.target.closest?.('.card');
+    if(c){
+      // Zurück zum aktuellen Hero-Hintergrund
+      const bg=heroes[currentIndex].dataset.bg;
+      if(bg) backdrop.style.backgroundImage=`url('${bg}')`;
+    }
+  },true);
+
+  /* Klick auf Kacheln */
   document.addEventListener('click',e=>{
     const c=e.target.closest?.('.card');
     if(c){
+      // EuroSDS spezielle Behandlung - Modal öffnen
+      if(c.dataset.eurosds === 'true'){
+        openEuroSDSModal();
+        return;
+      }
+      
+      // Normale Apps
       const href=c.dataset.link;
       if(href) location.href = href;
     }
   });
+
+  /* EuroSDS Button im Hero */
+  const btnEuroSDS = document.getElementById('btnEuroSDS');
+  if(btnEuroSDS){
+    btnEuroSDS.onclick = function(){
+      openEuroSDSModal();
+    };
+  }
 
   /* Theme */
   const themeBtn=document.getElementById('btnTheme');
@@ -342,6 +1026,113 @@ footer{
   themeBtn.onclick=()=>apply(
     document.documentElement.getAttribute('data-theme')==='light'?'dark':'light'
   );
+
+  // Initial update
+  updateHero();
+
+  // Autoplay starten
+  startAutoplay();
+
+  // Pause bei Hover über Hero
+  heroWrapper.addEventListener('mouseenter', stopAutoplay);
+  heroWrapper.addEventListener('mouseleave', startAutoplay);
+
+  /* MODAL FUNKTIONEN */
+  const modal = document.getElementById('modalAnleitung');
+  const btnAnleitung = document.getElementById('btnAnleitung');
+
+  window.openModal = function(){
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Verhindert Hintergrund-Scrollen
+  };
+
+  window.closeModal = function(){
+    modal.classList.remove('active');
+    document.body.style.overflow = ''; // Scrollen wieder erlauben
+  };
+
+  if(btnAnleitung){
+    btnAnleitung.onclick = openModal;
+  }
+
+  // Schließen bei Klick außerhalb des Modals
+  modal.addEventListener('click', function(e){
+    if(e.target === modal){
+      closeModal();
+    }
+  });
+
+  // Schließen mit ESC-Taste
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && modal.classList.contains('active')){
+      closeModal();
+    }
+  });
+
+  /* EUROSDS MODAL FUNKTIONEN */
+  const modalEuroSDS = document.getElementById('modalEuroSDS');
+  const euroSDSServerInput = document.getElementById('euroSDSServerInput');
+  const savedServerInfo = document.getElementById('savedServerInfo');
+  const savedServerName = document.getElementById('savedServerName');
+
+  // Zeige gespeicherten Server beim Laden
+  const savedServer = localStorage.getItem('euroSDSServer');
+  if(savedServer){
+    euroSDSServerInput.value = savedServer;
+    savedServerName.textContent = savedServer;
+    savedServerInfo.classList.add('active');
+  }
+
+  window.openEuroSDSModal = function(){
+    modalEuroSDS.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    // Fokussiere das Eingabefeld
+    setTimeout(() => euroSDSServerInput.focus(), 100);
+  };
+
+  window.closeEuroSDSModal = function(){
+    modalEuroSDS.classList.remove('active');
+    document.body.style.overflow = '';
+  };
+
+  window.openEuroSDS = function(host){
+    window.open(`https://${host}:8092/eurosds`, '_blank');
+    closeEuroSDSModal();
+  };
+
+  window.openEuroSDSCustom = function(){
+    const customServer = euroSDSServerInput.value.trim();
+    if(!customServer){
+      alert('Bitte gib einen Server-Namen oder eine IP-Adresse ein.');
+      euroSDSServerInput.focus();
+      return;
+    }
+    // Speichere den Server
+    localStorage.setItem('euroSDSServer', customServer);
+    // Öffne EuroSDS
+    openEuroSDS(customServer);
+  };
+
+  // Enter-Taste im Eingabefeld
+  euroSDSServerInput.addEventListener('keypress', function(e){
+    if(e.key === 'Enter'){
+      openEuroSDSCustom();
+    }
+  });
+
+  // Schließen bei Klick außerhalb
+  modalEuroSDS.addEventListener('click', function(e){
+    if(e.target === modalEuroSDS){
+      closeEuroSDSModal();
+    }
+  });
+
+  // ESC-Taste
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && modalEuroSDS.classList.contains('active')){
+      closeEuroSDSModal();
+    }
+  });
 
 })();
 </script>
