@@ -706,7 +706,7 @@ footer{
         <h1>Nexus IPS Offline</h1>
         <p>Lade alle Apps als ZIP-Paket herunter und nutze sie offline auf deinem PC.</p>
         <div class="actions">
-          <button class="btn primary" onclick="location.href='Nexus-ips.zip'">Jetzt herunterladen</button>
+          <button class="btn primary" id="btnDownloadZip">ZIP herunterladen</button>
           <button class="btn ghost" id="btnAnleitung">Installationsanleitung</button>
         </div>
       </div>
@@ -765,7 +765,7 @@ footer{
 </article>
 
 <!-- Install -->
-<article class="card" data-img="photos/Install.png" data-bg="photos/Install.png" data-link="Nexus-ips.zip">
+<article class="card" data-img="photos/Install.png" data-bg="photos/Install.png" data-install="true">
   <div class="thumb"></div>
   <div class="label"><span class="ico" style="background:linear-gradient(135deg,#10b981,#34d399)"></span>Offline Installation</div>
 </article>
@@ -1000,6 +1000,12 @@ footer{
         return;
       }
       
+      // Install-Kachel - öffnet Installationsanleitung
+      if(c.dataset.install === 'true'){
+        openModal();
+        return;
+      }
+      
       // Normale Apps
       const href=c.dataset.link;
       if(href) location.href = href;
@@ -1040,6 +1046,7 @@ footer{
   /* MODAL FUNKTIONEN */
   const modal = document.getElementById('modalAnleitung');
   const btnAnleitung = document.getElementById('btnAnleitung');
+  const btnDownloadZip = document.getElementById('btnDownloadZip');
 
   window.openModal = function(){
     modal.classList.add('active');
@@ -1053,6 +1060,27 @@ footer{
 
   if(btnAnleitung){
     btnAnleitung.onclick = openModal;
+  }
+
+  // ZIP Download Handler
+  if(btnDownloadZip){
+    btnDownloadZip.onclick = function(){
+      // Versuche ZIP zu laden, zeige Info wenn nicht verfügbar
+      const zipUrl = 'Nexus-ips.zip';
+      fetch(zipUrl, {method: 'HEAD'})
+        .then(response => {
+          if(response.ok){
+            window.location.href = zipUrl;
+          } else {
+            throw new Error('ZIP not found');
+          }
+        })
+        .catch(() => {
+          alert('⚠️ Die ZIP-Datei ist noch nicht hochgeladen!\n\n' +
+                'Bitte lade die Datei "Nexus-ips.zip" in das gleiche Verzeichnis wie diese HTML-Datei hoch.\n\n' +
+                'Die ZIP-Datei wurde dir separat bereitgestellt.');
+        });
+    };
   }
 
   // Schließen bei Klick außerhalb des Modals
