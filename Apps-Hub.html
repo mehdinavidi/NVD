@@ -818,7 +818,7 @@ footer{
       <h3>Schritt 3: Apps starten</h3>
       <ol>
         <li>Öffne den entpackten Ordner <code>Nexus-ips</code></li>
-        <li>Doppelklick auf <code>Apps-Hub-Scrollable.html</code></li>
+        <li>Doppelklick auf <code>Apps-Hub.html</code></li>
         <li>Die Hauptseite öffnet sich in deinem Browser</li>
       </ol>
 
@@ -833,7 +833,7 @@ footer{
       <h3>💡 Tipp: Lesezeichen erstellen</h3>
       <p>Für schnellen Zugriff:</p>
       <ol>
-        <li>Öffne <code>Apps-Hub-Scrollable.html</code> im Browser</li>
+        <li>Öffne <code>Apps-Hub.html</code> im Browser</li>
         <li>Drücke <code>Strg + D</code> (Windows) oder <code>Cmd + D</code> (Mac)</li>
         <li>Speichere als Lesezeichen</li>
       </ol>
@@ -1084,24 +1084,10 @@ footer{
     btnAnleitung.onclick = openModal;
   }
 
-  // ZIP Download Handler
+  // ZIP Download Handler - einfacher direkter Download
   if(btnDownloadZip){
     btnDownloadZip.onclick = function(){
-      // Versuche ZIP zu laden, zeige Info wenn nicht verfügbar
-      const zipUrl = 'Nexus-ips.zip';
-      fetch(zipUrl, {method: 'HEAD'})
-        .then(response => {
-          if(response.ok){
-            window.location.href = zipUrl;
-          } else {
-            throw new Error('ZIP not found');
-          }
-        })
-        .catch(() => {
-          alert('⚠️ Die ZIP-Datei ist noch nicht hochgeladen!\n\n' +
-                'Bitte lade die Datei "Nexus-ips.zip" in das gleiche Verzeichnis wie diese HTML-Datei hoch.\n\n' +
-                'Die ZIP-Datei wurde dir separat bereitgestellt.');
-        });
+      window.location.href = 'Nexus-ips.zip';
     };
   }
 
