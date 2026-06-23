@@ -203,6 +203,16 @@
       border-color: var(--accent-primary);
     }
 
+    .header-grid > div.editable-card {
+      cursor: pointer;
+    }
+
+    .header-grid > div.editable-card:focus-visible {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
     .header-grid .label {
       background: var(--accent-primary);
       color: #fff;
@@ -227,6 +237,12 @@
       background: var(--bg-panel);
       color: var(--text-main);
       font-weight: 600;
+    }
+
+    .profile-actions {
+      display: flex;
+      justify-content: center;
+      margin: -10px 0 25px;
     }
 
     /* Summary Cards */
@@ -1149,7 +1165,20 @@
       </button>
     </div>
 
-    <!-- 5. Hell/Dunkel -->
+    <!-- 5. Excel Export -->
+    <div class="menu-section">
+      <button class="menu-item" onclick="exportExcel()">
+        <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="8" y1="13" x2="16" y2="13"></line>
+          <line x1="8" y1="17" x2="16" y2="17"></line>
+        </svg>
+        <span>Excel Export</span>
+      </button>
+    </div>
+
+    <!-- 6. Hell/Dunkel -->
     <div class="menu-section">
       <button class="menu-item secondary" onclick="toggleTheme()">
         <svg class="icon" id="themeIconSVG" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
@@ -1159,7 +1188,7 @@
       </button>
     </div>
 
-    <!-- 6. Export JSON -->
+    <!-- 7. Export JSON -->
     <div class="menu-section">
       <button class="menu-item secondary" onclick="exportJSON()">
         <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
@@ -1171,7 +1200,7 @@
       </button>
     </div>
 
-    <!-- 7. Import JSON -->
+    <!-- 8. Import JSON -->
     <div class="menu-section">
       <label class="menu-item secondary" style="cursor: pointer;">
         <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
@@ -1184,7 +1213,7 @@
       </label>
     </div>
 
-    <!-- 8. Beispieldaten -->
+    <!-- 9. Beispieldaten -->
     <div class="menu-section">
       <button class="menu-item secondary" onclick="loadExampleData()">
         <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
@@ -1198,7 +1227,7 @@
       </button>
     </div>
 
-    <!-- 9. Alles löschen -->
+    <!-- 10. Alles löschen -->
     <div class="menu-section">
       <button class="menu-item danger" onclick="clearAllData()">
         <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
@@ -1227,17 +1256,17 @@
 
     <!-- Employee Header Grid -->
     <div class="header-grid">
-      <div>
+      <div class="editable-card" onclick="openPersonalSettings()" onkeydown="handleEditableCardKey(event)" tabindex="0" role="button" aria-label="Vorname ändern">
         <div class="label">Vorname</div>
         <div class="value" id="displayFirstName">Max</div>
       </div>
-      <div>
+      <div class="editable-card" onclick="openPersonalSettings()" onkeydown="handleEditableCardKey(event)" tabindex="0" role="button" aria-label="Nachname ändern">
         <div class="label">Nachname</div>
         <div class="value" id="displayLastName">Mustermann</div>
       </div>
       <div>
         <div class="label">Bruttogehalt</div>
-        <div class="value" id="displaySalary">4.375,00 €</div>
+        <div class="value" id="displaySalary">0,00 €</div>
       </div>
       <div>
         <div class="label">Wochenarbeitszeit</div>
@@ -1245,8 +1274,14 @@
       </div>
       <div>
         <div class="label">Stundenlohn Basis</div>
-        <div class="value" id="displayHourlyRate">25,14 €/h</div>
+        <div class="value" id="displayHourlyRate">0,00 €/h</div>
       </div>
+    </div>
+
+    <div class="profile-actions">
+      <button class="btn-secondary" type="button" onclick="openPersonalSettings()" style="width: auto; min-width: 240px;">
+        Persönliche Daten ändern
+      </button>
     </div>
 
     <!-- Summary Cards -->
@@ -1319,31 +1354,31 @@
         <h4>Kat. 1: Werktag Abend</h4>
         <div class="cat-detail">18:00-20:00 Uhr</div>
         <div class="cat-detail">Zuschlag: +25%</div>
-        <div class="cat-rate" id="rate1">31,43 €/h</div>
+        <div class="cat-rate" id="rate1">0,00 €/h</div>
       </div>
       <div class="category-card">
         <h4>Kat. 2: Werktag Nacht</h4>
         <div class="cat-detail">20:00-07:00 Uhr</div>
         <div class="cat-detail">Zuschlag: +50%</div>
-        <div class="cat-rate" id="rate2">37,71 €/h</div>
+        <div class="cat-rate" id="rate2">0,00 €/h</div>
       </div>
       <div class="category-card">
         <h4>Kat. 3: Samstag</h4>
         <div class="cat-detail">Ganztägig</div>
         <div class="cat-detail">Zuschlag: +50%</div>
-        <div class="cat-rate" id="rate3">37,71 €/h</div>
+        <div class="cat-rate" id="rate3">0,00 €/h</div>
       </div>
       <div class="category-card">
         <h4>Kat. 4: Sonntag</h4>
         <div class="cat-detail">Ganztägig</div>
         <div class="cat-detail">Zuschlag: +100%</div>
-        <div class="cat-rate" id="rate4">50,28 €/h</div>
+        <div class="cat-rate" id="rate4">0,00 €/h</div>
       </div>
       <div class="category-card">
         <h4>Kat. 5: Feiertag</h4>
         <div class="cat-detail">Ganztägig</div>
         <div class="cat-detail">Zuschlag: +100%</div>
-        <div class="cat-rate" id="rate5">50,28 €/h</div>
+        <div class="cat-rate" id="rate5">0,00 €/h</div>
       </div>
     </div>
 
@@ -1434,7 +1469,7 @@
           </div>
           <div class="form-group">
             <label for="settingSalary">Bruttogehalt (€/Monat) *</label>
-            <input type="number" id="settingSalary" step="0.01" required>
+            <input type="number" id="settingSalary" step="0.01" min="0" required>
           </div>
           <div class="form-group">
             <label for="settingWeeklyHours">Wochenarbeitszeit (Stunden) *</label>
@@ -1442,17 +1477,17 @@
           </div>
           <div class="form-group" style="grid-column: 1 / -1;">
             <label for="settingIBAN">IBAN</label>
-            <input type="text" id="settingIBAN" placeholder="z.B. DE21 5001 0517 5453 6769 08">
+            <input type="text" id="settingIBAN" placeholder="optional">
           </div>
           <div class="form-group" style="grid-column: 1 / -1;">
             <label for="settingBank">Bank</label>
-            <input type="text" id="settingBank" placeholder="z.B. ING Bank">
+            <input type="text" id="settingBank" placeholder="z.B. Musterbank">
           </div>
         </div>
         
         <div class="info-display" style="margin-top: 20px;">
           <div class="info-label">Berechneter Stundenlohn brutto:</div>
-          <div class="info-value" id="calculatedHourlyRate">25,14 €/h</div>
+          <div class="info-value" id="calculatedHourlyRate">0,00 €/h</div>
         </div>
         
         <div class="button-group" style="margin-top: 25px;">
@@ -1541,7 +1576,7 @@
           </div>
           <div class="form-group" style="grid-column: 1 / -1;">
             <label for="customer">Kunde</label>
-            <input type="text" id="customer" placeholder="z.B. NXKS-9781 - Marktredwitz">
+            <input type="text" id="customer" placeholder="z.B. Musterkunde">
           </div>
           <div class="form-group" style="grid-column: 1 / -1;">
             <label for="amount">Betrag (€)</label>
@@ -1685,10 +1720,10 @@
     let userSettings = {
       firstName: 'Max',
       lastName: 'Mustermann',
-      salary: 2500,
+      salary: 0,
       weeklyHours: 40,
-      iban: 'DE21 5001 0517 5453 6769 08',
-      bank: 'ING Bank'
+      iban: '',
+      bank: 'Musterbank'
     };
 
     let entries = [];
@@ -1815,12 +1850,250 @@
       }, 3000);
     }
 
+    // ==================== VALIDATION & DATA HELPERS ====================
+    function toNumber(value, fallback = 0) {
+      const number = Number(value);
+      return Number.isFinite(number) ? number : fallback;
+    }
+
+    function cleanText(value) {
+      return typeof value === 'string' ? value.trim() : '';
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function isSafeImageDataURL(value) {
+      return typeof value === 'string' &&
+        /^data:image\/(png|jpe?g|webp);base64,/i.test(value);
+    }
+
+    function isLegacySampleSettings(settings = {}) {
+      return settings.firstName === 'Max' &&
+        settings.lastName === 'Mustermann' &&
+        (Number(settings.salary) > 0 ||
+          Boolean(cleanText(settings.iban)) ||
+          (Boolean(cleanText(settings.bank)) && settings.bank !== 'Musterbank'));
+    }
+
+    function normalizeCustomerName(value) {
+      const customer = cleanText(value);
+
+      return /^[A-Z]{4}-\d{4,}\s+-\s+/.test(customer) ? 'Musterkunde' : customer;
+    }
+
+    function getSignatureImageFormat(value) {
+      if (/^data:image\/jpe?g/i.test(value)) return 'JPEG';
+      if (/^data:image\/webp/i.test(value)) return 'WEBP';
+      return 'PNG';
+    }
+
+    function readStoredJSON(key, fallback) {
+      const raw = localStorage.getItem(key);
+      if (!raw) return fallback;
+
+      try {
+        return JSON.parse(raw);
+      } catch (error) {
+        console.warn(`Gespeicherte Daten für "${key}" konnten nicht gelesen werden.`, error);
+        return fallback;
+      }
+    }
+
+    function normalizeSettings(settings = {}) {
+      const salary = toNumber(settings.salary, 0);
+      const weeklyHours = toNumber(settings.weeklyHours, 40);
+
+      return {
+        firstName: cleanText(settings.firstName) || 'Max',
+        lastName: cleanText(settings.lastName) || 'Mustermann',
+        salary: salary >= 0 ? salary : 0,
+        weeklyHours: weeklyHours > 0 ? weeklyHours : 40,
+        iban: cleanText(settings.iban),
+        bank: cleanText(settings.bank) || 'Musterbank'
+      };
+    }
+
+    function isValidTime(time) {
+      return /^([01]\d|2[0-3]):[0-5]\d$/.test(time);
+    }
+
+    function timeToMinutes(timeStr) {
+      if (!isValidTime(timeStr)) return NaN;
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      return hours * 60 + minutes;
+    }
+
+    function isValidDate(day, month, year) {
+      const date = new Date(year, month - 1, day);
+      return date.getFullYear() === year &&
+        date.getMonth() === month - 1 &&
+        date.getDate() === day;
+    }
+
+    function dateToDayIndex(day, month, year) {
+      return Date.UTC(year, month - 1, day) / 86400000;
+    }
+
+    function getEntryTimeRange(entry) {
+      const startMinutes = timeToMinutes(entry.startTime);
+      let endMinutes = timeToMinutes(entry.endTime);
+
+      if (!Number.isFinite(startMinutes) || !Number.isFinite(endMinutes) ||
+          !isValidDate(entry.day, entry.month, entry.year)) {
+        return null;
+      }
+
+      if (endMinutes <= startMinutes) {
+        endMinutes += 24 * 60;
+      }
+
+      const dayStart = dateToDayIndex(entry.day, entry.month, entry.year) * 24 * 60;
+      return {
+        start: dayStart + startMinutes,
+        end: dayStart + endMinutes
+      };
+    }
+
+    function rangesOverlap(first, second) {
+      return first && second && first.start < second.end && first.end > second.start;
+    }
+
+    function createEntryId() {
+      return Date.now() + Math.floor(Math.random() * 1000000);
+    }
+
+    function getCategoryMultiplier(category) {
+      if (category.includes('+25%')) return 1.25;
+      if (category.includes('+50%')) return 1.5;
+      if (category.includes('+100%')) return 2.0;
+      return 1.0;
+    }
+
+    function getRateForCategory(category) {
+      return calculateHourlyRate(userSettings.salary, userSettings.weeklyHours) * getCategoryMultiplier(category);
+    }
+
+    function normalizeEntry(entry) {
+      const day = parseInt(entry.day, 10);
+      const month = parseInt(entry.month, 10);
+      const year = parseInt(entry.year, 10);
+      const startTime = cleanText(entry.startTime);
+      const endTime = cleanText(entry.endTime);
+      const category = cleanText(entry.category);
+      const customer = normalizeCustomerName(entry.customer);
+
+      if (!isValidDate(day, month, year) || !isValidTime(startTime) || !isValidTime(endTime) || !category) {
+        return null;
+      }
+
+      const range = getEntryTimeRange({ day, month, year, startTime, endTime });
+      if (!range) return null;
+
+      const calculatedDuration = (range.end - range.start) / 60;
+      if (calculatedDuration <= 0) return null;
+
+      const duration = toNumber(entry.duration, calculatedDuration) > 0
+        ? toNumber(entry.duration, calculatedDuration)
+        : calculatedDuration;
+      const rate = toNumber(entry.rate, getRateForCategory(category)) > 0
+        ? toNumber(entry.rate, getRateForCategory(category))
+        : getRateForCategory(category);
+      const amount = toNumber(entry.amount, duration * rate);
+
+      return {
+        id: Number.isFinite(Number(entry.id)) ? Number(entry.id) : createEntryId(),
+        day,
+        month,
+        year,
+        startTime,
+        endTime,
+        duration,
+        category,
+        rate,
+        customer,
+        amount
+      };
+    }
+
+    function recalculateEntriesForCurrentSettings() {
+      entries = entries.map(entry => {
+        const rate = getRateForCategory(entry.category);
+        return {
+          ...entry,
+          rate,
+          amount: entry.duration * rate
+        };
+      });
+      saveEntries();
+    }
+
+    function isRangeInsideClockWindow(startMinutes, endMinutes, windowStart, windowEnd) {
+      let normalizedEnd = endMinutes <= startMinutes ? endMinutes + 1440 : endMinutes;
+      let normalizedStart = startMinutes;
+
+      if (windowEnd <= windowStart) {
+        const normalizedWindowEnd = windowEnd + 1440;
+        if (normalizedStart < windowStart) {
+          normalizedStart += 1440;
+          normalizedEnd += 1440;
+        }
+        return normalizedStart >= windowStart && normalizedEnd <= normalizedWindowEnd;
+      }
+
+      return normalizedStart >= windowStart && normalizedEnd <= windowEnd;
+    }
+
+    function getCategoryWarning(day, month, year, startTime, endTime, category) {
+      if (!category || !isValidDate(day, month, year)) return '';
+
+      const weekday = new Date(year, month - 1, day).getDay();
+      const startMinutes = timeToMinutes(startTime);
+      const endMinutes = timeToMinutes(endTime);
+      const isWorkday = weekday >= 1 && weekday <= 5;
+
+      if (category.includes('Samstag') && weekday !== 6) {
+        return 'Die gewählte Kategorie ist Samstag, das Datum ist aber kein Samstag.';
+      }
+
+      if (category.includes('Sonntag') && weekday !== 0) {
+        return 'Die gewählte Kategorie ist Sonntag, das Datum ist aber kein Sonntag.';
+      }
+
+      if (category.includes('Werktag') && !isWorkday) {
+        return 'Die gewählte Kategorie ist Werktag, das Datum liegt aber am Wochenende.';
+      }
+
+      if (category.includes('Werktag') && category.includes('+25%') &&
+          !isRangeInsideClockWindow(startMinutes, endMinutes, 18 * 60, 20 * 60)) {
+        return 'Die Kategorie +25% ist für Werktage von 18:00 bis 20:00 Uhr vorgesehen.';
+      }
+
+      if (category.includes('Werktag') && category.includes('+50%') &&
+          !isRangeInsideClockWindow(startMinutes, endMinutes, 20 * 60, 7 * 60)) {
+        return 'Die Kategorie +50% ist für Werktage von 20:00 bis 07:00 Uhr vorgesehen.';
+      }
+
+      return '';
+    }
+
     // ==================== SETTINGS ====================
     function loadSettings() {
-      const saved = localStorage.getItem('userSettings');
-      if (saved) {
-        userSettings = JSON.parse(saved);
+      const savedSettings = readStoredJSON('userSettings', null);
+
+      if (savedSettings && isLegacySampleSettings(savedSettings)) {
+        localStorage.removeItem('userSettings');
+        userSettings = normalizeSettings({});
+      } else {
+        userSettings = normalizeSettings(savedSettings || userSettings);
       }
+
       updateDisplay();
     }
 
@@ -1842,6 +2115,22 @@
       updateSettingsHourlyRate();
       document.getElementById('settingsModal').classList.add('active');
       closeHamburgerMenu();
+    }
+
+    function openPersonalSettings() {
+      openSettings();
+      setTimeout(() => {
+        const firstNameInput = document.getElementById('settingFirstName');
+        firstNameInput.focus();
+        firstNameInput.select();
+      }, 50);
+    }
+
+    function handleEditableCardKey(event) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openPersonalSettings();
+      }
     }
 
     function closeSettings() {
@@ -1896,15 +2185,30 @@
 
     function handleSettingsSave(e) {
       e.preventDefault();
+
+      const salary = parseFloat(document.getElementById('settingSalary').value);
+      const weeklyHours = parseFloat(document.getElementById('settingWeeklyHours').value);
+
+      if (!Number.isFinite(salary) || salary < 0) {
+        toast('Bitte ein gültiges Bruttogehalt eingeben. 0 ist als Musterwert erlaubt.', 'error');
+        return;
+      }
+
+      if (!Number.isFinite(weeklyHours) || weeklyHours <= 0) {
+        toast('Bitte eine gültige Wochenarbeitszeit eingeben.', 'error');
+        return;
+      }
       
       userSettings.firstName = document.getElementById('settingFirstName').value;
       userSettings.lastName = document.getElementById('settingLastName').value;
-      userSettings.salary = parseFloat(document.getElementById('settingSalary').value);
-      userSettings.weeklyHours = parseFloat(document.getElementById('settingWeeklyHours').value);
+      userSettings.salary = salary;
+      userSettings.weeklyHours = weeklyHours;
       userSettings.iban = document.getElementById('settingIBAN').value;
       userSettings.bank = document.getElementById('settingBank').value;
+      userSettings = normalizeSettings(userSettings);
       
       saveSettings();
+      recalculateEntriesForCurrentSettings();
       closeSettings();
       renderEntries();
     }
@@ -1919,8 +2223,10 @@
 
     function calculateHourlyRate(salary, weeklyHours) {
       // Excel-kompatible Berechnung: Wochenstunden × 4,35 = Monatsstunden
-      const monthlyHours = weeklyHours * 4.35;
-      return salary / monthlyHours;
+      const normalizedSalary = toNumber(salary, 0);
+      const normalizedWeeklyHours = toNumber(weeklyHours, 0);
+      const monthlyHours = normalizedWeeklyHours * 4.35;
+      return monthlyHours > 0 ? normalizedSalary / monthlyHours : 0;
     }
 
     function updateDisplay() {
@@ -1963,14 +2269,14 @@
 
     function updateRateAndAmount() {
       const category = document.getElementById('category').value;
-      const baseRate = calculateHourlyRate(userSettings.salary, userSettings.weeklyHours);
+
+      if (!category) {
+        document.getElementById('rate').value = '';
+        document.getElementById('amount').value = '';
+        return;
+      }
       
-      let multiplier = 1.0;
-      if (category.includes('+25%')) multiplier = 1.25;
-      else if (category.includes('+50%')) multiplier = 1.5;
-      else if (category.includes('+100%')) multiplier = 2.0;
-      
-      const rate = baseRate * multiplier;
+      const rate = getRateForCategory(category);
       document.getElementById('rate').value = rate.toFixed(2);
       updateAmount();
     }
@@ -1990,6 +2296,33 @@
       const year = parseInt(document.getElementById('year').value);
       const startTime = document.getElementById('startTime').value;
       const endTime = document.getElementById('endTime').value;
+
+      if (!isValidDate(day, month, year)) {
+        toast('Bitte ein gültiges Datum eingeben.', 'error');
+        return;
+      }
+
+      if (!isValidTime(startTime) || !isValidTime(endTime)) {
+        toast('Bitte gültige Uhrzeiten eingeben.', 'error');
+        return;
+      }
+
+      const newRange = getEntryTimeRange({ day, month, year, startTime, endTime });
+      const duration = newRange ? (newRange.end - newRange.start) / 60 : 0;
+
+      if (!newRange || duration <= 0) {
+        toast('Die Dauer muss größer als 0 Stunden sein.', 'error');
+        return;
+      }
+
+      const category = document.getElementById('category').value;
+      const categoryWarning = getCategoryWarning(day, month, year, startTime, endTime, category);
+      const rate = getRateForCategory(category);
+      const amount = duration * rate;
+
+      if (categoryWarning && !confirm(`${categoryWarning}\n\nTrotzdem speichern?`)) {
+        return;
+      }
       
       // Konflikt-Prüfung: Gibt es bereits einen Einsatz am selben Tag zur gleichen Zeit?
       const hasConflict = entries.some(e => {
@@ -1998,17 +2331,7 @@
           return false;
         }
         
-        if (e.day === day && e.month === month && e.year === year) {
-          // Zeitüberschneidung prüfen
-          const newStart = timeToMinutes(startTime);
-          const newEnd = timeToMinutes(endTime);
-          const existingStart = timeToMinutes(e.startTime);
-          const existingEnd = timeToMinutes(e.endTime);
-          
-          // Überschneidung wenn: (newStart < existingEnd) und (newEnd > existingStart)
-          return (newStart < existingEnd && newEnd > existingStart);
-        }
-        return false;
+        return rangesOverlap(newRange, getEntryTimeRange(e));
       });
       
       if (hasConflict) {
@@ -2022,11 +2345,11 @@
         year: year,
         startTime: startTime,
         endTime: endTime,
-        duration: parseFloat(document.getElementById('duration').value),
-        category: document.getElementById('category').value,
-        rate: parseFloat(document.getElementById('rate').value),
+        duration: duration,
+        category: category,
+        rate: rate,
         customer: document.getElementById('customer').value,
-        amount: parseFloat(document.getElementById('amount').value)
+        amount: amount
       };
       
       if (currentEditingId) {
@@ -2039,7 +2362,7 @@
         currentEditingId = null;
       } else {
         // Create mode - add new entry
-        entries.push({ ...entryData, id: Date.now() });
+        entries.push({ ...entryData, id: createEntryId() });
         toast('Einsatz erfolgreich gespeichert', 'success');
       }
       
@@ -2048,13 +2371,6 @@
       resetForm();
       closeEntryModal();
     }
-    
-    // Hilfsfunktion: Zeit in Minuten umrechnen
-    function timeToMinutes(timeStr) {
-      const [hours, minutes] = timeStr.split(':').map(Number);
-      return hours * 60 + minutes;
-    }
-
     function resetForm() {
       document.getElementById('entryForm').reset();
       document.getElementById('year').value = 2025;
@@ -2066,10 +2382,10 @@
 
     // ==================== ENTRIES MANAGEMENT ====================
     function loadEntries() {
-      const saved = localStorage.getItem('entries');
-      if (saved) {
-        entries = JSON.parse(saved);
-      }
+      const savedEntries = readStoredJSON('entries', []);
+      entries = Array.isArray(savedEntries)
+        ? savedEntries.map(normalizeEntry).filter(Boolean)
+        : [];
       renderEntries();
     }
 
@@ -2096,9 +2412,9 @@
           <td>${entry.startTime}</td>
           <td>${entry.endTime}</td>
           <td>${entry.duration.toFixed(2)}</td>
-          <td>${entry.category}</td>
+          <td>${escapeHTML(entry.category)}</td>
           <td>${formatCurrency(entry.rate)}</td>
-          <td>${entry.customer || '-'}</td>
+          <td>${entry.customer ? escapeHTML(entry.customer) : '-'}</td>
           <td><strong>${formatCurrency(entry.amount)}</strong></td>
           <td>
             <button class="btn-action edit" onclick="editEntry(${entry.id})" style="margin-right: 5px;">
@@ -2378,12 +2694,26 @@
       }
     }
 
+    function renderSignaturePreview() {
+      const preview = document.getElementById('signaturePreview');
+      if (!preview) return;
+
+      if (isSafeImageDataURL(signatureData)) {
+        preview.innerHTML = `<img src="${signatureData}" alt="Unterschrift">`;
+        preview.classList.remove('empty');
+      } else {
+        signatureData = null;
+        preview.innerHTML = 'Keine Unterschrift vorhanden';
+        preview.classList.add('empty');
+      }
+    }
+
     function clearSignature() {
-      if (!ctx || !canvas) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (ctx && canvas) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
       signatureData = null;
-      document.getElementById('signaturePreview').innerHTML = 'Keine Unterschrift vorhanden';
-      document.getElementById('signaturePreview').classList.add('empty');
+      renderSignaturePreview();
       
       localStorage.removeItem('signatureData');
       toast('Unterschrift gelöscht', 'success');
@@ -2392,22 +2722,31 @@
     function saveSignatureToPreview() {
       if (!canvas) return;
       signatureData = canvas.toDataURL('image/png');
-      const preview = document.getElementById('signaturePreview');
-      preview.innerHTML = `<img src="${signatureData}" alt="Unterschrift">`;
-      preview.classList.remove('empty');
+      renderSignaturePreview();
       localStorage.setItem('signatureData', signatureData);
     }
 
     function uploadSignature(event) {
       const file = event.target.files[0];
       if (!file) return;
+
+      if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) {
+        toast('Bitte PNG, JPG oder WebP verwenden.', 'error');
+        event.target.value = '';
+        return;
+      }
       
       const reader = new FileReader();
       reader.onload = function(e) {
         signatureData = e.target.result;
-        const preview = document.getElementById('signaturePreview');
-        preview.innerHTML = `<img src="${signatureData}" alt="Unterschrift">`;
-        preview.classList.remove('empty');
+
+        if (!isSafeImageDataURL(signatureData)) {
+          signatureData = null;
+          toast('Die Bilddatei konnte nicht verarbeitet werden.', 'error');
+          return;
+        }
+
+        renderSignaturePreview();
         
         // Draw on canvas
         if (ctx && canvas) {
@@ -2427,19 +2766,24 @@
 
     function loadSignature() {
       const savedSig = localStorage.getItem('signatureData');
-      if (savedSig) {
+      if (isSafeImageDataURL(savedSig)) {
         signatureData = savedSig;
-        const preview = document.getElementById('signaturePreview');
-        preview.innerHTML = `<img src="${signatureData}" alt="Unterschrift">`;
-        preview.classList.remove('empty');
+      } else {
+        signatureData = null;
+        localStorage.removeItem('signatureData');
       }
+      renderSignaturePreview();
     }
 
     // ==================== DATA MANAGEMENT ====================
     function saveData() {
       saveSettings();
       saveEntries();
-      localStorage.setItem('signatureData', signatureData || '');
+      if (signatureData) {
+        localStorage.setItem('signatureData', signatureData);
+      } else {
+        localStorage.removeItem('signatureData');
+      }
       toast('Alle Daten gespeichert', 'success');
       closeHamburgerMenu();
     }
@@ -2448,11 +2792,8 @@
       loadSettings();
       loadEntries();
       const savedSig = localStorage.getItem('signatureData');
-      if (savedSig) {
+      if (isSafeImageDataURL(savedSig)) {
         signatureData = savedSig;
-        const preview = document.getElementById('signaturePreview');
-        preview.innerHTML = `<img src="${signatureData}" alt="Unterschrift">`;
-        preview.classList.remove('empty');
         
         // Also draw on canvas if it exists
         if (canvas && ctx) {
@@ -2463,7 +2804,10 @@
           };
           img.src = signatureData;
         }
+      } else {
+        signatureData = null;
       }
+      renderSignaturePreview();
       toast('Daten geladen', 'success');
       closeHamburgerMenu();
     }
@@ -2478,10 +2822,10 @@
       userSettings = {
         firstName: 'Max',
         lastName: 'Mustermann',
-        salary: 4375,
+        salary: 0,
         weeklyHours: 40,
-        iban: 'DE21 5001 0517 5453 6769 08',
-        bank: 'ING Bank'
+        iban: '',
+        bank: 'Musterbank'
       };
       
       clearSignature();
@@ -2504,29 +2848,29 @@
       
       entries = [
         // Mai 2025
-        {id: Date.now(), day: 5, month: 5, year: 2025, startTime: '18:00', endTime: '20:00', duration: 2.0, category: 'Werktag +25%', rate: rate25, customer: 'NXKS-9781 - Marktredwitz', amount: 2.0 * rate25},
-        {id: Date.now()+1, day: 12, month: 5, year: 2025, startTime: '06:00', endTime: '07:30', duration: 1.5, category: 'Werktag +50%', rate: rate50, customer: 'NXKS-9623 - Gießen', amount: 1.5 * rate50},
-        {id: Date.now()+2, day: 19, month: 5, year: 2025, startTime: '20:00', endTime: '22:00', duration: 2.0, category: 'Werktag +50%', rate: rate50, customer: 'NXKS-10088 - Schärding', amount: 2.0 * rate50},
+        {id: Date.now(), day: 5, month: 5, year: 2025, startTime: '18:00', endTime: '20:00', duration: 2.0, category: 'Werktag +25%', rate: rate25, customer: 'Musterkunde 01', amount: 2.0 * rate25},
+        {id: Date.now()+1, day: 12, month: 5, year: 2025, startTime: '06:00', endTime: '07:30', duration: 1.5, category: 'Werktag +50%', rate: rate50, customer: 'Musterkunde 02', amount: 1.5 * rate50},
+        {id: Date.now()+2, day: 19, month: 5, year: 2025, startTime: '20:00', endTime: '22:00', duration: 2.0, category: 'Werktag +50%', rate: rate50, customer: 'Musterkunde 03', amount: 2.0 * rate50},
         
         // Juni 2025
-        {id: Date.now()+3, day: 2, month: 6, year: 2025, startTime: '18:30', endTime: '20:00', duration: 1.5, category: 'Werktag +25%', rate: rate25, customer: 'NXKS-12664 - Hamburg', amount: 1.5 * rate25},
-        {id: Date.now()+4, day: 7, month: 6, year: 2025, startTime: '08:00', endTime: '14:00', duration: 6.0, category: 'Samstag +50%', rate: rate50, customer: 'NXKS-12530 - Obernkirchen', amount: 6.0 * rate50},
-        {id: Date.now()+5, day: 14, month: 6, year: 2025, startTime: '05:30', endTime: '07:00', duration: 1.5, category: 'Werktag +50%', rate: rate50, customer: 'NXKS-14106 - Bad Salzungen', amount: 1.5 * rate50},
+        {id: Date.now()+3, day: 2, month: 6, year: 2025, startTime: '18:30', endTime: '20:00', duration: 1.5, category: 'Werktag +25%', rate: rate25, customer: 'Musterkunde 04', amount: 1.5 * rate25},
+        {id: Date.now()+4, day: 7, month: 6, year: 2025, startTime: '08:00', endTime: '14:00', duration: 6.0, category: 'Samstag +50%', rate: rate50, customer: 'Musterkunde 05', amount: 6.0 * rate50},
+        {id: Date.now()+5, day: 14, month: 6, year: 2025, startTime: '05:30', endTime: '07:00', duration: 1.5, category: 'Werktag +50%', rate: rate50, customer: 'Musterkunde 06', amount: 1.5 * rate50},
         
         // Juli 2025
-        {id: Date.now()+6, day: 5, month: 7, year: 2025, startTime: '08:00', endTime: '16:00', duration: 8.0, category: 'Samstag +50%', rate: rate50, customer: 'NXKS-13554 - Donauwörth', amount: 8.0 * rate50},
-        {id: Date.now()+7, day: 13, month: 7, year: 2025, startTime: '08:30', endTime: '12:30', duration: 4.0, category: 'Sonntag +100%', rate: rate100, customer: 'NXKS-13708 - Pforzheim', amount: 4.0 * rate100},
-        {id: Date.now()+8, day: 22, month: 7, year: 2025, startTime: '18:00', endTime: '19:30', duration: 1.5, category: 'Werktag +25%', rate: rate25, customer: 'NXKS-12787 - Stade', amount: 1.5 * rate25},
+        {id: Date.now()+6, day: 5, month: 7, year: 2025, startTime: '08:00', endTime: '16:00', duration: 8.0, category: 'Samstag +50%', rate: rate50, customer: 'Musterkunde 07', amount: 8.0 * rate50},
+        {id: Date.now()+7, day: 13, month: 7, year: 2025, startTime: '08:30', endTime: '12:30', duration: 4.0, category: 'Sonntag +100%', rate: rate100, customer: 'Musterkunde 08', amount: 4.0 * rate100},
+        {id: Date.now()+8, day: 22, month: 7, year: 2025, startTime: '18:00', endTime: '19:30', duration: 1.5, category: 'Werktag +25%', rate: rate25, customer: 'Musterkunde 09', amount: 1.5 * rate25},
         
         // August 2025
-        {id: Date.now()+9, day: 4, month: 8, year: 2025, startTime: '06:00', endTime: '07:00', duration: 1.0, category: 'Werktag +50%', rate: rate50, customer: 'NXKS-15223 - Bremen', amount: 1.0 * rate50},
-        {id: Date.now()+10, day: 9, month: 8, year: 2025, startTime: '09:00', endTime: '15:00', duration: 6.0, category: 'Samstag +50%', rate: rate50, customer: 'NXKS-15447 - Kiel', amount: 6.0 * rate50},
-        {id: Date.now()+11, day: 17, month: 8, year: 2025, startTime: '10:00', endTime: '14:00', duration: 4.0, category: 'Sonntag +100%', rate: rate100, customer: 'NXKS-15889 - Lübeck', amount: 4.0 * rate100},
+        {id: Date.now()+9, day: 4, month: 8, year: 2025, startTime: '06:00', endTime: '07:00', duration: 1.0, category: 'Werktag +50%', rate: rate50, customer: 'Musterkunde 10', amount: 1.0 * rate50},
+        {id: Date.now()+10, day: 9, month: 8, year: 2025, startTime: '09:00', endTime: '15:00', duration: 6.0, category: 'Samstag +50%', rate: rate50, customer: 'Musterkunde 11', amount: 6.0 * rate50},
+        {id: Date.now()+11, day: 17, month: 8, year: 2025, startTime: '10:00', endTime: '14:00', duration: 4.0, category: 'Sonntag +100%', rate: rate100, customer: 'Musterkunde 12', amount: 4.0 * rate100},
         
         // September 2025
-        {id: Date.now()+12, day: 6, month: 9, year: 2025, startTime: '08:00', endTime: '13:00', duration: 5.0, category: 'Samstag +50%', rate: rate50, customer: 'NXKS-16112 - Rostock', amount: 5.0 * rate50},
-        {id: Date.now()+13, day: 14, month: 9, year: 2025, startTime: '09:00', endTime: '16:00', duration: 7.0, category: 'Sonntag +100%', rate: rate100, customer: 'NXKS-16334 - Schwerin', amount: 7.0 * rate100},
-        {id: Date.now()+14, day: 23, month: 9, year: 2025, startTime: '20:00', endTime: '22:30', duration: 2.5, category: 'Werktag +50%', rate: rate50, customer: 'NXKS-16556 - Flensburg', amount: 2.5 * rate50}
+        {id: Date.now()+12, day: 6, month: 9, year: 2025, startTime: '08:00', endTime: '13:00', duration: 5.0, category: 'Samstag +50%', rate: rate50, customer: 'Musterkunde 13', amount: 5.0 * rate50},
+        {id: Date.now()+13, day: 14, month: 9, year: 2025, startTime: '09:00', endTime: '16:00', duration: 7.0, category: 'Sonntag +100%', rate: rate100, customer: 'Musterkunde 14', amount: 7.0 * rate100},
+        {id: Date.now()+14, day: 23, month: 9, year: 2025, startTime: '20:00', endTime: '22:30', duration: 2.5, category: 'Werktag +50%', rate: rate50, customer: 'Musterkunde 15', amount: 2.5 * rate50}
       ];
       
       saveEntries();
@@ -2560,7 +2904,8 @@
       };
       
       // Get existing versions
-      const versions = JSON.parse(localStorage.getItem('mehrarbeit_versions') || '[]');
+      const storedVersions = readStoredJSON('mehrarbeit_versions', []);
+      const versions = Array.isArray(storedVersions) ? storedVersions : [];
       
       // Add new version
       versions.push(versionData);
@@ -2573,10 +2918,11 @@
     }
 
     function loadSavedVersionsList() {
-      const versions = JSON.parse(localStorage.getItem('mehrarbeit_versions') || '[]');
+      const storedVersions = readStoredJSON('mehrarbeit_versions', []);
+      const versions = Array.isArray(storedVersions) ? storedVersions : [];
       const listContainer = document.getElementById('savedVersionsList');
       
-      if (versions.length === 0) {
+      if (!Array.isArray(versions) || versions.length === 0) {
         listContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 40px;">Noch keine Versionen gespeichert</p>';
         return;
       }
@@ -2584,12 +2930,12 @@
       listContainer.innerHTML = versions.map((version, index) => `
         <div class="version-item">
           <div class="version-info">
-            <div class="version-name">${version.name}</div>
+            <div class="version-name">${escapeHTML(version.name || 'Unbenannte Version')}</div>
             <div class="version-details">
               <span>${new Date(version.timestamp).toLocaleString('de-DE')}</span>
-              <span>${version.entries.length} Einsätze</span>
-              <span>${version.entries.reduce((sum, e) => sum + e.duration, 0).toFixed(2)} Stunden</span>
-              <span>${formatCurrency(version.entries.reduce((sum, e) => sum + e.amount, 0))}</span>
+              <span>${Array.isArray(version.entries) ? version.entries.length : 0} Einsätze</span>
+              <span>${Array.isArray(version.entries) ? version.entries.reduce((sum, e) => sum + toNumber(e.duration, 0), 0).toFixed(2) : '0.00'} Stunden</span>
+              <span>${formatCurrency(Array.isArray(version.entries) ? version.entries.reduce((sum, e) => sum + toNumber(e.amount, 0), 0) : 0)}</span>
             </div>
           </div>
           <div class="version-actions">
@@ -2617,7 +2963,8 @@
     function loadVersion(index) {
       if (!confirm('Aktuelle Daten werden überschrieben. Fortfahren?')) return;
       
-      const versions = JSON.parse(localStorage.getItem('mehrarbeit_versions') || '[]');
+      const storedVersions = readStoredJSON('mehrarbeit_versions', []);
+      const versions = Array.isArray(storedVersions) ? storedVersions : [];
       const version = versions[index];
       
       if (!version) {
@@ -2626,28 +2973,39 @@
       }
       
       // Load version data
-      userSettings = version.settings;
-      entries = version.entries;
-      signatureData = version.signature || '';
+      userSettings = normalizeSettings(version.settings);
+      entries = Array.isArray(version.entries)
+        ? version.entries.map(normalizeEntry).filter(Boolean)
+        : [];
+      signatureData = isSafeImageDataURL(version.signature) ? version.signature : null;
       
       // Save to current state
       saveSettings();
       saveEntries();
-      localStorage.setItem('signatureData', signatureData);
+      if (signatureData) {
+        localStorage.setItem('signatureData', signatureData);
+      } else {
+        localStorage.removeItem('signatureData');
+      }
       
       // Update display
       updateDisplay();
       calculateRates();
       renderEntries();
-      loadSignature();
+      renderSignaturePreview();
       
       toast('Version geladen: ' + version.name, 'success');
       closeSavedVersionsModal();
     }
 
     function deleteVersion(index) {
-      const versions = JSON.parse(localStorage.getItem('mehrarbeit_versions') || '[]');
+      const storedVersions = readStoredJSON('mehrarbeit_versions', []);
+      const versions = Array.isArray(storedVersions) ? storedVersions : [];
       const version = versions[index];
+      if (!version) {
+        toast('Version nicht gefunden', 'error');
+        return;
+      }
       
       if (!confirm(`Version "${version.name}" wirklich löschen?`)) return;
       
@@ -2685,27 +3043,30 @@
       reader.onload = function(e) {
         try {
           const data = JSON.parse(e.target.result);
-          
-          // Load settings
-          if (data.settings) {
-            userSettings = data.settings;
-            saveSettings();
+
+          userSettings = data.settings
+            ? normalizeSettings(data.settings)
+            : normalizeSettings(userSettings);
+
+          entries = Array.isArray(data.entries)
+            ? data.entries.map(normalizeEntry).filter(Boolean)
+            : [];
+
+          signatureData = isSafeImageDataURL(data.signature) ? data.signature : null;
+
+          saveSettings();
+          saveEntries();
+
+          if (signatureData) {
+            localStorage.setItem('signatureData', signatureData);
+          } else {
+            localStorage.removeItem('signatureData');
           }
-          
-          // Load entries
-          if (data.entries) {
-            entries = data.entries;
-            saveEntries();
-            renderEntries();
-          }
-          
-          // Load signature
-          if (data.signature) {
-            signatureData = data.signature;
-            const preview = document.getElementById('signaturePreview');
-            preview.innerHTML = `<img src="${signatureData}" alt="Unterschrift">`;
-            preview.classList.remove('empty');
-          }
+
+          updateDisplay();
+          calculateRates();
+          renderEntries();
+          renderSignaturePreview();
           
           toast('JSON importiert', 'success');
           closeHamburgerMenu();
@@ -2992,9 +3353,9 @@
       doc.text('Datum / Unterschrift Mitarbeiter', 55, yPos + 35, {align: 'center'});
       
       // Unterschrift einfügen wenn vorhanden
-      if (signatureData) {
+      if (isSafeImageDataURL(signatureData)) {
         try {
-          doc.addImage(signatureData, 'PNG', 20, yPos + 5, 70, 22);
+          doc.addImage(signatureData, getSignatureImageFormat(signatureData), 20, yPos + 5, 70, 22);
         } catch (e) {
           console.error('Signature error:', e);
         }
@@ -3022,10 +3383,11 @@
 
     // ==================== HELPER FUNCTIONS ====================
     function formatCurrency(value) {
+      const safeValue = toNumber(value, 0);
       return new Intl.NumberFormat('de-DE', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
-      }).format(value) + ' €';
+      }).format(safeValue) + ' €';
     }
 
     function getMonthName(month) {
