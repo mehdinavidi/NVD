@@ -365,10 +365,22 @@
       cursor: pointer;
     }
 
-    .inline-check input {
+    .inline-check input[type="checkbox"] {
+      flex: 0 0 18px;
       width: 18px;
       height: 18px;
+      min-width: 18px;
+      padding: 0;
+      margin: 0;
+      border-radius: 4px;
+      transform: none;
       accent-color: var(--accent-primary);
+    }
+
+    .inline-check input[type="checkbox"]:hover,
+    .inline-check input[type="checkbox"]:focus {
+      transform: none;
+      background: initial;
     }
 
     .auto-preview {
@@ -1622,11 +1634,11 @@
             <input type="number" id="duration" step="0.01" class="calculated-field" readonly>
           </div>
           <div class="holiday-options">
-            <label class="inline-check" for="startHoliday">
+            <label class="inline-check">
               <input type="checkbox" id="startHoliday">
               Dieser Tag ist Feiertag
             </label>
-            <label class="inline-check" for="nextHoliday" id="nextHolidayWrapper" style="display: none;">
+            <label class="inline-check" id="nextHolidayWrapper" style="display: none;">
               <input type="checkbox" id="nextHoliday">
               Folgetag ist Feiertag
             </label>
