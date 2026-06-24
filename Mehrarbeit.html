@@ -365,6 +365,11 @@
       cursor: pointer;
     }
 
+    .inline-check.locked {
+      cursor: default;
+      color: var(--text-secondary);
+    }
+
     .inline-check input[type="checkbox"] {
       flex: 0 0 18px;
       width: 18px;
@@ -381,6 +386,11 @@
     .inline-check input[type="checkbox"]:focus {
       transform: none;
       background: initial;
+    }
+
+    .inline-check input[type="checkbox"]:disabled {
+      cursor: not-allowed;
+      opacity: 0.8;
     }
 
     .auto-preview {
@@ -1634,13 +1644,13 @@
             <input type="number" id="duration" step="0.01" class="calculated-field" readonly>
           </div>
           <div class="holiday-options">
-            <label class="inline-check">
+            <label class="inline-check" id="startHolidayLabel">
               <input type="checkbox" id="startHoliday">
-              Dieser Tag ist Feiertag
+              <span id="startHolidayText">Dieser Tag ist Feiertag</span>
             </label>
             <label class="inline-check" id="nextHolidayWrapper" style="display: none;">
               <input type="checkbox" id="nextHoliday">
-              Folgetag ist Feiertag
+              <span id="nextHolidayText">Folgetag ist Feiertag</span>
             </label>
           </div>
           <div class="form-group">
@@ -2060,6 +2070,60 @@
       };
     }
 
+    function datePartsToKey(parts) {
+      return `${parts.year}-${pad2(parts.month)}-${pad2(parts.day)}`;
+    }
+
+    function addDaysToParts(parts, days) {
+      const date = new Date(Date.UTC(parts.year, parts.month - 1, parts.day + days));
+      return {
+        day: date.getUTCDate(),
+        month: date.getUTCMonth() + 1,
+        year: date.getUTCFullYear()
+      };
+    }
+
+    function getEasterSundayParts(year) {
+      const a = year % 19;
+      const b = Math.floor(year / 100);
+      const c = year % 100;
+      const d = Math.floor(b / 4);
+      const e = b % 4;
+      const f = Math.floor((b + 8) / 25);
+      const g = Math.floor((b - f + 1) / 3);
+      const h = (19 * a + b - d - g + 15) % 30;
+      const i = Math.floor(c / 4);
+      const k = c % 4;
+      const l = (32 + 2 * e + 2 * i - h - k) % 7;
+      const m = Math.floor((a + 11 * h + 22 * l) / 451);
+      const month = Math.floor((h + l - 7 * m + 114) / 31);
+      const day = ((h + l - 7 * m + 114) % 31) + 1;
+
+      return { day, month, year };
+    }
+
+    function getGermanFederalHolidayName(parts) {
+      if (!parts || !isValidDate(parts.day, parts.month, parts.year)) return '';
+
+      const fixedHolidays = {
+        [`${parts.year}-01-01`]: 'Neujahr',
+        [`${parts.year}-05-01`]: 'Tag der Arbeit',
+        [`${parts.year}-10-03`]: 'Tag der Deutschen Einheit',
+        [`${parts.year}-12-25`]: '1. Weihnachtstag',
+        [`${parts.year}-12-26`]: '2. Weihnachtstag'
+      };
+
+      const easterSunday = getEasterSundayParts(parts.year);
+      const movingHolidays = {
+        [datePartsToKey(addDaysToParts(easterSunday, -2))]: 'Karfreitag',
+        [datePartsToKey(addDaysToParts(easterSunday, 1))]: 'Ostermontag',
+        [datePartsToKey(addDaysToParts(easterSunday, 39))]: 'Christi Himmelfahrt',
+        [datePartsToKey(addDaysToParts(easterSunday, 50))]: 'Pfingstmontag'
+      };
+
+      return fixedHolidays[datePartsToKey(parts)] || movingHolidays[datePartsToKey(parts)] || '';
+    }
+
     function minutesToTime(minutes) {
       const normalized = ((minutes % 1440) + 1440) % 1440;
       const hours = Math.floor(normalized / 60);
@@ -2106,6 +2170,46 @@
       if (!shouldShow) {
         nextHoliday.checked = false;
       }
+    }
+
+    function setHolidayCheckboxState(inputId, labelId, textId, parts, defaultText) {
+      const input = document.getElementById(inputId);
+      const label = document.getElementById(labelId);
+      const text = document.getElementById(textId);
+      const holidayName = getGermanFederalHolidayName(parts);
+      const wasAutoHoliday = input.dataset.autoHoliday === 'true';
+
+      if (holidayName) {
+        input.checked = true;
+        input.disabled = true;
+        input.dataset.autoHoliday = 'true';
+        label.classList.add('locked');
+        text.textContent = `${defaultText} (${holidayName})`;
+        return;
+      }
+
+      input.disabled = false;
+      input.dataset.autoHoliday = 'false';
+      label.classList.remove('locked');
+      text.textContent = defaultText;
+
+      if (wasAutoHoliday) {
+        input.checked = false;
+      }
+    }
+
+    function updateHolidayCheckboxStates() {
+      const parts = getSelectedEntryDateParts();
+      const firstDayIndex = parts ? dateToDayIndex(parts.day, parts.month, parts.year) : null;
+      const nextDayParts = Number.isFinite(firstDayIndex) && isCrossMidnight(
+        document.getElementById('startTime').value,
+        document.getElementById('endTime').value
+      )
+        ? dayIndexToParts(firstDayIndex + 1)
+        : null;
+
+      setHolidayCheckboxState('startHoliday', 'startHolidayLabel', 'startHolidayText', parts, 'Dieser Tag ist Feiertag');
+      setHolidayCheckboxState('nextHoliday', 'nextHolidayWrapper', 'nextHolidayText', nextDayParts, 'Folgetag ist Feiertag');
     }
 
     function getFormHolidayForDayIndex(dayIndex, firstDayIndex) {
@@ -2588,6 +2692,7 @@
 
     function updateAutoPreview() {
       updateNextHolidayVisibility();
+      updateHolidayCheckboxStates();
 
       const result = buildAutomaticEntrySegments();
       const preview = document.getElementById('autoSplitPreview');
