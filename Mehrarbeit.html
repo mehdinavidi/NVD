@@ -340,6 +340,85 @@
       flex-direction: column;
     }
 
+    .hidden-date-fields {
+      display: none;
+    }
+
+    .holiday-options {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-secondary);
+    }
+
+    .inline-check {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    .inline-check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-primary);
+    }
+
+    .auto-preview {
+      margin-top: 6px;
+      padding: 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-secondary);
+    }
+
+    .auto-preview-title {
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: var(--text-main);
+    }
+
+    .auto-preview-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 9px 0;
+      border-top: 1px solid var(--border-color);
+      font-size: 14px;
+    }
+
+    .auto-preview-row:first-of-type {
+      border-top: none;
+    }
+
+    .auto-preview-row strong {
+      white-space: nowrap;
+      color: var(--accent-primary);
+    }
+
+    .auto-preview-empty,
+    .auto-preview-error {
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .auto-preview-empty {
+      color: var(--text-secondary);
+    }
+
+    .auto-preview-error {
+      color: var(--danger);
+      font-weight: 700;
+    }
+
     /* Buttons Standard */
     .btn {
       background: var(--accent-primary);
@@ -1521,31 +1600,14 @@
       
       <form id="entryForm">
         <div class="form-grid">
-          <div class="form-group">
-            <label for="day">Tag *</label>
-            <input type="number" id="day" min="1" max="31" required>
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label for="entryDate">Datum *</label>
+            <input type="date" id="entryDate" required>
           </div>
-          <div class="form-group">
-            <label for="month">Monat *</label>
-            <select id="month" required>
-              <option value="">Bitte wählen...</option>
-              <option value="1">Januar</option>
-              <option value="2">Februar</option>
-              <option value="3">März</option>
-              <option value="4">April</option>
-              <option value="5">Mai</option>
-              <option value="6">Juni</option>
-              <option value="7">Juli</option>
-              <option value="8">August</option>
-              <option value="9">September</option>
-              <option value="10">Oktober</option>
-              <option value="11">November</option>
-              <option value="12">Dezember</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="year">Jahr</label>
-            <input type="number" id="year" value="2025" required>
+          <div class="hidden-date-fields">
+            <input type="hidden" id="day">
+            <input type="hidden" id="month">
+            <input type="hidden" id="year" value="2025">
           </div>
           <div class="form-group">
             <label for="startTime">Beginn *</label>
@@ -1559,10 +1621,20 @@
             <label for="duration">Dauer (Stunden)</label>
             <input type="number" id="duration" step="0.01" class="calculated-field" readonly>
           </div>
+          <div class="holiday-options">
+            <label class="inline-check" for="startHoliday">
+              <input type="checkbox" id="startHoliday">
+              Dieser Tag ist Feiertag
+            </label>
+            <label class="inline-check" for="nextHoliday" id="nextHolidayWrapper" style="display: none;">
+              <input type="checkbox" id="nextHoliday">
+              Folgetag ist Feiertag
+            </label>
+          </div>
           <div class="form-group">
-            <label for="category">Kategorie *</label>
-            <select id="category" required>
-              <option value="">Bitte wählen...</option>
+            <label for="category">Kategorie</label>
+            <select id="category" disabled>
+              <option value="">Automatisch ermitteln</option>
               <option value="Werktag +25%">Werktag +25% (18:00-20:00)</option>
               <option value="Werktag +50%">Werktag +50% (20:00-07:00)</option>
               <option value="Samstag +50%">Samstag +50%</option>
@@ -1582,6 +1654,9 @@
             <label for="amount">Betrag (€)</label>
             <input type="number" id="amount" step="0.01" class="calculated-field" readonly>
           </div>
+        </div>
+        <div id="autoSplitPreview" class="auto-preview">
+          <div class="auto-preview-empty">Datum und Uhrzeit eintragen, dann wird die Aufteilung automatisch angezeigt.</div>
         </div>
         <div class="button-group" style="margin-top: 25px;">
           <button type="submit" class="btn-primary">
@@ -1748,6 +1823,9 @@
       document.getElementById('endTime').addEventListener('change', calculateDuration);
       document.getElementById('category').addEventListener('change', updateRateAndAmount);
       document.getElementById('duration').addEventListener('input', updateAmount);
+      document.getElementById('entryDate').addEventListener('change', updateAutoPreview);
+      document.getElementById('startHoliday').addEventListener('change', updateAutoPreview);
+      document.getElementById('nextHoliday').addEventListener('change', updateAutoPreview);
       document.getElementById('searchInput').addEventListener('input', handleSearch);
       
       // Settings form live calculation
@@ -1939,6 +2017,214 @@
 
     function dateToDayIndex(day, month, year) {
       return Date.UTC(year, month - 1, day) / 86400000;
+    }
+
+    function pad2(value) {
+      return String(value).padStart(2, '0');
+    }
+
+    function parseDateInput(value) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(value || '')) return null;
+      const [year, month, day] = value.split('-').map(Number);
+      return isValidDate(day, month, year) ? { day, month, year } : null;
+    }
+
+    function formatDateInputValue(day, month, year) {
+      return isValidDate(day, month, year)
+        ? `${year}-${pad2(month)}-${pad2(day)}`
+        : '';
+    }
+
+    function formatDateParts(parts) {
+      return `${pad2(parts.day)}.${pad2(parts.month)}.${parts.year}`;
+    }
+
+    function dayIndexToParts(dayIndex) {
+      const date = new Date(dayIndex * 86400000);
+      return {
+        day: date.getUTCDate(),
+        month: date.getUTCMonth() + 1,
+        year: date.getUTCFullYear()
+      };
+    }
+
+    function minutesToTime(minutes) {
+      const normalized = ((minutes % 1440) + 1440) % 1440;
+      const hours = Math.floor(normalized / 60);
+      const mins = normalized % 60;
+      return `${pad2(hours)}:${pad2(mins)}`;
+    }
+
+    function setEntryDateFields(parts) {
+      document.getElementById('day').value = parts.day;
+      document.getElementById('month').value = parts.month;
+      document.getElementById('year').value = parts.year;
+    }
+
+    function getSelectedEntryDateParts() {
+      const entryDate = document.getElementById('entryDate');
+      const selectedParts = parseDateInput(entryDate.value);
+
+      if (selectedParts) {
+        setEntryDateFields(selectedParts);
+        return selectedParts;
+      }
+
+      const day = parseInt(document.getElementById('day').value, 10);
+      const month = parseInt(document.getElementById('month').value, 10);
+      const year = parseInt(document.getElementById('year').value, 10);
+
+      return isValidDate(day, month, year) ? { day, month, year } : null;
+    }
+
+    function isCrossMidnight(startTime, endTime) {
+      const startMinutes = timeToMinutes(startTime);
+      const endMinutes = timeToMinutes(endTime);
+      return Number.isFinite(startMinutes) && Number.isFinite(endMinutes) && endMinutes <= startMinutes;
+    }
+
+    function updateNextHolidayVisibility() {
+      const startTime = document.getElementById('startTime').value;
+      const endTime = document.getElementById('endTime').value;
+      const nextHolidayWrapper = document.getElementById('nextHolidayWrapper');
+      const nextHoliday = document.getElementById('nextHoliday');
+      const shouldShow = isCrossMidnight(startTime, endTime);
+
+      nextHolidayWrapper.style.display = shouldShow ? 'inline-flex' : 'none';
+      if (!shouldShow) {
+        nextHoliday.checked = false;
+      }
+    }
+
+    function getFormHolidayForDayIndex(dayIndex, firstDayIndex) {
+      if (dayIndex === firstDayIndex) {
+        return document.getElementById('startHoliday').checked;
+      }
+
+      if (dayIndex === firstDayIndex + 1) {
+        return document.getElementById('nextHoliday').checked;
+      }
+
+      return false;
+    }
+
+    function getAutomaticCategory(dayIndex, startMinutes, endMinutes, isHoliday) {
+      const weekday = new Date(dayIndex * 86400000).getUTCDay();
+
+      if (isHoliday) return 'Feiertag +100%';
+      if (weekday === 0) return 'Sonntag +100%';
+      if (weekday === 6) return 'Samstag +50%';
+
+      if (weekday >= 1 && weekday <= 5) {
+        if (startMinutes >= 18 * 60 && endMinutes <= 20 * 60) {
+          return 'Werktag +25%';
+        }
+
+        if (startMinutes >= 20 * 60 || endMinutes <= 7 * 60) {
+          return 'Werktag +50%';
+        }
+      }
+
+      return '';
+    }
+
+    function getNextSplitPoint(cursor, rangeEnd) {
+      const dayIndex = Math.floor(cursor / 1440);
+      const dayStart = dayIndex * 1440;
+      const candidates = [7 * 60, 18 * 60, 20 * 60, 1440]
+        .map(boundary => dayStart + boundary)
+        .filter(boundary => boundary > cursor && boundary < rangeEnd);
+
+      return Math.min(rangeEnd, ...candidates);
+    }
+
+    function buildAutomaticEntrySegments() {
+      const parts = getSelectedEntryDateParts();
+      const startTime = document.getElementById('startTime').value;
+      const endTime = document.getElementById('endTime').value;
+      const customer = document.getElementById('customer').value;
+      const problems = [];
+
+      if (!parts || !isValidTime(startTime) || !isValidTime(endTime)) {
+        return { segments: [], problems, ready: false };
+      }
+
+      const startMinutes = timeToMinutes(startTime);
+      const endMinutes = timeToMinutes(endTime);
+      const firstDayIndex = dateToDayIndex(parts.day, parts.month, parts.year);
+      const rangeStart = firstDayIndex * 1440 + startMinutes;
+      let rangeEnd = firstDayIndex * 1440 + endMinutes;
+
+      if (endMinutes <= startMinutes) {
+        rangeEnd += 1440;
+      }
+
+      if (rangeEnd <= rangeStart) {
+        return {
+          segments: [],
+          problems: ['Die Dauer muss größer als 0 Stunden sein.'],
+          ready: true
+        };
+      }
+
+      const segments = [];
+      const uncovered = [];
+      let cursor = rangeStart;
+
+      while (cursor < rangeEnd) {
+        const next = getNextSplitPoint(cursor, rangeEnd);
+        const dayIndex = Math.floor(cursor / 1440);
+        const dayStart = dayIndex * 1440;
+        const segmentStart = cursor - dayStart;
+        const segmentEnd = next - dayStart;
+        const isHoliday = getFormHolidayForDayIndex(dayIndex, firstDayIndex);
+        const category = getAutomaticCategory(dayIndex, segmentStart, segmentEnd, isHoliday);
+        const dateParts = dayIndexToParts(dayIndex);
+        const start = minutesToTime(segmentStart);
+        const end = minutesToTime(segmentEnd);
+
+        if (!category) {
+          uncovered.push(`${formatDateParts(dateParts)} ${start}-${end}`);
+          cursor = next;
+          continue;
+        }
+
+        const duration = (next - cursor) / 60;
+        const rate = getRateForCategory(category);
+        const previous = segments[segments.length - 1];
+
+        if (previous &&
+            previous.day === dateParts.day &&
+            previous.month === dateParts.month &&
+            previous.year === dateParts.year &&
+            previous.category === category &&
+            previous.endTime === start) {
+          previous.endTime = end;
+          previous.duration += duration;
+          previous.amount = previous.duration * previous.rate;
+        } else {
+          segments.push({
+            day: dateParts.day,
+            month: dateParts.month,
+            year: dateParts.year,
+            startTime: start,
+            endTime: end,
+            duration,
+            category,
+            rate,
+            customer,
+            amount: duration * rate
+          });
+        }
+
+        cursor = next;
+      }
+
+      if (uncovered.length > 0) {
+        problems.push(`Für diese Zeit gibt es keine automatische Mehrarbeits-Kategorie: ${uncovered.join(', ')}.`);
+      }
+
+      return { segments, problems, ready: true };
     }
 
     function getEntryTimeRange(entry) {
@@ -2164,7 +2450,8 @@
     function openEntryModal() {
       // Reset editing mode
       currentEditingId = null;
-      
+      resetForm();
+
       // Reset modal title to "Neuen Einsatz erfassen"
       document.querySelector('#entryModal .modal-header h2').innerHTML = `
         <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
@@ -2251,20 +2538,7 @@
 
     // ==================== FORM HANDLING ====================
     function calculateDuration() {
-      const start = document.getElementById('startTime').value;
-      const end = document.getElementById('endTime').value;
-      
-      if (start && end) {
-        const [startH, startM] = start.split(':').map(Number);
-        const [endH, endM] = end.split(':').map(Number);
-        
-        let duration = (endH * 60 + endM) - (startH * 60 + startM);
-        if (duration < 0) duration += 24 * 60;
-        
-        duration = duration / 60;
-        document.getElementById('duration').value = duration.toFixed(2);
-        updateAmount();
-      }
+      updateAutoPreview();
     }
 
     function updateRateAndAmount() {
@@ -2288,84 +2562,112 @@
       document.getElementById('amount').value = amount.toFixed(2);
     }
 
+    function setCalculatedFieldsFromSegments(segments) {
+      const totalDuration = segments.reduce((sum, entry) => sum + entry.duration, 0);
+      const totalAmount = segments.reduce((sum, entry) => sum + entry.amount, 0);
+      const categories = [...new Set(segments.map(entry => entry.category))];
+      const rates = [...new Set(segments.map(entry => entry.rate.toFixed(2)))];
+
+      document.getElementById('duration').value = totalDuration > 0 ? totalDuration.toFixed(2) : '';
+      document.getElementById('amount').value = totalDuration > 0 ? totalAmount.toFixed(2) : '';
+      document.getElementById('category').value = categories.length === 1 ? categories[0] : '';
+      document.getElementById('rate').value = rates.length === 1 ? rates[0] : '';
+    }
+
+    function updateAutoPreview() {
+      updateNextHolidayVisibility();
+
+      const result = buildAutomaticEntrySegments();
+      const preview = document.getElementById('autoSplitPreview');
+
+      if (!result.ready) {
+        document.getElementById('duration').value = '';
+        document.getElementById('rate').value = '';
+        document.getElementById('amount').value = '';
+        document.getElementById('category').value = '';
+        preview.innerHTML = '<div class="auto-preview-empty">Datum und Uhrzeit eintragen, dann wird die Aufteilung automatisch angezeigt.</div>';
+        return;
+      }
+
+      setCalculatedFieldsFromSegments(result.segments);
+
+      if (result.problems.length > 0) {
+        preview.innerHTML = `<div class="auto-preview-error">${escapeHTML(result.problems.join(' '))}</div>`;
+        return;
+      }
+
+      if (result.segments.length === 0) {
+        preview.innerHTML = '<div class="auto-preview-empty">Für diese Eingabe wurde noch kein Einsatz erkannt.</div>';
+        return;
+      }
+
+      const rows = result.segments.map(entry => `
+        <div class="auto-preview-row">
+          <span>${formatDateParts(entry)} · ${entry.startTime}-${entry.endTime} · ${escapeHTML(entry.category)} · ${entry.duration.toFixed(2)} h</span>
+          <strong>${formatCurrency(entry.amount)}</strong>
+        </div>
+      `).join('');
+
+      preview.innerHTML = `
+        <div class="auto-preview-title">${result.segments.length === 1 ? 'Automatischer Einsatz' : `Automatische Aufteilung: ${result.segments.length} Einsätze`}</div>
+        ${rows}
+      `;
+    }
+
     function handleFormSubmit(e) {
       e.preventDefault();
-      
-      const day = parseInt(document.getElementById('day').value);
-      const month = parseInt(document.getElementById('month').value);
-      const year = parseInt(document.getElementById('year').value);
-      const startTime = document.getElementById('startTime').value;
-      const endTime = document.getElementById('endTime').value;
 
-      if (!isValidDate(day, month, year)) {
-        toast('Bitte ein gültiges Datum eingeben.', 'error');
+      const result = buildAutomaticEntrySegments();
+
+      if (!result.ready) {
+        toast('Bitte Datum, Beginn und Ende vollständig eingeben.', 'error');
         return;
       }
 
-      if (!isValidTime(startTime) || !isValidTime(endTime)) {
-        toast('Bitte gültige Uhrzeiten eingeben.', 'error');
+      if (result.problems.length > 0) {
+        toast(result.problems[0], 'error');
         return;
       }
 
-      const newRange = getEntryTimeRange({ day, month, year, startTime, endTime });
-      const duration = newRange ? (newRange.end - newRange.start) / 60 : 0;
-
-      if (!newRange || duration <= 0) {
+      if (result.segments.length === 0) {
         toast('Die Dauer muss größer als 0 Stunden sein.', 'error');
         return;
       }
 
-      const category = document.getElementById('category').value;
-      const categoryWarning = getCategoryWarning(day, month, year, startTime, endTime, category);
-      const rate = getRateForCategory(category);
-      const amount = duration * rate;
+      const hasConflict = result.segments.some(segment => {
+        const segmentRange = getEntryTimeRange(segment);
 
-      if (categoryWarning && !confirm(`${categoryWarning}\n\nTrotzdem speichern?`)) {
-        return;
-      }
-      
-      // Konflikt-Prüfung: Gibt es bereits einen Einsatz am selben Tag zur gleichen Zeit?
-      const hasConflict = entries.some(e => {
-        // Ignoriere den aktuell bearbeiteten Eintrag
-        if (currentEditingId && e.id === currentEditingId) {
-          return false;
-        }
-        
-        return rangesOverlap(newRange, getEntryTimeRange(e));
+        return entries.some(entry => {
+          if (currentEditingId && entry.id === currentEditingId) {
+            return false;
+          }
+
+          return rangesOverlap(segmentRange, getEntryTimeRange(entry));
+        });
       });
-      
+
       if (hasConflict) {
-        toast('Konflikt! Es existiert bereits ein Einsatz zu dieser Zeit an diesem Tag.', 'error');
+        toast('Konflikt! Es existiert bereits ein Einsatz in dieser Zeit.', 'error');
         return;
       }
-      
-      const entryData = {
-        day: day,
-        month: month,
-        year: year,
-        startTime: startTime,
-        endTime: endTime,
-        duration: duration,
-        category: category,
-        rate: rate,
-        customer: document.getElementById('customer').value,
-        amount: amount
-      };
-      
+
+      const entriesToSave = result.segments.map((segment, index) => ({
+        ...segment,
+        id: currentEditingId && index === 0 ? currentEditingId : createEntryId()
+      }));
+
       if (currentEditingId) {
-        // Edit mode - update existing entry
         const index = entries.findIndex(e => e.id === currentEditingId);
         if (index !== -1) {
-          entries[index] = { ...entryData, id: currentEditingId };
-          toast('Einsatz erfolgreich aktualisiert', 'success');
+          entries.splice(index, 1, ...entriesToSave);
+          toast(entriesToSave.length === 1 ? 'Einsatz erfolgreich aktualisiert' : `${entriesToSave.length} Einsätze erfolgreich aktualisiert`, 'success');
         }
         currentEditingId = null;
       } else {
-        // Create mode - add new entry
-        entries.push({ ...entryData, id: createEntryId() });
-        toast('Einsatz erfolgreich gespeichert', 'success');
+        entries.push(...entriesToSave);
+        toast(entriesToSave.length === 1 ? 'Einsatz erfolgreich gespeichert' : `${entriesToSave.length} Einsätze erfolgreich gespeichert`, 'success');
       }
-      
+
       saveEntries();
       renderEntries();
       resetForm();
@@ -2373,11 +2675,15 @@
     }
     function resetForm() {
       document.getElementById('entryForm').reset();
+      document.getElementById('day').value = '';
+      document.getElementById('month').value = '';
       document.getElementById('year').value = 2025;
       document.getElementById('duration').value = '';
       document.getElementById('rate').value = '';
       document.getElementById('amount').value = '';
+      document.getElementById('category').value = '';
       currentEditingId = null; // Reset editing mode
+      updateAutoPreview();
     }
 
     // ==================== ENTRIES MANAGEMENT ====================
@@ -2448,19 +2754,20 @@
       
       // Set editing mode
       currentEditingId = id;
-      
+
       // Fill form with entry data
-      document.getElementById('day').value = entry.day;
-      document.getElementById('month').value = entry.month;
-      document.getElementById('year').value = entry.year;
+      setEntryDateFields(entry);
+      document.getElementById('entryDate').value = formatDateInputValue(entry.day, entry.month, entry.year);
       document.getElementById('startTime').value = entry.startTime;
       document.getElementById('endTime').value = entry.endTime;
       document.getElementById('duration').value = entry.duration.toFixed(2);
       document.getElementById('category').value = entry.category;
       document.getElementById('customer').value = entry.customer || '';
-      
-      // Update rate and amount
-      updateRateAndAmount();
+      document.getElementById('startHoliday').checked = entry.category.includes('Feiertag');
+      document.getElementById('nextHoliday').checked = false;
+
+      // Update automatic preview
+      updateAutoPreview();
       
       // Change modal title
       document.querySelector('#entryModal .modal-header h2').innerHTML = `
