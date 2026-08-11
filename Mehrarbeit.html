@@ -1670,7 +1670,7 @@
           </div>
           <div class="form-group" style="grid-column: 1 / -1;">
             <label for="customer">Kunde</label>
-            <input type="text" id="customer" placeholder="z.B. Musterkunde">
+            <input type="text" id="customer" placeholder="z.B. Mustermann">
           </div>
           <div class="form-group" style="grid-column: 1 / -1;">
             <label for="amount">Betrag (€)</label>
@@ -1977,15 +1977,12 @@
     function isLegacySampleSettings(settings = {}) {
       return settings.firstName === 'Max' &&
         settings.lastName === 'Mustermann' &&
-        (Number(settings.salary) > 0 ||
-          Boolean(cleanText(settings.iban)) ||
+        (Boolean(cleanText(settings.iban)) ||
           (Boolean(cleanText(settings.bank)) && settings.bank !== 'Musterbank'));
     }
 
     function normalizeCustomerName(value) {
-      const customer = cleanText(value);
-
-      return /^[A-Z]{4}-\d{4,}\s+-\s+/.test(customer) ? 'Musterkunde' : customer;
+      return cleanText(value);
     }
 
     function getSignatureImageFormat(value) {
@@ -3263,41 +3260,54 @@
 
     function loadExampleData() {
       if (!confirm('Beispieldaten laden? Vorhandene Daten werden überschrieben!')) return;
-      
+
+      userSettings = normalizeSettings({
+        ...userSettings,
+        firstName: 'Max',
+        lastName: 'Mustermann',
+        salary: 2750,
+        weeklyHours: 40,
+        iban: '',
+        bank: 'Musterbank'
+      });
+
       // Berechne korrekte Sätze basierend auf aktuellem Stundenlohn
       const baseRate = calculateHourlyRate(userSettings.salary, userSettings.weeklyHours);
       const rate25 = baseRate * 1.25;
       const rate50 = baseRate * 1.5;
       const rate100 = baseRate * 2.0;
-      
+
       entries = [
         // Mai 2025
-        {id: Date.now(), day: 5, month: 5, year: 2025, startTime: '18:00', endTime: '20:00', duration: 2.0, category: 'Werktag +25%', rate: rate25, customer: 'Musterkunde 01', amount: 2.0 * rate25},
-        {id: Date.now()+1, day: 12, month: 5, year: 2025, startTime: '06:00', endTime: '07:30', duration: 1.5, category: 'Werktag +50%', rate: rate50, customer: 'Musterkunde 02', amount: 1.5 * rate50},
-        {id: Date.now()+2, day: 19, month: 5, year: 2025, startTime: '20:00', endTime: '22:00', duration: 2.0, category: 'Werktag +50%', rate: rate50, customer: 'Musterkunde 03', amount: 2.0 * rate50},
-        
+        {id: Date.now(), day: 5, month: 5, year: 2025, startTime: '18:00', endTime: '20:00', duration: 2.0, category: 'Werktag +25%', rate: rate25, customer: 'Mustermann', amount: 2.0 * rate25},
+        {id: Date.now()+1, day: 12, month: 5, year: 2025, startTime: '06:00', endTime: '07:30', duration: 1.5, category: 'Werktag +50%', rate: rate50, customer: 'Mustermann', amount: 1.5 * rate50},
+        {id: Date.now()+2, day: 19, month: 5, year: 2025, startTime: '20:00', endTime: '22:00', duration: 2.0, category: 'Werktag +50%', rate: rate50, customer: 'Mustermann', amount: 2.0 * rate50},
+
         // Juni 2025
-        {id: Date.now()+3, day: 2, month: 6, year: 2025, startTime: '18:30', endTime: '20:00', duration: 1.5, category: 'Werktag +25%', rate: rate25, customer: 'Musterkunde 04', amount: 1.5 * rate25},
-        {id: Date.now()+4, day: 7, month: 6, year: 2025, startTime: '08:00', endTime: '14:00', duration: 6.0, category: 'Samstag +50%', rate: rate50, customer: 'Musterkunde 05', amount: 6.0 * rate50},
-        {id: Date.now()+5, day: 14, month: 6, year: 2025, startTime: '05:30', endTime: '07:00', duration: 1.5, category: 'Werktag +50%', rate: rate50, customer: 'Musterkunde 06', amount: 1.5 * rate50},
-        
+        {id: Date.now()+3, day: 2, month: 6, year: 2025, startTime: '18:30', endTime: '20:00', duration: 1.5, category: 'Werktag +25%', rate: rate25, customer: 'Mustermann', amount: 1.5 * rate25},
+        {id: Date.now()+4, day: 7, month: 6, year: 2025, startTime: '08:00', endTime: '14:00', duration: 6.0, category: 'Samstag +50%', rate: rate50, customer: 'Mustermann', amount: 6.0 * rate50},
+        {id: Date.now()+5, day: 14, month: 6, year: 2025, startTime: '05:30', endTime: '07:00', duration: 1.5, category: 'Werktag +50%', rate: rate50, customer: 'Mustermann', amount: 1.5 * rate50},
+
         // Juli 2025
-        {id: Date.now()+6, day: 5, month: 7, year: 2025, startTime: '08:00', endTime: '16:00', duration: 8.0, category: 'Samstag +50%', rate: rate50, customer: 'Musterkunde 07', amount: 8.0 * rate50},
-        {id: Date.now()+7, day: 13, month: 7, year: 2025, startTime: '08:30', endTime: '12:30', duration: 4.0, category: 'Sonntag +100%', rate: rate100, customer: 'Musterkunde 08', amount: 4.0 * rate100},
-        {id: Date.now()+8, day: 22, month: 7, year: 2025, startTime: '18:00', endTime: '19:30', duration: 1.5, category: 'Werktag +25%', rate: rate25, customer: 'Musterkunde 09', amount: 1.5 * rate25},
-        
+        {id: Date.now()+6, day: 5, month: 7, year: 2025, startTime: '08:00', endTime: '16:00', duration: 8.0, category: 'Samstag +50%', rate: rate50, customer: 'Mustermann', amount: 8.0 * rate50},
+        {id: Date.now()+7, day: 13, month: 7, year: 2025, startTime: '08:30', endTime: '12:30', duration: 4.0, category: 'Sonntag +100%', rate: rate100, customer: 'Mustermann', amount: 4.0 * rate100},
+        {id: Date.now()+8, day: 22, month: 7, year: 2025, startTime: '18:00', endTime: '19:30', duration: 1.5, category: 'Werktag +25%', rate: rate25, customer: 'Mustermann', amount: 1.5 * rate25},
+
         // August 2025
-        {id: Date.now()+9, day: 4, month: 8, year: 2025, startTime: '06:00', endTime: '07:00', duration: 1.0, category: 'Werktag +50%', rate: rate50, customer: 'Musterkunde 10', amount: 1.0 * rate50},
-        {id: Date.now()+10, day: 9, month: 8, year: 2025, startTime: '09:00', endTime: '15:00', duration: 6.0, category: 'Samstag +50%', rate: rate50, customer: 'Musterkunde 11', amount: 6.0 * rate50},
-        {id: Date.now()+11, day: 17, month: 8, year: 2025, startTime: '10:00', endTime: '14:00', duration: 4.0, category: 'Sonntag +100%', rate: rate100, customer: 'Musterkunde 12', amount: 4.0 * rate100},
-        
+        {id: Date.now()+9, day: 4, month: 8, year: 2025, startTime: '06:00', endTime: '07:00', duration: 1.0, category: 'Werktag +50%', rate: rate50, customer: 'Mustermann', amount: 1.0 * rate50},
+        {id: Date.now()+10, day: 9, month: 8, year: 2025, startTime: '09:00', endTime: '15:00', duration: 6.0, category: 'Samstag +50%', rate: rate50, customer: 'Mustermann', amount: 6.0 * rate50},
+        {id: Date.now()+11, day: 17, month: 8, year: 2025, startTime: '10:00', endTime: '14:00', duration: 4.0, category: 'Sonntag +100%', rate: rate100, customer: 'Mustermann', amount: 4.0 * rate100},
+
         // September 2025
-        {id: Date.now()+12, day: 6, month: 9, year: 2025, startTime: '08:00', endTime: '13:00', duration: 5.0, category: 'Samstag +50%', rate: rate50, customer: 'Musterkunde 13', amount: 5.0 * rate50},
-        {id: Date.now()+13, day: 14, month: 9, year: 2025, startTime: '09:00', endTime: '16:00', duration: 7.0, category: 'Sonntag +100%', rate: rate100, customer: 'Musterkunde 14', amount: 7.0 * rate100},
-        {id: Date.now()+14, day: 23, month: 9, year: 2025, startTime: '20:00', endTime: '22:30', duration: 2.5, category: 'Werktag +50%', rate: rate50, customer: 'Musterkunde 15', amount: 2.5 * rate50}
+        {id: Date.now()+12, day: 6, month: 9, year: 2025, startTime: '08:00', endTime: '13:00', duration: 5.0, category: 'Samstag +50%', rate: rate50, customer: 'Mustermann', amount: 5.0 * rate50},
+        {id: Date.now()+13, day: 14, month: 9, year: 2025, startTime: '09:00', endTime: '16:00', duration: 7.0, category: 'Sonntag +100%', rate: rate100, customer: 'Mustermann', amount: 7.0 * rate100},
+        {id: Date.now()+14, day: 23, month: 9, year: 2025, startTime: '20:00', endTime: '22:30', duration: 2.5, category: 'Werktag +50%', rate: rate50, customer: 'Mustermann', amount: 2.5 * rate50}
       ];
-      
+
+      localStorage.setItem('userSettings', JSON.stringify(userSettings));
       saveEntries();
+      updateDisplay();
+      calculateRates();
       renderEntries();
       toast('15 Beispieldaten geladen', 'success');
       closeHamburgerMenu();
