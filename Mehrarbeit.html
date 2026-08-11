@@ -1244,7 +1244,7 @@
 
     <!-- 3. Speichern -->
     <div class="menu-section">
-      <button class="menu-item" onclick="openSavedVersionsModal()">
+      <button class="menu-item" onclick="saveNewVersion()">
         <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
           <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
           <polyline points="17 21 17 13 7 13 7 21"></polyline>
@@ -1254,7 +1254,19 @@
       </button>
     </div>
 
-    <!-- 4. Drucken / PDF -->
+    <!-- 4. Laden -->
+    <div class="menu-section">
+      <button class="menu-item" onclick="openSavedVersionsModal()">
+        <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
+          <polyline points="1 4 1 10 7 10"></polyline>
+          <polyline points="23 20 23 14 17 14"></polyline>
+          <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+        </svg>
+        <span>Laden</span>
+      </button>
+    </div>
+
+    <!-- 5. Drucken / PDF -->
     <div class="menu-section">
       <button class="menu-item" onclick="exportPDF()">
         <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
@@ -1266,7 +1278,7 @@
       </button>
     </div>
 
-    <!-- 5. Excel Export -->
+    <!-- 6. Excel Export -->
     <div class="menu-section">
       <button class="menu-item" onclick="exportExcel()">
         <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
@@ -1279,7 +1291,21 @@
       </button>
     </div>
 
-    <!-- 6. Hell/Dunkel -->
+    <!-- 7. Excel Import -->
+    <div class="menu-section">
+      <label class="menu-item" style="cursor: pointer;">
+        <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <polyline points="12 11 12 17"></polyline>
+          <polyline points="9 14 12 17 15 14"></polyline>
+        </svg>
+        <span>Import Excel</span>
+        <input type="file" id="importExcel" accept=".xlsx,.xls" style="display: none;" onchange="importExcel(this.files[0])">
+      </label>
+    </div>
+
+    <!-- 8. Hell/Dunkel -->
     <div class="menu-section">
       <button class="menu-item secondary" onclick="toggleTheme()">
         <svg class="icon" id="themeIconSVG" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
@@ -1289,7 +1315,7 @@
       </button>
     </div>
 
-    <!-- 7. Export JSON -->
+    <!-- 9. Export JSON -->
     <div class="menu-section">
       <button class="menu-item secondary" onclick="exportJSON()">
         <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
@@ -1301,7 +1327,7 @@
       </button>
     </div>
 
-    <!-- 8. Import JSON -->
+    <!-- 10. Import JSON -->
     <div class="menu-section">
       <label class="menu-item secondary" style="cursor: pointer;">
         <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
@@ -1314,7 +1340,7 @@
       </label>
     </div>
 
-    <!-- 9. Beispieldaten -->
+    <!-- 11. Beispieldaten -->
     <div class="menu-section">
       <button class="menu-item secondary" onclick="loadExampleData()">
         <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
@@ -1328,7 +1354,7 @@
       </button>
     </div>
 
-    <!-- 10. Alles löschen -->
+    <!-- 12. Alles löschen -->
     <div class="menu-section">
       <button class="menu-item danger" onclick="clearAllData()">
         <svg class="icon" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;">
@@ -1791,19 +1817,9 @@
             <polyline points="17 21 17 13 7 13 7 21"></polyline>
             <polyline points="7 3 7 8 15 8"></polyline>
           </svg>
-          Gespeicherte Versionen
+          Version laden
         </h2>
         <button class="close-btn" onclick="closeSavedVersionsModal()">&times;</button>
-      </div>
-
-      <div style="margin-bottom: 20px;">
-        <button class="btn-primary" onclick="saveNewVersion()">
-          <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; margin-right: 6px;">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
-          Neue Version speichern
-        </button>
       </div>
 
       <div id="savedVersionsList" style="max-height: 400px; overflow-y: auto;">
@@ -2401,9 +2417,8 @@
       const duration = toNumber(entry.duration, calculatedDuration) > 0
         ? toNumber(entry.duration, calculatedDuration)
         : calculatedDuration;
-      const rate = toNumber(entry.rate, getRateForCategory(category)) > 0
-        ? toNumber(entry.rate, getRateForCategory(category))
-        : getRateForCategory(category);
+      const normalizedRate = toNumber(entry.rate, getRateForCategory(category));
+      const rate = normalizedRate >= 0 ? normalizedRate : getRateForCategory(category);
       const amount = toNumber(entry.amount, duration * rate);
 
       return {
@@ -3346,9 +3361,10 @@
       
       // Save back to localStorage
       localStorage.setItem('mehrarbeit_versions', JSON.stringify(versions));
-      
+
       toast('Version gespeichert: ' + versionName, 'success');
       loadSavedVersionsList();
+      closeHamburgerMenu();
     }
 
     function loadSavedVersionsList() {
@@ -3512,50 +3528,378 @@
       reader.readAsText(file);
     }
 
-    function exportExcel() {
+    function cellValue(ws, address) {
+      const cell = ws[address];
+      return cell ? cell.v ?? cell.w ?? '' : '';
+    }
+
+    function cellText(ws, address) {
+      return cleanText(cellValue(ws, address));
+    }
+
+    function parseExcelNumber(value, fallback = 0) {
+      if (typeof value === 'number') return Number.isFinite(value) ? value : fallback;
+      let normalized = String(value ?? '').trim().replace(/[^\d,.-]/g, '');
+      if (!normalized || normalized === '-' || normalized === ',' || normalized === '.') return fallback;
+      if (normalized.includes(',') && normalized.includes('.')) {
+        normalized = normalized.replace(/\./g, '').replace(',', '.');
+      } else if (normalized.includes(',')) {
+        normalized = normalized.replace(',', '.');
+      }
+      const parsed = Number(normalized);
+      return Number.isFinite(parsed) ? parsed : fallback;
+    }
+
+    function parseExcelDay(value) {
+      const match = String(value ?? '').match(/\d+/);
+      return match ? parseInt(match[0], 10) : NaN;
+    }
+
+    function parseExcelTime(cell) {
+      if (!cell) return '';
+
+      const displayed = cleanText(cell.w);
+      if (isValidTime(displayed)) return displayed;
+
+      if (typeof cell.v === 'string') {
+        const match = cell.v.match(/([01]?\d|2[0-3]):([0-5]\d)/);
+        if (match) return `${pad2(match[1])}:${match[2]}`;
+      }
+
+      if (typeof cell.v === 'number' && Number.isFinite(cell.v)) {
+        const minutes = Math.round((cell.v % 1) * 1440);
+        return minutesToTime(minutes);
+      }
+
+      if (cell.v instanceof Date) {
+        return `${pad2(cell.v.getHours())}:${pad2(cell.v.getMinutes())}`;
+      }
+
+      return '';
+    }
+
+    function setWorksheetCell(ws, address, value, options = {}) {
+      const existing = ws[address] ? { ...ws[address] } : {};
+      const cell = { ...existing };
+      delete cell.w;
+
+      if (options.formula) {
+        cell.f = options.formula.replace(/^=/, '');
+      } else {
+        delete cell.f;
+      }
+
+      if (value === undefined || value === null || value === '') {
+        delete cell.v;
+        cell.t = 'z';
+      } else {
+        cell.v = value;
+        cell.t = options.type || (typeof value === 'number' ? 'n' : 's');
+      }
+
+      if (options.format) {
+        cell.z = options.format;
+      }
+
+      ws[address] = cell;
+    }
+
+    function clearWorksheetCell(ws, address) {
+      if (!ws[address]) return;
+      const cell = { ...ws[address] };
+      delete cell.v;
+      delete cell.w;
+      delete cell.f;
+      cell.t = 'z';
+      ws[address] = cell;
+    }
+
+    function setFormulaCell(ws, address, formula, cachedValue = undefined, format = undefined) {
+      setWorksheetCell(ws, address, cachedValue, {
+        type: typeof cachedValue === 'number' ? 'n' : undefined,
+        formula,
+        format
+      });
+    }
+
+    function timeToExcelFraction(time) {
+      const minutes = timeToMinutes(time);
+      return Number.isFinite(minutes) ? minutes / 1440 : 0;
+    }
+
+    function getExcelExportYear() {
+      const years = entries.map(entry => entry.year).filter(Boolean);
+      return years.length > 0 ? years[0] : 2025;
+    }
+
+    function setMnaWorkbookStaticCells(ws, rowCount) {
+      const exportYear = getExcelExportYear();
+      const monthlyHours = userSettings.weeklyHours * 4.35;
+      const baseRate = calculateHourlyRate(userSettings.salary, userSettings.weeklyHours);
+      const lastEntryRow = 25 + rowCount;
+      const sumRow = lastEntryRow + 1;
+      const transferRow = sumRow + 2;
+      const confirmRow = sumRow + 4;
+      const leaderRow = sumRow + 5;
+
+      setWorksheetCell(ws, 'G1', `Arbeitseinsätze / Mehrarbeit ${exportYear}`);
+      setWorksheetCell(ws, 'D2', 'Bruttogehalt [€/Monat]:');
+      setWorksheetCell(ws, 'E2', userSettings.salary, { type: 'n', format: '#,##0.00' });
+      setWorksheetCell(ws, 'G2', '(außerhalb der Regelarbeitszeit)');
+
+      [
+        [3, 40, 1, 174],
+        [4, 35, 0.875, 152.25],
+        [5, 30, 0.75, 130.5],
+        [6, 25, 0.625, 108.75],
+        [7, 20, 0.5, 87]
+      ].forEach(([row, weekly, factor, hours]) => {
+        setWorksheetCell(ws, `C${row}`, weekly, { type: 'n' });
+        setWorksheetCell(ws, `D${row}`, factor, { type: 'n' });
+        setWorksheetCell(ws, `E${row}`, hours, { type: 'n' });
+      });
+
+      setWorksheetCell(ws, 'D8', 'Wochenarbeitszeit [h]:');
+      setWorksheetCell(ws, 'E8', userSettings.weeklyHours, { type: 'n' });
+      setWorksheetCell(ws, 'D9', 'Monatsarbeitszeit [h]:');
+      setWorksheetCell(ws, 'E9', monthlyHours, { type: 'n', format: '0.00' });
+      setWorksheetCell(ws, 'D10', 'Stundenlohn brutto [€/h]:');
+      setFormulaCell(ws, 'E10', 'E2/E9', baseRate, '#,##0.00');
+
+      setWorksheetCell(ws, 'A11', 'Kat.');
+      setWorksheetCell(ws, 'B11', 'Tag');
+      setWorksheetCell(ws, 'C11', 'Uhrzeit');
+      setWorksheetCell(ws, 'D11', 'Zuschlag');
+      setWorksheetCell(ws, 'E11', '   ↓');
+      setWorksheetCell(ws, 'G11', 'Nachname:');
+      setWorksheetCell(ws, 'H11', userSettings.lastName);
+      setWorksheetCell(ws, 'G12', 'Vorname:');
+      setWorksheetCell(ws, 'H12', userSettings.firstName);
+      setWorksheetCell(ws, 'G14', 'IBAN:');
+      setWorksheetCell(ws, 'H14', userSettings.iban || '');
+      setWorksheetCell(ws, 'G15', 'BIC:');
+      setWorksheetCell(ws, 'H15', '');
+      setWorksheetCell(ws, 'G16', 'Bank:');
+      setWorksheetCell(ws, 'H16', userSettings.bank || '');
+
+      [
+        [12, 1, 'Werktag', '18:00-20:00', '+25', 'E10*1.25', baseRate * 1.25],
+        [13, 2, 'Werktag', '20:00-7:00', '+50', 'E10*1.5', baseRate * 1.5],
+        [14, 3, 'Samstag', 'ganztägig', '+50', 'E10*1.5', baseRate * 1.5],
+        [15, 4, 'Sonntag', 'ganztägig', '+100', 'E10*2', baseRate * 2],
+        [16, 5, 'Feiertag', 'ganztägig', '+100', 'E10*2', baseRate * 2]
+      ].forEach(([row, kat, day, time, bonus, formula, value]) => {
+        setWorksheetCell(ws, `A${row}`, kat, { type: 'n' });
+        setWorksheetCell(ws, `B${row}`, day);
+        setWorksheetCell(ws, `C${row}`, time);
+        setWorksheetCell(ws, `D${row}`, bonus);
+        setFormulaCell(ws, `E${row}`, formula, value, '#,##0.00');
+      });
+
+      setWorksheetCell(ws, 'A18', 'Aufwand für Arbeitseinsätze');
+      ['Tag', 'Monat', 'Jahr', 'Beginn', 'Ende', 'Dauer', 'Kategorie', 'Vergütung', 'Kunde', 'Betrag'].forEach((label, index) => {
+        setWorksheetCell(ws, `${String.fromCharCode(65 + index)}19`, label);
+      });
+      setWorksheetCell(ws, 'D20', '[Uhrzeit]');
+      setWorksheetCell(ws, 'E20', '[Uhrzeit]');
+      setWorksheetCell(ws, 'F20', '[h]');
+      setWorksheetCell(ws, 'H20', '[€/h]');
+
+      [
+        ['Werktag +25%', 'E12', baseRate * 1.25],
+        ['Werktag +50%', 'E13', baseRate * 1.5],
+        ['Samstag +50%', 'E14', baseRate * 1.5],
+        ['Sonntag +100%', 'E15', baseRate * 2],
+        ['Feiertag +100%', 'E16', baseRate * 2]
+      ].forEach(([category, formulaCell, value], index) => {
+        const row = 21 + index;
+        setWorksheetCell(ws, `G${row}`, category);
+        setFormulaCell(ws, `H${row}`, formulaCell, value, '#,##0.00');
+      });
+
+      for (let row = 57; row <= 62; row++) {
+        for (let col = 0; col < 10; col++) {
+          clearWorksheetCell(ws, `${String.fromCharCode(65 + col)}${row}`);
+        }
+      }
+
+      setWorksheetCell(ws, `I${sumRow}`, 'Summation:');
+      setFormulaCell(ws, `J${sumRow}`, `SUMIF(J26:J${lastEntryRow},">0")`, entries.reduce((sum, entry) => sum + entry.amount, 0), '#,##0.00');
+      setWorksheetCell(ws, `A${transferRow}`, 'Übertrag in die Lohnbuchhaltung:');
+      setFormulaCell(ws, `J${transferRow}`, `J${sumRow}`, entries.reduce((sum, entry) => sum + entry.amount, 0), '#,##0.00');
+      setWorksheetCell(ws, `G${confirmRow}`, 'Ich bestätige durch meine Unterschrift die Richtigkeit dieser Angaben:');
+      setWorksheetCell(ws, `H${confirmRow}`, 'MNA');
+      setWorksheetCell(ws, `G${leaderRow}`, 'sachlich richtig (Unterschrift verantwortlicher Leiter):');
+      setWorksheetCell(ws, `H${leaderRow}`, 'Datum / Unterschrift');
+
+      ws['!merges'] = [
+        { s: { r: 10, c: 7 }, e: { r: 10, c: 9 } },
+        { s: { r: 11, c: 7 }, e: { r: 11, c: 9 } },
+        { s: { r: confirmRow - 1, c: 7 }, e: { r: confirmRow - 1, c: 9 } },
+        { s: { r: leaderRow - 1, c: 7 }, e: { r: leaderRow - 1, c: 9 } }
+      ];
+      ws['!ref'] = `A1:J${leaderRow}`;
+      ws['!cols'] = [
+        { wch: 13 }, { wch: 13 }, { wch: 13 }, { wch: 13 }, { wch: 12 },
+        { wch: 13 }, { wch: 15 }, { wch: 13 }, { wch: 33 }, { wch: 13 }
+      ];
+    }
+
+    function fillMnaWorkbook(wb, rowCount = 31) {
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const lastEntryRow = 25 + rowCount;
+
+      setMnaWorkbookStaticCells(ws, rowCount);
+
+      for (let row = 26; row <= lastEntryRow; row++) {
+        ['A', 'B', 'C', 'D', 'E', 'G', 'I'].forEach(column => clearWorksheetCell(ws, `${column}${row}`));
+        setFormulaCell(ws, `F${row}`, getMnaDurationFormula(row), 0, '0.00');
+        setFormulaCell(ws, `H${row}`, `IFERROR(VLOOKUP(G${row},$G$21:$H$25,2,),"")`, '', '#,##0.00');
+        setFormulaCell(ws, `J${row}`, `IFERROR(F${row}*H${row},"")`, '', '#,##0.00');
+      }
+
+      entries.forEach((entry, index) => {
+        const row = 26 + index;
+        setWorksheetCell(ws, `A${row}`, `${pad2(entry.day)}.`);
+        setWorksheetCell(ws, `B${row}`, entry.month, { type: 'n' });
+        setWorksheetCell(ws, `C${row}`, entry.year, { type: 'n' });
+        setWorksheetCell(ws, `D${row}`, timeToExcelFraction(entry.startTime), { type: 'n', format: 'hh:mm' });
+        setWorksheetCell(ws, `E${row}`, timeToExcelFraction(entry.endTime), { type: 'n', format: 'hh:mm' });
+        setFormulaCell(ws, `F${row}`, getMnaDurationFormula(row), entry.duration, '0.00');
+        setWorksheetCell(ws, `G${row}`, entry.category);
+        setFormulaCell(ws, `H${row}`, `IFERROR(VLOOKUP(G${row},$G$21:$H$25,2,),"")`, entry.rate, '#,##0.00');
+        setWorksheetCell(ws, `I${row}`, entry.customer || '');
+        setFormulaCell(ws, `J${row}`, `IFERROR(F${row}*H${row},"")`, entry.amount, '#,##0.00');
+      });
+
+      wb.Workbook = wb.Workbook || {};
+      wb.Workbook.CalcPr = { calcMode: 'auto' };
+    }
+
+    function createMnaWorkbook(rowCount = 31) {
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.aoa_to_sheet([]);
+      XLSX.utils.book_append_sheet(wb, ws, 'Tabelle1');
+      fillMnaWorkbook(wb, rowCount);
+      return wb;
+    }
+
+    function getMnaDurationFormula(row) {
+      return `IF(B${row}>0,IF(E${row}<D${row},(1-D${row}+E${row})*24,(E${row}-D${row})*24),0)`;
+    }
+
+    async function loadMnaTemplateWorkbook(rowCount) {
+      try {
+        const response = await fetch('templates/MNA-Mehrarbeit-template.xlsx', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Template nicht erreichbar');
+        const data = await response.arrayBuffer();
+        const wb = XLSX.read(data, { type: 'array', cellStyles: true });
+        fillMnaWorkbook(wb, rowCount);
+        return wb;
+      } catch (error) {
+        console.warn('Excel-Vorlage konnte nicht geladen werden, nutze Ersatzformat.', error);
+        return createMnaWorkbook(rowCount);
+      }
+    }
+
+    function importExcel(file) {
+      if (!file) return;
+
       if (typeof XLSX === 'undefined') {
         toast('Excel-Bibliothek nicht geladen', 'error');
         return;
       }
-      
-      // Prepare data
-      const data = entries.map(e => ({
-        'Tag': e.day,
-        'Monat': getMonthName(e.month),
-        'Jahr': e.year,
-        'Beginn': e.startTime,
-        'Ende': e.endTime,
-        'Dauer (h)': e.duration,
-        'Kategorie': e.category,
-        'Vergütung (€/h)': e.rate,
-        'Kunde': e.customer || '-',
-        'Betrag (€)': e.amount
-      }));
-      
-      // Add summary row
-      const totalAmount = entries.reduce((sum, e) => sum + e.amount, 0);
-      data.push({
-        'Tag': '',
-        'Monat': '',
-        'Jahr': '',
-        'Beginn': '',
-        'Ende': '',
-        'Dauer (h)': '',
-        'Kategorie': '',
-        'Vergütung (€/h)': '',
-        'Kunde': 'GESAMT:',
-        'Betrag (€)': totalAmount
-      });
-      
-      // Create workbook
-      const ws = XLSX.utils.json_to_sheet(data);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Mehrarbeit 2025');
-      
-      // Download
-      XLSX.writeFile(wb, `Mehrarbeit_${userSettings.lastName}_${new Date().toISOString().slice(0,10)}.xlsx`);
-      
-      toast('Excel exportiert', 'success');
+
+      if (!confirm('Excel-Datei importieren? Aktuelle Daten werden überschrieben.')) {
+        document.getElementById('importExcel').value = '';
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const wb = XLSX.read(e.target.result, { type: 'array', cellDates: true });
+          const ws = wb.Sheets[wb.SheetNames[0]];
+          const importedSettings = normalizeSettings({
+            firstName: cellText(ws, 'H12') || userSettings.firstName,
+            lastName: cellText(ws, 'H11') || userSettings.lastName,
+            salary: parseExcelNumber(cellValue(ws, 'E2'), userSettings.salary),
+            weeklyHours: parseExcelNumber(cellValue(ws, 'E8'), userSettings.weeklyHours),
+            iban: cellText(ws, 'H14') || userSettings.iban,
+            bank: cellText(ws, 'H16') || userSettings.bank
+          });
+
+          const importedEntries = [];
+          const importedBaseRate = calculateHourlyRate(importedSettings.salary, importedSettings.weeklyHours);
+          const range = XLSX.utils.decode_range(ws['!ref'] || 'A1:J200');
+          const lastRow = Math.max(range.e.r + 1, 56);
+
+          for (let row = 26; row <= lastRow; row++) {
+            const day = parseExcelDay(cellValue(ws, `A${row}`));
+            const month = parseInt(parseExcelNumber(cellValue(ws, `B${row}`), NaN), 10);
+            const year = parseInt(parseExcelNumber(cellValue(ws, `C${row}`), NaN), 10);
+            const startTime = parseExcelTime(ws[`D${row}`]);
+            const endTime = parseExcelTime(ws[`E${row}`]);
+            const category = cellText(ws, `G${row}`);
+            const customer = cellText(ws, `I${row}`);
+
+            if (!day && !month && !year && !startTime && !endTime && !category && !customer) {
+              continue;
+            }
+
+            const rangeData = getEntryTimeRange({ day, month, year, startTime, endTime });
+            const calculatedDuration = rangeData ? (rangeData.end - rangeData.start) / 60 : 0;
+            const duration = parseExcelNumber(cellValue(ws, `F${row}`), calculatedDuration);
+            const rate = parseExcelNumber(cellValue(ws, `H${row}`), importedBaseRate * getCategoryMultiplier(category));
+            const amount = parseExcelNumber(cellValue(ws, `J${row}`), duration * rate);
+            const normalized = normalizeEntry({
+              day,
+              month,
+              year,
+              startTime,
+              endTime,
+              duration,
+              category,
+              rate,
+              customer,
+              amount
+            });
+
+            if (normalized) {
+              importedEntries.push({ ...normalized, id: createEntryId() });
+            }
+          }
+
+          userSettings = importedSettings;
+          entries = importedEntries;
+          localStorage.setItem('userSettings', JSON.stringify(userSettings));
+          saveEntries();
+          updateDisplay();
+          calculateRates();
+          renderEntries();
+          toast(`${entries.length} Einsätze aus Excel importiert`, 'success');
+          closeHamburgerMenu();
+        } catch (error) {
+          console.error(error);
+          toast('Excel konnte nicht importiert werden', 'error');
+        } finally {
+          document.getElementById('importExcel').value = '';
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    async function exportExcel() {
+      if (typeof XLSX === 'undefined') {
+        toast('Excel-Bibliothek nicht geladen', 'error');
+        return;
+      }
+
+      const rowCount = Math.max(31, entries.length);
+      const wb = await loadMnaTemplateWorkbook(rowCount);
+      XLSX.writeFile(wb, `MNA-Mehrarbeit_${userSettings.lastName}_${new Date().toISOString().slice(0,10)}.xlsx`);
+
+      toast('Excel im MNA-Format exportiert', 'success');
       closeHamburgerMenu();
     }
 
